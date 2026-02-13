@@ -27,14 +27,28 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-[var(--background)] text-[var(--color-text-body)] antialiased" style={{ fontFamily: "var(--font-body)" }}>
-        <TopHeader />
-        <Suspense fallback={null}>
-          <MegaMenu />
-        </Suspense>
-        <BreakingNewsTicker />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
+      <body
+        className="bg-[var(--background)] text-[var(--color-text-body)] antialiased"
+        style={{ fontFamily: "var(--font-body)" }}
+      >
+        {/* Desktop Header — hidden on mobile */}
+        <div className="hidden md:block">
+          <TopHeader />
+          <Suspense fallback={null}>
+            <MegaMenu />
+          </Suspense>
+          <BreakingNewsTicker />
+        </div>
+
+        {/* Main Content */}
+        <main className="min-h-screen pb-16 md:pb-0">{children}</main>
+
+        {/* Desktop Footer — hidden on mobile */}
+        <div className="hidden md:block">
+          <Footer />
+        </div>
+
+        {/* Mobile Bottom Nav — hidden on desktop */}
         <MobileNavBar />
       </body>
     </html>
