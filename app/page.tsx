@@ -1,16 +1,42 @@
-export default function Home() {
+"use client";
+
+import { mockArticles, trendingArticles, mostDiscussedArticles } from "@/lib/mockData";
+import NavigationPanel from "@/components/navigation/NavigationPanel";
+import AboutNews from "@/components/about-news/AboutNews";
+import NewsFeedSection from "@/components/news-feed/NewsFeedSection";
+import RightSidebar from "@/components/right-sidebar/RightSidebar";
+
+export default function FeedPage() {
+  const feedArticles = mockArticles;
+  const spotlightArticle = feedArticles[0];
+  const topNewsArticles = feedArticles.slice(0, 5);
+  const highlightArticles = feedArticles.slice(2, 7);
+
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-4 text-center">
-      <h1 className="mb-4 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-        India Global News
-      </h1>
-      <p className="max-w-xl text-lg text-gray-600">
-        Your new destination for global news. Stay tuned for updates!
-      </p>
-      <div className="mt-10 flex items-center justify-center gap-x-6">
-        <span className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-          Coming Soon
-        </span>
+    <div className="mx-auto max-w-7xl px-4 py-6 lg:px-6">
+      {/* 3-Column Layout */}
+      <div className="flex gap-6">
+        {/* LEFT PANEL — Navigation + About News */}
+        <div className="w-[220px] shrink-0 hidden lg:block space-y-4">
+          <NavigationPanel />
+          <AboutNews />
+        </div>
+
+        {/* CENTER — News Feed Section (8) */}
+        <div className="flex-1 min-w-0">
+          <NewsFeedSection articles={feedArticles} />
+        </div>
+
+        {/* RIGHT SIDEBAR (9) */}
+        <div className="w-[300px] shrink-0">
+          <RightSidebar
+            spotlightArticle={spotlightArticle}
+            topNewsArticles={topNewsArticles}
+            highlightArticles={highlightArticles}
+            trendingArticles={trendingArticles}
+            mostDiscussedArticles={mostDiscussedArticles}
+          />
+        </div>
       </div>
     </div>
   );
