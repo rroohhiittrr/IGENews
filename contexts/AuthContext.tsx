@@ -20,6 +20,7 @@ interface AuthContextType {
   user: UserProfile | null;
   supabaseUser: User | null;
   isLoggedIn: boolean;
+  loading: boolean;
   login: (email: string, password: string) => Promise<boolean>;
   signup: (data: { name: string; email: string; mobile?: string; password: string }) => Promise<boolean>;
   logout: () => Promise<void>;
@@ -308,7 +309,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const isLoggedIn = DEV_MODE ? !!user : !!supabaseUser;
 
   return (
-    <AuthContext.Provider value={{ user, supabaseUser, isLoggedIn, login, signup, logout, updateOnboarding }}>
+    <AuthContext.Provider value={{ user, supabaseUser, isLoggedIn, loading, login, signup, logout, updateOnboarding }}>
       {children}
     </AuthContext.Provider>
   );
