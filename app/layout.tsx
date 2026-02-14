@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Suspense } from "react";
-import TopHeader from "@/components/header/TopHeader";
-import MegaMenu from "@/components/mega-menu/MegaMenu";
-import BreakingNewsTicker from "@/components/layout/BreakingNewsTicker";
-import Footer from "@/components/layout/Footer";
-import MobileNavBar from "@/components/layout/MobileNavBar";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 export const metadata: Metadata = {
   title: "India Global News — B2B Trade Intelligence",
@@ -31,25 +26,7 @@ export default function RootLayout({
         className="bg-[var(--background)] text-[var(--color-text-body)] antialiased"
         style={{ fontFamily: "var(--font-body)" }}
       >
-        {/* Desktop Header — hidden on mobile */}
-        <div className="hidden md:block">
-          <TopHeader />
-          <Suspense fallback={null}>
-            <MegaMenu />
-          </Suspense>
-          <BreakingNewsTicker />
-        </div>
-
-        {/* Main Content */}
-        <main className="min-h-screen pb-16 md:pb-0">{children}</main>
-
-        {/* Desktop Footer — hidden on mobile */}
-        <div className="hidden md:block">
-          <Footer />
-        </div>
-
-        {/* Mobile Bottom Nav — hidden on desktop */}
-        <MobileNavBar />
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );
