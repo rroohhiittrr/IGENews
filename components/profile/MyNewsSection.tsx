@@ -78,12 +78,12 @@ export default function MyNewsSection() {
                 {/* Image */}
                 <div className="h-40 w-full overflow-hidden relative">
                   <img 
-                    src={article.image} 
+                    src={article.heroImage} 
                     alt={article.title} 
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                   <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-xs font-bold text-[var(--color-primary)]">
-                    {article.category}
+                    {article.sector?.name || article.tags[0] || 'News'}
                   </div>
                 </div>
 
