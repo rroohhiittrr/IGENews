@@ -3,6 +3,7 @@
 import { useState, ReactNode } from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface SidebarSectionProps {
   title: string;
@@ -21,6 +22,7 @@ export default function SidebarSection({
   expandedCount = 5,
   viewMoreHref = "#",
 }: SidebarSectionProps) {
+  const t = useTranslations("common");
   const [isHovered, setIsHovered] = useState(false);
   const visibleCount = isHovered ? expandedCount : defaultCount;
   const displayItems = children.slice(0, Math.min(visibleCount, children.length));
@@ -64,7 +66,7 @@ export default function SidebarSection({
         href={viewMoreHref}
         className="flex items-center justify-center gap-1 border-t border-[var(--color-neutral-light)] px-4 py-2 text-xs font-medium text-[var(--color-secondary)] transition-colors hover:bg-[var(--color-neutral-light)] hover:text-[var(--color-primary)]"
       >
-        View More <ChevronRight className="h-3 w-3" />
+        {t("viewMore")} <ChevronRight className="h-3 w-3" />
       </Link>
     </div>
   );

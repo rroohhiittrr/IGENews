@@ -7,9 +7,10 @@ import NewsCard from "./NewsCard";
 
 interface NewsFeedSectionProps {
   articles: Article[];
+  hideTabs?: boolean;
 }
 
-export default function NewsFeedSection({ articles }: NewsFeedSectionProps) {
+export default function NewsFeedSection({ articles, hideTabs = false }: NewsFeedSectionProps) {
   const [activeTab, setActiveTab] = useState<FeedTab>("sector");
   const mainArticles = articles;
 
@@ -23,7 +24,7 @@ export default function NewsFeedSection({ articles }: NewsFeedSectionProps) {
       </div>
 
       {/* Sub-Tab Bar */}
-      <SubTabBar activeTab={activeTab} onTabChange={setActiveTab} prefix="" />
+      {!hideTabs && <SubTabBar activeTab={activeTab} onTabChange={setActiveTab} prefix="" />}
 
       {/* "You are missing out" block */}
       <div className="rounded-xl border border-dashed border-[var(--color-accent-gold)]/40 bg-[var(--color-accent-gold-light)] p-4 text-center">

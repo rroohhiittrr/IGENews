@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { AlertTriangle } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const BREAKING_NEWS = [
   {
@@ -22,6 +23,8 @@ const BREAKING_NEWS = [
 ];
 
 export default function BreakingNewsTicker() {
+  const t = useTranslations("common");
+
   return (
     <div className="relative overflow-hidden bg-[var(--color-breaking)] text-white">
       <div className="mx-auto flex max-w-7xl items-center">
@@ -29,7 +32,7 @@ export default function BreakingNewsTicker() {
         <div className="flex shrink-0 items-center gap-1.5 bg-[var(--color-breaking)] px-3 py-1.5 z-10">
           <AlertTriangle className="h-3.5 w-3.5 animate-pulse" />
           <span className="text-xs font-bold uppercase tracking-wider">
-            Breaking
+            {t("breaking")}
           </span>
         </div>
 

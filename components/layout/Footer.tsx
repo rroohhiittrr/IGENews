@@ -1,25 +1,26 @@
 import Link from "next/link";
 import { Linkedin, Twitter, Instagram, Youtube, Send } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const FOOTER_LINKS = {
   company: [
-    { label: "About Us", href: "/about" },
-    { label: "Advertise With Us", href: "/advertise" },
-    { label: "Contact Us", href: "/contact" },
-    { label: "Careers", href: "/careers" },
+    { key: "aboutUs", href: "/about" },
+    { key: "advertise", href: "/advertise" },
+    { key: "contactUs", href: "/contact" },
+    { key: "careers", href: "/careers" },
   ],
   quickLinks: [
-    { label: "Feed", href: "/" },
-    { label: "Headlines", href: "/headlines" },
-    { label: "Trending", href: "/trending" },
-    { label: "Categories", href: "/categories/sector" },
-    { label: "Subscription Plans", href: "/plans" },
+    { key: "feed", href: "/", section: "nav" },
+    { key: "headlines", href: "/headlines", section: "nav" },
+    { key: "trending", href: "/trending", section: "nav" },
+    { key: "categories", href: "/categories/sector", section: "nav" },
+    { key: "subscriptionPlans", href: "/plans", section: "footer" },
   ],
   legal: [
-    { label: "Privacy Policy", href: "/privacy" },
-    { label: "Terms of Use", href: "/terms" },
-    { label: "Cookie Policy", href: "/cookies" },
-    { label: "Sitemap", href: "/sitemap" },
+    { key: "privacy", href: "/privacy" },
+    { key: "terms", href: "/terms" },
+    { key: "cookie", href: "/cookies" },
+    { key: "sitemap", href: "/sitemap" },
   ],
   portals: [
     { label: "iGenWorld", href: "https://igenworld.com", external: true },
@@ -43,12 +44,15 @@ const SECTORS_GRID = [
 ];
 
 export default function Footer() {
+  const t = useTranslations();
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className="border-t border-[var(--color-neutral-light)] bg-[var(--color-primary)]">
       {/* Sector Directory */}
       <div className="mx-auto max-w-7xl px-4 py-6 lg:px-6">
         <h4 className="mb-3 text-xs font-semibold uppercase tracking-widest text-[var(--color-neutral-mid)]">
-          Sector Directory
+          {t("footer.sectorDirectory")}
         </h4>
         <div className="flex flex-wrap gap-2">
           {SECTORS_GRID.map((s) => (
@@ -79,23 +83,23 @@ export default function Footer() {
               </div>
             </div>
             <p className="mb-4 text-sm leading-relaxed text-[var(--color-neutral-mid)]">
-              India&apos;s premier B2B news platform covering trade, exports, policy, and business leadership across 20 sectors and 195 bilateral country relations.
+              {t("footer.description")}
             </p>
 
             {/* Newsletter */}
             <div className="mb-4">
               <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-[var(--color-accent-gold)]">
-                Subscribe to IGN Weekly
+                {t("footer.subscribeTitle")}
               </p>
               <div className="flex rounded-lg overflow-hidden">
                 <input
                   type="email"
-                  placeholder="your@email.com"
+                  placeholder={t("sidebar.emailPlaceholder")}
                   className="flex-1 border-0 bg-white/10 px-3 py-2.5 text-sm text-white placeholder-[var(--color-neutral-mid)] outline-none focus:bg-white/15"
                 />
                 <button className="flex items-center gap-1 bg-[var(--color-accent-gold)] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-accent-gold-dark)]">
                   <Send className="h-3.5 w-3.5" />
-                  Subscribe
+                  {t("common.subscribe")}
                 </button>
               </div>
             </div>
@@ -120,13 +124,13 @@ export default function Footer() {
           {/* Company */}
           <div>
             <h4 className="mb-3 text-xs font-semibold uppercase tracking-widest text-[var(--color-accent-gold)]">
-              Company
+              {t("footer.company")}
             </h4>
             <ul className="space-y-2">
               {FOOTER_LINKS.company.map((link) => (
-                <li key={link.label}>
+                <li key={link.key}>
                   <Link href={link.href} className="text-sm text-[var(--color-neutral-mid)] transition-colors hover:text-white">
-                    {link.label}
+                    {t(`footer.${link.key}`)}
                   </Link>
                 </li>
               ))}
@@ -136,13 +140,14 @@ export default function Footer() {
           {/* Quick Links */}
           <div>
             <h4 className="mb-3 text-xs font-semibold uppercase tracking-widest text-[var(--color-accent-gold)]">
-              Quick Links
+              {t("footer.quickLinks")}
             </h4>
             <ul className="space-y-2">
               {FOOTER_LINKS.quickLinks.map((link) => (
-                <li key={link.label}>
+                <li key={link.key}>
                   <Link href={link.href} className="text-sm text-[var(--color-neutral-mid)] transition-colors hover:text-white">
-                    {link.label}
+                    {/* Handle section based translation */}
+                    {link.section === "nav" ? t(`nav.${link.key}`) : t(`footer.${link.key}`)}
                   </Link>
                 </li>
               ))}
@@ -152,7 +157,7 @@ export default function Footer() {
           {/* Portals & Legal */}
           <div>
             <h4 className="mb-3 text-xs font-semibold uppercase tracking-widest text-[var(--color-accent-gold)]">
-              Portals
+              {t("footer.portals")}
             </h4>
             <ul className="space-y-2 mb-6">
               {FOOTER_LINKS.portals.map((link) => (
@@ -169,13 +174,13 @@ export default function Footer() {
               ))}
             </ul>
             <h4 className="mb-3 text-xs font-semibold uppercase tracking-widest text-[var(--color-accent-gold)]">
-              Legal
+              {t("footer.legal")}
             </h4>
             <ul className="space-y-2">
               {FOOTER_LINKS.legal.map((link) => (
-                <li key={link.label}>
+                <li key={link.key}>
                   <Link href={link.href} className="text-sm text-[var(--color-neutral-mid)] transition-colors hover:text-white">
-                    {link.label}
+                    {t(`footer.${link.key}`)}
                   </Link>
                 </li>
               ))}
@@ -187,10 +192,10 @@ export default function Footer() {
       {/* Bottom Bar */}
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-4 text-xs text-[var(--color-neutral-mid)] sm:flex-row lg:px-6">
-          <p>© 2026 India Global Expo News Pvt. Ltd. All rights reserved.</p>
+          <p>{t("footer.rights", { year: currentYear })}</p>
           <p className="flex items-center gap-1">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-accent-green)]"></span>
-            SSL Secured · V0.1.0
+            {t("footer.ssl")} · V0.1.0
           </p>
         </div>
       </div>

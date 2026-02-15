@@ -5,27 +5,61 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 import MenuDropdown from "./MenuDropdown";
-import { FEED_ITEMS } from "./FeedMenu";
-import { HEADLINES_ITEMS } from "./HeadlinesMenu";
-import { TRENDING_ITEMS } from "./TrendingMenu";
-import { CATEGORIES_ITEMS } from "./CategoriesMenu";
-import { MYNEWS_ITEMS } from "./MyNewsMenu";
-
-const MENU_ITEMS = [
-  { label: "Feed", href: "/", subItems: FEED_ITEMS },
-  { label: "Headlines", href: "/headlines", subItems: HEADLINES_ITEMS },
-  { label: "Trending", href: "/trending", subItems: TRENDING_ITEMS },
-  { label: "Categories", href: "/categories/sector", subItems: CATEGORIES_ITEMS },
-  { label: "My News", href: "/mynews", subItems: MYNEWS_ITEMS },
-];
+import { useTranslations } from "next-intl";
 
 export default function MegaMenu() {
   const pathname = usePathname();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const t = useTranslations("nav");
+
+  const FEED_ITEMS = [
+    { label: t("sectorNews"), href: "/feed/sector" },
+    { label: t("countryNews"), href: "/feed/country" },
+    { label: t("leaderNews"), href: "/feed/leader" },
+    { label: t("exploreIGE"), href: "https://indiaglobalexpo.com", external: true },
+  ];
+
+  const HEADLINES_ITEMS = [
+    { label: t("sectorNews"), href: "/headlines/sector" },
+    { label: t("countryNews"), href: "/headlines/country" },
+    { label: t("leaderNews"), href: "/headlines/leader" },
+    { label: t("exploreIGE"), href: "https://indiaglobalexpo.com", external: true },
+  ];
+
+  const TRENDING_ITEMS = [
+    { label: t("sectorNews"), href: "/trending/sector" },
+    { label: t("countryNews"), href: "/trending/country" },
+    { label: t("leaderNews"), href: "/trending/leader" },
+    { label: t("exploreIGE"), href: "https://indiaglobalexpo.com", external: true },
+  ];
+
+  const CATEGORIES_ITEMS = [
+    { label: t("sectorNews"), href: "/categories/sector" },
+    { label: t("countryNews"), href: "/categories/country" },
+    { label: t("leaderNews"), href: "/categories/leader" },
+  ];
+
+  const MYNEWS_ITEMS = [
+    { label: t("myFavourites"), href: "/mynews/favourites" },
+    { label: t("myBookmarks"), href: "/mynews/bookmarks" },
+    { label: t("myReadLater"), href: "/mynews/readlater" },
+    { label: t("myComments"), href: "/mynews/comments" },
+    { label: t("myLikes"), href: "/mynews/likes" },
+  ];
+
+  const MENU_ITEMS = [
+    { label: t("feed"), href: "/", subItems: FEED_ITEMS },
+    { label: t("headlines"), href: "/headlines", subItems: HEADLINES_ITEMS },
+    { label: t("trending"), href: "/trending", subItems: TRENDING_ITEMS },
+    { label: t("categories"), href: "/categories/sector", subItems: CATEGORIES_ITEMS },
+    { label: t("myNews"), href: "/mynews", subItems: MYNEWS_ITEMS },
+  ];
 
   const isActive = (href: string) => {
-    if (href === "/") return pathname === "/";
-    return pathname.startsWith(href.split("?")[0]);
+    // Handle locale prefix in pathname
+    const cleanPath = pathname.replace(/^\/(en|hi|ta|kn)/, '') || '/';
+    if (href === "/") return cleanPath === "/";
+    return cleanPath.startsWith(href.split("?")[0]);
   };
 
   return (
@@ -33,7 +67,7 @@ export default function MegaMenu() {
       <div className="mx-auto flex max-w-7xl items-center px-4 lg:px-6">
         {MENU_ITEMS.map((item, index) => (
           <div
-            key={item.label}
+            key={item.href}
             className="mega-menu-item relative"
             onMouseEnter={() => setOpenIndex(index)}
             onMouseLeave={() => setOpenIndex(null)}
@@ -66,9 +100,9 @@ export default function MegaMenu() {
         {/* Top News - Coming Soon */}
         <div className="px-4 py-3">
           <span className="flex items-center gap-1 text-sm font-medium text-[var(--color-neutral-mid)] cursor-not-allowed">
-            Top News
+            {t("topNews")}
             <span className="rounded-full bg-[var(--color-neutral-light)] px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-[var(--color-neutral-mid)]">
-              Soon
+              {t("soon")}
             </span>
           </span>
         </div>

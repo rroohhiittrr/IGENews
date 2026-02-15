@@ -3,20 +3,16 @@ import Image from "next/image";
 import { Article } from "@/types/types";
 import { MessageCircle, Building2 } from "lucide-react";
 import SidebarSection from "./SidebarSection";
-
-function timeAgoShort(dateStr: string): string {
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const hours = Math.floor(diff / 3600000);
-  if (hours < 1) return "Just now";
-  if (hours < 24) return `${hours}h ago`;
-  return `${Math.floor(hours / 24)}d ago`;
-}
+import { useTranslations, useFormatter } from "next-intl";
 
 interface MostDiscussedWidgetProps {
   articles: Article[];
 }
 
 export default function MostDiscussedWidget({ articles }: MostDiscussedWidgetProps) {
+  const t = useTranslations("sidebar");
+  const format = useFormatter();
+
   const items = articles.map((article, index) => {
     const isCompanyAd = index === 2; // 3rd item is company profile ad
     return (
@@ -50,7 +46,7 @@ export default function MostDiscussedWidget({ articles }: MostDiscussedWidgetPro
               {article.commentCount}
             </span>
             <span>·</span>
-            <span>{timeAgoShort(article.publishedAt)}</span>
+            <span>{format.relativeTime(new Date(article.publishedAt))}</span>
           </div>
         </div>
       </Link>
@@ -59,7 +55,7 @@ export default function MostDiscussedWidget({ articles }: MostDiscussedWidgetPro
 
   return (
     <SidebarSection
-      title="Most Discussed"
+      title={t("mostDiscussed")}
       icon="💬"
       viewMoreHref="/trending?sort=discussed"
     >

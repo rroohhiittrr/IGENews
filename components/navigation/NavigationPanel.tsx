@@ -11,23 +11,29 @@ import {
   Bookmark,
   Clock,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
-const NAV_ITEMS = [
-  { label: "Feed", href: "/", icon: Newspaper },
-  { label: "Headlines", href: "/headlines", icon: LayoutList },
-  { label: "Categories", href: "/categories", icon: Grid3X3 },
-  { label: "Trending", href: "/trending", icon: TrendingUp },
-  { label: "Search", href: "/search", icon: Search },
-  { label: "Bookmarks", href: "/mynews?tab=bookmarks", icon: Bookmark },
-  { label: "Read Later", href: "/mynews?tab=readlater", icon: Clock },
-];
+
 
 export default function NavigationPanel() {
   const pathname = usePathname();
+  const t = useTranslations("nav");
+
+  const navItems = [
+    { label: t("feed"), href: "/", icon: Newspaper },
+    { label: t("headlines"), href: "/headlines", icon: LayoutList },
+    { label: t("categories"), href: "/categories", icon: Grid3X3 },
+    { label: t("trending"), href: "/trending", icon: TrendingUp },
+    { label: t("search"), href: "/search", icon: Search },
+    { label: t("bookmarks"), href: "/mynews?tab=bookmarks", icon: Bookmark },
+    { label: t("readLater"), href: "/mynews?tab=readlater", icon: Clock },
+  ];
 
   const isActive = (href: string) => {
-    if (href === "/") return pathname === "/";
-    return pathname.startsWith(href.split("?")[0]);
+    // Handle locale prefix in pathname
+    const cleanPath = pathname.replace(/^\/(en|hi|ta|kn)/, '') || '/';
+    if (href === "/") return cleanPath === "/";
+    return cleanPath.startsWith(href.split("?")[0]);
   };
 
   return (
@@ -35,12 +41,12 @@ export default function NavigationPanel() {
       <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-neutral-dark)]">
         Navigations
       </h3>
-      {NAV_ITEMS.map((item) => {
+      {navItems.map((item) => {
         const Icon = item.icon;
         const active = isActive(item.href);
         return (
           <Link
-            key={item.label}
+            key={item.href} // Changed key to href since label might change
             href={item.href}
             className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
               active
