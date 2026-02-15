@@ -12,8 +12,10 @@ import {
   User,
   Sparkles,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function TopHeader() {
+  const t = useTranslations();
   const [isDark, setIsDark] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
   const [notifCount] = useState(3);
@@ -41,7 +43,7 @@ export default function TopHeader() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--color-neutral-dark)]" />
           <input
             type="text"
-            placeholder="Search headlines, people, topics..."
+            placeholder={t("header.searchPlaceholder")}
             className="w-full rounded-full border border-[var(--color-neutral-mid)] bg-[var(--color-neutral-light)] py-2 pl-10 pr-16 text-sm text-[var(--color-text-body)] placeholder-[var(--color-neutral-dark)] outline-none transition-all focus:border-[var(--color-secondary)] focus:bg-white focus:ring-2 focus:ring-[var(--color-secondary)]/20"
             onFocus={() => setSearchFocused(true)}
             onBlur={() => setSearchFocused(false)}
@@ -86,7 +88,7 @@ export default function TopHeader() {
 
         {/* Plan Badge */}
         <span className="hidden rounded-full bg-[var(--color-neutral-light)] px-2 py-0.5 text-[10px] font-semibold text-[var(--color-neutral-dark)] uppercase tracking-wider sm:inline-block">
-          Free
+          {t("common.free")}
         </span>
 
         {/* Profile Avatar */}
@@ -100,7 +102,7 @@ export default function TopHeader() {
           className="hidden items-center gap-1 rounded-full bg-[var(--color-accent-gold)] px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition-all hover:bg-[var(--color-accent-gold-dark)] hover:shadow-md sm:flex"
         >
           <Sparkles className="h-3.5 w-3.5" />
-          Upgrade
+          {t("common.upgrade")}
         </Link>
       </div>
     </header>

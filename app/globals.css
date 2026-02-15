@@ -73,6 +73,35 @@
   --mega-menu-height: 48px;
 }
 
+/* Dark mode color overrides */
+.dark {
+  --background: #0F1419;
+  --foreground: #E8E9EA;
+  
+  /* Dark mode brand colors */
+  --color-primary: #4A8FC2;
+  --color-primary-light: #5BA3D6;
+  --color-primary-dark: #2F6FA3;
+  --color-secondary: #5BA3D6;
+  --color-secondary-light: #6DB4E5;
+  --color-secondary-dark: #4A8FC2;
+  --color-accent-gold: #FDB84A;
+  --color-accent-gold-light: #FEC970;
+  --color-accent-gold-dark: #F4A024;
+  --color-accent-green: #4CAF50;
+  --color-accent-green-light: #81C784;
+  --color-accent-green-dark: #388E3C;
+  
+  /* Dark mode neutrals */
+  --color-neutral-white: #1A1F26;
+  --color-neutral-light: #242933;
+  --color-neutral-mid: #3D4451;
+  --color-neutral-dark: #9BA3AF;
+  --color-text-body: #E8E9EA;
+  --color-breaking: #EF5350;
+  --color-breaking-light: #2D1F1F;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -85,6 +114,7 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* ==========================================

@@ -3,20 +3,16 @@ import Image from "next/image";
 import { Article } from "@/types/types";
 import { UserCircle } from "lucide-react";
 import SidebarSection from "./SidebarSection";
-
-function timeAgoShort(dateStr: string): string {
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const hours = Math.floor(diff / 3600000);
-  if (hours < 1) return "Just now";
-  if (hours < 24) return `${hours}h ago`;
-  return `${Math.floor(hours / 24)}d ago`;
-}
+import { useTranslations, useFormatter } from "next-intl";
 
 interface TrendingNowWidgetProps {
   articles: Article[];
 }
 
 export default function TrendingNowWidget({ articles }: TrendingNowWidgetProps) {
+  const t = useTranslations("sidebar");
+  const format = useFormatter();
+
   const items = articles.map((article, index) => {
     const isCeoAd = index === 2; // 3rd item is CEO voice ad
     return (
@@ -51,7 +47,7 @@ export default function TrendingNowWidget({ articles }: TrendingNowWidgetProps) 
           <div className="mt-1 flex items-center gap-2 text-[10px] text-[var(--color-neutral-dark)]">
             {article.sector && <span>{article.sector.name}</span>}
             <span>·</span>
-            <span>{timeAgoShort(article.publishedAt)}</span>
+            <span>{format.relativeTime(new Date(article.publishedAt))}</span>
           </div>
         </div>
       </Link>
@@ -60,7 +56,7 @@ export default function TrendingNowWidget({ articles }: TrendingNowWidgetProps) 
 
   return (
     <SidebarSection
-      title="Trending Now"
+      title={t("trendingNow")}
       icon="🔥"
       viewMoreHref="/trending"
     >

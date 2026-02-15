@@ -2,12 +2,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { Article } from "@/types/types";
 import { BookOpen, Bookmark, Share2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface NowReadingDeskProps {
   article: Article;
 }
 
 export default function NowReadingDesk({ article }: NowReadingDeskProps) {
+  const t = useTranslations();
+
   return (
     <div className="rounded-xl overflow-hidden border border-[var(--color-neutral-light)] shadow-sm">
       {/* Header */}
@@ -15,7 +18,7 @@ export default function NowReadingDesk({ article }: NowReadingDeskProps) {
         <div className="flex items-center gap-2">
           <BookOpen className="h-4 w-4 text-white/80" />
           <span className="text-xs font-semibold text-white uppercase tracking-wider">
-            Now Reading / Desk
+            {t("sidebar.nowReading")}
           </span>
         </div>
         <div className="flex items-center gap-1.5">
@@ -58,7 +61,7 @@ export default function NowReadingDesk({ article }: NowReadingDeskProps) {
 
         {/* Meta */}
         <div className="flex items-center gap-2 text-[10px] text-white/60">
-          <span>{article.readTime} min read</span>
+          <span>{t("common.minRead", { min: article.readTime })}</span>
           <span>·</span>
           <span>{article.sourceName}</span>
         </div>
@@ -68,7 +71,7 @@ export default function NowReadingDesk({ article }: NowReadingDeskProps) {
           href={`/article/${article.slug}`}
           className="mt-3 flex w-full items-center justify-center rounded-lg bg-white py-2 text-xs font-semibold text-[var(--color-primary)] transition-all hover:bg-white/90 hover:shadow-md"
         >
-          Open Article
+          {t("sidebar.openArticle")}
         </Link>
       </div>
     </div>

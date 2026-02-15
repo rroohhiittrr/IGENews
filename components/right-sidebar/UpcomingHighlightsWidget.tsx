@@ -3,20 +3,16 @@ import Image from "next/image";
 import { Article } from "@/types/types";
 import { Globe, Megaphone } from "lucide-react";
 import SidebarSection from "./SidebarSection";
-
-function timeAgoShort(dateStr: string): string {
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const hours = Math.floor(diff / 3600000);
-  if (hours < 1) return "Just now";
-  if (hours < 24) return `${hours}h ago`;
-  return `${Math.floor(hours / 24)}d ago`;
-}
+import { useTranslations, useFormatter } from "next-intl";
 
 interface UpcomingHighlightsWidgetProps {
   articles: Article[];
 }
 
 export default function UpcomingHighlightsWidget({ articles }: UpcomingHighlightsWidgetProps) {
+  const t = useTranslations("sidebar");
+  const format = useFormatter();
+
   const items = articles.map((article, index) => {
     const isCountryAd = index === 2; // 3rd item is a country news ad
     return (
@@ -48,7 +44,7 @@ export default function UpcomingHighlightsWidget({ articles }: UpcomingHighlight
             {article.country?.pairName && <span className="flex items-center gap-0.5"><Globe className="h-2.5 w-2.5" />{article.country.pairName}</span>}
             {!article.country?.pairName && article.sector && <span>{article.sector.name}</span>}
             <span>·</span>
-            <span>{timeAgoShort(article.publishedAt)}</span>
+            <span>{format.relativeTime(new Date(article.publishedAt))}</span>
           </div>
         </div>
       </Link>
@@ -57,7 +53,7 @@ export default function UpcomingHighlightsWidget({ articles }: UpcomingHighlight
 
   return (
     <SidebarSection
-      title="Upcoming Highlights"
+      title={t("upcomingHighlights")}
       icon="📋"
       viewMoreHref="/headlines"
     >
