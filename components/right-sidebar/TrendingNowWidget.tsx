@@ -47,7 +47,7 @@ export default function TrendingNowWidget({ articles }: TrendingNowWidgetProps) 
           <div className="mt-1 flex items-center gap-2 text-[10px] text-[var(--color-neutral-dark)]">
             {article.sector && <span>{article.sector.name}</span>}
             <span>·</span>
-            <span>{format.relativeTime(new Date(article.publishedAt))}</span>
+            <span>{format.relativeTime(new Date(article.publishedAt), { now: new Date() })}</span>
           </div>
         </div>
       </Link>

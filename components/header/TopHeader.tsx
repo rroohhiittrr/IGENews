@@ -10,6 +10,7 @@ import ProfileAvatar from "@/components/header/ProfileAvatar";
 import UpgradeButton from "@/components/header/UpgradeButton";
 import AuthButtons from "@/components/header/AuthButtons";
 import { useAuth } from "@/contexts/AuthContext";
+import Link from "next/link";
 
 export default function TopHeader() {
   const { isLoggedIn } = useAuth();
@@ -19,6 +20,12 @@ export default function TopHeader() {
       <Logo />
       <SearchBar />
       <div className="flex items-center gap-1 sm:gap-2">
+        <Link
+          href="/about-igen"
+          className="hidden sm:flex items-center rounded-full px-2.5 py-1.5 text-xs font-medium text-[var(--color-neutral-dark)] hover:bg-[var(--color-neutral-light)] transition-all"
+        >
+          About IGEN
+        </Link>
         <LanguageSelector />
         <NotificationBell />
         <DarkModeToggle />

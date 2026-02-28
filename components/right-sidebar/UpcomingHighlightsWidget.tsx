@@ -44,7 +44,7 @@ export default function UpcomingHighlightsWidget({ articles }: UpcomingHighlight
             {article.country?.pairName && <span className="flex items-center gap-0.5"><Globe className="h-2.5 w-2.5" />{article.country.pairName}</span>}
             {!article.country?.pairName && article.sector && <span>{article.sector.name}</span>}
             <span>·</span>
-            <span>{format.relativeTime(new Date(article.publishedAt))}</span>
+            <span>{format.relativeTime(new Date(article.publishedAt), { now: new Date() })}</span>
           </div>
         </div>
       </Link>

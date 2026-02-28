@@ -46,7 +46,7 @@ export default function MostDiscussedWidget({ articles }: MostDiscussedWidgetPro
               {article.commentCount}
             </span>
             <span>·</span>
-            <span>{format.relativeTime(new Date(article.publishedAt))}</span>
+            <span>{format.relativeTime(new Date(article.publishedAt), { now: new Date() })}</span>
           </div>
         </div>
       </Link>
