@@ -97,7 +97,7 @@ export default function SignupPage() {
           <div className="space-y-8">
             <div>
               <h1 className="text-4xl lg:text-5xl font-display font-bold mb-4 leading-tight">
-                Welcome to India Global News
+                Welcome to IGENews
               </h1>
               <p className="text-xl text-white/90 font-medium">
                 The Intelligence Pulse of Global India

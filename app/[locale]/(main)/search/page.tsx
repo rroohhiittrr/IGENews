@@ -60,7 +60,7 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--color-neutral-light)]/30 pb-24">
+    <div className="min-h-screen bg-[var(--color-neutral-light)]/30 pb-28">
       {/* Mobile Header */}
       <header className="sticky top-0 z-50 bg-white border-b border-[var(--color-neutral-light)] shadow-sm md:hidden">
         <div className="px-4 py-3">
@@ -105,7 +105,7 @@ export default function SearchPage() {
           return (
             <div
               key={section.id}
-              className="rounded-xl bg-white border border-[var(--color-neutral-light)] shadow-sm overflow-hidden"
+            className={`w-full rounded-xl bg-white dark:bg-[var(--color-neutral-white)] border border-[var(--color-neutral-light)] dark:border-[var(--color-neutral-mid)] shadow-sm overflow-hidden`}
             >
               {/* Toggle Header */}
               <button

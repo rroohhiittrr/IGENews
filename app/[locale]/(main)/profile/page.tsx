@@ -1,8 +1,9 @@
 "use client";
 
 import { useAuth } from "@/contexts/AuthContext";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { useEffect } from "react";
+import { Settings, ChevronLeft } from "lucide-react";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import InterestsCard from "@/components/profile/InterestsCard";
 import ActivityStats from "@/components/profile/ActivityStats";
@@ -11,13 +12,15 @@ import MyNewsSection from "@/components/profile/MyNewsSection";
 export default function ProfilePage() {
   const { user, isLoggedIn, loading } = useAuth();
   const router = useRouter();
+  const params = useParams();
+  const locale = (params?.locale as string) || "en";
 
   // Redirect to login if not authenticated
   useEffect(() => {
     if (!loading && !isLoggedIn) {
-      router.push("/login");
+      router.push(`/${locale}/login`);
     }
-  }, [isLoggedIn, loading, router]);
+  }, [isLoggedIn, loading, router, locale]);
 
   // Show loading state while checking authentication
   if (loading || !isLoggedIn || !user) {
@@ -32,8 +35,34 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--color-neutral-light)]/30 pb-24 pt-8">
-      <div className="max-w-7xl mx-auto px-4 lg:px-6">
+    <div className="min-h-screen bg-[var(--color-neutral-light)]/30 pb-28">
+      {/* ── Mobile-only sticky header ── */}
+      <header className="sticky top-0 z-50 flex items-center justify-between px-4 py-3 bg-white dark:bg-[var(--background)] border-b border-[var(--color-neutral-light)] dark:border-[var(--color-neutral-mid)] shadow-sm md:hidden">
+        <button
+          onClick={() => router.back()}
+          className="flex items-center justify-center h-7 w-7 rounded-full bg-[var(--color-neutral-light)] text-[var(--color-neutral-dark)] active:bg-[var(--color-neutral-mid)]/30 transition-colors"
+          aria-label="Go back"
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </button>
+
+        <h1
+          className="text-base font-bold text-[var(--color-primary)]"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
+          My Profile
+        </h1>
+
+        <button
+          className="flex items-center justify-center h-7 w-7 rounded-full bg-[var(--color-neutral-light)] text-[var(--color-neutral-dark)] active:bg-[var(--color-neutral-mid)]/30 transition-colors"
+          aria-label="Settings"
+        >
+          <Settings className="h-4 w-4" />
+        </button>
+      </header>
+
+      {/* ── Page content ── */}
+      <div className="max-w-7xl mx-auto px-4 lg:px-6 md:pt-8">
         {/* Profile Header */}
         <ProfileHeader user={user} />
 
@@ -51,7 +80,6 @@ export default function ProfilePage() {
 
         {/* Full Width: My News / Activity */}
         <MyNewsSection />
-        
       </div>
     </div>
   );

@@ -371,7 +371,7 @@ export default function OnboardingPage() {
       <div className="onb-header">
         <div className="onb-header-brand">
           <Newspaper className="w-6 h-6 text-[var(--color-secondary)]" />
-          <span>India Global News</span>
+          <span>IGENews</span>
         </div>
         <div className="onb-header-step">Step {step} of 3</div>
       </div>

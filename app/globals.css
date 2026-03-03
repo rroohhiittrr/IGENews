@@ -5,26 +5,37 @@
    IGN DESIGN SYSTEM — TAILWIND V4 THEME
    ========================================== */
 @theme inline {
-  /* Colors — Brand Palette */
-  --color-primary: #1E3A5F;
-  --color-primary-light: #2F6FA3;
-  --color-primary-dark: #142848;
-  --color-secondary: #2F6FA3;
-  --color-secondary-light: #4A8FC2;
-  --color-secondary-dark: #1E5A8A;
-  --color-accent-gold: #F4A024;
-  --color-accent-gold-light: #FEF3DC;
-  --color-accent-gold-dark: #C47F1A;
-  --color-accent-green: #2E7D32;
-  --color-accent-green-light: #E8F5E9;
-  --color-accent-green-dark: #1B5E20;
-  --color-neutral-white: #FFFFFF;
-  --color-neutral-light: #F5F5F5;
-  --color-neutral-mid: #BDC3C7;
-  --color-neutral-dark: #5A6A7A;
-  --color-text-body: #1A1A1A;
-  --color-breaking: #DC2626;
-  --color-breaking-light: #FEF2F2;
+  /* ── Brand Primary ── */
+  --color-primary:           #1E3A5F;   /* Indigo Navy  — 40% */
+  --color-primary-light:     #2F6FA3;   /* Steel Blue   — lightened primary */
+  --color-primary-dark:      #142840;   /* Deeper navy  — hover/pressed */
+
+  /* ── Brand Secondary ── */
+  --color-secondary:         #2F6FA3;   /* Steel Blue   — 25% */
+  --color-secondary-light:   #4A8FC2;   /* Lighter steel blue */
+  --color-secondary-dark:    #1E5580;   /* Darker steel blue */
+
+  /* ── Accent: Saffron Gold — 20% ── */
+  --color-accent-gold:       #F4A024;   /* Saffron Gold — primary accent */
+  --color-accent-gold-light: #FEF3DC;   /* Gold tint — subtle backgrounds */
+  --color-accent-gold-bright:#F4A024;   /* Alias for use as text on dark surfaces */
+  --color-accent-gold-dark:  #C47F1A;   /* Dark gold — hover state */
+
+  /* ── Accent: Export Green — 15% ── */
+  --color-accent-green:      #2E7D32;   /* Export Green */
+  --color-accent-green-light:#E8F5E9;   /* Green tint */
+  --color-accent-green-dark: #1B5E20;   /* Dark green */
+
+  /* ── Neutrals ── */
+  --color-neutral-white:     #FFFFFF;
+  --color-neutral-light:     #F5F5F5;   /* Light Grey */
+  --color-neutral-mid:       #D0D7E0;   /* Divider/border */
+  --color-neutral-dark:      #5A6A7A;   /* Dark Grey */
+  --color-text-body:         #1A1A1A;
+
+  /* ── Alerts / Breaking ── */
+  --color-breaking:          #DC2626;   /* Red — warnings, breaking, critical */
+  --color-breaking-light:    #FEF2F2;
 
   /* Fonts */
   --font-display: 'Playfair Display', Georgia, serif;
@@ -47,58 +58,61 @@
   --radius-full: 999px;
 
   /* Shadows */
-  --shadow-card: 0 2px 8px rgba(30, 58, 95, 0.08);
+  --shadow-card:  0 2px 8px rgba(30, 58, 95, 0.08);
   --shadow-hover: 0 8px 24px rgba(30, 58, 95, 0.16);
   --shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.24);
-  --shadow-glow: 0 0 20px rgba(244, 160, 36, 0.3);
+  --shadow-glow:  0 0 20px rgba(244, 160, 36, 0.3);
 
   /* Font Sizes */
   --font-size-display-xl: 48px;
   --font-size-display-lg: 36px;
-  --font-size-headline: 24px;
+  --font-size-headline:   24px;
   --font-size-card-title: 18px;
-  --font-size-body-lg: 16px;
-  --font-size-body-sm: 14px;
-  --font-size-meta: 12px;
-  --font-size-micro: 11px;
+  --font-size-body-lg:    16px;
+  --font-size-body-sm:    14px;
+  --font-size-meta:       12px;
+  --font-size-micro:      11px;
 }
 
 /* ==========================================
    BASE STYLES
    ========================================== */
 :root {
-  --background: #FFFFFF;
-  --foreground: #1A1A1A;
-  --header-height: 64px;
-  --mega-menu-height: 48px;
+  --background:        #FFFFFF;
+  --foreground:        #1A1A1A;
+  --header-height:     64px;
+  --mega-menu-height:  48px;
 }
 
 /* Dark mode color overrides */
 .dark {
-  --background: #0F1419;
+  --background: #0D1521;
   --foreground: #E8E9EA;
-  
-  /* Dark mode brand colors */
-  --color-primary: #4A8FC2;
-  --color-primary-light: #5BA3D6;
-  --color-primary-dark: #2F6FA3;
-  --color-secondary: #5BA3D6;
-  --color-secondary-light: #6DB4E5;
-  --color-secondary-dark: #4A8FC2;
-  --color-accent-gold: #FDB84A;
-  --color-accent-gold-light: #FEC970;
-  --color-accent-gold-dark: #F4A024;
-  --color-accent-green: #4CAF50;
-  --color-accent-green-light: #81C784;
-  --color-accent-green-dark: #388E3C;
-  
+
+  /* Dark mode brand colors — lighter for readability on dark bg */
+  --color-primary:             #2F6FA3;
+  --color-primary-light:       #4A8FC2;
+  --color-primary-dark:        #1E3A5F;
+  --color-secondary:           #4A8FC2;
+  --color-secondary-light:     #6DB4E5;
+  --color-secondary-dark:      #2F6FA3;
+
+  --color-accent-gold:         #FDB84A;
+  --color-accent-gold-light:   #FEC970;
+  --color-accent-gold-bright:  #FDB84A;
+  --color-accent-gold-dark:    #F4A024;
+
+  --color-accent-green:        #4CAF50;
+  --color-accent-green-light:  #81C784;
+  --color-accent-green-dark:   #388E3C;
+
   /* Dark mode neutrals */
-  --color-neutral-white: #1A1F26;
-  --color-neutral-light: #242933;
-  --color-neutral-mid: #3D4451;
-  --color-neutral-dark: #9BA3AF;
-  --color-text-body: #E8E9EA;
-  --color-breaking: #EF5350;
+  --color-neutral-white:  #1A1F26;
+  --color-neutral-light:  #242933;
+  --color-neutral-mid:    #3D4451;
+  --color-neutral-dark:   #9BA3AF;
+  --color-text-body:      #E8E9EA;
+  --color-breaking:       #EF5350;
   --color-breaking-light: #2D1F1F;
 }
 
@@ -115,6 +129,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color 0.3s ease, color 0.3s ease;
+  /* Mobile: prevent iOS rubber-banding and allow vertical scroll only */
+  touch-action: pan-y;
+  overscroll-behavior-y: contain;
 }
 
 /* ==========================================
@@ -174,6 +191,24 @@ h3 {
 
 .animate-ticker {
   animation: ticker 25s linear infinite;
+}
+
+/* ==========================================
+   SLIDE ANIMATIONS (used by MobileNewsCard & CommentPanel)
+   ========================================== */
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 /* ==========================================

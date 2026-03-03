@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Search,
   Bell,
@@ -24,16 +25,27 @@ export default function TopHeader() {
     <header className="sticky top-0 z-50 flex h-16 items-center justify-between border-b border-[var(--color-neutral-light)] bg-white px-4 shadow-sm lg:px-6">
       {/* Logo */}
       <Link href="/" className="flex items-center gap-2 shrink-0">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--color-primary)] text-white font-bold text-sm">
-          IGN
+        {/* Brand icon */}
+        <div className="flex h-9 w-9 items-center justify-center shrink-0">
+          <Image
+            src="/images/IGExpoNews_logo.svg"
+            alt="IGENews Brand Icon"
+            width={36}
+            height={36}
+            className="object-contain"
+            priority
+          />
         </div>
-        <div className="hidden sm:block">
-          <h1 className="text-base font-bold text-[var(--color-primary)] leading-tight" style={{ fontFamily: 'var(--font-display)' }}>
-            India Global News
-          </h1>
-          <p className="text-[10px] text-[var(--color-neutral-dark)] leading-none -mt-0.5">
-            by iGenWorld
-          </p>
+        {/* Full logo text */}
+        <div className="hidden sm:flex items-center">
+          <Image
+            src="/images/IGENews_logo.svg"
+            alt="India Global Expo News"
+            width={120}
+            height={36}
+            className="object-contain"
+            priority
+          />
         </div>
       </Link>
 

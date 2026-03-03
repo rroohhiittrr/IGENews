@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Globe, ChevronDown, SlidersHorizontal } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
+import Image from "next/image";
+import { Globe, ChevronDown, SlidersHorizontal, Search, Bell, Moon, Sun } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export type NewsViewType = "top" | "trending" | "headlines" | "discussed";
 
@@ -11,22 +14,28 @@ interface MobileHeaderProps {
 }
 
 const VIEW_OPTIONS: { value: NewsViewType; label: string; icon: string }[] = [
-  { value: "top", label: "Top News", icon: "⭐" },
-  { value: "trending", label: "Trending", icon: "🔥" },
-  { value: "headlines", label: "Headlines", icon: "📰" },
-  { value: "discussed", label: "Most Discussed", icon: "💬" },
+  { value: "top",       label: "Top News",       icon: "⭐" },
+  { value: "trending",  label: "Trending",        icon: "🔥" },
+  { value: "headlines", label: "Headlines",       icon: "📰" },
+  { value: "discussed", label: "Most Discussed",  icon: "💬" },
 ];
 
 const LANGUAGES = ["EN", "HI", "TA", "TE", "BN"];
 
 export default function MobileHeader({ activeView, onViewChange }: MobileHeaderProps) {
-  const [showLangMenu, setShowLangMenu] = useState(false);
-  const [showViewMenu, setShowViewMenu] = useState(false);
-  const [currentLang, setCurrentLang] = useState("EN");
+  const [showLangMenu,  setShowLangMenu]  = useState(false);
+  const [showViewMenu,  setShowViewMenu]  = useState(false);
+  const [currentLang,   setCurrentLang]   = useState("EN");
+  const params  = useParams();
+  const router  = useRouter();
+  const locale  = (params?.locale as string) || "en";
+  const { theme, toggleTheme } = useTheme();
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-[var(--color-neutral-light)] shadow-sm md:hidden">
+    <header className="sticky top-0 z-50 bg-white dark:bg-[var(--background)] border-b border-[var(--color-neutral-light)] dark:border-[var(--color-neutral-mid)] shadow-sm md:hidden">
+      {/* ── Row 1: Language | Logo | Actions ── */}
       <div className="flex items-center justify-between px-4 py-3">
+
         {/* Left — Language Toggle */}
         <div className="relative">
           <button
@@ -41,7 +50,7 @@ export default function MobileHeader({ activeView, onViewChange }: MobileHeaderP
           {showLangMenu && (
             <>
               <div className="fixed inset-0 z-40" onClick={() => setShowLangMenu(false)} />
-              <div className="absolute left-0 top-full mt-1 z-50 min-w-[100px] rounded-xl border border-[var(--color-neutral-light)] bg-white py-1 shadow-xl">
+              <div className="absolute left-0 top-full mt-1 z-50 min-w-[100px] rounded-xl border border-[var(--color-neutral-light)] bg-white dark:bg-[var(--background)] py-1 shadow-xl">
                 {LANGUAGES.map((lang) => (
                   <button
                     key={lang}
@@ -61,50 +70,85 @@ export default function MobileHeader({ activeView, onViewChange }: MobileHeaderP
         </div>
 
         {/* Center — Logo */}
-        <div className="absolute left-1/2 -translate-x-1/2 text-center">
-          <h1
-            className="text-base font-bold text-[var(--color-primary)] leading-tight"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
-            India Global News
-          </h1>
-          <p className="text-[9px] text-[var(--color-neutral-dark)] leading-none -mt-0.5">
-            by iGenWorld
-          </p>
+        <div className="absolute left-1/2 -translate-x-1/2">
+          <Image
+            src="/images/IGENews_logo.svg"
+            alt="IGE News"
+            width={110}
+            height={32}
+            className="object-contain"
+            priority
+          />
         </div>
 
-        {/* Right — News Type Switcher */}
-        <div className="relative">
+        {/* Right — Action Icons + View Switcher */}
+        <div className="flex items-center gap-1.5">
+
+          {/* Dark mode toggle */}
           <button
-            onClick={() => { setShowViewMenu(!showViewMenu); setShowLangMenu(false); }}
-            className="flex items-center gap-1 rounded-full bg-[var(--color-primary)] px-2.5 py-1.5 text-xs font-medium text-white active:bg-[var(--color-primary-dark)]"
+            onClick={toggleTheme}
+            aria-label="Toggle dark mode"
+            className="flex items-center justify-center h-7 w-7 rounded-full bg-[var(--color-neutral-light)] text-[var(--color-neutral-dark)] active:bg-[var(--color-neutral-mid)]/30 transition-colors"
           >
-            <SlidersHorizontal className="h-3.5 w-3.5" />
-            <span className="max-w-[60px] truncate">{VIEW_OPTIONS.find(v => v.value === activeView)?.label}</span>
-            <ChevronDown className={`h-3 w-3 transition-transform ${showViewMenu ? "rotate-180" : ""}`} />
+            {theme === "dark"
+              ? <Sun className="h-3.5 w-3.5 text-[var(--color-accent-gold)]" />
+              : <Moon className="h-3.5 w-3.5" />
+            }
           </button>
 
-          {showViewMenu && (
-            <>
-              <div className="fixed inset-0 z-40" onClick={() => setShowViewMenu(false)} />
-              <div className="absolute right-0 top-full mt-1 z-50 min-w-[180px] rounded-xl border border-[var(--color-neutral-light)] bg-white py-1 shadow-xl overflow-hidden">
-                {VIEW_OPTIONS.map((option) => (
-                  <button
-                    key={option.value}
-                    onClick={() => { onViewChange(option.value); setShowViewMenu(false); }}
-                    className={`w-full flex items-center gap-2.5 px-4 py-2.5 text-left text-sm transition-colors ${
-                      activeView === option.value
-                        ? "bg-[var(--color-primary)] text-white font-medium"
-                        : "text-[var(--color-neutral-dark)] active:bg-[var(--color-neutral-light)]"
-                    }`}
-                  >
-                    <span className="text-base">{option.icon}</span>
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
+          {/* Search icon */}
+          <button
+            onClick={() => router.push(`/${locale}/search`)}
+            aria-label="Search"
+            className="flex items-center justify-center h-7 w-7 rounded-full bg-[var(--color-neutral-light)] text-[var(--color-neutral-dark)] active:bg-[var(--color-neutral-mid)]/30 transition-colors"
+          >
+            <Search className="h-3.5 w-3.5" />
+          </button>
+
+          {/* Notifications */}
+          <button
+            onClick={() => router.push(`/${locale}/profile`)}
+            aria-label="Notifications"
+            className="relative flex items-center justify-center h-7 w-7 rounded-full bg-[var(--color-neutral-light)] text-[var(--color-neutral-dark)] active:bg-[var(--color-neutral-mid)]/30 transition-colors"
+          >
+            <Bell className="h-3.5 w-3.5" />
+            {/* Unread dot */}
+            <span className="absolute top-0.5 right-0.5 h-1.5 w-1.5 rounded-full bg-[var(--color-breaking)]" />
+          </button>
+
+          {/* News Type Switcher */}
+          <div className="relative">
+            <button
+              onClick={() => { setShowViewMenu(!showViewMenu); setShowLangMenu(false); }}
+              className="flex items-center gap-1 rounded-full bg-[var(--color-primary)] px-2.5 py-1.5 text-xs font-medium text-white active:bg-[var(--color-primary-dark)]"
+            >
+              <SlidersHorizontal className="h-3.5 w-3.5" />
+              <span className="max-w-[56px] truncate">{VIEW_OPTIONS.find(v => v.value === activeView)?.label}</span>
+              <ChevronDown className={`h-3 w-3 transition-transform ${showViewMenu ? "rotate-180" : ""}`} />
+            </button>
+
+            {showViewMenu && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setShowViewMenu(false)} />
+                <div className="absolute right-0 top-full mt-1 z-50 min-w-[180px] rounded-xl border border-[var(--color-neutral-light)] bg-white dark:bg-[var(--background)] py-1 shadow-xl overflow-hidden">
+                  {VIEW_OPTIONS.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => { onViewChange(option.value); setShowViewMenu(false); }}
+                      className={`w-full flex items-center gap-2.5 px-4 py-2.5 text-left text-sm transition-colors ${
+                        activeView === option.value
+                          ? "bg-[var(--color-primary)] text-white font-medium"
+                          : "text-[var(--color-neutral-dark)] active:bg-[var(--color-neutral-light)]"
+                      }`}
+                    >
+                      <span className="text-base">{option.icon}</span>
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </header>

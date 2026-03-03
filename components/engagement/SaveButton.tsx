@@ -23,7 +23,7 @@ export default function SaveButton({ isBookmarked = false, compact = false }: Sa
       <Bookmark
         className={`h-4 w-4 transition-all ${saved ? "fill-[var(--color-accent-gold)] text-[var(--color-accent-gold)]" : ""}`}
       />
-      {!compact && <span>{saved ? "Saved" : "Save"}</span>}
+      {!compact && <span>MyNews</span>}
     </button>
   );
 }
