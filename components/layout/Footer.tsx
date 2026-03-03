@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Linkedin, Twitter, Instagram, Youtube, Send } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -72,14 +73,25 @@ export default function Footer() {
           {/* Brand + Newsletter */}
           <div className="sm:col-span-2 lg:col-span-2">
             <div className="flex items-center gap-2 mb-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--color-accent-gold)] text-white font-bold text-xs">
-                IGN
+              {/* Brand icon */}
+              <div className="flex h-8 w-8 items-center justify-center shrink-0">
+                <Image
+                  src="/images/IGExpoNews_logo.svg"
+                  alt="IGENews Brand Icon"
+                  width={32}
+                  height={32}
+                  className="object-contain"
+                />
               </div>
-              <div>
-                <h3 className="text-sm font-bold text-white" style={{ fontFamily: 'var(--font-display)' }}>
-                  India Global News
-                </h3>
-                <p className="text-[10px] text-[var(--color-neutral-mid)]">by iGenWorld</p>
+              {/* Full logo */}
+              <div className="flex items-center">
+                <Image
+                  src="/images/IGENews_logo.svg"
+                  alt="India Global Expo News"
+                  width={110}
+                  height={30}
+                  className="object-contain brightness-0 invert"
+                />
               </div>
             </div>
             <p className="mb-4 text-sm leading-relaxed text-[var(--color-neutral-mid)]">

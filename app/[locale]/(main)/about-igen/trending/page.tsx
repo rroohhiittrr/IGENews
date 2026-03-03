@@ -173,7 +173,7 @@ export default function TrendingLandingPage() {
           <span className="mb-4 inline-block rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest">
             🔴 Mega Menu 3 — Momentum Engine
           </span>
-          <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-[var(--color-accent-gold-light,#FFD700)]">
+          <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-[var(--color-accent-gold-light,#F4A024)]">
             In Trade, Momentum Is Intelligence.
           </p>
           <h1 className="mb-5 font-display text-3xl font-extrabold leading-tight md:text-5xl lg:text-6xl text-white">
@@ -437,7 +437,7 @@ export default function TrendingLandingPage() {
       <section className="px-4 py-16 md:px-6 md:py-20 bg-[var(--color-primary)] text-white">
         <div className="mx-auto max-w-7xl">
           <div className="mb-12 text-center">
-            <span className="mb-3 inline-block text-xs font-bold uppercase tracking-widest text-[var(--color-accent-gold-light,#FFD700)]">
+            <span className="mb-3 inline-block text-xs font-bold uppercase tracking-widest text-[var(--color-accent-gold-light,#F4A024)]">
                 Time Horizons
             </span>
             <h2 className="font-display text-2xl font-bold md:text-3xl">

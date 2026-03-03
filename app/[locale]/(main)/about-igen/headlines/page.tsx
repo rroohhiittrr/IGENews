@@ -194,7 +194,7 @@ export default function HeadlinesPage() {
           <span className="mb-4 inline-block rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-white/80">
             🟢 Mega Menu 2 — Authority Engine
           </span>
-          <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-[var(--color-accent-gold-light,#FFD700)]">
+          <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-[var(--color-accent-gold-light,#F4A024)]">
             Not Everything Is News. Some Things Are Signals.
           </p>
           <h1 className="mb-5 font-display text-3xl font-extrabold leading-tight text-white md:text-5xl lg:text-6xl">
@@ -458,7 +458,7 @@ export default function HeadlinesPage() {
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
              <div>
-              <span className="mb-3 inline-block text-xs font-bold uppercase tracking-widest text-[var(--color-accent-gold-light,#FFD700)]">
+              <span className="mb-3 inline-block text-xs font-bold uppercase tracking-widest text-[var(--color-accent-gold-light,#F4A024)]">
                 Weekly Strategic Signals
               </span>
               <h2 className="mb-5 font-display text-2xl font-bold text-white md:text-3xl">
@@ -663,7 +663,7 @@ export default function HeadlinesPage() {
               </div>
             ))}
           </div>
-          <p className="mb-8 text-sm font-semibold text-[var(--color-accent-gold-light,#FFD700)]">
+          <p className="mb-8 text-sm font-semibold text-[var(--color-accent-gold-light,#F4A024)]">
             🌟 First 500 Founding Member slots — ₹24,999/year. Founding price locked permanently.
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">

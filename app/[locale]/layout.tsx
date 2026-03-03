@@ -9,9 +9,9 @@ import { notFound } from 'next/navigation';
 import { locales } from '@/i18n';
 
 export const metadata: Metadata = {
-  title: "India Global News — B2B Trade Intelligence",
+  title: "IGENews — India Global Expo News | B2B Trade Intelligence",
   description:
-    "India Global News delivers curated sector, country and leader news for international trade professionals.",
+    "IGENews delivers curated sector, country and leader news for international trade professionals.",
   keywords: [
     "India trade news",
     "B2B trade intelligence",
@@ -19,6 +19,10 @@ export const metadata: Metadata = {
     "sector analysis",
     "bilateral trade",
   ],
+  icons: {
+    icon: "/images/favicon_IGENews.svg",
+    apple: "/images/favicon_IGENews.svg",
+  },
 };
 
 export function generateStaticParams() {

@@ -304,7 +304,7 @@ export default function PlansPage() {
         <div className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] rounded-2xl p-12 text-white">
           <h2 className="text-3xl font-bold mb-4">Ready to Transform Your Trade Intelligence?</h2>
           <p className="text-lg mb-8 opacity-90">
-            Join thousands of professionals making smarter trade decisions with India Global News
+            Join thousands of professionals making smarter trade decisions with IGENews
           </p>
           <div className="flex gap-4 justify-center">
             <Link

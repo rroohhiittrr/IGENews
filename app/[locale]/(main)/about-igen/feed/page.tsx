@@ -204,7 +204,7 @@ export default function FeedPage() {
           <span className="mb-4 inline-block rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-white/80">
             🔵 Mega Menu 1 — Volume Engine
           </span>
-          <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-[var(--color-accent-gold-light,#FFD700)]">
+          <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-[var(--color-accent-gold-light,#F4A024)]">
             Every Trade Story. Every Sector. Every Moment.
           </p>
           <h1 className="mb-5 font-display text-3xl font-extrabold leading-tight text-white md:text-5xl lg:text-6xl">

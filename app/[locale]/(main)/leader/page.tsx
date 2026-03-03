@@ -27,7 +27,7 @@ export default function LeaderNewsPage() {
   const articles = getSortedArticles();
 
   return (
-    <div className="min-h-screen pb-24">
+    <div className="min-h-screen pb-28">
       {/* Mobile */}
       <div className="md:hidden">
         <MobileHeader activeView={activeView} onViewChange={setActiveView} />
@@ -39,8 +39,10 @@ export default function LeaderNewsPage() {
         {articles.length > 0 ? (
           articles.map((a) => <MobileNewsCard key={a.id} article={a} />)
         ) : (
-          <div className="px-4 py-12 text-center text-sm text-[var(--color-neutral-dark)]">
-            No leader news for this filter.
+          <div className="flex flex-col items-center justify-center py-24 px-8 text-center">
+            <span className="text-4xl mb-3">👤</span>
+            <p className="text-sm font-semibold text-[var(--color-text-body)]">No leader news</p>
+            <p className="text-xs text-[var(--color-neutral-dark)] mt-1">Try a different filter above</p>
           </div>
         )}
       </div>
