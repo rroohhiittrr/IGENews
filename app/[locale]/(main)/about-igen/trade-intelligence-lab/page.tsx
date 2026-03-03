@@ -109,8 +109,8 @@ const pricingTable = [
   { product: "Survey Participation", free: "—", pro: "✓", leader: "✓", corporate: "✓" },
   { product: "Whitepaper Download Centre", free: "—", pro: "✓", leader: "✓", corporate: "✓" },
   { product: "Annual Intelligence Book", free: "—", pro: "✓", leader: "✓", corporate: "✓" },
-  { product: "Commission Corporate Whitepaper", free: "—", pro: "—", pro: "—", leader: "—", corporate: "✓" },
-  { product: "Co-branded Research Reports", free: "—", pro: "—", pro: "—", leader: "—", corporate: "✓" }
+  { product: "Commission Corporate Whitepaper", free: "—", pro: "—", leader: "—", corporate: "✓" },
+  { product: "Co-branded Research Reports", free: "—", pro: "—", leader: "—", corporate: "✓" }
 ];
 
 const faqs = [
@@ -142,7 +142,7 @@ const faqs = [
 
 // ── COMPONENTS ───────────────────────────────────────────────────────────────
 
-function FAQAccordion({ faqs }: { faqs: typeof faqs }) {
+function FAQAccordion({ faqs }: { faqs: { q: string; a: string }[] }) {
   const [open, setOpen] = useState<number | null>(null);
   return (
     <div className="divide-y divide-[var(--color-neutral-light)] dark:divide-[var(--color-neutral-mid)]/20">
