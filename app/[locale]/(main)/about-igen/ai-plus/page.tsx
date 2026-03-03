@@ -55,21 +55,6 @@ const PILLARS = [
   }
 ];
 
-const COMPARISON = [
-  { task: "Monitoring 5 sectors", without: "45 min/day scanning", with: "Automated alerts", icon: <Activity className="h-4 w-4" /> },
-  { task: "Researching a country", without: "60–90 min online", with: "5 min AI snapshot", icon: <Search className="h-4 w-4" /> },
-  { task: "Summarising industry news", without: "2 hours/week", with: "20 min smart digest", icon: <Clock className="h-4 w-4" /> },
-  { task: "Tracking 10 leader movements", without: "Impossible at scale", with: "Automated leader monitor", icon: <Users className="h-4 w-4" /> },
-  { task: "Spotting emerging signals", without: "Luck", with: "Predictive momentum index", icon: <TrendingUp className="h-4 w-4" /> },
-];
-
-const FAQS = [
-  { q: "What is IGEN AI Plus?", a: "The premium intelligence layer of IGEN — bringing automated monitoring, predictive trade signals, smart research tools, and AI personalisation to trade professionals." },
-  { q: "Is AI Plus an additional cost?", a: "AI Plus is included at the Emerging Leader and Corporate plan levels. Pro Readers can access AI Plus as a premium add-on." },
-  { q: "What is the Industry Momentum Index?", a: "A composite score measuring article volume growth, engagement acceleration, search spikes, and leader activity concentration." },
-  { q: "Is the AI trained on IGEN's content only?", a: "Yes. AI Plus draws primarily from IGEN's verified, QC-checked content archive to ensure accuracy and editorial integrity." },
-];
-
 const Users = ({ className }: { className?: string }) => (
   <svg 
     xmlns="http://www.w3.org/2000/svg" 
@@ -89,6 +74,22 @@ const Users = ({ className }: { className?: string }) => (
     <path d="M16 3.13a4 4 0 0 1 0 7.75" />
   </svg>
 );
+
+const COMPARISON = [
+  { task: "Monitoring 5 sectors", without: "45 min/day scanning", with: "Automated alerts", icon: <Activity className="h-4 w-4" /> },
+  { task: "Researching a country", without: "60–90 min online", with: "5 min AI snapshot", icon: <Search className="h-4 w-4" /> },
+  { task: "Summarising industry news", without: "2 hours/week", with: "20 min smart digest", icon: <Clock className="h-4 w-4" /> },
+  { task: "Tracking 10 leader movements", without: "Impossible at scale", with: "Automated leader monitor", icon: <Users className="h-4 w-4" /> },
+  { task: "Spotting emerging signals", without: "Luck", with: "Predictive momentum index", icon: <TrendingUp className="h-4 w-4" /> },
+];
+
+const FAQS = [
+  { q: "What is IGEN AI Plus?", a: "The premium intelligence layer of IGEN — bringing automated monitoring, predictive trade signals, smart research tools, and AI personalisation to trade professionals." },
+  { q: "Is AI Plus an additional cost?", a: "AI Plus is included at the Emerging Leader and Corporate plan levels. Pro Readers can access AI Plus as a premium add-on." },
+  { q: "What is the Industry Momentum Index?", a: "A composite score measuring article volume growth, engagement acceleration, search spikes, and leader activity concentration." },
+  { q: "Is the AI trained on IGEN's content only?", a: "Yes. AI Plus draws primarily from IGEN's verified, QC-checked content archive to ensure accuracy and editorial integrity." },
+];
+
 
 export default function AIPlusPage() {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
