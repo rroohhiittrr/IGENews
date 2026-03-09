@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { mockArticles, trendingArticles, mostDiscussedArticles } from "@/lib/mockData";
 import NavigationPanel from "@/components/navigation/NavigationPanel";
@@ -10,7 +11,8 @@ import MobileFeedView from "@/components/mobile/MobileFeedView";
 
 type TabType = "sector" | "country" | "leader";
 
-export default function HeadlinesPage() {
+// Inner component that safely uses useSearchParams (must be inside Suspense)
+function HeadlinesContent() {
   const searchParams = useSearchParams();
   const activeTab = (searchParams.get("tab") as TabType) || "sector";
 
@@ -105,5 +107,14 @@ export default function HeadlinesPage() {
         </div>
       </div>
     </>
+  );
+}
+
+// Page wrapper — required Suspense boundary for useSearchParams
+export default function HeadlinesPage() {
+  return (
+    <Suspense fallback={null}>
+      <HeadlinesContent />
+    </Suspense>
   );
 }

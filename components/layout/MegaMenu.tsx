@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { ChevronDown, ExternalLink } from "lucide-react";
 
 interface SubItem {
@@ -48,7 +48,6 @@ const MENU_ITEMS: MenuItem[] = [
 
 export default function MegaMenu() {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const isActive = (href: string) => {
