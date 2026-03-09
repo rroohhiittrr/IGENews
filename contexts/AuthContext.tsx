@@ -208,8 +208,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } as UserProfile);
       
       return true;
-    } catch (err) {
+    } catch (err: any) {
       console.error("Signup error:", err);
+      // "Failed to fetch" means CORS — Vercel domain not allowed in Supabase dashboard
+      if (err?.message?.toLowerCase().includes('failed to fetch') || err?.message?.toLowerCase().includes('networkerror')) {
+        throw new Error(
+          "Network error: Cannot reach Supabase. Please go to Supabase Dashboard → Authentication → URL Configuration and add 'https://igen-app-news.vercel.app' to the allowed URLs list."
+        );
+      }
       throw err;
     }
   }, []);
