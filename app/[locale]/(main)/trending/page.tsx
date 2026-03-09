@@ -23,7 +23,7 @@ export default function TrendingPage() {
       case "country":
         return trendingOnly.filter((a) => a.country);
       case "leader":
-        return trendingOnly.filter((a) => a.leader);
+        return trendingOnly.filter((a) => a.leaderDesignation);
       default:
         return trendingOnly;
     }
