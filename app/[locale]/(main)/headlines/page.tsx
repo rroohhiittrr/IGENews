@@ -22,7 +22,7 @@ export default function HeadlinesPage() {
       case "country":
         return mockArticles.filter((a) => a.country);
       case "leader":
-        return mockArticles.filter((a) => a.leader);
+        return mockArticles.filter((a) => a.leaderDesignation);
       default:
         return mockArticles;
     }
