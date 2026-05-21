@@ -1,7 +1,7 @@
 "use client";
 
 import { UserProfile } from "@/contexts/AuthContext";
-import { User, Mail, Phone, Crown, Calendar, Edit2 } from "lucide-react";
+import { Edit2, Instagram, Facebook, Twitter, Linkedin, Send } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface ProfileHeaderProps {
@@ -9,73 +9,65 @@ interface ProfileHeaderProps {
 }
 
 export default function ProfileHeader({ user }: ProfileHeaderProps) {
-  // Mock data for display purposes
-  const joinDate = "Oct 2023";
-  const memberSince = "Free Member";
-
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="relative overflow-hidden rounded-3xl bg-white p-6 shadow-xl border border-[var(--color-neutral-light)]"
+      className="bg-white rounded-[32px] p-6 md:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative"
     >
-      {/* Background Decorative Elements */}
-      <div className="absolute top-0 right-0 -mr-16 -mt-16 h-64 w-64 rounded-full bg-[var(--color-primary-light)]/10 blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 -ml-16 -mb-16 h-64 w-64 rounded-full bg-[var(--color-secondary-light)]/10 blur-3xl"></div>
+      <button className="absolute top-6 right-6 text-gray-400 hover:text-[#F4A024] transition-colors">
+        <Edit2 className="w-5 h-5" />
+      </button>
 
-      <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start gap-6">
-        {/* Avatar Section */}
-        <div className="relative group">
-          <div className="h-28 w-28 rounded-full bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-secondary)] p-1 shadow-lg">
-            <div className="h-full w-full rounded-full bg-white flex items-center justify-center overflow-hidden">
-              <User className="h-12 w-12 text-[var(--color-neutral-mid)]" />
-            </div>
+      <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
+        
+        {/* Avatar with circle background */}
+        <div className="relative shrink-0">
+          <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-[#8b5cf6] p-1 flex items-center justify-center overflow-hidden shadow-lg">
+             {/* Abstract person shape since no photo */}
+             <div className="w-full h-full rounded-full bg-[#a78bfa] flex items-end justify-center relative">
+                <div className="w-16 h-16 bg-white/40 rounded-full absolute top-6"></div>
+                <div className="w-24 h-24 bg-white/30 rounded-t-full relative top-6"></div>
+             </div>
           </div>
-          <button className="absolute bottom-0 right-0 bg-white p-2 rounded-full shadow-md border border-[var(--color-neutral-light)] text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white transition-colors">
-            <Edit2 className="h-4 w-4" />
-          </button>
         </div>
 
-        {/* User Info */}
-        <div className="flex-1 text-center md:text-left space-y-2">
-          <div className="flex flex-col md:flex-row md:items-center gap-2 justify-center md:justify-start">
-            <h1 className="text-2xl font-bold text-[var(--color-primary)]" style={{ fontFamily: "var(--font-display)" }}>
-              {user.name}
-            </h1>
-            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs font-semibold border border-[var(--color-primary)]/20 w-fit mx-auto md:mx-0">
-              {user.plan === "free" ? "🆓" : <Crown className="h-3 w-3" />}
-              {user.plan.toUpperCase()} MEMBER
-            </span>
-          </div>
-
-          <div className="flex flex-col gap-1 text-sm text-[var(--color-neutral-dark)] items-center md:items-start">
-            <div className="flex items-center gap-2">
-              <Mail className="h-4 w-4 text-[var(--color-neutral-mid)]" />
-              <span>{user.email}</span>
-            </div>
-            {user.mobile && (
-              <div className="flex items-center gap-2">
-                <Phone className="h-4 w-4 text-[var(--color-neutral-mid)]" />
-                <span>{user.mobile}</span>
+        {/* Info Area */}
+        <div className="flex-1 text-center md:text-left space-y-4 pt-2">
+           <h2 className="text-2xl font-bold text-[#1E3A5F]">{user.name || "User Name"}</h2>
+           
+           <div className="space-y-2 text-sm text-gray-500 max-w-md mx-auto md:mx-0">
+              <div className="flex flex-col sm:flex-row sm:gap-2">
+                 <span className="font-medium text-gray-400 sm:w-36 text-left">Registration date:</span>
+                 <span className="text-[#1E3A5F] font-medium text-left">24 November 2026</span>
               </div>
-            )}
-            <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-[var(--color-neutral-mid)]" />
-              <span>Joined {joinDate}</span>
-            </div>
-          </div>
+              <div className="flex flex-col sm:flex-row sm:gap-2">
+                 <span className="font-medium text-gray-400 sm:w-36 text-left">Country, city:</span>
+                 <span className="text-[#1E3A5F] font-medium text-left">{user.countries?.[0] || "Not set"}</span>
+              </div>
+              <div className="flex flex-col sm:flex-row sm:gap-2">
+                 <span className="font-medium text-gray-400 sm:w-36 text-left">E-mail:</span>
+                 <span className="text-[#1E3A5F] font-medium text-left">{user.email}</span>
+              </div>
+              {user.mobile && (
+                 <div className="flex flex-col sm:flex-row sm:gap-2">
+                    <span className="font-medium text-gray-400 sm:w-36 text-left">Phone:</span>
+                    <span className="text-[#1E3A5F] font-medium text-left">{user.mobile}</span>
+                 </div>
+              )}
+           </div>
+
+           {/* Social Icons */}
+           <div className="flex items-center justify-center md:justify-start gap-3 pt-4">
+              {[Instagram, Facebook, Twitter, Linkedin, Send].map((Icon, i) => (
+                 <a key={i} href="#" className="w-9 h-9 rounded-full bg-[#1E3A5F] text-white flex items-center justify-center hover:bg-[#F4A024] hover:-translate-y-1 transition-all shadow-md">
+                    <Icon className="w-4 h-4" />
+                 </a>
+              ))}
+           </div>
         </div>
 
-        {/* Quick Actions */}
-        <div className="flex flex-col gap-3 w-full md:w-auto">
-          <button className="w-full md:w-auto px-6 py-2.5 rounded-xl bg-[var(--color-primary)] text-white font-semibold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all text-sm">
-            Edit Profile
-          </button>
-          <button className="w-full md:w-auto px-6 py-2.5 rounded-xl bg-white border border-[var(--color-neutral-light)] text-[var(--color-neutral-dark)] font-semibold hover:bg-[var(--color-neutral-light)] transition-colors text-sm">
-            Account Settings
-          </button>
-        </div>
       </div>
     </motion.div>
   );

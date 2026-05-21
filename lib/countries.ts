@@ -258,4 +258,4 @@ export const ALL_COUNTRIES: Country[] = COUNTRIES_BY_CONTINENT.flatMap((g) => g.
   .filter((c, i, arr) => arr.findIndex((x) => x.name === c.name) === i)
   .sort((a, b) => a.name.localeCompare(b.name));
 
-export const FREE_COUNTRY_LIMIT = 2;
+export const FREE_COUNTRY_LIMIT = 10;
