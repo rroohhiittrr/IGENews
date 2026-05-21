@@ -21,25 +21,26 @@ export default function LoginPage() {
     setError("");
 
     if (!email.trim()) {
-      setError("Email is required");
+      setError("Please enter your email");
       return;
     }
     if (!password) {
-      setError("Password is required");
+      setError("Please enter your password");
       return;
     }
 
     setLoading(true);
-    
+
     try {
       const success = await login(email.trim().toLowerCase(), password);
+
       if (!success) {
-        setError("Invalid email or password");
+        setError("No account found with this email. Please sign up first.");
         setLoading(false);
         return;
       }
 
-      // Check if onboarding is complete
+      // Check onboarding status from localStorage
       const stored = localStorage.getItem("ign_user");
       if (stored) {
         const u = JSON.parse(stored);
@@ -50,7 +51,7 @@ export default function LoginPage() {
       }
       router.push("/");
     } catch (err: any) {
-      setError(err.message || "Something went wrong");
+      setError(err.message || "Something went wrong. Please try again.");
       setLoading(false);
     }
   };
@@ -108,11 +109,6 @@ export default function LoginPage() {
               >
                 {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
               </button>
-            </div>
-            <div className="text-right mt-1">
-              <Link href="#" className="text-xs font-medium text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] hover:underline">
-                Forgot password?
-              </Link>
             </div>
           </div>
 

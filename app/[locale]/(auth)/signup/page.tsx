@@ -28,13 +28,8 @@ export default function SignupPage() {
     e.preventDefault();
     setError("");
 
-    if (!form.name || !form.email || !form.password || !form.confirmPassword) {
+    if (!form.name.trim() || !form.email.trim() || !form.password || !form.confirmPassword) {
       setError("All fields are required");
-      return;
-    }
-
-    if (form.password.length < 6) {
-      setError("Password must be at least 6 characters");
       return;
     }
 
@@ -44,7 +39,7 @@ export default function SignupPage() {
     }
 
     setLoading(true);
-    
+
     try {
       const success = await signup({
         name: form.name.trim(),
@@ -53,32 +48,15 @@ export default function SignupPage() {
       });
 
       if (!success) {
-        setError("An account with this email already exists or signup failed");
+        setError("Could not create account. Please try again.");
         setLoading(false);
         return;
       }
 
-      // Successful signup - redirect to onboarding
+      // Successful signup — go to onboarding
       router.push("/onboarding");
     } catch (err: any) {
-      console.error("Signup error:", err);
-      
-      // Handle specific Supabase errors
-      let errorMessage = "Failed to create account. Please try again.";
-      
-      if (err.message) {
-        if (err.message.includes("rate limit") || err.message.includes("Email rate limit exceeded")) {
-          errorMessage = "Too many signup attempts. Please wait a few minutes and try again, or disable email confirmation in Supabase settings.";
-        } else if (err.message.includes("already registered") || err.message.includes("already exists")) {
-          errorMessage = "An account with this email already exists. Try logging in instead.";
-        } else if (err.message.includes("invalid email")) {
-          errorMessage = "Please enter a valid email address.";
-        } else {
-          errorMessage = err.message;
-        }
-      }
-      
-      setError(errorMessage);
+      setError(err.message || "Something went wrong. Please try again.");
       setLoading(false);
     }
   };
@@ -196,7 +174,7 @@ export default function SignupPage() {
                     value={form.password}
                     onChange={(e) => handleChange("password", e.target.value)}
                     className="w-full pl-12 pr-4 py-3 border-2 border-neutral-mid rounded-lg focus:border-primary focus:outline-none transition-colors text-text-body font-medium"
-                    placeholder="Min. 6 characters"
+                    placeholder="Create a password"
                   />
                 </div>
               </div>
