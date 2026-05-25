@@ -3,12 +3,16 @@
 import { UserProfile } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 
 interface UpgradeJourneyCardProps {
   user: UserProfile;
 }
 
 export default function UpgradeJourneyCard({ user }: UpgradeJourneyCardProps) {
+  const params = useParams();
+  const locale = (params?.locale as string) || "en";
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
@@ -41,7 +45,7 @@ export default function UpgradeJourneyCard({ user }: UpgradeJourneyCardProps) {
          </li>
       </ul>
 
-      <Link href="/plans" className="block w-full py-3.5 bg-white text-[#1E3A5F] text-center font-bold rounded-2xl shadow-[0_4px_14px_rgba(255,255,255,0.15)] hover:bg-[#F4A024] hover:text-white transition-colors relative z-10">
+      <Link href={`/${locale}/profile/plans/reader`} className="block w-full py-3.5 bg-white text-[#1E3A5F] text-center font-bold rounded-2xl shadow-[0_4px_14px_rgba(255,255,255,0.15)] hover:bg-[#F4A024] hover:text-white transition-colors relative z-10">
         Subscribe
       </Link>
     </motion.div>

@@ -10,12 +10,22 @@ export interface UserProfile {
   email: string;
   mobile?: string;
   plan: "free" | "starter" | "pro" | "enterprise";
+  readerPlan?: "free" | "pro" | "enterprise";
+  smePlan?: "none" | "free" | "pro" | "elite";
+  associateSmePlan?: "none" | "free" | "plus" | "premium";
+  companyPlan?: "none" | "free" | "silver" | "gold";
+  leaderPlan?: "none" | "free" | "verified" | "elite";
   sectors: string[];
   countries: string[];
   leaders: string[];
   accountType?: AccountType;
   accountTypeSelectedAt?: string; // ISO timestamp
   onboardingComplete: boolean;
+  onboardingRole?: "none" | "sme" | "associate-sme" | "company" | "leader";
+  onboardingStatus?: "none" | "Draft" | "Submitted" | "Under Review" | "Need More Information" | "Approved" | "Rejected";
+  onboardingForm?: any;
+  onboardingDocs?: any;
+  onboardingFeedback?: string;
 }
 
 interface AuthContextType {
@@ -25,14 +35,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<boolean>;
   signup: (data: { name: string; email: string; mobile?: string; password: string }) => Promise<boolean>;
   logout: () => Promise<void>;
-  updateOnboarding: (data: {
-    sectors?: string[];
-    countries?: string[];
-    leaders?: string[];
-    accountType?: AccountType;
-    accountTypeSelectedAt?: string;
-    onboardingComplete?: boolean;
-  }) => Promise<void>;
+  updateOnboarding: (data: Partial<UserProfile>) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -68,11 +71,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         email: data.email.trim().toLowerCase(),
         mobile: data.mobile?.trim(),
         plan: "free",
+        readerPlan: "free",
+        smePlan: "none",
+        associateSmePlan: "none",
+        companyPlan: "none",
+        leaderPlan: "none",
         sectors: [],
         countries: [],
         leaders: [],
         accountType: undefined,
         onboardingComplete: false,
+        onboardingRole: "none",
+        onboardingStatus: "none",
+        onboardingForm: null,
+        onboardingDocs: null,
+        onboardingFeedback: "",
       };
 
       // Cache in localStorage (temp storage)
@@ -118,14 +131,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
    * UPDATE ONBOARDING — updates user data in localStorage and state.
    */
   const updateOnboarding = useCallback(
-    async (data: {
-      sectors?: string[];
-      countries?: string[];
-      leaders?: string[];
-      accountType?: AccountType;
-      accountTypeSelectedAt?: string;
-      onboardingComplete?: boolean;
-    }) => {
+    async (data: Partial<UserProfile>) => {
       setUser((prev) => {
         if (!prev) return prev;
         const updated: UserProfile = { ...prev, ...data };
