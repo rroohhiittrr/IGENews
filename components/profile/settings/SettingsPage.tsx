@@ -2,430 +2,642 @@
 
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { motion } from "framer-motion";
 import {
   User, Bell, Shield, Globe, Eye, EyeOff, Save, ChevronRight,
   Moon, Sun, Building2, Lock, Zap, ArrowRight, Clock, Crown,
-  BookOpen, Star, Users, Briefcase,
+  BookOpen, Star, Users, Briefcase, FileText, Key, Share2, Clipboard,
+  Mail, Phone, ShieldAlert, Check, HelpCircle
 } from "lucide-react";
 
-type SettingsTab = "account" | "interests" | "account-type" | "notifications" | "privacy" | "preferences";
+type SettingsTab = "account" | "interests" | "notifications" | "privacy" | "preferences" | "security" | "role" | "upgrade";
 
-const TABS: { id: SettingsTab; icon: any; label: string; badge?: string }[] = [
-  { id: "account",       icon: User,      label: "Account" },
-  { id: "interests",     icon: Globe,     label: "My Interests",   badge: "FREE" },
-  { id: "account-type",  icon: Crown,     label: "Account Type",   badge: "FREE" },
-  { id: "notifications", icon: Bell,      label: "Notifications" },
-  { id: "privacy",       icon: Shield,    label: "Privacy" },
-  { id: "preferences",   icon: Globe,     label: "Preferences" },
-];
-
-/* ─── helpers ─────────────────────────────────── */
 function Toggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
   return (
-    <button onClick={onToggle} className={`w-12 h-6 rounded-full relative transition-colors ${on ? "bg-[#1E3A5F]" : "bg-gray-200"}`}>
+    <button onClick={onToggle} type="button" className={`w-12 h-6 rounded-full relative transition-colors shrink-0 ${on ? "bg-emerald-600" : "bg-gray-200 dark:bg-white/10"}`}>
       <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${on ? "translate-x-7" : "translate-x-1"}`} />
     </button>
   );
 }
+
 function Row({ label, desc, children }: { label: string; desc?: string; children: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-between py-4 border-b border-gray-100 last:border-0 gap-4">
-      <div><p className="text-sm font-semibold text-[#1E3A5F]">{label}</p>{desc && <p className="text-xs text-gray-400 mt-0.5">{desc}</p>}</div>
+    <div className="flex items-center justify-between py-4 border-b border-gray-100 dark:border-white/5 last:border-0 gap-4 text-left">
+      <div>
+        <p className="text-sm font-bold text-[#1E3A5F] dark:text-white">{label}</p>
+        {desc && <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 leading-relaxed">{desc}</p>}
+      </div>
       {children}
     </div>
   );
 }
 
-/* ─── Locked Interest Section ─────────────────── */
-function LockedInterestSection({
-  icon: Icon, title, color, bg, items, daysLeft,
-}: {
-  icon: any; title: string; color: string; bg: string; items: string[]; daysLeft: number;
-}) {
-  const isLocked = daysLeft > 0;
-  return (
-    <div className={`rounded-2xl border-2 ${isLocked ? "border-dashed border-gray-200 bg-gray-50" : "border-[#1E3A5F]/20 bg-white"} p-5 mb-5`}>
-      <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
-        <div className="flex items-center gap-2">
-          <div className={`w-8 h-8 rounded-xl ${bg} ${color} flex items-center justify-center`}><Icon className="w-4 h-4" /></div>
-          <h3 className="font-bold text-[#1E3A5F] text-sm">{title}</h3>
-        </div>
-        {isLocked ? (
-          <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-xl">
-            <Clock className="w-3.5 h-3.5 text-amber-500" />
-            <span className="text-xs font-bold text-amber-700">Editable in {daysLeft} days</span>
-          </div>
-        ) : (
-          <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl">Available to edit</span>
-        )}
-      </div>
-
-      {/* Current selections */}
-      <div className="flex flex-wrap gap-2 mb-4">
-        {items.length > 0 ? items.map(item => (
-          <span key={item} className={`px-3 py-1.5 rounded-xl text-xs font-bold capitalize ${isLocked ? "bg-gray-200 text-gray-500" : "bg-[#1E3A5F] text-white"}`}>
-            {item.replace(/-/g, " ")}
-          </span>
-        )) : <span className="text-xs text-gray-400 italic">None selected</span>}
-      </div>
-
-      {/* Free plan restriction note */}
-      <div className="bg-white border border-gray-200 rounded-xl p-4 mb-4">
-        <p className="text-xs text-gray-500 leading-relaxed">
-          <span className="font-bold text-[#1E3A5F]">Free Plan Restriction:</span> On the Free plan, you can only edit your {title.toLowerCase()} once every 60 days. Your next edit window opens in <span className="font-bold text-amber-600">{daysLeft} days</span>.
-        </p>
-      </div>
-
-      {/* CTA */}
-      <div className="flex flex-col sm:flex-row gap-3">
-        <button disabled className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-gray-200 text-gray-400 text-sm font-bold rounded-xl cursor-not-allowed">
-          <Lock className="w-4 h-4" /> Edit {title}
-        </button>
-        <button className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-gradient-to-r from-[#1E3A5F] to-[#2F6FA3] text-white text-sm font-bold rounded-xl hover:shadow-lg hover:-translate-y-0.5 transition-all">
-          <Zap className="w-4 h-4 text-[#F4A024]" /> Upgrade to Edit Anytime <ArrowRight className="w-3.5 h-3.5" />
-        </button>
-      </div>
-    </div>
-  );
-}
-
-/* ─── Role Combination Card ───────────────────── */
-type RoleCombo = {
-  id: string;
-  roles: { label: string; icon: any; color: string; bg: string }[];
-  desc: string;
-  isCurrent?: boolean;
-  requiresUpgrade: boolean;
-  upgradeNote?: string;
-};
-
-const ROLE_COMBOS: RoleCombo[] = [
-  {
-    id: "free-reader",
-    roles: [{ label: "Free Reader", icon: BookOpen, color: "text-slate-700", bg: "bg-slate-100" }],
-    desc: "Basic news access only. Read industry headlines and follow sectors.",
-    isCurrent: true,
-    requiresUpgrade: false,
-  },
-  {
-    id: "pro-reader",
-    roles: [{ label: "Pro Reader", icon: Star, color: "text-blue-700", bg: "bg-blue-100" }],
-    desc: "Premium content, reports, and advanced sector feeds.",
-    requiresUpgrade: true,
-    upgradeNote: "Upgrade to Pro",
-  },
-  {
-    id: "pro-associate-sme",
-    roles: [
-      { label: "Pro Reader", icon: Star, color: "text-blue-700", bg: "bg-blue-100" },
-      { label: "Associate SME", icon: Users, color: "text-violet-700", bg: "bg-violet-100" },
-    ],
-    desc: "10+ years expert. Publish articles and build authority.",
-    requiresUpgrade: true,
-    upgradeNote: "Requires Pro + Associate SME",
-  },
-  {
-    id: "pro-sme",
-    roles: [
-      { label: "Pro Reader", icon: Star, color: "text-blue-700", bg: "bg-blue-100" },
-      { label: "SME", icon: Users, color: "text-emerald-700", bg: "bg-emerald-100" },
-    ],
-    desc: "20+ years expert. Consulting, reports, authority, and monetization.",
-    requiresUpgrade: true,
-    upgradeNote: "Requires Pro + SME",
-  },
-  {
-    id: "pro-leader",
-    roles: [
-      { label: "Pro Reader", icon: Star, color: "text-blue-700", bg: "bg-blue-100" },
-      { label: "Leader", icon: Crown, color: "text-amber-700", bg: "bg-amber-100" },
-    ],
-    desc: "Verified leadership identity and thought leadership access.",
-    requiresUpgrade: true,
-    upgradeNote: "Requires Pro + Leader",
-  },
-  {
-    id: "pro-associate-leader",
-    roles: [
-      { label: "Pro Reader", icon: Star, color: "text-blue-700", bg: "bg-blue-100" },
-      { label: "Associate SME", icon: Users, color: "text-violet-700", bg: "bg-violet-100" },
-      { label: "Leader", icon: Crown, color: "text-amber-700", bg: "bg-amber-100" },
-    ],
-    desc: "Expert profile with verified industry leader status.",
-    requiresUpgrade: true,
-    upgradeNote: "Requires Pro + Associate SME + Leader",
-  },
-  {
-    id: "pro-sme-leader",
-    roles: [
-      { label: "Pro Reader", icon: Star, color: "text-blue-700", bg: "bg-blue-100" },
-      { label: "SME", icon: Users, color: "text-emerald-700", bg: "bg-emerald-100" },
-      { label: "Leader", icon: Crown, color: "text-amber-700", bg: "bg-amber-100" },
-    ],
-    desc: "High authority. Consulting + leadership + recognition.",
-    requiresUpgrade: true,
-    upgradeNote: "Requires Pro + SME + Leader",
-  },
-  {
-    id: "company",
-    roles: [{ label: "Company", icon: Briefcase, color: "text-rose-700", bg: "bg-rose-100" }],
-    desc: "Verified company page with branding and sector visibility.",
-    requiresUpgrade: true,
-    upgradeNote: "Requires Company plan",
-  },
-  {
-    id: "company-leader",
-    roles: [
-      { label: "Company", icon: Briefcase, color: "text-rose-700", bg: "bg-rose-100" },
-      { label: "Leader", icon: Crown, color: "text-amber-700", bg: "bg-amber-100" },
-    ],
-    desc: "Company profile with founder/CEO leader identity.",
-    requiresUpgrade: true,
-    upgradeNote: "Requires Company + Leader",
-  },
-  {
-    id: "company-pro",
-    roles: [
-      { label: "Company", icon: Briefcase, color: "text-rose-700", bg: "bg-rose-100" },
-      { label: "Pro Reader", icon: Star, color: "text-blue-700", bg: "bg-blue-100" },
-    ],
-    desc: "Corporate premium intelligence access.",
-    requiresUpgrade: true,
-    upgradeNote: "Requires Company + Pro",
-  },
-  {
-    id: "company-pro-leader",
-    roles: [
-      { label: "Company", icon: Briefcase, color: "text-rose-700", bg: "bg-rose-100" },
-      { label: "Pro Reader", icon: Star, color: "text-blue-700", bg: "bg-blue-100" },
-      { label: "Leader", icon: Crown, color: "text-amber-700", bg: "bg-amber-100" },
-    ],
-    desc: "Most powerful corporate identity — branding + intelligence + leadership.",
-    requiresUpgrade: true,
-    upgradeNote: "Requires Company + Pro + Leader",
-  },
-];
-
-/* ─── Main Component ──────────────────────────── */
 export default function SettingsPage() {
-  const { user, logout } = useAuth();
-  const [tab, setTab] = useState<SettingsTab>("account");
+  const { user, updateOnboarding, logout } = useAuth();
+  const [activeTab, setActiveTab] = useState<SettingsTab>("account");
   const [showPass, setShowPass] = useState(false);
-  const [notifs, setNotifs] = useState({ breaking: true, digest: true, sme: false, events: true, messages: true });
-  const [privacy, setPrivacy] = useState({ publicProfile: true, showSectors: true, showCountries: false });
-  const [prefs, setPrefs] = useState({ darkMode: false, emailDigest: true, language: "English" });
-  const toggle = (obj: any, set: any, k: string) => set({ ...obj, [k]: !obj[k] });
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-  // Simulate days since onboarding (dummy: 18 days ago → 42 left)
-  const DAYS_LEFT = 42;
+  // Form states matching user
+  const [displayName, setDisplayName] = useState(user?.name || "");
+  const [bio, setBio] = useState(user?.onboardingForm?.aboutText || "");
+  const [designation, setDesignation] = useState(user?.onboardingForm?.currentDesignation || "");
+  const [email, setEmail] = useState(user?.email || "");
+  const [mobile, setMobile] = useState(user?.mobile || "");
+  const [linkedin, setLinkedin] = useState(user?.onboardingForm?.linkedinUrl || "");
+  
+  // Toggles & Preferences State
+  const [notifs, setNotifs] = useState({ breaking: true, digest: true, sme: true, events: true, messages: true });
+  const [privacy, setPrivacy] = useState({ publicProfile: true, showSectors: true, showCountries: false, readingHistoryPublic: false });
+  const [prefs, setPrefs] = useState({ darkMode: false, emailDigest: true, language: "English", commentModeration: "auto" });
+  const [mfaEnabled, setMfaEnabled] = useState(false);
+
+  // SME specifics
+  const [consultingOpen, setConsultingOpen] = useState(user?.onboardingForm?.consultingAvailable || false);
+  const [smeCategory, setSmeCategory] = useState("Trade Analysis");
+
+  // Leader specifics
+  const [companyLinkPrivacy, setCompanyLinkPrivacy] = useState(true);
+
+  // Associate SME specifics
+  const [copiedLink, setCopiedLink] = useState(false);
+
+  // Company Signatory
+  const [signatoryEmailInput, setSignatoryEmailInput] = useState("");
+
+  if (!user) return null;
+
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const updatedForm = {
+      ...user.onboardingForm,
+      aboutText: bio,
+      currentDesignation: designation,
+      linkedinUrl: linkedin,
+      consultingAvailable: consultingOpen,
+    };
+    await updateOnboarding({
+      name: displayName,
+      email,
+      mobile,
+      onboardingForm: updatedForm,
+    });
+    triggerSuccess("Settings updated successfully!");
+  };
+
+  const triggerSuccess = (msg: string) => {
+    setSuccessMsg(msg);
+    setTimeout(() => setSuccessMsg(null), 3000);
+  };
+
+  const copyAffiliate = () => {
+    setCopiedLink(true);
+    navigator.clipboard.writeText(`https://igenews.com/ref?code=associate_${user.id}`);
+    setTimeout(() => setCopiedLink(false), 2000);
+  };
+
+  const userRole = user.onboardingRole || "reader";
+
+  const tabsConfig: { id: SettingsTab; icon: any; label: string; badge?: string }[] = [
+    { id: "account", icon: User, label: "Account Customiser" },
+    { id: "interests", icon: Globe, label: "Interests & Sectors" },
+    { id: "notifications", icon: Bell, label: "Digests & Alerts" },
+    { id: "privacy", icon: Shield, label: "Privacy Controls" },
+    { id: "preferences", icon: Globe, label: "Language & Theme" },
+    { id: "security", icon: Key, label: "Security & MFA" },
+    { id: "role", icon: Star, label: "Role Extensions" },
+    { id: "upgrade", icon: Zap, label: "Upgrade Plan", badge: "FREE" },
+  ];
 
   return (
-    <div className="p-5 md:p-8 lg:p-10">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[#1E3A5F]" style={{ fontFamily: "var(--font-display)" }}>Settings</h1>
-        <p className="text-sm text-gray-500 mt-1">Manage your account, notifications, and preferences</p>
+    <div className="p-5 md:p-8 lg:p-10 max-w-6xl mx-auto pb-24 text-left">
+      
+      {/* Header */}
+      <div className="mb-8 flex justify-between items-center flex-wrap gap-4">
+        <div>
+          <span className="px-3 py-1 bg-[#C55A11] text-white text-[10px] font-black rounded-lg uppercase tracking-wider inline-flex items-center gap-1.5 mb-2.5">
+            <Star className="w-3.5 h-3.5 fill-white text-white" /> FREE MEMBER
+          </span>
+          <h1 className="text-3xl font-bold text-[#1E3A5F] dark:text-white" style={{ fontFamily: "var(--font-display)" }}>
+            Profile Settings
+          </h1>
+          <p className="text-sm text-gray-500 mt-1">
+            Configure preferences, contact details, and role-specific customizers.
+          </p>
+        </div>
+
+        {/* Status Indicator */}
+        <div className="px-4 py-2 bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl">
+          <span className="text-[10px] text-gray-400 block font-bold uppercase tracking-wider">Profile Status</span>
+          <span className="text-xs font-bold text-amber-600">
+            {userRole === "reader" ? "Free Reader" : "Free & Unverified — Self-Declared"}
+          </span>
+        </div>
       </div>
+
+      {successMsg && (
+        <div className="mb-6 p-4 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/50 text-emerald-700 dark:text-emerald-400 text-xs font-bold rounded-2xl flex items-center gap-2">
+          <Check className="w-4 h-4" />
+          <span>{successMsg}</span>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
-        {/* ── Sidebar ── */}
+        
+        {/* Sidebar Nav */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-[24px] p-3 shadow-sm border border-gray-100">
-            {TABS.map(t => (
-              <button key={t.id} onClick={() => setTab(t.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-sm font-bold transition-all mb-1 last:mb-0 ${tab === t.id ? "bg-[#1E3A5F] text-white shadow" : "text-gray-500 hover:bg-[#f4f7fb] hover:text-[#1E3A5F]"}`}>
-                <t.icon className={`w-4 h-4 shrink-0 ${tab === t.id ? "text-[#F4A024]" : ""}`} />
+          <div className="bg-white dark:bg-[#122238] rounded-3xl p-3 shadow-sm border border-gray-100 dark:border-white/5 space-y-1">
+            {tabsConfig.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => setActiveTab(t.id)}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all ${
+                  activeTab === t.id
+                    ? "bg-[#1E3A5F] text-white shadow dark:bg-[#F4A024]"
+                    : "text-gray-500 hover:bg-[#f4f7fb] hover:text-[#1E3A5F] dark:text-gray-400 dark:hover:bg-white/5"
+                }`}
+              >
+                <t.icon className="w-4 h-4 shrink-0" />
                 <span>{t.label}</span>
                 {t.badge && (
-                  <span className={`ml-auto text-[9px] font-black px-2 py-0.5 rounded-md ${tab === t.id ? "bg-[#F4A024] text-white" : "bg-gray-100 text-gray-500"}`}>
+                  <span className={`ml-auto text-[9px] font-black px-2 py-0.5 rounded-md ${
+                    activeTab === t.id ? "bg-white text-[#1e3a5f]" : "bg-[#C55A11] text-white"
+                  }`}>
                     {t.badge}
                   </span>
                 )}
-                {!t.badge && <ChevronRight className={`w-4 h-4 ml-auto ${tab === t.id ? "text-white/50" : "text-gray-300"}`} />}
               </button>
             ))}
           </div>
         </div>
 
-        {/* ── Content Panel ── */}
+        {/* Content Area */}
         <div className="lg:col-span-3">
-          <div className="bg-white rounded-[28px] p-6 md:p-8 shadow-sm border border-gray-100">
-
-            {/* ── ACCOUNT ── */}
-            {tab === "account" && (
-              <div>
-                <h2 className="text-lg font-bold text-[#1E3A5F] mb-6">Account Details</h2>
-                <div className="space-y-5 mb-6">
-                  {([["Full Name", user?.name || "", "text"], ["Email Address", user?.email || "", "email"], ["Mobile Number", user?.mobile || "", "tel"]] as [string, string, string][]).map(([label, val, type]) => (
-                    <div key={label}>
-                      <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5 block">{label}</label>
-                      <input type={type} defaultValue={val} placeholder={val ? undefined : `Enter ${label}`}
-                        className="w-full px-4 py-3 bg-[#f4f7fb] rounded-2xl text-sm font-medium text-[#1E3A5F] border-none focus:outline-none focus:ring-2 focus:ring-[#F4A024] transition-all" />
+          <div className="bg-white dark:bg-[#122238] rounded-[32px] p-6 md:p-8 shadow-sm border border-gray-100 dark:border-white/5 min-h-[500px]">
+            
+            {/* ── ACCOUNT TAB ── */}
+            {activeTab === "account" && (
+              <form onSubmit={handleSave} className="space-y-6">
+                <div>
+                  <h3 className="text-base font-bold text-[#1E3A5F] dark:text-white border-b border-gray-100 dark:border-white/5 pb-2.5 mb-5">
+                    1. Profile Customiser
+                  </h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-1.5">Display Name</label>
+                      <input 
+                        type="text" 
+                        value={displayName}
+                        onChange={(e) => setDisplayName(e.target.value)}
+                        className="w-full px-4 py-3 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs text-[#1E3A5F] dark:text-white font-semibold border-none focus:outline-none"
+                      />
                     </div>
-                  ))}
-                  <div>
-                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5 block">Password</label>
-                    <div className="relative">
-                      <input type={showPass ? "text" : "password"} defaultValue="••••••••"
-                        className="w-full px-4 py-3 bg-[#f4f7fb] rounded-2xl text-sm font-medium text-[#1E3A5F] border-none focus:outline-none focus:ring-2 focus:ring-[#F4A024] transition-all pr-12" />
-                      <button onClick={() => setShowPass(!showPass)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#1E3A5F]">
-                        {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    {userRole !== "reader" && (
+                      <div>
+                        <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-1.5">Designation</label>
+                        <input 
+                          type="text" 
+                          value={designation}
+                          onChange={(e) => setDesignation(e.target.value)}
+                          placeholder="e.g. Chief Director"
+                          className="w-full px-4 py-3 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs text-[#1E3A5F] dark:text-white font-semibold border-none focus:outline-none"
+                        />
+                      </div>
+                    )}
+                    <div>
+                      <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-1.5">Bio Update</label>
+                      <textarea 
+                        rows={4}
+                        value={bio}
+                        onChange={(e) => setBio(e.target.value)}
+                        placeholder="Write your professional bio..."
+                        className="w-full px-4 py-3 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs text-[#1E3A5F] dark:text-white font-semibold border-none focus:outline-none resize-none"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-base font-bold text-[#1E3A5F] dark:text-white border-b border-gray-100 dark:border-white/5 pb-2.5 mb-5">
+                    2. Contact Details
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-1.5">Email Address</label>
+                      <input 
+                        type="email" 
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full px-4 py-3 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs text-[#1E3A5F] dark:text-white font-semibold border-none focus:outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-1.5">Mobile Number</label>
+                      <input 
+                        type="text" 
+                        value={mobile}
+                        onChange={(e) => setMobile(e.target.value)}
+                        className="w-full px-4 py-3 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs text-[#1E3A5F] dark:text-white font-semibold border-none focus:outline-none"
+                      />
+                    </div>
+                  </div>
+                  <div className="mt-4">
+                    <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-1.5">LinkedIn URL</label>
+                    <input 
+                      type="url" 
+                      value={linkedin}
+                      onChange={(e) => setLinkedin(e.target.value)}
+                      placeholder="https://linkedin.com/in/username"
+                      className="w-full px-4 py-3 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs text-[#1E3A5F] dark:text-white font-semibold border-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="pt-6 border-t border-gray-100 dark:border-white/5 flex flex-wrap justify-between items-center gap-4">
+                  <div className="space-y-1">
+                    <h4 className="text-xs font-bold text-red-500">Account Management</h4>
+                    <p className="text-[10px] text-gray-400">Temporarily suspend or permanently delete your account profile.</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <button type="button" onClick={() => triggerSuccess("Account temporarily deactivated.")} className="px-3.5 py-2 text-[10px] font-bold bg-amber-500/10 text-amber-600 rounded-xl hover:bg-amber-500/20">Deactivate</button>
+                    <button type="button" onClick={() => triggerSuccess("Profile deleted.")} className="px-3.5 py-2 text-[10px] font-bold bg-red-500/10 text-red-600 rounded-xl hover:bg-red-500/20">Delete Profile</button>
+                  </div>
+                </div>
+
+                <button type="submit" className="px-6 py-3 bg-[#1E3A5F] hover:bg-[#2F6FA3] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-md">
+                  <Save className="w-4 h-4" /> Save Account Changes
+                </button>
+              </form>
+            )}
+
+            {/* ── INTERESTS TAB ── */}
+            {activeTab === "interests" && (
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-base font-bold text-[#1E3A5F] dark:text-white border-b border-gray-100 dark:border-white/5 pb-2.5 mb-5">
+                    Sector & Interest Manager
+                  </h3>
+                  <p className="text-xs text-gray-400 mb-6 leading-relaxed">
+                    Update followed sectors, countries of interest, and news alignment to direct your personalized intelligence feed. (Free Reader plan: follow up to 10 sectors maximum).
+                  </p>
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-3">Sectors Followed</label>
+                  <div className="flex flex-wrap gap-2">
+                    {(user.sectors || []).map((s) => (
+                      <span key={s} className="px-3 py-1.5 bg-[#1E3A5F] text-white text-xs font-bold rounded-xl flex items-center gap-1.5">
+                        <span>{s.replace("-", " ")}</span>
+                        <button onClick={() => triggerSuccess("Sector removed.")} className="hover:text-red-300 font-bold">×</button>
+                      </span>
+                    ))}
+                    <button onClick={() => triggerSuccess("Add Sector modal loaded.")} className="px-3 py-1.5 border-2 border-dashed border-[#1E3A5F] text-[#1E3A5F] dark:border-white/20 dark:text-white text-xs font-bold rounded-xl hover:bg-[#f4f7fb] dark:hover:bg-white/5">
+                      + Add Sector (Limit 10)
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-3">Countries of Interest</label>
+                  <div className="flex flex-wrap gap-2">
+                    {(user.countries || []).map((c) => (
+                      <span key={c} className="px-3 py-1.5 bg-[#F4A024] text-white text-xs font-bold rounded-xl flex items-center gap-1.5">
+                        <span>{c}</span>
+                        <button onClick={() => triggerSuccess("Country removed.")} className="hover:text-red-100 font-bold">×</button>
+                      </span>
+                    ))}
+                    <button onClick={() => triggerSuccess("Add Country modal loaded.")} className="px-3 py-1.5 border-2 border-dashed border-[#F4A024] text-[#F4A024] text-xs font-bold rounded-xl hover:bg-orange-50">
+                      + Add Country
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ── NOTIFICATIONS TAB ── */}
+            {activeTab === "notifications" && (
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-base font-bold text-[#1E3A5F] dark:text-white border-b border-gray-100 dark:border-white/5 pb-2.5 mb-5">
+                    Newsletter Preferences & Alerts
+                  </h3>
+                  <p className="text-xs text-gray-400 mb-6">
+                    Manage digest frequencies and breaking news push alerts.
+                  </p>
+                </div>
+
+                <div className="divide-y divide-gray-100 dark:divide-white/5">
+                  <Row label="Daily Trade Digest" desc="Summary email digest sent morning calendar hours (Free: summary version only).">
+                    <Toggle on={notifs.digest} onToggle={() => setNotifs(prev => ({ ...prev, digest: !prev.digest }))} />
+                  </Row>
+                  <Row label="Breaking News Alerts" desc="Instant alerts for critical updates across followed sectors.">
+                    <Toggle on={notifs.breaking} onToggle={() => setNotifs(prev => ({ ...prev, breaking: !prev.breaking }))} />
+                  </Row>
+                  <Row label="Weekly Intelligence Reports" desc="Bilateral sector intelligence updates.">
+                    <Toggle on={notifs.events} onToggle={() => setNotifs(prev => ({ ...prev, events: !prev.events }))} />
+                  </Row>
+                </div>
+              </div>
+            )}
+
+            {/* ── PRIVACY TAB ── */}
+            {activeTab === "privacy" && (
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-base font-bold text-[#1E3A5F] dark:text-white border-b border-gray-100 dark:border-white/5 pb-2.5 mb-5">
+                    Privacy Controls
+                  </h3>
+                </div>
+
+                <div className="divide-y divide-gray-100 dark:divide-white/5">
+                  <Row label="Public Profile Visibility" desc="Controls whether your profile URL can be viewed publicly by guests.">
+                    <Toggle on={privacy.publicProfile} onToggle={() => setPrivacy(prev => ({ ...prev, publicProfile: !prev.publicProfile }))} />
+                  </Row>
+                  <Row label="Display Followed Sectors" desc="Toggle sector interest chips visibility on your public landing page.">
+                    <Toggle on={privacy.showSectors} onToggle={() => setPrivacy(prev => ({ ...prev, showSectors: !prev.showSectors }))} />
+                  </Row>
+                </div>
+
+                <div className="pt-6 border-t border-gray-100 dark:border-white/5">
+                  <h4 className="text-xs font-bold text-[#1E3A5F] dark:text-white mb-2">GDPR Data Portability</h4>
+                  <p className="text-[11px] text-gray-400 mb-4 leading-normal">
+                    Download a full dump of your self-declared metadata and activity stats index in a standard JSON format.
+                  </p>
+                  <button type="button" onClick={() => triggerSuccess("Profile dump downloaded.")} className="px-4 py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 text-xs font-bold text-[#1E3A5F] dark:text-white rounded-xl">
+                    Download My Profile Data (JSON)
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* ── PREFERENCES TAB ── */}
+            {activeTab === "preferences" && (
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-base font-bold text-[#1E3A5F] dark:text-white border-b border-gray-100 dark:border-white/5 pb-2.5 mb-5">
+                    Preferences & Theme
+                  </h3>
+                </div>
+
+                <div className="space-y-5">
+                  <Row label="Language Settings" desc="Choose primary localization interface language.">
+                    <select 
+                      value={prefs.language} 
+                      onChange={(e) => setPrefs(prev => ({ ...prev, language: e.target.value }))}
+                      className="px-3 py-2 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs font-bold text-[#1E3A5F] dark:text-white border-none focus:outline-none"
+                    >
+                      <option value="English">English</option>
+                      <option value="Hindi">Hindi (हिंदी)</option>
+                    </select>
+                  </Row>
+
+                  <Row label="Dark Theme Interface" desc="Switch app layout contrast themes.">
+                    <div className="flex items-center gap-2">
+                      <Sun className="w-4 h-4 text-[#F4A024]" />
+                      <Toggle on={prefs.darkMode} onToggle={() => setPrefs(prev => ({ ...prev, darkMode: !prev.darkMode }))} />
+                      <Moon className="w-4 h-4 text-[#1E3A5F]" />
+                    </div>
+                  </Row>
+                </div>
+              </div>
+            )}
+
+            {/* ── SECURITY TAB ── */}
+            {activeTab === "security" && (
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-base font-bold text-[#1E3A5F] dark:text-white border-b border-gray-100 dark:border-white/5 pb-2.5 mb-5">
+                    Security & Account Protection
+                  </h3>
+                </div>
+
+                <div className="space-y-5">
+                  <div className="bg-[#f4f7fb] dark:bg-white/5 p-5 rounded-2xl">
+                    <h4 className="text-xs font-bold text-[#1E3A5F] dark:text-white mb-2">Password Update (Email OTP Verification)</h4>
+                    <p className="text-[10px] text-gray-400 mb-4 leading-normal">
+                      Update your login credential. Triggering will send an security OTP code to your registered email {user.email}.
+                    </p>
+                    <button type="button" onClick={() => triggerSuccess("Verification OTP code sent to your registered email.")} className="px-4 py-2.5 bg-[#1E3A5F] text-white text-xs font-bold rounded-xl">
+                      Send Password Reset OTP
+                    </button>
+                  </div>
+
+                  <Row label="Google Authenticator MFA (TOTP)" desc="Add multi-factor device authentication overrides to login screens.">
+                    <Toggle on={mfaEnabled} onToggle={() => {
+                      setMfaEnabled(!mfaEnabled);
+                      triggerSuccess(mfaEnabled ? "MFA disabled." : "MFA setup initialized. Scan key dynamically.");
+                    }} />
+                  </Row>
+                </div>
+              </div>
+            )}
+
+            {/* ── ROLE EXTENSIONS TAB ── */}
+            {activeTab === "role" && (
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-base font-bold text-[#1E3A5F] dark:text-white border-b border-gray-100 dark:border-white/5 pb-2.5 mb-5">
+                    {userRole.replace("-", " ").toUpperCase()} Specific Configurations
+                  </h3>
+                </div>
+
+                {/* Reader Role Settings */}
+                {userRole === "reader" && (
+                  <div className="divide-y divide-gray-100 dark:divide-white/5">
+                    <Row label="Reading History Visibility" desc="Make your article read list history visible on public dashboard landing tabs.">
+                      <Toggle on={privacy.readingHistoryPublic} onToggle={() => setPrivacy(prev => ({ ...prev, readingHistoryPublic: !prev.readingHistoryPublic }))} />
+                    </Row>
+                    <Row label="Comment Moderation Mode" desc="Choose comment validation rules.">
+                      <select 
+                        value={prefs.commentModeration} 
+                        onChange={(e) => setPrefs(prev => ({ ...prev, commentModeration: e.target.value }))}
+                        className="px-3 py-2 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs border-none font-bold text-[#1E3A5F] dark:text-white"
+                      >
+                        <option value="auto">Auto-publish immediately</option>
+                        <option value="review">Hold for self-review approval</option>
+                      </select>
+                    </Row>
+                    <div className="py-4">
+                      <h4 className="text-xs font-bold text-[#1E3A5F] dark:text-white mb-2">Export Saved Articles</h4>
+                      <p className="text-[11px] text-gray-400 mb-3">Download list of your saved books/articles index in csv formatting.</p>
+                      <button type="button" onClick={() => triggerSuccess("Exported CSV index download started.")} className="px-4 py-2 bg-[#1E3A5F] text-white text-xs font-bold rounded-xl">
+                        Export Articles List (CSV)
                       </button>
                     </div>
                   </div>
-                </div>
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <button className="flex items-center justify-center gap-2 px-6 py-3 bg-[#1E3A5F] text-white text-sm font-bold rounded-2xl hover:bg-[#F4A024] transition-colors shadow-md">
-                    <Save className="w-4 h-4" /> Save Changes
-                  </button>
-                  <button onClick={() => logout()} className="px-6 py-3 border-2 border-red-200 text-red-500 text-sm font-bold rounded-2xl hover:bg-red-50 transition-colors">
-                    Sign Out
-                  </button>
-                </div>
-              </div>
-            )}
+                )}
 
-            {/* ── INTERESTS ── */}
-            {tab === "interests" && (
-              <div>
-                <div className="flex items-start justify-between gap-4 mb-2 flex-wrap">
-                  <div>
-                    <h2 className="text-lg font-bold text-[#1E3A5F]">My Interests</h2>
-                    <p className="text-xs text-gray-500 mt-0.5">Sectors, countries, and leader roles you selected during onboarding</p>
-                  </div>
-                  <span className="flex items-center gap-1.5 text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-xl">
-                    <Lock className="w-3 h-3" /> Free Plan — 60-Day Lock
-                  </span>
-                </div>
+                {/* SME Specific Settings */}
+                {userRole === "sme" && (
+                  <div className="space-y-5">
+                    <Row label="Consulting Availability Tag" desc="Toggle 'Consulting Available' indicator chip visibility on your public directory listing profile.">
+                      <Toggle on={consultingOpen} onToggle={() => setConsultingOpen(!consultingOpen)} />
+                    </Row>
 
-                {/* Info banner */}
-                <div className="bg-[#1E3A5F]/5 border border-[#1E3A5F]/10 rounded-2xl p-4 mb-6">
-                  <p className="text-xs text-[#1E3A5F] leading-relaxed">
-                    <span className="font-bold">⏳ Free Plan Restriction:</span> On the Free plan, each interest category can only be edited once every <span className="font-bold">60 days</span> to maintain platform integrity. Upgrade to Pro for unlimited edits anytime.
-                  </p>
-                </div>
+                    <Row label="Default Article Sector Category" desc="Index categories when publishing columns.">
+                      <select 
+                        value={smeCategory}
+                        onChange={(e) => setSmeCategory(e.target.value)}
+                        className="px-3 py-2 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs border-none font-bold text-[#1E3A5F] dark:text-white"
+                      >
+                        <option value="Trade Analysis">Trade Analysis</option>
+                        <option value="Policy Briefings">Policy Briefings</option>
+                        <option value="Bilateral Focus">Bilateral Focus</option>
+                      </select>
+                    </Row>
 
-                <LockedInterestSection
-                  icon={Building2} title="Sectors" color="text-blue-700" bg="bg-blue-100"
-                  items={user?.sectors ?? []} daysLeft={DAYS_LEFT}
-                />
-                <LockedInterestSection
-                  icon={Globe} title="Countries" color="text-teal-700" bg="bg-teal-100"
-                  items={user?.countries ?? []} daysLeft={DAYS_LEFT - 5}
-                />
-                <LockedInterestSection
-                  icon={Users} title="Leader Roles" color="text-violet-700" bg="bg-violet-100"
-                  items={user?.leaders ?? []} daysLeft={DAYS_LEFT + 10}
-                />
-              </div>
-            )}
-
-            {/* ── ACCOUNT TYPE ── */}
-            {tab === "account-type" && (
-              <div>
-                <div className="flex items-start justify-between gap-4 mb-2 flex-wrap">
-                  <div>
-                    <h2 className="text-lg font-bold text-[#1E3A5F]">Account Type & Role</h2>
-                    <p className="text-xs text-gray-500 mt-0.5">Your active role combination defines your dashboard and capabilities</p>
-                  </div>
-                  <span className="flex items-center gap-1.5 text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-xl">
-                    <BookOpen className="w-3 h-3" /> Currently: Free Reader
-                  </span>
-                </div>
-
-                {/* Info banner */}
-                <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-6">
-                  <p className="text-xs text-amber-800 leading-relaxed">
-                    <span className="font-bold">ℹ️ Important:</span> All new users start as <span className="font-bold">Free Reader</span>. To unlock SME, Associate SME, Leader, or Company roles — and their combinations — you must upgrade your plan. You can hold multiple roles simultaneously.
-                  </p>
-                </div>
-
-                {/* Role Combination Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {ROLE_COMBOS.map(combo => (
-                    <div key={combo.id}
-                      className={`rounded-2xl border-2 p-5 transition-all relative ${combo.isCurrent ? "border-[#1E3A5F] bg-[#1E3A5F]/5 shadow-md" : "border-gray-200 bg-gray-50"}`}>
-                      {combo.isCurrent && (
-                        <div className="absolute -top-2.5 left-4 bg-[#1E3A5F] text-white text-[10px] font-black px-3 py-0.5 rounded-full">
-                          ✓ Active Plan
-                        </div>
-                      )}
-
-                      {/* Role badges */}
-                      <div className="flex flex-wrap gap-2 mb-3">
-                        {combo.roles.map((r, i) => (
-                          <span key={i} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border ${combo.isCurrent ? `${r.bg} ${r.color} border-transparent` : "bg-white text-gray-400 border-gray-200"}`}>
-                            <r.icon className="w-3.5 h-3.5" />
-                            {r.label}
-                          </span>
-                        ))}
+                    <div className="pt-4 border-t border-dashed border-gray-100 dark:border-white/5 flex justify-between items-center bg-gray-50 dark:bg-white/5 p-4 rounded-xl">
+                      <div>
+                        <h4 className="text-xs font-bold text-gray-400 flex items-center gap-1"><Lock className="w-3.5 h-3.5" /> Professional Profile PDF Export</h4>
+                        <p className="text-[10px] text-gray-400 mt-1">Generate a styled executive profile resume page sheet. (Requires Upgrade).</p>
                       </div>
-
-                      <p className={`text-xs leading-relaxed mb-4 ${combo.isCurrent ? "text-[#1E3A5F]" : "text-gray-400"}`}>{combo.desc}</p>
-
-                      {combo.requiresUpgrade ? (
-                        <button className="w-full flex items-center justify-center gap-2 py-2.5 bg-gradient-to-r from-[#1E3A5F] to-[#2F6FA3] text-white text-xs font-bold rounded-xl hover:shadow-md hover:-translate-y-0.5 transition-all">
-                          <Zap className="w-3.5 h-3.5 text-[#F4A024]" />
-                          Upgrade — {combo.upgradeNote}
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </button>
-                      ) : (
-                        <div className="w-full py-2.5 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-xl text-center">
-                          ✓ Your Current Plan
-                        </div>
-                      )}
+                      <button type="button" onClick={() => setActiveTab("upgrade")} className="px-3.5 py-2 text-[10px] font-bold bg-[#F4A024] text-white rounded-xl">Unlock Tool</button>
                     </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* ── NOTIFICATIONS ── */}
-            {tab === "notifications" && (
-              <div>
-                <h2 className="text-lg font-bold text-[#1E3A5F] mb-6">Notification Preferences</h2>
-                <Row label="Breaking News Alerts" desc="Instant alerts for major trade news"><Toggle on={notifs.breaking} onToggle={() => toggle(notifs, setNotifs, "breaking")} /></Row>
-                <Row label="Daily Digest Email" desc="Morning summary of top stories"><Toggle on={notifs.digest} onToggle={() => toggle(notifs, setNotifs, "digest")} /></Row>
-                <Row label="SME Article Updates" desc="When SMEs you follow publish content"><Toggle on={notifs.sme} onToggle={() => toggle(notifs, setNotifs, "sme")} /></Row>
-                <Row label="Event Reminders" desc="Reminders for events you're registered for"><Toggle on={notifs.events} onToggle={() => toggle(notifs, setNotifs, "events")} /></Row>
-                <Row label="New Messages" desc="Notifications for direct messages"><Toggle on={notifs.messages} onToggle={() => toggle(notifs, setNotifs, "messages")} /></Row>
-              </div>
-            )}
-
-            {/* ── PRIVACY ── */}
-            {tab === "privacy" && (
-              <div>
-                <h2 className="text-lg font-bold text-[#1E3A5F] mb-6">Privacy Settings</h2>
-                <Row label="Public Profile" desc="Allow others to view your profile"><Toggle on={privacy.publicProfile} onToggle={() => toggle(privacy, setPrivacy, "publicProfile")} /></Row>
-                <Row label="Show Tracked Sectors" desc="Display your sectors on your public profile"><Toggle on={privacy.showSectors} onToggle={() => toggle(privacy, setPrivacy, "showSectors")} /></Row>
-                <Row label="Show Tracked Countries" desc="Display your countries on your public profile"><Toggle on={privacy.showCountries} onToggle={() => toggle(privacy, setPrivacy, "showCountries")} /></Row>
-              </div>
-            )}
-
-            {/* ── PREFERENCES ── */}
-            {tab === "preferences" && (
-              <div>
-                <h2 className="text-lg font-bold text-[#1E3A5F] mb-6">App Preferences</h2>
-                <Row label="Dark Mode" desc="Switch to a darker interface theme">
-                  <div className="flex items-center gap-2">
-                    <Sun className="w-4 h-4 text-[#F4A024]" />
-                    <Toggle on={prefs.darkMode} onToggle={() => toggle(prefs, setPrefs, "darkMode")} />
-                    <Moon className="w-4 h-4 text-[#1E3A5F]" />
                   </div>
-                </Row>
-                <Row label="Weekly Email Digest" desc="Receive a weekly industry summary">
-                  <Toggle on={prefs.emailDigest} onToggle={() => toggle(prefs, setPrefs, "emailDigest")} />
-                </Row>
-                <Row label="Content Language" desc="Preferred language for news articles">
-                  <select value={prefs.language} onChange={e => setPrefs({ ...prefs, language: e.target.value })}
-                    className="px-3 py-2 bg-[#f4f7fb] rounded-xl text-sm font-semibold text-[#1E3A5F] border-none focus:outline-none focus:ring-2 focus:ring-[#F4A024]">
-                    <option>English</option><option>Hindi</option><option>German</option><option>Arabic</option>
-                  </select>
-                </Row>
+                )}
+
+                {/* Associate SME Settings */}
+                {userRole === "associate-sme" && (
+                  <div className="space-y-5">
+                    <div className="bg-[#f4f7fb] dark:bg-white/5 p-5 rounded-2xl space-y-4">
+                      <h4 className="text-xs font-bold text-[#1E3A5F] dark:text-white">Affiliate Links & Credit Registry</h4>
+                      <p className="text-[10px] text-gray-400 leading-relaxed">
+                        Copy link referral, and redeem credits accumulated to unlock verified Pro plans discounts.
+                      </p>
+                      <div className="flex gap-2">
+                        <button type="button" onClick={copyAffiliate} className="px-4 py-2 bg-[#1E3A5F] text-white text-xs font-bold rounded-xl">
+                          {copiedLink ? "Link Copied!" : "Copy Referral Link"}
+                        </button>
+                        <button type="button" onClick={() => triggerSuccess("Balance details updated.")} className="px-4 py-2 bg-gray-100 dark:bg-white/5 text-xs text-gray-600 dark:text-white font-bold rounded-xl">
+                          View Referrals tracking
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="pt-4 border-t border-dashed border-gray-100 dark:border-white/5 flex justify-between items-center bg-gray-50 dark:bg-white/5 p-4 rounded-xl">
+                      <div>
+                        <h4 className="text-xs font-bold text-gray-400 flex items-center gap-1"><Lock className="w-3.5 h-3.5" /> Consulting Rate Configurator</h4>
+                        <p className="text-[10px] text-gray-400 mt-1">Settings for booking appointments and setting fees. (Requires Upgrade).</p>
+                      </div>
+                      <button type="button" onClick={() => setActiveTab("upgrade")} className="px-3.5 py-2 text-[10px] font-bold bg-[#F4A024] text-white rounded-xl">Unlock Tool</button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Company Settings */}
+                {userRole === "company" && (
+                  <div className="space-y-5">
+                    <div className="bg-[#f4f7fb] dark:bg-white/5 p-5 rounded-2xl space-y-4">
+                      <h4 className="text-xs font-bold text-[#1E3A5F] dark:text-white">Signatory Rights Delegation</h4>
+                      <p className="text-[10px] text-gray-400 leading-relaxed">
+                        Add or transfer administrative page ownership rights to another signatory. Requires registered OTP verification from both emails.
+                      </p>
+                      <div className="flex gap-2">
+                        <input 
+                          type="email" 
+                          placeholder="new-signatory@company.com" 
+                          value={signatoryEmailInput}
+                          onChange={(e) => setSignatoryEmailInput(e.target.value)}
+                          className="flex-1 px-3 py-2 bg-white dark:bg-[#122238] rounded-xl text-xs border-none"
+                        />
+                        <button type="button" onClick={() => {
+                          if (signatoryEmailInput.includes("@")) {
+                            triggerSuccess("Delegation verification request sent to target email.");
+                            setSignatoryEmailInput("");
+                          }
+                        }} className="px-4 py-2 bg-[#1E3A5F] text-white text-xs font-bold rounded-xl">Send Invite</button>
+                      </div>
+                    </div>
+
+                    <div className="pt-4 border-t border-dashed border-gray-100 dark:border-white/5 flex justify-between items-center bg-gray-50 dark:bg-white/5 p-4 rounded-xl">
+                      <div>
+                        <h4 className="text-xs font-bold text-gray-400 flex items-center gap-1"><Lock className="w-3.5 h-3.5" /> Multiple Signatories & Admins Access</h4>
+                        <p className="text-[10px] text-gray-400 mt-1">Grant simultaneous administrative access keys to team members. (Requires Upgrade).</p>
+                      </div>
+                      <button type="button" onClick={() => setActiveTab("upgrade")} className="px-3.5 py-2 text-[10px] font-bold bg-[#F4A024] text-white rounded-xl">Unlock Tool</button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Leader Settings */}
+                {userRole === "leader" && (
+                  <div className="space-y-5">
+                    <Row label="Display Associated Company on Profile" desc="Show or hide company linkage name from public biography banner layouts.">
+                      <Toggle on={companyLinkPrivacy} onToggle={() => setCompanyLinkPrivacy(!companyLinkPrivacy)} />
+                    </Row>
+
+                    <div className="p-5 bg-[#f4f7fb] dark:bg-white/5 rounded-2xl">
+                      <h4 className="text-xs font-bold text-[#1E3A5F] dark:text-white mb-2">Company Portability Setup</h4>
+                      <p className="text-[10px] text-gray-400 mb-4 leading-normal">
+                        This leader profile belongs to you. Change company linkage association at any time to clear history display.
+                      </p>
+                      <button type="button" onClick={() => triggerSuccess("Redirection to company linkage tab triggered.")} className="px-4 py-2 bg-[#1E3A5F] text-white text-xs font-bold rounded-xl">
+                        Manage Company Linkage
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ── UPGRADE TAB ── */}
+            {activeTab === "upgrade" && (
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-base font-bold text-[#1E3A5F] dark:text-white border-b border-gray-100 dark:border-white/5 pb-2.5 mb-5 flex items-center gap-2">
+                    <Zap className="w-5 h-5 text-[#F4A024]" />
+                    Upgrade to Premium Authority Tier
+                  </h3>
+                  <p className="text-xs text-gray-400 leading-relaxed">
+                    View features limits on your active free membership tier and choose package levels to unlock verified badges.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Free Plan specs */}
+                  <div className="border border-gray-100 dark:border-white/5 p-6 rounded-2xl space-y-4">
+                    <h4 className="text-sm font-bold text-gray-500 uppercase">Active Free Tier</h4>
+                    <ul className="text-xs space-y-2.5 text-gray-600 dark:text-gray-400">
+                      <li>• Self-declared information listings</li>
+                      <li>• Persistent Orange FREE MEMBER badges</li>
+                      <li>• Basic keyword directory searches</li>
+                      <li>• Locked analytics charts logs</li>
+                    </ul>
+                  </div>
+
+                  {/* Paid Plan specs */}
+                  <div className="border-2 border-[#1E3A5F] dark:border-[#F4A024] p-6 rounded-2xl bg-gradient-to-br from-[#1E3A5F]/5 to-[#2F6FA3]/10 space-y-4 relative overflow-hidden">
+                    <span className="absolute top-3 right-3 text-[10px] bg-[#F4A024] text-white px-2 py-0.5 font-bold rounded uppercase">Recommended</span>
+                    <h4 className="text-sm font-bold text-[#1E3A5F] dark:text-white uppercase">Premium Verified Tier</h4>
+                    <ul className="text-xs space-y-2.5 text-gray-700 dark:text-gray-300">
+                      <li>• Official Blue Tick verification badges</li>
+                      <li>• Unlimited articles/PR publication</li>
+                      <li>• Live B2B analytics dashboards</li>
+                      <li>• Sector ranking priority listings</li>
+                    </ul>
+                    <button 
+                      type="button" 
+                      onClick={() => window.location.href = `./plans/${userRole}`}
+                      className="w-full mt-4 py-3 bg-[#1E3A5F] dark:bg-[#F4A024] text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow"
+                    >
+                      Compare Plans & Upgrade <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Empty billing logs */}
+                <div className="pt-6 border-t border-gray-100 dark:border-white/5">
+                  <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">Billing History</h4>
+                  <div className="p-4 bg-gray-50 dark:bg-white/5 rounded-2xl text-center">
+                    <p className="text-xs text-gray-400 italic">No payments found. (You are on a Free membership plan).</p>
+                  </div>
+                </div>
               </div>
             )}
 
           </div>
         </div>
+
       </div>
     </div>
   );

@@ -95,14 +95,14 @@ const ACCOUNT_TYPES: AccountTypeOption[] = [
 ];
 
 /* ============================
-   PROGRESS BAR (4 steps)
+   PROGRESS BAR (3 steps)
    ============================ */
 function ProgressBar({ step }: { step: number }) {
-  const steps = ["Sectors", "Countries", "Leaders", "Account"];
+  const steps = ["Sectors", "Countries", "Leaders"];
   return (
     <div className="onb-progress">
       <div className="onb-progress-bar">
-        <div className="onb-progress-fill" style={{ width: `${(step / 4) * 100}%` }} />
+        <div className="onb-progress-fill" style={{ width: `${(step / 3) * 100}%` }} />
       </div>
       <div className="onb-progress-labels">
         {steps.map((label, i) => (
@@ -392,61 +392,6 @@ function LeaderStep({ selected, onToggle }: { selected: string[]; onToggle: (id:
 }
 
 /* ============================
-   STEP 4 — PRIMARY ACCOUNT SELECTION
-   ============================ */
-function AccountTypeStep({
-  selected,
-  onSelect,
-}: {
-  selected: AccountType | null;
-  onSelect: (type: AccountType) => void;
-}) {
-  return (
-    <div className="onb-step">
-      <div className="onb-step-header">
-        <h2>Primary Account Type</h2>
-        <p>Select one account type — this defines your dashboard and profile structure</p>
-      </div>
-
-      <div className="onb-account-grid">
-        {ACCOUNT_TYPES.map((type) => {
-          const Icon = type.icon;
-          const isSel = selected === type.id;
-
-          return (
-            <motion.button
-              key={type.id}
-              whileHover={{ scale: 1.015 }}
-              whileTap={{ scale: 0.985 }}
-              onClick={() => onSelect(type.id)}
-              className={`onb-account-card ${isSel ? "selected" : ""}`}
-            >
-              <div className="onb-account-icon-wrap">
-                <Icon className="w-6 h-6" />
-              </div>
-              <div>
-                <div className="onb-account-card-title">{type.label}</div>
-                <div className="onb-account-card-desc">{type.description}</div>
-                <span className="onb-account-badge">{type.badge}</span>
-              </div>
-              {isSel && (
-                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="onb-account-check">
-                  <Check className="w-4 h-4" />
-                </motion.div>
-              )}
-            </motion.button>
-          );
-        })}
-      </div>
-
-      <p className="onb-single-note">
-        ✦ You can only select one account type &nbsp;·&nbsp; You can update this later from your profile
-      </p>
-    </div>
-  );
-}
-
-/* ============================
    MAIN ONBOARDING PAGE
    ============================ */
 export default function OnboardingPage() {
@@ -458,10 +403,9 @@ export default function OnboardingPage() {
   const [sectors, setSectors] = useState<string[]>(user?.sectors || []);
   const [countries, setCountries] = useState<string[]>(user?.countries || []);
   const [leaders, setLeaders] = useState<string[]>(user?.leaders || []);
-  const [accountType, setAccountType] = useState<AccountType | null>(user?.accountType || null);
   const [saving, setSaving] = useState(false);
 
-  const TOTAL_STEPS = 4;
+  const TOTAL_STEPS = 3;
 
   const toggleItem = (list: string[], setList: (v: string[]) => void, id: string) => {
     setList(list.includes(id) ? list.filter((x) => x !== id) : [...list, id]);
@@ -471,7 +415,6 @@ export default function OnboardingPage() {
     if (step === 1) return sectors.length > 0;
     if (step === 2) return countries.length > 0;
     if (step === 3) return leaders.length > 0;
-    if (step === 4) return accountType !== null;
     return false;
   };
 
@@ -482,14 +425,14 @@ export default function OnboardingPage() {
       return;
     }
 
-    // Final step — save everything
+    // Final step — save everything and set account type to reader by default
     setSaving(true);
     try {
       await updateOnboarding({
         sectors,
         countries,
         leaders,
-        accountType: accountType!,
+        accountType: "reader",
         accountTypeSelectedAt: new Date().toISOString(),
         onboardingComplete: true,
       });
@@ -559,12 +502,6 @@ export default function OnboardingPage() {
               <LeaderStep
                 selected={leaders}
                 onToggle={(id) => toggleItem(leaders, setLeaders, id)}
-              />
-            )}
-            {step === 4 && (
-              <AccountTypeStep
-                selected={accountType}
-                onSelect={setAccountType}
               />
             )}
           </motion.div>
