@@ -4,7 +4,11 @@ import { useState } from "react";
 import { Search, Sparkles, Command } from "lucide-react";
 import { useTranslations } from 'next-intl';
 
-export default function SearchBar() {
+interface SearchBarProps {
+  compact?: boolean;
+}
+
+export default function SearchBar({ compact = false }: SearchBarProps) {
   const [focused, setFocused] = useState(false);
   const t = useTranslations('header');
 
@@ -12,8 +16,10 @@ export default function SearchBar() {
     <>
       {/* Desktop AI Search Bar */}
       <div
-        className={`relative mx-4 hidden md:flex flex-1 max-w-2xl transition-all duration-300 ${
-          focused ? "max-w-4xl" : ""
+        className={`relative mx-3 hidden md:flex flex-1 transition-all duration-300 ${
+          compact
+            ? focused ? "max-w-sm" : "max-w-xs"
+            : focused ? "max-w-4xl" : "max-w-2xl"
         }`}
       >
         <div className="relative w-full group">
