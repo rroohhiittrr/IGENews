@@ -2,8 +2,8 @@
 
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-import EOILandingPage from "@/components/eoi-form/EOILandingPage";
-import { ProductId, PRODUCT_INFO } from "@/components/eoi-form/data/productData";
+import EOITabSwitcher from "@/components/eoi-form/EOITabSwitcher";
+import { ProductId, PRODUCT_INFO } from "@/components/eoi-form/Rohit/data/productData";
 
 function EOIPageContent() {
   const searchParams = useSearchParams();
@@ -26,7 +26,7 @@ function EOIPageContent() {
   const teamMember = searchParams.get("team") || "";
 
   return (
-    <EOILandingPage
+    <EOITabSwitcher
       preselectedProduct={preselectedProduct}
       prefillCity={prefillCity}
       prefillSector={prefillSector}
@@ -42,7 +42,7 @@ export default function EOIPage() {
       <div className="flex min-h-screen items-center justify-center" style={{ background: "#0A2463" }}>
         <div className="text-center text-white">
           <div className="text-4xl mb-4 animate-bounce">🌐</div>
-          <p className="text-lg font-semibold">Loading IGEN EOI Form…</p>
+          <p className="text-lg font-semibold">Loading IGEN EOI…</p>
         </div>
       </div>
     }>
