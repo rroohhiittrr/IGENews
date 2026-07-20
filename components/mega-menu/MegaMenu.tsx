@@ -6,11 +6,16 @@ import { usePathname } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 import MenuDropdown from "./MenuDropdown";
 import { useTranslations } from "next-intl";
+import NewsPOCMegaMenu from "@/components/news-poc/NewsPOCMegaMenu";
 
 export default function MegaMenu() {
   const pathname = usePathname();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const t = useTranslations("nav");
+
+  if (pathname.includes("/news-poc")) {
+    return <NewsPOCMegaMenu />;
+  }
 
   const FEED_ITEMS = [
     { label: t("sectorNews"), href: "/feed/sector" },

@@ -1,0 +1,511 @@
+"use client";
+
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import type { ComponentType, ReactNode } from "react";
+import { useState } from "react";
+import {
+  ArrowLeft,
+  Award,
+  BarChart2,
+  Bell,
+  Bookmark,
+  Briefcase,
+  Calendar,
+  CheckCircle,
+  ChevronRight,
+  Crown,
+  Download,
+  Eye,
+  FileText,
+  Filter,
+  Globe,
+  Factory,
+  Lock,
+  Mail,
+  MapPin,
+  MessageSquare,
+  Mic,
+  Plus,
+  Search,
+  Share2,
+  Sparkles,
+  Star,
+  Target,
+  TrendingUp,
+  Trophy,
+  User,
+  Users,
+  Zap,
+  ThumbsUp,
+  HelpCircle,
+  Layers,
+  Check,
+  TrendingDown
+} from "lucide-react";
+
+type Submenu = "all" | "engagement" | "intelligence";
+
+interface Props {
+  submenu: Submenu;
+}
+
+const SUBMENU_CONFIG: Record<Submenu, {
+  label: string;
+  sublabel: string;
+  purpose: string;
+  icon: ComponentType<{ className?: string }>;
+  gradFrom: string;
+  gradTo: string;
+  badgeBg: string;
+  button: string;
+}> = {
+  all: {
+    label: "All Sector Directory",
+    sublabel: "Master 50-Sector Industry Repository",
+    purpose: "Browse all 50 sectors, 1,350+ industries, and ministry-aligned taxonomy.",
+    icon: Factory,
+    gradFrom: "from-blue-600",
+    gradTo: "to-indigo-700",
+    badgeBg: "bg-blue-600",
+    button: "bg-blue-600 hover:bg-blue-700 text-white"
+  },
+  engagement: {
+    label: "Sector Engagement",
+    sublabel: "Industry Community, Polls & Expert Q&A",
+    purpose: "Engage with trade professionals, participate in polls, and ask verified SMEs.",
+    icon: Users,
+    gradFrom: "from-emerald-600",
+    gradTo: "to-teal-700",
+    badgeBg: "bg-emerald-600",
+    button: "bg-emerald-600 hover:bg-emerald-700 text-white"
+  },
+  intelligence: {
+    label: "Sector Intelligence",
+    sublabel: "Market Research Reports & AI Forecasts",
+    purpose: "Purchase peer-reviewed sector whitepapers, view AI forecasts, and order custom research.",
+    icon: Sparkles,
+    gradFrom: "from-purple-600",
+    gradTo: "to-indigo-700",
+    badgeBg: "bg-purple-600",
+    button: "bg-purple-600 hover:bg-purple-700 text-white"
+  }
+};
+
+const SECTORS_ALL_50 = [
+  { code: "S01", name: "Agriculture & Farmers Welfare", count: "28 Industries", news: "1,420 Articles", growth: "+14.2%", ministry: "Ministry of Agriculture", heat: "High" },
+  { code: "S02", name: "AI & Cyber Security", count: "30 Industries", news: "2,840 Articles", growth: "+34.1%", ministry: "Ministry of Electronics & IT", heat: "Very High" },
+  { code: "S03", name: "Animal Husbandry & Dairying", count: "28 Industries", news: "890 Articles", growth: "+11.8%", ministry: "Ministry of Fisheries & Dairying", heat: "Medium" },
+  { code: "S04", name: "Atomic Energy", count: "27 Industries", news: "620 Articles", growth: "+9.5%", ministry: "Department of Atomic Energy", heat: "Medium" },
+  { code: "S05", name: "Ayush & Herbal Medicine", count: "31 Industries", news: "1,150 Articles", growth: "+18.2%", ministry: "Ministry of Ayush", heat: "High" },
+  { code: "S06", name: "Biotechnology", count: "30 Industries", news: "1,980 Articles", growth: "+22.5%", ministry: "Min of Science & Technology", heat: "Very High" },
+  { code: "S07", name: "Chemicals & Fertilizers", count: "35 Industries", news: "1,340 Articles", growth: "+13.7%", ministry: "Min of Chemicals & Fertilizers", heat: "High" },
+  { code: "S13", name: "Defence & Aerospace", count: "25 Industries", news: "2,100 Articles", growth: "+19.8%", ministry: "Ministry of Defence", heat: "Very High" },
+  { code: "S16", name: "Electronics & IT", count: "35 Industries", news: "3,450 Articles", growth: "+28.7%", ministry: "Ministry of Electronics & IT", heat: "Very High" },
+  { code: "S17", name: "Energy & Sustainability", count: "28 Industries", news: "2,760 Articles", growth: "+31.0%", ministry: "Min of Renewable Energy", heat: "Very High" },
+  { code: "S23", name: "Health & Family Welfare", count: "25 Industries", news: "2,240 Articles", growth: "+18.4%", ministry: "Ministry of Health", heat: "High" },
+  { code: "S42", name: "FinTech & Digital Payments", count: "26 Industries", news: "3,120 Articles", growth: "+26.9%", ministry: "Reserve Bank of India", heat: "Very High" },
+  { code: "S43", name: "Logistics & Supply Chain", count: "26 Industries", news: "1,890 Articles", growth: "+16.5%", ministry: "Ministry of Commerce", heat: "High" },
+  { code: "S45", name: "Automotive & Electric Vehicles", count: "26 Industries", news: "2,410 Articles", growth: "+24.3%", ministry: "Min of Heavy Industries", heat: "Very High" },
+  { code: "S46", name: "Semiconductors", count: "26 Industries", news: "3,890 Articles", growth: "+38.2%", ministry: "Ministry of Electronics & IT", heat: "Very High" },
+  { code: "S47", name: "Startups & Innovation", count: "26 Industries", news: "2,650 Articles", growth: "+21.4%", ministry: "DPIIT", heat: "Very High" }
+];
+
+const COMMUNITY_POSTS = [
+  { id: "cp-1", author: "Rajesh Sharma", role: "Logistics Operations Lead", company: "AeroFreight Logistics", time: "25m ago", title: "How is your team handling Red Sea freight tariff fluctuations?", content: "Maritime freight rates on Indo-European lanes have seen a 14% spike over the last fortnight. Are exporters shifting to air freight or IMEC rail multimodal corridors?", likes: 42, comments: 18, sector: "Logistics (S43)" },
+  { id: "cp-2", author: "Dr. Ananya Varma", role: "Biotech Policy Analyst", company: "BioVisions India", time: "1h ago", title: "New GoI Phytochemical Export Benchmarks — Key Takeaways", content: "The Ministry of Commerce has unified extraction purity benchmarks for herbal exports to EU ports. Here is a breakdown of compliance requirements.", likes: 89, comments: 27, sector: "Biotechnology (S06)" },
+  { id: "cp-3", author: "Karan Patel", role: "Clean Energy Strategist", company: "SunGrid Solutions", time: "2h ago", title: "SIGHT Phase-2 Green Hydrogen Tariff Arbitrage Discussion", content: "Comparing levelized cost of hydrogen (LCOH) across Gujarat ports vs Middle East bunkering hubs. Thoughts on long-term off-take agreements?", likes: 64, comments: 14, sector: "Energy (S17)" }
+];
+
+const COMMUNITY_POLLS = [
+  { id: "poll-1", question: "Which sector will see the highest FDI inflow growth in H2 2026?", totalVotes: 1240, options: [{ label: "Semiconductors (S46)", pct: 45 }, { label: "Renewable Energy (S17)", pct: 32 }, { label: "AI & Cyber (S02)", pct: 15 }, { label: "Biotechnology (S06)", pct: 8 }] },
+  { id: "poll-2", question: "Is your organization planning to deploy sovereign LLM infrastructure this year?", totalVotes: 890, options: [{ label: "Yes, currently in pilot", pct: 52 }, { label: "Evaluating vendors", pct: 28 }, { label: "No immediate plans", pct: 20 }] }
+];
+
+const EXPERT_QA = [
+  { expert: "Dr. Aris Thorne", role: "AI & Cyber SME", q: "What is the optimal latency threshold for sovereign enterprise LLMs?", answer: "Sub-50ms latency is achievable by running quantized 8-bit model weights on local edge nodes with direct tensor acceleration.", upvotes: 154 },
+  { expert: "Meera Deshmukh", role: "Trade Compliance SME", q: "How do IMEC corridors alter customs documentation clearance times?", answer: "Digitized blockchain manifests reduce container holding times at Mundra Port by an average of 48 hours.", upvotes: 128 }
+];
+
+const INTELLIGENCE_REPORTS_STORE = [
+  { id: "rep-1", title: "2026 Sovereign AI Infrastructure & Enterprise Datacenter Report", code: "REP-AI-02", price: "$299", category: "AI & Cyber Security", pages: "96 pages", date: "Updated July 2026", rating: "4.9 ★", downloads: 1420 },
+  { id: "rep-2", title: "Global Semiconductor OSAT Substrate Supply & Capex Analysis", code: "REP-SEM-46", price: "$249", category: "Semiconductors", pages: "84 pages", date: "Updated June 2026", rating: "4.9 ★", downloads: 1890 },
+  { id: "rep-3", title: "India Green Hydrogen Maritime Export Corridors & LCOH Outlook", code: "REP-ENG-17", price: "$199", category: "Energy & Sustainability", pages: "62 pages", date: "Updated July 2026", rating: "4.8 ★", downloads: 1150 },
+  { id: "rep-4", title: "Precision Agritech Drone Sprayer Global Export & Tariff Playbook", code: "REP-AGR-01", price: "$149", category: "Agriculture", pages: "50 pages", date: "Updated May 2026", rating: "4.7 ★", downloads: 860 }
+];
+
+function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return (
+    <div className={`bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl shadow-xs ${className}`}>
+      {children}
+    </div>
+  );
+}
+
+function SectionTitle({ title, action }: { title: string; action?: ReactNode }) {
+  return (
+    <div className="flex items-center justify-between gap-3 border-b border-gray-200 dark:border-gray-800 pb-3">
+      <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">{title}</h2>
+      {action}
+    </div>
+  );
+}
+
+export default function NewsPOCSectorNewsSubmenu({ submenu }: Props) {
+  const router = useRouter();
+  const cfg = SUBMENU_CONFIG[submenu];
+  const IconComp = cfg.icon;
+  const basePath = "/en/news-poc/sector-news";
+
+  const [votedPolls, setVotedPolls] = useState<Record<string, number>>({});
+
+  const handleVote = (pollId: string, optionIdx: number) => {
+    setVotedPolls((prev) => ({ ...prev, [pollId]: optionIdx }));
+  };
+
+  const SubMenuHeader = () => (
+    <div className="mx-auto max-w-7xl px-4 lg:px-6">
+      <div className="flex items-center gap-2 py-4 border-b border-gray-200 dark:border-gray-800">
+        <button
+          onClick={() => router.push(basePath)}
+          className="p-2 rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-blue-500 transition-all mr-1"
+          aria-label="Go back to Sector News main page"
+        >
+          <ArrowLeft className="h-4 w-4" />
+        </button>
+
+        <div className={`bg-gradient-to-r ${cfg.gradFrom} ${cfg.gradTo} text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 shrink-0 shadow-xs`}>
+          <IconComp className="h-3.5 w-3.5" />
+          <span className="text-[10px] font-bold">{cfg.label}</span>
+        </div>
+
+        <div className="flex gap-1 flex-wrap">
+          {(["all", "engagement", "intelligence"] as Submenu[]).map((s) => (
+            <button
+              key={s}
+              onClick={() => router.push(`${basePath}/${s}`)}
+              className={`px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all ${
+                submenu === s
+                  ? "bg-blue-600 text-white shadow-xs"
+                  : "bg-gray-100 dark:bg-gray-900 text-gray-500 hover:text-blue-600 dark:hover:text-blue-400"
+              }`}
+            >
+              {SUBMENU_CONFIG[s].label}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const HeroBanner = ({ title, description }: { title: string; description: string }) => (
+    <section className={`bg-gradient-to-br ${cfg.gradFrom} ${cfg.gradTo} text-white relative overflow-hidden`}>
+      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] [background-size:28px_28px]" />
+      <div className="relative z-10 mx-auto max-w-7xl px-4 py-8 lg:px-6">
+        <div className="flex flex-col lg:flex-row gap-6 lg:items-end justify-between">
+          <div className="max-w-3xl space-y-3">
+            <div className="flex items-center gap-2">
+              <div className="h-9 w-9 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center">
+                <IconComp className="h-4 w-4" />
+              </div>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-white/70">{cfg.sublabel}</span>
+            </div>
+            <h1 className="font-display text-2xl md:text-4xl font-bold tracking-tight">{title}</h1>
+            <p className="text-sm text-white/85 leading-relaxed font-normal">{description}</p>
+          </div>
+          
+          <div className="flex gap-2">
+            <Link href="/eoi" className="bg-white text-gray-950 font-bold text-xs px-4 py-2.5 rounded-xl hover:bg-gray-100 transition-all">
+              Explore Datasets
+            </Link>
+            <Link href="/eoi" className="bg-white/15 border border-white/20 text-white font-bold text-xs px-4 py-2.5 rounded-xl hover:bg-white/25 transition-all">
+              Request Advisory
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+
+  // VIEW 1: ALL SECTOR (Master Directory)
+  if (submenu === "all") {
+    return (
+      <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
+        <SubMenuHeader />
+        <HeroBanner
+          title="All Sector Master Directory & Intelligence Feed"
+          description="Master repository of all 50 sectors, 1,350+ industries, and GoI ministry taxonomy."
+        />
+
+        <section className="mx-auto max-w-7xl px-4 pt-8 lg:px-6 space-y-8">
+          <Card className="p-4 flex flex-wrap items-center gap-3">
+            <div className="relative flex-1 min-w-56">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
+              <input className="w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 py-2.5 pl-9 pr-3 text-xs outline-none focus:border-blue-500" placeholder="Search 50 sectors, codes, or ministry alignment..." />
+            </div>
+            {["All Regions", "Domestic", "India-US Bilateral", "India-EU Corridors", "ASEAN"].map((r) => (
+              <button key={r} className="rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-100 dark:bg-gray-900 px-3 py-2 text-[10px] font-bold text-gray-600 dark:text-gray-400 hover:text-blue-600">
+                {r}
+              </button>
+            ))}
+            <button className={`${cfg.button} rounded-lg px-4 py-2 text-xs font-bold flex items-center gap-1.5`}>
+              <Filter className="h-3.5 w-3.5" /> Filter
+            </button>
+          </Card>
+
+          <div className="space-y-4">
+            <SectionTitle title="Master 50-Sector Directory" action={<span className="text-[10px] text-gray-400 font-bold">50 Sectors Tracked</span>} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+              {SECTORS_ALL_50.map((sec) => (
+                <Card key={sec.code} className="p-4 hover:border-blue-500 transition-all space-y-2 group">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[9px] font-mono text-gray-400 font-bold">{sec.code}</span>
+                    <span className="text-[9px] font-bold text-emerald-500">{sec.growth} YoY</span>
+                  </div>
+                  <h3 className="font-bold text-xs text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors leading-snug">{sec.name}</h3>
+                  <p className="text-[10px] text-gray-500">{sec.ministry}</p>
+                  <div className="pt-2 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-[9px]">
+                    <span className="text-gray-400">{sec.count}</span>
+                    <span className="text-blue-600 font-bold">{sec.news}</span>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  // VIEW 2: ENGAGEMENT (Sector Engagement & Community)
+  if (submenu === "engagement") {
+    return (
+      <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
+        <SubMenuHeader />
+        <HeroBanner
+          title="Sector Engagement Community & Polls"
+          description="Engage in industry discussions, cast votes in real-time polls, and ask verified Subject Matter Experts."
+        />
+
+        <section className="mx-auto max-w-7xl px-4 pt-8 lg:px-6 space-y-8">
+          <div className="grid grid-cols-12 gap-8">
+
+            {/* Left Column: Community Feed & Polls */}
+            <div className="col-span-12 lg:col-span-8 space-y-8">
+
+              {/* Create Post / Ask Expert Bar */}
+              <Card className="p-4 space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center">
+                    YOU
+                  </div>
+                  <input className="flex-1 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-4 py-2.5 text-xs outline-none focus:border-emerald-500" placeholder="Start a sector discussion or ask an expert..." />
+                  <button className={`${cfg.button} rounded-xl px-4 py-2.5 text-xs font-bold flex items-center gap-1.5`}>
+                    <Plus className="h-3.5 w-3.5" /> Post
+                  </button>
+                </div>
+              </Card>
+
+              {/* Community Discussions */}
+              <div className="space-y-4">
+                <SectionTitle title="Community Feed & Discussions" />
+                {COMMUNITY_POSTS.map((post) => (
+                  <Card key={post.id} className="p-5 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2.5">
+                        <div className="h-9 w-9 rounded-full bg-gradient-to-br from-emerald-600 to-teal-700 text-white font-bold text-xs flex items-center justify-center">
+                          {post.author.split(" ").map((w) => w[0]).slice(0, 2).join("")}
+                        </div>
+                        <div>
+                          <h4 className="text-xs font-bold text-gray-900 dark:text-white leading-snug">{post.author}</h4>
+                          <span className="text-[9px] text-gray-400">{post.role} · {post.company}</span>
+                        </div>
+                      </div>
+                      <span className="text-[8px] font-bold px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600">
+                        {post.sector}
+                      </span>
+                    </div>
+
+                    <h3 className="text-sm font-bold text-gray-950 dark:text-white leading-snug">{post.title}</h3>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 font-normal leading-relaxed">{post.content}</p>
+
+                    <div className="pt-2 border-t border-gray-100 dark:border-gray-850 flex items-center justify-between text-[10px] text-gray-500">
+                      <span>{post.time}</span>
+                      <div className="flex items-center gap-4">
+                        <button className="flex items-center gap-1 hover:text-emerald-600"><ThumbsUp className="h-3.5 w-3.5" /> {post.likes}</button>
+                        <button className="flex items-center gap-1 hover:text-blue-600"><MessageSquare className="h-3.5 w-3.5" /> {post.comments} comments</button>
+                        <button className="hover:text-gray-700"><Share2 className="h-3.5 w-3.5" /></button>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Interactive Polls */}
+              <div className="space-y-4">
+                <SectionTitle title="Active Industry Polls & Surveys" action={<BarChart2 className="h-4 w-4 text-emerald-500" />} />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {COMMUNITY_POLLS.map((poll) => {
+                    const votedIdx = votedPolls[poll.id];
+                    return (
+                      <Card key={poll.id} className="p-5 space-y-3">
+                        <span className="text-[8px] font-bold text-emerald-600 uppercase">LIVE POLL · {poll.totalVotes} VOTES</span>
+                        <h4 className="text-xs font-bold text-gray-900 dark:text-white leading-snug">{poll.question}</h4>
+                        
+                        <div className="space-y-2 pt-1">
+                          {poll.options.map((opt, idx) => {
+                            const isSelected = votedIdx === idx;
+                            return (
+                              <button
+                                key={idx}
+                                onClick={() => handleVote(poll.id, idx)}
+                                className={`w-full text-left p-2.5 rounded-xl border text-xs relative overflow-hidden transition-all ${
+                                  isSelected ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/30" : "border-gray-200 dark:border-gray-800 hover:border-emerald-300"
+                                }`}
+                              >
+                                <div
+                                  className="absolute left-0 top-0 bottom-0 bg-emerald-500/10 rounded-xl transition-all"
+                                  style={{ width: `${opt.pct}%` }}
+                                />
+                                <div className="relative z-10 flex justify-between font-semibold">
+                                  <span className="text-gray-900 dark:text-white flex items-center gap-1.5">
+                                    {isSelected && <Check className="h-3 w-3 text-emerald-600 shrink-0" />}
+                                    {opt.label}
+                                  </span>
+                                  <span className="text-emerald-600 font-bold">{opt.pct}%</span>
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </Card>
+                    );
+                  })}
+                </div>
+              </div>
+
+            </div>
+
+            {/* Right Sidebar: Ask an Expert & Webinars */}
+            <div className="col-span-12 lg:col-span-4 space-y-6">
+              
+              {/* Ask an Expert Board */}
+              <Card className="p-4 space-y-3">
+                <SectionTitle title="Ask an Expert (SME Q&A)" action={<HelpCircle className="h-4 w-4 text-emerald-500" />} />
+                <div className="space-y-3">
+                  {EXPERT_QA.map((qa, idx) => (
+                    <div key={idx} className="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 space-y-1.5">
+                      <span className="text-[8px] font-bold text-emerald-600 block">Answered by {qa.expert}</span>
+                      <h5 className="text-[10px] font-bold text-gray-900 dark:text-white leading-snug">Q: {qa.q}</h5>
+                      <p className="text-[9px] text-gray-500 leading-relaxed font-normal">{qa.answer}</p>
+                      <div className="pt-1 flex items-center justify-between text-[8px] text-gray-400">
+                        <span className="flex items-center gap-0.5"><ThumbsUp className="h-2.5 w-2.5 text-emerald-500" /> {qa.upvotes} helpful</span>
+                        <Link href="/eoi" className="text-blue-600 font-bold hover:underline">Ask Question →</Link>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+
+              {/* Upcoming Webinars */}
+              <Card className="p-4 space-y-3">
+                <SectionTitle title="Upcoming Industry Webinars" action={<Calendar className="h-4 w-4 text-blue-500" />} />
+                {[
+                  { title: "2026 Sovereign AI Datacenter Panel", time: "Tomorrow, 3 PM IST" },
+                  { title: "Green Hydrogen Off-Take Contracting", time: "July 24, 4 PM IST" }
+                ].map((web, idx) => (
+                  <div key={idx} className="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 space-y-1">
+                    <span className="text-[8px] font-bold text-blue-600 uppercase block">{web.time}</span>
+                    <h5 className="text-[10px] font-bold text-gray-900 dark:text-white leading-snug">{web.title}</h5>
+                    <Link href="/eoi" className="text-[9px] font-bold text-blue-600 hover:underline block pt-1">
+                      Register Now →
+                    </Link>
+                  </div>
+                ))}
+              </Card>
+
+            </div>
+
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  // VIEW 3: INTELLIGENCE (Sector Intelligence Reports & AI)
+  return (
+    <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
+      <SubMenuHeader />
+      <HeroBanner
+        title="Sector Intelligence Reports & Market Research Store"
+        description="Purchase peer-reviewed market research, access AI-powered forecast scorecards, and request custom enterprise consulting."
+      />
+
+      <section className="mx-auto max-w-7xl px-4 pt-8 lg:px-6 space-y-8">
+        
+        {/* Research Store Grid */}
+        <div className="space-y-4">
+          <SectionTitle title="Market Research & Intelligence Reports" action={<span className="text-[10px] font-bold text-purple-600">Download Samples Available</span>} />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {INTELLIGENCE_REPORTS_STORE.map((rep) => (
+              <Card key={rep.id} className="p-5 space-y-3 flex flex-col justify-between hover:border-purple-500 transition-all group">
+                <div>
+                  <div className="flex items-center justify-between text-[8px] font-bold text-gray-400">
+                    <span>{rep.code}</span>
+                    <span className="text-amber-500">{rep.rating}</span>
+                  </div>
+                  <span className="inline-block mt-1 text-[8px] font-bold px-2 py-0.5 rounded bg-purple-50 dark:bg-purple-950/20 text-purple-600">
+                    {rep.category}
+                  </span>
+                  <h3 className="text-xs font-bold text-gray-950 dark:text-white mt-2 leading-snug group-hover:text-purple-600 transition-colors">{rep.title}</h3>
+                  <span className="text-[9px] text-gray-400 block mt-1">{rep.pages} · {rep.downloads} downloads</span>
+                </div>
+
+                <div className="pt-2 border-t border-gray-100 dark:border-gray-850 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-display text-base font-bold text-gray-900 dark:text-white">{rep.price}</span>
+                    <Link href="/eoi" className="bg-emerald-500 hover:bg-emerald-600 text-white text-[9px] font-bold px-3 py-1.5 rounded-lg transition-colors">
+                      Buy Report
+                    </Link>
+                  </div>
+                  <Link href="/eoi" className="w-full text-center border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 text-[9px] font-bold py-1.5 rounded-lg block hover:bg-gray-100 dark:hover:bg-gray-900">
+                    Download Sample PDF
+                  </Link>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        {/* Enterprise Consulting Request Form */}
+        <Card className="p-6 bg-gradient-to-br from-slate-950 to-[#1e1238] text-white border border-purple-900/60 shadow-lg space-y-4">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-4">
+            <div>
+              <span className="text-[9px] font-bold text-purple-400 uppercase tracking-widest">Enterprise Advisory</span>
+              <h3 className="text-base font-bold text-white mt-1">Order Custom B2B Sector Intelligence & Market Audits</h3>
+              <p className="text-xs text-slate-300 font-normal mt-0.5">Need customized market sizing, tariff impact models, or FDI advisory? Submit a custom research request.</p>
+            </div>
+            <Link href="/eoi" className="bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shrink-0">
+              Submit RFP / Inquiry
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+            {[
+              { title: "Custom Sizing Reports", desc: "Granular tariff & volume breakdowns" },
+              { title: "Competitive Audits", desc: "Top 50 competitor benchmarking" },
+              { title: "Regulatory Due Diligence", desc: "GoI ministry policy briefings" },
+              { title: "Bilateral Trade Maps", desc: "Custom corridor trade visualizers" }
+            ].map((srv, idx) => (
+              <div key={idx} className="p-3 bg-white/5 border border-white/10 rounded-xl space-y-1">
+                <h4 className="text-xs font-bold text-white">{srv.title}</h4>
+                <p className="text-[9px] text-slate-400">{srv.desc}</p>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+      </section>
+    </div>
+  );
+}

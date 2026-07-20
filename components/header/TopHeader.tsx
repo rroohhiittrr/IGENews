@@ -10,6 +10,7 @@ import ProfileAvatar from "@/components/header/ProfileAvatar";
 import UpgradeButton from "@/components/header/UpgradeButton";
 import AuthButtons from "@/components/header/AuthButtons";
 import EOIButton from "@/components/eoi-form/EOIButton";
+import NewsPOCButton from "@/components/news-poc/NewsPOCButton";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 
@@ -21,6 +22,7 @@ export default function TopHeader() {
       <Logo />
       <SearchBar compact />
       <div className="flex items-center gap-1 sm:gap-2">
+        <NewsPOCButton />
         <EOIButton />
         <Link
           href="/about-igen"
