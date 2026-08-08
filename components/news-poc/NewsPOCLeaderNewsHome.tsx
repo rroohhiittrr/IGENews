@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   User, Search, CheckCircle, Crown, Star, Globe, TrendingUp,
   ChevronRight, ArrowUpRight, Bookmark, Share2, Eye, Award,
@@ -100,7 +100,7 @@ const INTELLIGENCE_MODULES = [
   { title: "Top Leaders Reports", desc: "Weekly / Monthly Top Leader Reports", icon: Trophy, locked: false, badge: "Free" },
   { title: "Executive Rankings", desc: "Global & Sector-wise Rankings", icon: BarChart2, locked: true, badge: "Pro" },
   { title: "AI Leadership Insights", desc: "AI-powered Leadership Intelligence", icon: Sparkles, locked: true, badge: "Pro" },
-  { title: "Live Discussions", desc: "Join Live Panels, Webinars & AMAs", icon: MessageSquare, locked: false, badge: "Free" },
+  { title: "Executive AMA Archive", desc: "Access Past Panels & AMAs", icon: MessageSquare, locked: false, badge: "Free" },
   { title: "Leadership Analytics", desc: "Influence Metrics, Comparisons", icon: Activity, locked: true, badge: "Enterprise" },
   { title: "Saved Alerts", desc: "Custom Alerts & Notifications", icon: Bell, locked: true, badge: "Pro" }
 ];
@@ -142,7 +142,96 @@ const MOST_READ = [
   { headline: "Indra Nooyi Receives Award 2024", views: "1.3K" }
 ];
 
+const APPOINTMENTS = [
+  {
+    type: "appointment",
+    name: "Priya Nair",
+    oldRole: "CMO, Hindustan Unilever",
+    newRole: "CEO, HSBC India",
+    company: "HSBC India",
+    date: "Aug 5, 2026",
+    badge: "NEW",
+    color: "emerald"
+  },
+  {
+    type: "promotion",
+    name: "Nitin Paranjpe",
+    oldRole: "COO, Unilever Global",
+    newRole: "President & CEO, Unilever Global",
+    company: "Unilever",
+    date: "Aug 4, 2026",
+    badge: "PROMOTED",
+    color: "blue"
+  },
+  {
+    type: "appointment",
+    name: "Leena Nair",
+    oldRole: "CHRO, Unilever",
+    newRole: "Global CEO, Chanel",
+    company: "Chanel",
+    date: "Aug 3, 2026",
+    badge: "NEW",
+    color: "emerald"
+  },
+  {
+    type: "resignation",
+    name: "Sanjay Mehrotra",
+    oldRole: "CEO, Micron Technology",
+    newRole: "Independent Board Advisor",
+    company: "Micron Technology",
+    date: "Aug 2, 2026",
+    badge: "STEPPING DOWN",
+    color: "amber"
+  },
+  {
+    type: "appointment",
+    name: "Punit Renjen",
+    oldRole: "Global CEO, Deloitte",
+    newRole: "Chairman, Deloitte India Board",
+    company: "Deloitte India",
+    date: "Aug 1, 2026",
+    badge: "APPOINTED",
+    color: "blue"
+  },
+  {
+    type: "promotion",
+    name: "Anand Mahindra",
+    oldRole: "MD & CEO, Mahindra Group",
+    newRole: "Executive Chairman, Mahindra Group",
+    company: "Mahindra Group",
+    date: "Jul 30, 2026",
+    badge: "PROMOTED",
+    color: "blue"
+  }
+];
+
+const QUOTE_OF_DAY = {
+  quote: "India will not just be the world's largest economy — it will be the most sustainable one. That is the commitment we must make today.",
+  leader: "Mukesh Ambani",
+  role: "Chairman & MD",
+  company: "Reliance Industries",
+  initial: "MA",
+  color: "from-purple-600 to-violet-700",
+  date: "Aug 6, 2026"
+};
+
 const NEWS_TABS = ["Latest", "Trending", "Most Read", "Interviews", "Appointments"];
+
+const FEATURED_LEADER_STORY = {
+  id: "fls-1",
+  leader: "Gautam Adani",
+  role: "Chairman",
+  company: "Adani Group",
+  date: "Updated 15 mins ago",
+  headline: "Gautam Adani Unveils $15 Billion Infrastructure Expansion Blueprint",
+  summary: "Adani Group commits to a massive capital deployment across maritime ports, high-voltage energy transmission corridors, and green manufacturing clusters in 12 states to power India's industrial export corridors.",
+  image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=1200&auto=format&fit=crop&q=80",
+  metrics: [
+    { label: "Capital Outlay", value: "$15 Billion", color: "text-amber-400" },
+    { label: "New Employment", value: "200,000 Jobs", color: "text-emerald-400" },
+    { label: "Sectors Impacted", value: "Infrastructure", color: "text-blue-400" }
+  ]
+};
 
 const TIER_BADGE: Record<string, { label: string; bg: string; text: string }> = {
   enterprise: { label: "Enterprise", bg: "bg-gradient-to-r from-amber-400 to-orange-500", text: "text-gray-950" },
@@ -156,244 +245,340 @@ export default function NewsPOCLeaderNewsHome() {
   const [activeSectorTab, setActiveSectorTab] = useState("Technology");
   const [subscribed, setSubscribed] = useState(false);
   const [email, setEmail] = useState("");
-  const [carouselIdx, setCarouselIdx] = useState(0);
-
-  // Auto-advance featured carousel
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCarouselIdx((prev) => (prev + 1) % FEATURED_LEADERS.length);
-    }, 4500);
-    return () => clearInterval(timer);
-  }, []);
+  const [followedLeaders, setFollowedLeaders] = useState<string[]>([]);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const scroll = (direction: "left" | "right") => {
+    if (scrollRef.current) {
+      const { scrollLeft, clientWidth } = scrollRef.current;
+      const scrollTo = direction === "left" 
+        ? scrollLeft - clientWidth / 2
+        : scrollLeft + clientWidth / 2;
+      scrollRef.current.scrollTo({ left: scrollTo, behavior: "smooth" });
+    }
+  };
 
   const tierPath = "/en/news-poc/leader-news";
 
   return (
     <div className="bg-gray-50 dark:bg-[#070b12] text-gray-900 dark:text-gray-100 min-h-screen pb-16 transition-colors duration-300">
+      <style dangerouslySetInnerHTML={{__html: `
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+      `}} />
 
-      {/* ══════════════════════════════════════════════════════════════════
-          1. HERO BANNER — Discovery & Conversion
-      ══════════════════════════════════════════════════════════════════ */}
-      <section className="relative bg-gradient-to-br from-[#0c1931] via-[#12224a] to-[#0a1628] text-white overflow-hidden">
-        {/* Dot grid */}
-        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "radial-gradient(circle at 2px 2px, white 1px, transparent 0)", backgroundSize: "28px 28px" }} />
-        {/* Glow blobs */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-600/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-72 h-72 bg-purple-600/10 rounded-full translate-y-1/2 -translate-x-1/3 blur-3xl" />
-
-        <div className="relative z-10 mx-auto max-w-7xl px-4 pt-12 pb-10 lg:px-6">
-          <div className="flex flex-col lg:flex-row gap-10 items-center justify-between">
-            <div className="flex-1 space-y-6 max-w-2xl">
-              <div className="flex items-center gap-2">
-                <div className="h-8 w-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center">
-                  <User className="h-4 w-4 text-white" />
-                </div>
-                <span className="text-[10px] font-bold text-white/60 uppercase tracking-widest">Leadership Intelligence Hub</span>
-              </div>
-              <h1 className="font-display text-3xl md:text-5xl font-bold tracking-tight leading-tight">
-                Leader News
-              </h1>
-              <p className="text-slate-300 text-sm md:text-base font-normal leading-relaxed max-w-lg">
-                Discover leadership updates, achievements and insights from top executives, founders and innovators across every industry.
-              </p>
-
-              {/* Search bar */}
-              <div className="flex gap-2 max-w-xl">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Search leaders, companies, industries..."
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-slate-400 text-sm outline-none focus:border-purple-400 transition-colors"
-                  />
-                </div>
-                <select className="bg-white/10 border border-white/20 text-white rounded-xl px-3 py-3 text-xs outline-none">
-                  <option>All Sectors</option>
-                  <option>Technology</option>
-                  <option>Energy</option>
-                  <option>Finance</option>
-                </select>
-                <button className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-5 py-3 rounded-xl transition-all text-sm shrink-0">
-                  Search
-                </button>
-              </div>
-
-              {/* 4 CTA buttons */}
-              <div className="flex flex-wrap gap-3">
-                <Link href={`${tierPath}/registered/news`} className="bg-blue-500 hover:bg-blue-600 text-white font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition-all">
-                  <User className="h-3.5 w-3.5" /> Register as Leader (Free)
-                </Link>
-                <Link href={`${tierPath}/verified/news`} className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition-all">
-                  <CheckCircle className="h-3.5 w-3.5" /> Get Verified (Pro)
-                </Link>
-                <Link href={`${tierPath}/top/news`} className="bg-gradient-to-r from-amber-500 to-orange-600 text-gray-950 font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition-all">
-                  <Crown className="h-3.5 w-3.5" /> Go Enterprise
-                </Link>
-                <Link href="/eoi" className="bg-white/10 border border-white/20 hover:bg-white/20 text-white font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition-all">
-                  <Mic className="h-3.5 w-3.5" /> Post Leadership News
-                </Link>
-              </div>
+      {/* ── TOP SEARCH & TICKER STRIP ── */}
+      <section className="bg-gradient-to-br from-[#0c1931] via-[#0f2444] to-[#0a1628] text-white pt-10 pb-6 border-b border-gray-800">
+        <div className="mx-auto max-w-7xl px-4 lg:px-6 space-y-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <User className="h-6 w-6 text-purple-400" />
+              <h1 className="font-display text-2xl font-bold tracking-tight">Leader News Hub</h1>
+              <span className="bg-purple-500 text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-full ml-1">L</span>
             </div>
-
-            {/* Hero stats panel */}
-            <div className="grid grid-cols-2 gap-3 shrink-0">
-              {[
-                { val: "42,000+", label: "Registered Leaders", icon: User, color: "text-blue-400" },
-                { val: "8,200+", label: "Verified Leaders", icon: CheckCircle, color: "text-emerald-400" },
-                { val: "1,200+", label: "Enterprise Leaders", icon: Crown, color: "text-amber-400" },
-                { val: "50+", label: "Industry Sectors", icon: Globe, color: "text-purple-400" }
-              ].map((s, idx) => {
-                const SIcon = s.icon;
-                return (
-                  <div key={idx} className="bg-white/5 border border-white/10 rounded-xl p-4 text-center space-y-1.5">
-                    <SIcon className={`h-5 w-5 mx-auto ${s.color}`} />
-                    <div className={`font-display text-xl font-bold ${s.color}`}>{s.val}</div>
-                    <div className="text-slate-400 text-[9px] font-semibold uppercase tracking-wider">{s.label}</div>
-                  </div>
-                );
-              })}
+            
+            {/* Search bar */}
+            <div className="flex gap-2 w-full md:max-w-xl">
+              <div className="relative flex-1">
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search leaders, executives, companies..."
+                  className="w-full pl-10 pr-4 py-2 text-xs rounded-xl bg-white/10 border border-white/20 backdrop-blur-sm text-white placeholder:text-slate-400 outline-none focus:border-purple-400 transition-colors"
+                />
+              </div>
+              <button className="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all">
+                Search
+              </button>
             </div>
           </div>
-        </div>
 
-        {/* Tier navigation strip */}
-        <div className="relative z-10 border-t border-white/10 bg-white/5">
-          <div className="mx-auto max-w-7xl px-4 lg:px-6 py-3 flex flex-wrap gap-2 items-center justify-between">
-            <span className="text-[9px] font-bold text-white/50 uppercase tracking-widest">Navigate by Tier:</span>
-            <div className="flex gap-2 flex-wrap">
-              {[
-                { tier: "registered", label: "Registered Leaders (Free)", icon: User, color: "bg-blue-600" },
-                { tier: "verified", label: "Verified Leaders (Pro)", icon: CheckCircle, color: "bg-emerald-600" },
-                { tier: "top", label: "Top Leaders (Enterprise)", icon: Crown, color: "bg-gradient-to-r from-amber-500 to-orange-600" }
-              ].map((t) => {
-                const TIcon = t.icon;
-                return (
-                  <Link key={t.tier} href={`${tierPath}/${t.tier}/news`} className={`${t.color} text-white text-[10px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5 hover:opacity-90 transition-all`}>
-                    <TIcon className="h-3 w-3" /> {t.label}
-                    <ChevronRight className="h-3 w-3 opacity-60" />
-                  </Link>
-                );
-              })}
+          {/* Quick filter chips */}
+          <div className="flex flex-wrap gap-2 justify-start items-center">
+            <span className="text-[10px] text-slate-450 uppercase tracking-wider font-semibold mr-2">Quick filters:</span>
+            {["All Sectors", "CEOs", "Founders", "Tech Leaders", "Policy Makers", "Appointments"].map((chip) => (
+              <button key={chip} className="bg-white/10 hover:bg-white/20 border border-white/15 text-white text-[9px] font-bold px-2.5 py-1 rounded-full transition-all">
+                {chip}
+              </button>
+            ))}
+          </div>
+
+          {/* Live news updates ticker */}
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-2.5 backdrop-blur-md flex items-center gap-3">
+            <div className="bg-red-600 text-white text-[8px] font-extrabold px-2 py-0.5 rounded-md flex items-center gap-1 shrink-0 animate-pulse">
+              <span className="h-1 w-1 bg-white rounded-full" />
+              LIVE UPDATE
+            </div>
+            <div className="flex-1 overflow-hidden h-5 relative">
+              <div className="absolute inset-0 flex items-center animate-marquee whitespace-nowrap text-[11px] text-slate-200 font-semibold gap-8">
+                {[...LATEST_NEWS, ...LATEST_NEWS].map((item, idx) => (
+                  <span key={idx} className="inline-flex items-center gap-2">
+                    <strong className="text-purple-400 font-bold">{item.leader}:</strong> {item.headline}
+                    <span className="text-slate-400 text-[9px]">({item.time})</span>
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════════
-          2. FEATURED LEADER NEWS — Enterprise Spotlight Carousel
-      ══════════════════════════════════════════════════════════════════ */}
+      {/* ── FEATURED LEADER STORY (Hero Card style) ── */}
       <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
-        <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-4 mb-6">
-          <div className="flex items-center gap-3">
-            <h2 className="font-display text-lg font-bold text-gray-900 dark:text-white uppercase tracking-tight">Featured Leader News</h2>
-            <span className="bg-gradient-to-r from-amber-400 to-orange-500 text-gray-950 text-[8px] font-bold px-2 py-0.5 rounded-full">Enterprise Spotlight</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <button onClick={() => setCarouselIdx((prev) => (prev - 1 + FEATURED_LEADERS.length) % FEATURED_LEADERS.length)} className="p-1.5 rounded-lg border border-gray-200 dark:border-gray-800 hover:bg-gray-100 transition-colors">
-              <ChevronLeft className="h-3.5 w-3.5" />
-            </button>
-            <button onClick={() => setCarouselIdx((prev) => (prev + 1) % FEATURED_LEADERS.length)} className="p-1.5 rounded-lg border border-gray-200 dark:border-gray-800 hover:bg-gray-100 transition-colors">
-              <ChevronRight className="h-3.5 w-3.5" />
-            </button>
-            <Link href="/eoi" className="text-[10px] font-bold text-blue-500 hover:underline uppercase ml-2">View All</Link>
+        <div className="relative rounded-2xl overflow-hidden bg-[#0c1931] text-white min-h-[380px] flex flex-col justify-end p-8 border border-slate-800 shadow-sm group">
+          <div 
+            className="absolute inset-0 z-0 bg-cover bg-center opacity-65 group-hover:scale-102 transition-transform duration-300"
+            style={{ backgroundImage: `url(${FEATURED_LEADER_STORY.image})` }}
+          />
+          <div className="absolute inset-0 z-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent" />
+          
+          <div className="relative z-10 space-y-4 max-w-4xl">
+            <div className="flex items-center gap-2">
+              <span className="bg-purple-600 text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase">
+                FEATURED LEADER STORY
+              </span>
+              <span className="text-[10px] text-slate-300 font-semibold">
+                {FEATURED_LEADER_STORY.leader} · {FEATURED_LEADER_STORY.date}
+              </span>
+            </div>
+
+            <h2 className="font-display text-2xl md:text-4xl font-bold leading-tight text-white group-hover:text-purple-300 transition-colors">
+              {FEATURED_LEADER_STORY.headline}
+            </h2>
+            
+            <p className="text-slate-300 text-xs md:text-sm font-normal max-w-3xl leading-relaxed">
+              {FEATURED_LEADER_STORY.summary}
+            </p>
+
+            <div className="pt-2 flex flex-wrap items-center gap-6 border-t border-white/10 pt-4 text-xs font-semibold text-slate-300">
+              {FEATURED_LEADER_STORY.metrics.map((m, idx) => (
+                <div key={idx}>
+                  <span className="block text-[8px] text-gray-400 uppercase">{m.label}</span>
+                  <span className={`text-sm font-bold ${m.color}`}>{m.value}</span>
+                </div>
+              ))}
+              <div className="ml-auto">
+                <Link href={`/en/news-poc/article/${FEATURED_LEADER_STORY.id}`} className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-5 py-2.5 rounded-lg transition-colors flex items-center gap-1.5 text-[10px]">
+                  READ FULL BRIEFING <ChevronRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
+      </section>
+      {/* ── LATEST LEADER NEWS FEED (Full Width, 2 Columns for Featured & Stream) ── */}
+      <section className="mx-auto max-w-7xl px-4 pt-12 lg:px-6">
+        <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden shadow-xs p-6 space-y-6">
+          <div className="border-b border-gray-100 dark:border-gray-855 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <div className="h-3 w-3 rounded-full bg-purple-600 animate-ping" />
+              <h3 className="font-display text-lg md:text-xl lg:text-2xl font-black text-gray-900 dark:text-white uppercase tracking-tight">Latest & Trending Leader News</h3>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="flex bg-gray-100 dark:bg-gray-900 p-1 rounded-xl border border-gray-200 dark:border-gray-800">
+                {["Latest", "Trending", "Appointments"].map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveNewsTab(tab)}
+                    className={`px-4 py-2 text-xs font-bold rounded-lg cursor-pointer transition-all ${
+                      activeNewsTab === tab ? "bg-white dark:bg-gray-800 text-purple-600 shadow-sm" : "text-gray-500 hover:text-gray-700"
+                    }`}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
+              <Link href="/eoi" className="text-xs font-bold text-purple-500 hover:underline uppercase shrink-0">View All</Link>
+            </div>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-          {FEATURED_LEADERS.map((leader, idx) => {
-            const badge = TIER_BADGE[leader.tier];
-            const isActive = idx === carouselIdx;
-            return (
-              <div key={leader.id} className={`bg-white dark:bg-[#0f172a] border rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-all group cursor-pointer ${isActive ? "border-purple-300 dark:border-purple-800 shadow-sm" : "border-gray-200 dark:border-gray-800"}`}>
-                {/* Leader image placeholder */}
-                <div className={`h-32 bg-gradient-to-br ${leader.logoColor} relative flex items-center justify-center`}>
-                  <div className="h-16 w-16 rounded-full bg-white/20 border-2 border-white/40 flex items-center justify-center font-display text-xl font-bold text-white">
-                    {leader.logo}
-                  </div>
-                  <div className={`absolute top-2 left-2 ${badge.bg} ${badge.text} text-[7px] font-bold px-1.5 py-0.5 rounded`}>
-                    {badge.label}
-                  </div>
-                  <div className="absolute top-2 right-2 bg-black/30 text-white text-[8px] font-bold px-1.5 py-0.5 rounded">
-                    {leader.category}
-                  </div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {/* Left featured column (col-span-6) */}
+            <div className="lg:col-span-6 flex flex-col gap-4 group cursor-pointer">
+              <div className="w-full h-64 md:h-80 rounded-2xl overflow-hidden bg-slate-900 border border-gray-200 dark:border-gray-800 relative shadow-sm shrink-0">
+                <img 
+                  src={activeNewsTab === "Latest" 
+                    ? "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&auto=format&fit=crop&q=60"
+                    : "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=800&auto=format&fit=crop&q=60"
+                  } 
+                  alt="News thumbnail" 
+                  className="w-full h-full object-cover opacity-85 group-hover:scale-102 transition-transform duration-500"
+                />
+                <div className="absolute top-4 left-4 bg-purple-600 text-white text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
+                  {activeNewsTab === "Latest" ? "EXCLUSIVE INTERVIEW" : "TRENDING"}
                 </div>
+              </div>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 font-extrabold text-[10px] md:text-xs px-2.5 py-0.5 rounded border border-purple-100 dark:border-purple-900/30 uppercase">
+                    {activeNewsTab === "Latest" ? "Tata Group" : "Biocon India"}
+                  </span>
+                  <span className="text-xs text-slate-450 font-semibold">• {activeNewsTab === "Latest" ? "2 hrs ago" : "Trending #1"}</span>
+                </div>
+                <h4 className="font-display text-base md:text-lg lg:text-xl font-bold text-gray-900 dark:text-white leading-snug group-hover:text-purple-500 transition-colors">
+                  {activeNewsTab === "Latest" 
+                    ? "N Chandrasekaran outlines Tata Group's global multi-sector green strategy for 2026."
+                    : "Kiran Mazumdar-Shaw receives Global Entrepreneurship excellence award in London."
+                  }
+                </h4>
+                <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 font-normal leading-relaxed">
+                  {activeNewsTab === "Latest"
+                    ? "In a major leadership briefing, Tata Group Chairman N Chandrasekaran details the conglomerate's roadmap to integrate zero-emission supply chains across automotive, aerospace, and energy verticals."
+                    : "The prestigious title recognizes Kiran Mazumdar-Shaw's outstanding lifetime work in building Biocon into a world-leader in biological medicine and affordable biosimilars."
+                  }
+                </p>
+                {/* Share buttons on featured leader card */}
+                <div className="flex items-center gap-3 pt-1 border-t border-gray-100 dark:border-gray-800">
+                  <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Share:</span>
+                  <button className="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white text-[9px] font-bold px-2.5 py-1 rounded-md transition-colors">🔗 LinkedIn</button>
+                  <button className="flex items-center gap-1 bg-sky-500 hover:bg-sky-600 text-white text-[9px] font-bold px-2.5 py-1 rounded-md transition-colors">𝕏 Twitter</button>
+                  <button className="flex items-center gap-1 bg-green-500 hover:bg-green-600 text-white text-[9px] font-bold px-2.5 py-1 rounded-md transition-colors">💬 WhatsApp</button>
+                  <button className="flex items-center gap-1 border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 text-[9px] font-bold px-2.5 py-1 rounded-md hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors">📋 Copy</button>
+                </div>
+              </div>
+            </div>
 
-                <div className="p-4 space-y-2">
-                  <div>
-                    <span className="font-bold text-[10px] text-gray-900 dark:text-white block">{leader.name}</span>
-                    <span className="text-[9px] text-gray-450">{leader.role} · {leader.company}</span>
+            {/* Right stream list (col-span-6) */}
+            <div className="lg:col-span-6 divide-y divide-gray-100 dark:divide-gray-800 space-y-4 lg:pl-4">
+              {LATEST_NEWS.map((item, idx) => (
+                <div key={idx} className={`hover:bg-gray-55 dark:hover:bg-gray-955 transition-colors group p-4 rounded-xl cursor-pointer ${idx > 0 ? "pt-4" : ""}`}>
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    <span className="font-bold text-xs md:text-sm text-gray-900 dark:text-white">{item.leader}</span>
+                    <span className="bg-purple-50 dark:bg-purple-950/20 text-purple-600 text-[8px] font-bold px-2 py-0.5 rounded">{item.sector}</span>
+                    <span className="text-[10px] text-gray-400 ml-auto font-semibold">{item.time}</span>
                   </div>
-                  <h3 className="text-xs font-bold text-gray-950 dark:text-white leading-snug group-hover:text-purple-500 transition-colors">{leader.headline}</h3>
-                  <p className="text-[10px] text-gray-500 leading-relaxed font-normal line-clamp-2">{leader.excerpt}</p>
-                  <div className="flex items-center justify-between text-[9px] text-gray-400 pt-1 border-t border-gray-50 dark:border-gray-850">
-                    <span>{leader.date} · {leader.readTime}</span>
-                    <div className="flex gap-1.5">
-                      <button className="hover:text-purple-500 transition-colors"><Bookmark className="h-3 w-3" /></button>
-                      <button className="hover:text-blue-500 transition-colors"><Share2 className="h-3 w-3" /></button>
+                  <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 leading-snug font-semibold group-hover:text-purple-500 transition-colors">{item.headline}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── APPOINTMENTS & EXECUTIVE MOVEMENTS ── */}
+      <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
+        <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden shadow-xs">
+          <div className="p-5 border-b border-gray-100 dark:border-gray-850 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 bg-emerald-500 rounded-full animate-pulse" />
+                <h3 className="font-display text-base md:text-lg font-black text-gray-900 dark:text-white uppercase tracking-tight">Appointments &amp; Executive Movements</h3>
+              </div>
+              <p className="text-[10px] text-gray-400 mt-0.5 ml-4">Latest leadership changes across top companies — updated daily</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="flex gap-1">
+                {["All", "New", "Promoted", "Resigned"].map((t) => (
+                  <button key={t} className="px-2.5 py-1 text-[9px] font-bold rounded-lg bg-gray-100 dark:bg-gray-900 text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors">{t}</button>
+                ))}
+              </div>
+              <Link href="/eoi" className="text-[10px] font-bold text-purple-500 hover:underline uppercase flex items-center gap-0.5">View All <ChevronRight className="h-3 w-3" /></Link>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            {APPOINTMENTS.map((appt, idx) => {
+              const colorMap: Record<string, { bg: string; text: string; border: string; dot: string }> = {
+                emerald: { bg: "bg-emerald-50 dark:bg-emerald-950/20", text: "text-emerald-700 dark:text-emerald-300", border: "border-emerald-200 dark:border-emerald-900", dot: "bg-emerald-500" },
+                blue: { bg: "bg-blue-50 dark:bg-blue-950/20", text: "text-blue-700 dark:text-blue-300", border: "border-blue-200 dark:border-blue-900", dot: "bg-blue-500" },
+                amber: { bg: "bg-amber-50 dark:bg-amber-950/20", text: "text-amber-700 dark:text-amber-300", border: "border-amber-200 dark:border-amber-900", dot: "bg-amber-500" },
+              };
+              const c = colorMap[appt.color];
+              return (
+                <div key={idx} className={`p-4 border-b border-r border-gray-100 dark:border-gray-850 hover:bg-gray-50 dark:hover:bg-gray-955 transition-colors group cursor-pointer ${idx >= 3 ? "border-b-0" : ""}`}>
+                  <div className="flex items-start gap-3">
+                    <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-slate-600 to-slate-800 flex items-center justify-center font-bold text-white text-xs shrink-0">
+                      {appt.name.split(" ").map((n: string) => n[0]).join("").slice(0, 2)}
+                    </div>
+                    <div className="flex-1 min-w-0 space-y-1">
+                      <div className="flex items-center justify-between gap-1">
+                        <span className="font-bold text-xs text-gray-900 dark:text-white truncate">{appt.name}</span>
+                        <span className={`text-[8px] font-extrabold px-1.5 py-0.5 rounded-full shrink-0 ${c.bg} ${c.text} ${c.border} border`}>{appt.badge}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-[9px] text-gray-400">
+                        <span className="line-through">{appt.oldRole}</span>
+                      </div>
+                      <div className="flex items-center gap-1 text-[9px] font-bold text-gray-700 dark:text-gray-200">
+                        <span className={`h-1.5 w-1.5 rounded-full ${c.dot} shrink-0`} />
+                        {appt.newRole}
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-[8px] text-gray-400">
+                          <Link href="/en/news-poc/company-news" className="hover:text-purple-500 hover:underline">
+                            {appt.company}
+                          </Link>
+                          {" · "}{appt.date}
+                        </span>
+                        <button className="opacity-0 group-hover:opacity-100 transition-opacity text-[8px] font-bold text-purple-500 hover:underline">Share →</button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════════
-          MAIN CONTENT GRID (3 + Latest News / Intelligence / Rankings)
-      ══════════════════════════════════════════════════════════════════ */}
+      {/* ── MAIN CONTENT GRID (Featured Carousel / Spotlights / Intelligence / Rankings) ── */}
       <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
         <div className="grid grid-cols-12 gap-8">
 
           {/* ── LEFT MAIN COLUMN ── */}
           <div className="col-span-12 lg:col-span-8 space-y-10">
 
-            {/* 3. LATEST LEADER NEWS FEED */}
+            {/* 1. FEATURED LEADER NEWS — Enterprise Spotlight Carousel (Moved here!) */}
             <div className="space-y-4">
               <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
-                <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Latest Leader News Feed</h2>
-                <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-900 p-0.5 rounded-xl border border-gray-200 dark:border-gray-800">
-                  {NEWS_TABS.map((tab) => (
-                    <button
-                      key={tab}
-                      onClick={() => setActiveNewsTab(tab)}
-                      className={`px-2.5 py-1 rounded-lg text-[9px] font-bold transition-all ${activeNewsTab === tab ? "bg-white dark:bg-gray-800 text-purple-600 shadow-xs" : "text-gray-500 hover:text-gray-700"}`}
-                    >
-                      {tab}
-                    </button>
-                  ))}
+                <div className="flex items-center gap-3">
+                  <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Featured Leaders Spotlight</h2>
+                  <span className="bg-gradient-to-r from-amber-400 to-orange-500 text-gray-955 text-[8px] font-bold px-2 py-0.5 rounded-full">Enterprise Spotlight</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button onClick={() => scroll("left")} className="p-1 rounded-lg border border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors cursor-pointer" aria-label="Previous slide">
+                    <ChevronLeft className="h-3 w-3" />
+                  </button>
+                  <button onClick={() => scroll("right")} className="p-1 rounded-lg border border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors cursor-pointer" aria-label="Next slide">
+                    <ChevronRight className="h-3.5 w-3.5" />
+                  </button>
+                  <Link href="/eoi" className="text-[10px] font-bold text-blue-500 hover:underline uppercase ml-2">View All</Link>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {LATEST_NEWS.map((item) => (
-                  <div key={item.id} className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-xl p-4 hover:shadow-sm hover:border-purple-300 dark:hover:border-purple-900 transition-all group">
-                    <div className="flex items-start gap-3">
-                      <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center font-bold text-white text-xs shrink-0">
-                        {item.leader.split(" ").map(w => w[0]).slice(0, 2).join("")}
+              <div 
+                ref={scrollRef}
+                className="flex overflow-x-auto gap-6 pb-4 scroll-smooth snap-x snap-mandatory scrollbar-hide"
+                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+              >
+                {FEATURED_LEADERS.map((leader) => {
+                  const badge = TIER_BADGE[leader.tier];
+                  return (
+                    <div 
+                      key={leader.id} 
+                      className="w-full md:w-[calc(50%-12px)] shrink-0 snap-start bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-all group cursor-pointer"
+                    >
+                      <div className={`h-28 bg-gradient-to-br ${leader.logoColor} relative flex items-center justify-center`}>
+                        <div className="h-12 w-12 rounded-full bg-white/20 border-2 border-white/40 flex items-center justify-center font-display text-base font-bold text-white shadow-sm">
+                          {leader.logo}
+                        </div>
+                        <div className={`absolute top-2 left-2 ${badge.bg} ${badge.text} text-[7px] font-bold px-1.5 py-0.5 rounded`}>
+                          {badge.label}
+                        </div>
+                        <div className="absolute top-2 right-2 bg-black/30 text-white text-[8px] font-bold px-1.5 py-0.5 rounded">
+                          {leader.category}
+                        </div>
                       </div>
-                      <div className="flex-1 space-y-1 min-w-0">
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="font-bold text-[9px] text-gray-900 dark:text-white truncate">{item.leader}</span>
-                          <span className="bg-purple-50 dark:bg-purple-950/20 text-purple-600 text-[7px] font-bold px-1.5 py-0.5 rounded">{item.sector}</span>
+                      <div className="p-4 space-y-2">
+                        <div>
+                          <span className="font-bold text-[10px] text-gray-900 dark:text-white block">{leader.name}</span>
+                          <span className="text-[9px] text-gray-450">{leader.role} · {leader.company}</span>
                         </div>
-                        <h4 className="text-[10px] md:text-xs font-bold text-gray-950 dark:text-white leading-snug group-hover:text-purple-500 transition-colors">{item.headline}</h4>
-                        <div className="flex items-center justify-between text-[9px] text-gray-400">
-                          <span>{item.time}</span>
-                          <div className="flex items-center gap-2">
-                            <span className="flex items-center gap-0.5"><Eye className="h-2.5 w-2.5" />{item.views}</span>
-                            <Bookmark className="h-2.5 w-2.5 hover:text-purple-500 cursor-pointer" />
-                          </div>
-                        </div>
+                        <h3 className="text-xs font-bold text-gray-955 dark:text-white leading-snug group-hover:text-purple-500 transition-colors">{leader.headline}</h3>
+                        <p className="text-[10px] text-gray-550 leading-relaxed font-normal line-clamp-2">{leader.excerpt}</p>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-              <div className="text-center">
-                <Link href="/eoi" className="text-purple-500 font-bold text-xs hover:underline flex items-center gap-1 justify-center">
-                  Load More Leader News <ChevronRight className="h-3.5 w-3.5" />
-                </Link>
+                  );
+                })}
               </div>
             </div>
 
@@ -601,63 +786,34 @@ export default function NewsPOCLeaderNewsHome() {
               </div>
             </div>
 
-            {/* 11. LIVE DISCUSSIONS */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
-                <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Live Discussions & Events</h2>
-                <span className="flex items-center gap-1 text-[9px] font-bold text-red-500"><span className="h-1.5 w-1.5 bg-red-500 rounded-full animate-pulse" /> Live Now</span>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[
-                  { type: "WEBINAR", title: "Leadership in the Age of AI — Panel Discussion", host: "IGEN Leadership Council", time: "Live Now", seats: "342 attending", icon: Play },
-                  { type: "AMA", title: "Ask Me Anything: Navigating ESG with Kiran Mazumdar-Shaw", host: "Biocon & IGEN Expert Panel", time: "Starting in 20 min", seats: "1.2K registered", icon: MessageSquare },
-                  { type: "PODCAST", title: "Trade & Leadership Weekly — Episode 48", host: "Marcus Chen & Priya Sharma", time: "New Episode", seats: "8.4K listeners", icon: Mic },
-                  { type: "AMA", title: "Global Supply Chains: Executive Q&A with Julian Vance", host: "Logistics Intelligence Forum", time: "Tomorrow, 3 PM IST", seats: "890 registered", icon: MessageSquare }
-                ].map((ev, idx) => {
-                  const EvIcon = ev.icon;
-                  return (
-                    <div key={idx} className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-xl p-4 flex gap-3 hover:border-purple-300 dark:hover:border-purple-900 transition-all group">
-                      <div className="h-10 w-10 rounded-xl bg-purple-100 dark:bg-purple-950/30 flex items-center justify-center shrink-0">
-                        <EvIcon className="h-4 w-4 text-purple-600" />
-                      </div>
-                      <div className="space-y-1 min-w-0">
-                        <span className="text-[8px] font-bold text-red-500 uppercase">{ev.type} · {ev.time}</span>
-                        <h4 className="text-xs font-bold text-gray-950 dark:text-white leading-snug group-hover:text-purple-500 transition-colors">{ev.title}</h4>
-                        <p className="text-[9px] text-gray-450">{ev.host} · {ev.seats}</p>
-                        <Link href="/eoi" className="text-[9px] font-bold text-purple-500 hover:underline">Join Now →</Link>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
           </div>
 
           {/* ── RIGHT SIDEBAR ── */}
           <div className="col-span-12 lg:col-span-4 space-y-6">
 
-            {/* Upgrade widget */}
-            <div className="bg-gradient-to-br from-slate-950 to-[#162d54] text-white border border-slate-800 p-5 rounded-2xl shadow-xs space-y-4">
+            {/* Executive Quote of the Day */}
+            <div className="bg-gradient-to-br from-[#0c1931] to-[#1a2d5a] text-white border border-slate-800 p-5 rounded-2xl shadow-sm space-y-4">
               <div className="flex items-center gap-2">
-                <Crown className="h-4 w-4 text-amber-400" />
-                <span className="text-[9px] font-bold text-amber-400 uppercase tracking-widest">Upgrade to Access</span>
+                <span className="text-amber-400 text-lg leading-none">“”</span>
+                <span className="text-[9px] font-extrabold text-amber-400 uppercase tracking-widest">Quote of the Day</span>
+                <span className="ml-auto text-[8px] text-slate-500">{QUOTE_OF_DAY.date}</span>
               </div>
-              <ul className="space-y-2 text-[10px] text-slate-300">
-                {["Post Leadership News", "Complete Leader Profiles", "AI Insights & Reports", "Executive Rankings", "Export (PDF/Excel)", "Team Collaboration", "API Access"].map((item, idx) => (
-                  <li key={idx} className="flex items-center gap-1.5">
-                    <CheckCircle className="h-3 w-3 text-emerald-400 shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <div className="space-y-2 pt-2">
-                <Link href="/eoi" className="block text-center bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs py-2.5 rounded-lg transition-colors">
-                  Get Verified (Pro)
-                </Link>
-                <Link href="/eoi" className="block text-center bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-gray-950 font-bold text-xs py-2.5 rounded-lg transition-colors">
-                  Go Enterprise
-                </Link>
+              <blockquote className="text-sm font-semibold text-slate-200 leading-relaxed border-l-2 border-amber-400 pl-3 italic">
+                &ldquo;{QUOTE_OF_DAY.quote}&rdquo;
+              </blockquote>
+              <div className="flex items-center gap-3">
+                <div className={`h-9 w-9 rounded-xl bg-gradient-to-br ${QUOTE_OF_DAY.color} flex items-center justify-center font-bold text-white text-xs shrink-0`}>
+                  {QUOTE_OF_DAY.initial}
+                </div>
+                <div>
+                  <span className="font-bold text-[11px] text-white block">{QUOTE_OF_DAY.leader}</span>
+                  <span className="text-[9px] text-slate-400">{QUOTE_OF_DAY.role} · {QUOTE_OF_DAY.company}</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 pt-1 border-t border-white/10">
+                <span className="text-[9px] text-slate-500">Share this quote:</span>
+                <button className="text-[9px] font-bold text-blue-400 hover:text-blue-300">🔗 LinkedIn</button>
+                <button className="text-[9px] font-bold text-sky-400 hover:text-sky-300">𝕏 Twitter</button>
               </div>
             </div>
 
@@ -673,11 +829,22 @@ export default function NewsPOCLeaderNewsHome() {
                     <span className="font-display text-sm font-extrabold text-gray-200 dark:text-gray-800 w-4 text-center">{idx + 1}</span>
                     <div className={`h-8 w-8 rounded-xl bg-gradient-to-br ${l.color} flex items-center justify-center text-white font-bold text-[10px] shrink-0`}>{l.initial}</div>
                     <div className="flex-1 min-w-0">
-                      <span className="font-bold text-[10px] text-gray-900 dark:text-white block truncate">{l.name}</span>
+                      <Link href="/en/news-poc/leader-news" className="font-bold text-[10px] text-gray-900 dark:text-white block truncate hover:text-purple-500 transition-colors">
+                        {l.name}
+                      </Link>
                       <span className="text-[9px] text-gray-450 truncate block">{l.company}</span>
                     </div>
-                    <button className="text-[8px] font-bold text-purple-500 border border-purple-200 dark:border-purple-900 px-1.5 py-0.5 rounded hover:bg-purple-50 transition-colors shrink-0">
-                      Follow
+                    <button 
+                      onClick={() => {
+                        setFollowedLeaders(prev => prev.includes(l.name) ? prev.filter(n => n !== l.name) : [...prev, l.name]);
+                      }}
+                      className={`text-[8px] font-bold px-2 py-1 rounded transition-all shrink-0 ${
+                        followedLeaders.includes(l.name)
+                          ? "bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-450 border border-emerald-250 dark:border-emerald-900"
+                          : "text-purple-500 border border-purple-200 dark:border-purple-900 hover:bg-purple-50"
+                      }`}
+                    >
+                      {followedLeaders.includes(l.name) ? "Following" : "Follow"}
                     </button>
                   </div>
                 ))}
@@ -730,6 +897,29 @@ export default function NewsPOCLeaderNewsHome() {
               ))}
             </div>
 
+            {/* Simplified upgrade teaser (Moved to bottom) */}
+            <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-4 rounded-xl shadow-xs space-y-3">
+              <div className="flex items-center gap-2">
+                <Crown className="h-4 w-4 text-amber-400" />
+                <span className="text-[10px] font-bold text-gray-900 dark:text-white uppercase tracking-wider">Unlock Leader Pro Access</span>
+              </div>
+              <ul className="space-y-1.5 text-[10px] text-gray-600 dark:text-gray-400">
+                {[
+                  "Real-Time Executive Movements Tracker",
+                  "Board Vacancy & Direct Sourcing Alerts",
+                  "Sector-Wise Influence Analytics"
+                ].map((item) => (
+                  <li key={item} className="flex items-center gap-1.5">
+                    <CheckCircle className="h-3 w-3 text-emerald-400 shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <Link href="/eoi" className="block text-center bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-gray-955 font-bold text-xs py-2.5 rounded-lg transition-colors">
+                Learn More →
+              </Link>
+            </div>
+
           </div>
         </div>
       </section>
@@ -737,53 +927,7 @@ export default function NewsPOCLeaderNewsHome() {
       {/* ══════════════════════════════════════════════════════════════════
           12. UPGRADE BANNER — Primary Revenue Section
       ══════════════════════════════════════════════════════════════════ */}
-      <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
-        <div className="bg-gradient-to-br from-[#0c1931] via-[#1a2d5a] to-[#0a1628] text-white p-8 md:p-10 rounded-3xl border border-slate-800 shadow-lg relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-purple-600/8 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl" />
-
-          <div className="relative z-10 text-center space-y-6 max-w-3xl mx-auto">
-            <div className="space-y-2">
-              <span className="bg-amber-400/15 text-amber-400 border border-amber-400/20 text-[9px] font-bold px-3 py-1 rounded-full uppercase tracking-widest inline-block">
-                Unlock Premium Leadership Intelligence
-              </span>
-              <h2 className="font-display text-2xl md:text-3xl font-bold">
-                Discover. Connect. Lead.
-              </h2>
-              <p className="text-slate-400 text-sm font-normal max-w-xl mx-auto">
-                Get unlimited access to in-depth leader profiles, AI insights, exclusive reports, rankings and more.
-              </p>
-            </div>
-
-            {/* Feature icons */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
-              {[
-                { icon: BarChart2, label: "Unlimited News & Reports" },
-                { icon: Sparkles, label: "AI Insights & Analytics" },
-                { icon: Search, label: "Advanced Search & Filters" },
-                { icon: Shield, label: "Export Data (PDF/Excel)" }
-              ].map((f, idx) => {
-                const FIcon = f.icon;
-                return (
-                  <div key={idx} className="bg-white/5 border border-white/10 rounded-xl p-4 text-center space-y-2">
-                    <FIcon className="h-5 w-5 mx-auto text-amber-400" />
-                    <span className="text-[9px] font-bold text-slate-300 block">{f.label}</span>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Plan buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/eoi" className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm px-8 py-3 rounded-xl transition-all">
-                Get Verified (Pro) — from ₹999/mo
-              </Link>
-              <Link href="/eoi" className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-gray-950 font-bold text-sm px-8 py-3 rounded-xl transition-all">
-                Go Enterprise — Contact Sales
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Bottom upgrade banner removed — one conversion CTA is sufficient */}
 
     </div>
   );

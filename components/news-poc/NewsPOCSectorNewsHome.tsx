@@ -95,6 +95,8 @@ const NEWS_TABS = ["Latest", "Trending", "Most Read", "Editor's Pick"];
 
 export default function NewsPOCSectorNewsHome() {
   const [activeNewsTab, setActiveNewsTab] = useState("Latest");
+  const [followedSectors, setFollowedSectors] = useState<string[]>([]);
+  const [selectedBulletin, setSelectedBulletin] = useState<{ text: string; cat: string; details: string } | null>(null);
 
   return (
     <div className="bg-gray-50 dark:bg-[#070b12] text-gray-900 dark:text-gray-100 min-h-screen pb-16 transition-colors duration-300">
@@ -138,51 +140,52 @@ export default function NewsPOCSectorNewsHome() {
                   />
                 </div>
                 <select className="bg-white/10 border border-white/20 text-white rounded-xl px-3 py-3 text-xs outline-none">
-                  <option className="bg-gray-900 text-white">All 50 Sectors</option>
-                  <option className="bg-gray-900 text-white">Semiconductors (S46)</option>
-                  <option className="bg-gray-900 text-white">AI & Cyber (S02)</option>
-                  <option className="bg-gray-900 text-white">Renewable Energy (S17)</option>
-                  <option className="bg-gray-900 text-white">Biotechnology (S06)</option>
+                  <option className="bg-gray-955 text-white">All 50 Sectors</option>
+                  <option className="bg-gray-955 text-white">Semiconductors (S46)</option>
+                  <option className="bg-gray-955 text-white">AI & Cyber (S02)</option>
+                  <option className="bg-gray-955 text-white">Renewable Energy (S17)</option>
+                  <option className="bg-gray-955 text-white">Biotechnology (S06)</option>
                 </select>
                 <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-3 rounded-xl transition-all text-sm shrink-0">
                   Search
                 </button>
               </div>
-
-              {/* 4 Primary CTAs */}
-              <div className="flex flex-wrap gap-3">
-                <Link href="/en/news-poc/sector-news/all" className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition-all shadow-xs">
-                  <Factory className="h-3.5 w-3.5" /> Explore All 50 Sectors
-                </Link>
-                <Link href="/en/news-poc/sector-news/engagement" className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition-all shadow-xs">
-                  <Users className="h-3.5 w-3.5" /> Sector Engagement
-                </Link>
-                <Link href="/en/news-poc/sector-news/intelligence" className="bg-gradient-to-r from-amber-500 to-orange-600 text-gray-950 font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition-all shadow-xs">
-                  <Download className="h-3.5 w-3.5" /> Intelligence Reports
-                </Link>
-                <Link href="/eoi" className="bg-white/10 border border-white/20 hover:bg-white/20 text-white font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition-all">
-                  <Crown className="h-3.5 w-3.5" /> Upgrade to Pro
-                </Link>
-              </div>
             </div>
 
-            {/* Quick Stat Counter Panel */}
-            <div className="grid grid-cols-2 gap-3 shrink-0">
-              {[
-                { val: "50", label: "Core Sectors", icon: Factory, color: "text-blue-400" },
-                { val: "1,350+", label: "Industries Tracked", icon: Layers, color: "text-emerald-400" },
-                { val: "$782B+", label: "Annual Trade Output", icon: TrendingUp, color: "text-amber-400" },
-                { val: "23", label: "GoI Ministries", icon: Building, color: "text-purple-400" }
-              ].map((s, idx) => {
-                const SIcon = s.icon;
-                return (
-                  <div key={idx} className="bg-white/5 border border-white/10 rounded-xl p-4 text-center space-y-1.5 backdrop-blur-xs">
-                    <SIcon className={`h-5 w-5 mx-auto ${s.color}`} />
-                    <div className={`font-display text-xl font-bold ${s.color}`}>{s.val}</div>
-                    <div className="text-slate-400 text-[9px] font-semibold uppercase tracking-wider">{s.label}</div>
+            {/* Live Sector Alert Bulletin Ticker */}
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-5 w-full lg:w-[400px] backdrop-blur-md shadow-xl shrink-0 space-y-4">
+              <div className="flex items-center justify-between border-b border-white/15 pb-2.5">
+                <div className="flex items-center gap-2">
+                  <div className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Trade Bulletins</span>
+                </div>
+                <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Policy & Market Alerts</span>
+              </div>
+              <div className="space-y-3.5">
+                {[
+                  { text: "DGFT removes restriction guidelines on premium copper scrap imports", time: "5 min ago", cat: "Metal Trade" },
+                  { text: "MeitY finalizes approvals for 3 silicon assembly packaging facilities", time: "18 min ago", cat: "Semiconductors" },
+                  { text: "Green Hydrogen phase 2 auctions announced for Western Coastal Grid", time: "2 hrs ago", cat: "Renewables" }
+                ].map((b, idx) => (
+                  <div 
+                    key={idx} 
+                    onClick={() => setSelectedBulletin({
+                      text: b.text,
+                      cat: b.cat,
+                      details: `Detailed analysis of this ${b.cat} trade bulletin item: "${b.text}". The trade ministry has published revised tariff rates, compliance standards, and operational guidelines. B2B exporters should review updated customs procedures to utilize these concessions.`
+                    })}
+                    className="space-y-1 group/item cursor-pointer"
+                  >
+                    <div className="flex items-center justify-between text-[8px]">
+                      <span className="text-blue-400 font-bold uppercase">{b.cat}</span>
+                      <span className="text-slate-400">{b.time}</span>
+                    </div>
+                    <p className="text-[11px] font-medium text-slate-200 group-hover/item:text-blue-300 transition-colors leading-relaxed line-clamp-2">
+                      {b.text}
+                    </p>
                   </div>
-                );
-              })}
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -216,7 +219,7 @@ export default function NewsPOCSectorNewsHome() {
             className="absolute inset-0 z-0 bg-cover bg-center opacity-30 group-hover:scale-102 transition-transform duration-300"
             style={{ backgroundImage: `url(${FEATURED_SECTOR_STORY.image})` }}
           />
-          <div className="absolute inset-0 z-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+          <div className="absolute inset-0 z-0 bg-gradient-to-t from-slate-955 via-slate-950/40 to-transparent" />
           
           <div className="relative z-10 space-y-4 max-w-4xl">
             <div className="flex items-center gap-2">
@@ -243,95 +246,19 @@ export default function NewsPOCSectorNewsHome() {
                   <span className={`text-sm font-bold ${m.color}`}>{m.value}</span>
                 </div>
               ))}
-              <div className="ml-auto">
+              <div className="ml-auto flex items-center gap-2 flex-wrap">
                 <Link href={`/en/news-poc/article/${FEATURED_SECTOR_STORY.id}`} className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2.5 rounded-lg transition-colors flex items-center gap-1.5 text-[10px]">
                   READ FULL ANALYSIS <ChevronRight className="h-3.5 w-3.5" />
                 </Link>
+                <button className="flex items-center gap-1 bg-blue-700/60 hover:bg-blue-600 text-white text-[9px] font-bold px-2.5 py-1.5 rounded-md transition-colors">🔗 LinkedIn</button>
+                <button className="flex items-center gap-1 bg-sky-600/60 hover:bg-sky-500 text-white text-[9px] font-bold px-2.5 py-1.5 rounded-md transition-colors">𝕏 Twitter</button>
+                <button className="flex items-center gap-1 bg-white/10 hover:bg-white/20 text-white text-[9px] font-bold px-2.5 py-1.5 rounded-md transition-colors">📋 Copy</button>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════════
-          3. LIVE SECTOR UPDATES & TICKER
-      ══════════════════════════════════════════════════════════════════ */}
-      <section className="mx-auto max-w-7xl px-4 pt-8 lg:px-6">
-        <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow-xs space-y-3">
-          <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-850 pb-2">
-            <div className="flex items-center gap-2">
-              <span className="h-2 w-2 bg-red-500 rounded-full animate-pulse" />
-              <h3 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">Live Sector Updates</h3>
-            </div>
-            <Link href="/eoi" className="text-[10px] font-bold text-blue-500 hover:underline uppercase">View All Updates</Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {LIVE_SECTOR_UPDATES.map((up) => (
-              <div key={up.id} className="p-3 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-gray-100 dark:border-gray-800 space-y-1">
-                <div className="flex items-center justify-between text-[8px] font-bold">
-                  <span className="text-blue-600 dark:text-blue-400">{up.sector}</span>
-                  <span className="bg-red-50 dark:bg-red-950/20 text-red-600 px-1.5 py-0.5 rounded">{up.tag} · {up.time}</span>
-                </div>
-                <p className="text-xs font-bold text-gray-900 dark:text-white leading-snug">{up.text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════════════
-          4. SECTOR PERFORMANCE DASHBOARD
-      ══════════════════════════════════════════════════════════════════ */}
-      <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
-        <div className="space-y-4">
-          <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
-            <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Sector Performance Dashboard</h2>
-            <span className="text-[9px] font-bold text-gray-400">Macroeconomic Metrics</span>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {PERFORMANCE_METRICS.map((pm, idx) => {
-              const PMIcon = pm.icon;
-              return (
-                <div key={idx} className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs space-y-2">
-                  <PMIcon className={`h-6 w-6 ${pm.color}`} />
-                  <span className="text-[9px] font-bold text-gray-400 uppercase block">{pm.label}</span>
-                  <div className="font-display text-xl md:text-2xl font-bold text-gray-900 dark:text-white">{pm.val}</div>
-                  <span className="text-[9px] font-bold text-emerald-500 block">{pm.change}</span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════════════
-          5. BROWSE BY SECTOR (50 SECTORS GRID)
-      ══════════════════════════════════════════════════════════════════ */}
-      <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
-        <div className="space-y-4">
-          <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
-            <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Browse 50 Industry Sectors</h2>
-            <Link href="/en/news-poc/sector-news/all" className="text-[10px] font-bold text-blue-500 hover:underline uppercase">View Master Directory (All 50)</Link>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            {SECTORS_50_GRID.map((sec) => (
-              <Link key={sec.code} href="/eoi" className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-3.5 rounded-xl text-center hover:shadow-sm hover:border-blue-500 transition-all group">
-                <span className="text-2xl block mb-1">{sec.icon}</span>
-                <span className="text-[9px] font-mono text-gray-400 font-bold block">{sec.code}</span>
-                <span className="font-bold text-[10px] text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors block truncate">{sec.name}</span>
-                <span className="text-[8px] text-emerald-500 font-bold block mt-0.5">{sec.growth} YoY</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════════════
-          6. MAIN GRID (Latest News / AI Forecasts / Reports / Companies)
-      ══════════════════════════════════════════════════════════════════ */}
       <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
         <div className="grid grid-cols-12 gap-8">
 
@@ -339,53 +266,151 @@ export default function NewsPOCSectorNewsHome() {
           <div className="col-span-12 lg:col-span-8 space-y-10">
 
             {/* LATEST SECTOR NEWS (TABBED FEED) */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
-                <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Latest Sector News Feed</h2>
-                <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-900 p-0.5 rounded-xl border border-gray-200 dark:border-gray-800">
-                  {NEWS_TABS.map((tab) => (
-                    <button
-                      key={tab}
-                      onClick={() => setActiveNewsTab(tab)}
-                      className={`px-2.5 py-1 rounded-lg text-[9px] font-bold transition-all ${activeNewsTab === tab ? "bg-white dark:bg-gray-800 text-blue-600 shadow-xs" : "text-gray-500 hover:text-gray-700"}`}
-                    >
-                      {tab}
-                    </button>
+            <div className="space-y-4 bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-xs">
+              <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-855 pb-4">
+                <div className="flex items-center gap-2">
+                  <div className="h-3 w-3 rounded-full bg-blue-600 animate-pulse" />
+                  <h3 className="font-display text-lg font-bold text-gray-900 dark:text-white uppercase tracking-wider">Latest Sector News Feed</h3>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="flex bg-gray-100 dark:bg-gray-900 p-0.5 rounded-xl border border-gray-200 dark:border-gray-800">
+                    {NEWS_TABS.map((tab) => (
+                      <button
+                        key={tab}
+                        onClick={() => setActiveNewsTab(tab)}
+                        className={`px-2.5 py-1 rounded-lg text-[9px] font-bold transition-all ${activeNewsTab === tab ? "bg-white dark:bg-gray-800 text-blue-600 shadow-xs" : "text-gray-500 hover:text-gray-700"}`}
+                      >
+                        {tab}
+                      </button>
+                    ))}
+                  </div>
+                  <Link href="/eoi" className="text-xs font-bold text-blue-500 hover:underline uppercase shrink-0">View All</Link>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-2">
+                {/* Left featured column (col-span-6) */}
+                <Link href={`/en/news-poc/article/${LATEST_SECTOR_NEWS[0].id}`} className="lg:col-span-6 flex flex-col gap-4 group cursor-pointer block">
+                  <div className="w-full h-52 md:h-64 rounded-2xl overflow-hidden bg-slate-900 border border-gray-200 dark:border-gray-850 relative shadow-xs shrink-0">
+                    <img 
+                      src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&auto=format&fit=crop&q=60" 
+                      alt="Featured sector news" 
+                      className="w-full h-full object-cover opacity-90 group-hover:scale-102 transition-transform duration-500"
+                    />
+                    <div className="absolute top-4 left-4 bg-blue-600 text-white text-[9px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-xs">
+                      SECTOR UPDATE
+                    </div>
+                  </div>
+                  <div className="space-y-2.5">
+                    <div className="flex items-center gap-2">
+                      <span className="bg-blue-50 dark:bg-blue-955/40 text-blue-600 dark:text-blue-400 font-extrabold text-[9px] px-2.5 py-0.5 rounded border border-blue-100 dark:border-blue-900/30 uppercase">
+                        {LATEST_SECTOR_NEWS[0].sector}
+                      </span>
+                      <span className="text-[10px] text-slate-400 font-semibold">• {LATEST_SECTOR_NEWS[0].date}</span>
+                    </div>
+                    <h4 className="font-display text-base font-bold text-gray-955 dark:text-white leading-snug group-hover:text-blue-600 transition-colors">
+                      {LATEST_SECTOR_NEWS[0].title}
+                    </h4>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 font-normal leading-relaxed">
+                      Strategic bilateral tech alignments and infrastructure shifts are driving significant new orders in semiconductor, EV, and renewable energy corridors.
+                    </p>
+                    
+                    {/* Share row */}
+                    <div className="flex items-center gap-2 pt-2.5 border-t border-gray-100 dark:border-gray-800" onClick={(e) => e.preventDefault()}>
+                      <span className="text-[8px] font-bold text-gray-400 uppercase tracking-wider">Share:</span>
+                      <button className="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white text-[9px] font-bold px-2.5 py-0.5 rounded-md transition-colors">🔗 LinkedIn</button>
+                      <button className="flex items-center gap-1 bg-sky-500 hover:bg-sky-600 text-white text-[9px] font-bold px-2.5 py-0.5 rounded-md transition-colors">𝕏 Twitter</button>
+                      <button className="flex items-center gap-1 bg-green-500 hover:bg-green-600 text-white text-[9px] font-bold px-2.5 py-0.5 rounded-md transition-colors">💬 WhatsApp</button>
+                      <button className="flex items-center gap-1 border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-405 text-[9px] font-bold px-2.5 py-0.5 rounded-md hover:bg-gray-50 dark:hover:bg-gray-955 transition-colors">📋 Copy</button>
+                    </div>
+                  </div>
+                </Link>
+
+                {/* Right stream list (col-span-6) */}
+                <div className="lg:col-span-6 divide-y divide-gray-100 dark:divide-gray-855 space-y-4 lg:pl-4">
+                  {LATEST_SECTOR_NEWS.slice(1).map((item, idx) => (
+                    <Link key={item.id} href={`/en/news-poc/article/${item.id}`} className={`hover:bg-gray-55 dark:hover:bg-gray-955 transition-colors group p-3.5 rounded-xl cursor-pointer block ${idx > 0 ? "pt-4" : ""}`}>
+                      <div className="space-y-1.5">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="bg-blue-50 dark:bg-blue-955/30 text-blue-600 text-[8px] font-bold px-1.5 py-0.5 rounded uppercase">{item.sector}</span>
+                          <span className="text-[9px] text-gray-400">· {item.date}</span>
+                          {item.premium && <Lock className="h-3 w-3 text-amber-500 shrink-0" />}
+                        </div>
+                        <h4 className="text-xs font-bold text-gray-900 dark:text-white leading-snug group-hover:text-blue-600 transition-colors">
+                          {item.title}
+                        </h4>
+                        <span className="text-[9px] text-gray-400 block truncate">By {item.author} · {item.readTime} read</span>
+                      </div>
+                    </Link>
                   ))}
                 </div>
               </div>
 
-              <div className="space-y-3">
-                {LATEST_SECTOR_NEWS.map((item) => (
-                  <Link key={item.id} href={`/en/news-poc/article/${item.id}`} className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-xl p-4 hover:shadow-sm hover:border-blue-300 dark:hover:border-blue-900 transition-all group block">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="space-y-1.5 flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-[8px] font-bold text-blue-600 bg-blue-50 dark:bg-blue-950/20 px-2 py-0.5 rounded border border-blue-100/40">
-                            {item.sector}
-                          </span>
-                          <span className="text-[9px] text-gray-400">{item.date} · {item.readTime}</span>
-                          {item.premium && <Lock className="h-3 w-3 text-amber-500" />}
-                        </div>
-                        <h3 className="text-xs md:text-sm font-bold text-gray-950 dark:text-white leading-snug group-hover:text-blue-600 transition-colors">
-                          {item.title}
-                        </h3>
-                        <div className="flex items-center justify-between text-[9px] text-gray-400 pt-1">
-                          <span>By {item.author}</span>
-                          <div className="flex items-center gap-3">
-                            <span className="flex items-center gap-0.5"><Eye className="h-3 w-3" />{item.views}</span>
-                            <Bookmark className="h-3 w-3 hover:text-blue-500 cursor-pointer" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-              <div className="text-center">
+              <div className="text-center pt-2">
                 <Link href="/eoi" className="text-blue-600 font-bold text-xs hover:underline flex items-center gap-1 justify-center">
                   Load More Sector News <ChevronRight className="h-3.5 w-3.5" />
                 </Link>
+              </div>
+            </div>
+
+            {/* ── SECTOR OF THE WEEK ── */}
+            <div className="mt-8">
+              <div className="relative bg-gradient-to-r from-[#0c182b] via-[#122644] to-[#162d54] text-white rounded-3xl border border-slate-800 overflow-hidden shadow-lg">
+                <div className="absolute inset-0 z-0 bg-cover bg-center opacity-10" style={{ backgroundImage: `url(https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&auto=format&fit=crop&q=60)` }} />
+                <div className="absolute top-0 right-0 w-80 h-80 bg-blue-400/5 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl" />
+                <div className="relative z-10 p-6 md:p-8 flex flex-col lg:flex-row justify-between gap-8 items-start">
+                  <div className="space-y-4 max-w-2xl flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="bg-blue-500 text-white text-[8px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-widest">📅 Sector of the Week</span>
+                      <span className="text-slate-400 text-[10px] font-semibold">Week of Aug 5 – 11, 2026</span>
+                      <button 
+                        onClick={() => {
+                          setFollowedSectors(prev => prev.includes("Semiconductors") ? prev.filter(s => s !== "Semiconductors") : [...prev, "Semiconductors"]);
+                        }}
+                        className={`text-[8px] font-bold px-2 py-0.5 rounded-md transition-all ${
+                          followedSectors.includes("Semiconductors")
+                            ? "bg-emerald-500 text-white"
+                            : "bg-white/10 text-white hover:bg-white/20"
+                        }`}
+                      >
+                        {followedSectors.includes("Semiconductors") ? "Following" : "+ Follow Sector"}
+                      </button>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-4xl">📠</span>
+                      <div>
+                        <h2 className="font-display text-xl md:text-2xl lg:text-3xl font-bold leading-tight">Semiconductors &amp; Electronics (S46)</h2>
+                        <p className="text-slate-400 text-xs mt-0.5">India · $18.2B Capex · Ministry of Electronics &amp; IT</p>
+                      </div>
+                    </div>
+                    <p className="text-slate-300 text-sm font-normal leading-relaxed">
+                      <span className="text-blue-300 font-bold">Why in focus this week:</span> India's domestic OSAT packaging facilities hit full capacity as Phase-2 silicon corridor fabs go live in Gujarat and Tamil Nadu, Foxconn expands substrate investment by $1.2B, and Union Budget signals fresh ₹76,000 crore PLI allocation — making Semiconductors the most tracked sector across IGE this week.
+                    </p>
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      <span className="bg-blue-955/50 text-blue-400 border border-blue-900 text-[9px] font-bold px-2.5 py-1 rounded-full">📈 Growth +38.2% YoY</span>
+                      <span className="bg-emerald-955/50 text-emerald-400 border border-emerald-900 text-[9px] font-bold px-2.5 py-1 rounded-full">🏠 4 New Fab Announcements</span>
+                      <span className="bg-amber-955/50 text-amber-400 border border-amber-900 text-[9px] font-bold px-2.5 py-1 rounded-full">⚡ PLI Scheme Active</span>
+                    </div>
+                    <div className="flex gap-3 pt-1">
+                      <Link href="/eoi" className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-5 py-2.5 rounded-lg transition-all flex items-center gap-1.5">Read Full Coverage <ChevronRight className="h-3.5 w-3.5" /></Link>
+                      <Link href="/eoi" className="border border-white/20 text-white hover:bg-white/10 font-bold text-xs px-4 py-2.5 rounded-lg transition-all">Previous Picks →</Link>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-3 shrink-0">
+                    {[
+                      { label: "Sector Capex", val: "$18.2B", color: "text-blue-400" },
+                      { label: "YoY Growth", val: "+38.2%", color: "text-emerald-400" },
+                      { label: "Active Projects", val: "126", color: "text-amber-400" },
+                      { label: "News this week", val: "54 Articles", color: "text-purple-400" }
+                    ].map((stat, idx) => (
+                      <div key={idx} className="bg-white/5 border border-white/10 p-4 rounded-xl text-center">
+                        <div className="font-bold text-white text-sm">{stat.val}</div>
+                        <div className={`text-[9px] mt-0.5 ${stat.color} font-semibold`}>{stat.label}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -396,7 +421,7 @@ export default function NewsPOCSectorNewsHome() {
                   <Sparkles className="h-5 w-5 text-amber-400" />
                   <h2 className="font-display text-sm font-bold uppercase tracking-wider">AI Market Intelligence & Signals</h2>
                 </div>
-                <span className="bg-amber-400 text-gray-950 text-[8px] font-bold px-2 py-0.5 rounded-full">POWERED BY IGEN AI</span>
+                <span className="bg-amber-400 text-gray-955 text-[8px] font-bold px-2 py-0.5 rounded-full">POWERED BY IGEN AI</span>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -425,70 +450,11 @@ export default function NewsPOCSectorNewsHome() {
               </div>
             </div>
 
-            {/* PREMIUM INTELLIGENCE REPORTS STORE */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
-                <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Premium Sector Intelligence Reports</h2>
-                <Link href="/en/news-poc/sector-news/intelligence" className="text-[10px] font-bold text-blue-500 hover:underline uppercase">View All Reports</Link>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {PREMIUM_REPORTS.map((rep, idx) => (
-                  <div key={idx} className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-xl p-4 shadow-xs space-y-3 flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center justify-between text-[8px] font-bold text-gray-400">
-                        <span>{rep.code}</span>
-                        <span className="text-amber-500">{rep.rating}</span>
-                      </div>
-                      <h4 className="text-xs font-bold text-gray-900 dark:text-white mt-1 leading-snug">{rep.title}</h4>
-                      <span className="text-[9px] text-gray-400 block mt-1">{rep.pages}</span>
-                    </div>
-
-                    <div className="pt-2 border-t border-gray-100 dark:border-gray-850 flex items-center justify-between">
-                      <span className="font-display text-sm font-bold text-gray-900 dark:text-white">{rep.price}</span>
-                      <Link href="/eoi" className="bg-emerald-500 hover:bg-emerald-600 text-white text-[9px] font-bold px-3 py-1.5 rounded-lg transition-colors">
-                        Buy Report
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
 
           </div>
 
           {/* ── RIGHT SIDEBAR ── */}
           <div className="col-span-12 lg:col-span-4 space-y-6">
-
-            {/* Persistent Upgrade Banner */}
-            <div className="bg-gradient-to-br from-slate-950 to-[#122644] text-white border border-slate-800 p-5 rounded-2xl shadow-xs space-y-4">
-              <div className="flex items-center gap-2">
-                <Crown className="h-4 w-4 text-amber-400" />
-                <span className="text-[9px] font-bold text-amber-400 uppercase tracking-widest">Upgrade to Sector Pro</span>
-              </div>
-              <ul className="space-y-2 text-[10px] text-slate-300">
-                {[
-                  "Unlimited Sector News & Datapacks",
-                  "AI Forecasts & Opportunity Scores",
-                  "Full Access to 50-Sector Dashboards",
-                  "Discounted Intelligence Reports",
-                  "Custom Sector Alerts & CRM Exports"
-                ].map((item, idx) => (
-                  <li key={idx} className="flex items-center gap-1.5">
-                    <CheckCircle className="h-3 w-3 text-emerald-400 shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <div className="space-y-2 pt-2">
-                <Link href="/eoi" className="block text-center bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs py-2.5 rounded-lg transition-colors">
-                  Get Pro Membership
-                </Link>
-                <Link href="/eoi" className="block text-center bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-gray-950 font-bold text-xs py-2.5 rounded-lg transition-colors">
-                  Go Enterprise
-                </Link>
-              </div>
-            </div>
 
             {/* Top Companies */}
             <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden shadow-xs">
@@ -496,7 +462,7 @@ export default function NewsPOCSectorNewsHome() {
                 <span>Top Sector Companies</span>
                 <Link href="/eoi" className="text-[9px] opacity-80 hover:opacity-100">View All</Link>
               </div>
-              <div className="divide-y divide-gray-50 dark:divide-gray-850">
+              <div className="divide-y divide-gray-55 dark:divide-gray-855">
                 {TOP_COMPANIES.map((c, idx) => (
                   <div key={idx} className="flex items-center gap-2.5 p-3 hover:bg-gray-50 dark:hover:bg-gray-955 transition-colors">
                     <div className={`h-7 w-7 rounded-lg bg-gradient-to-br ${c.color} flex items-center justify-center text-white font-bold text-[9px] shrink-0`}>{c.logo}</div>
@@ -516,7 +482,7 @@ export default function NewsPOCSectorNewsHome() {
                 <span>Top Industry Leaders</span>
                 <Link href="/eoi" className="text-[9px] opacity-80 hover:opacity-100">View All</Link>
               </div>
-              <div className="divide-y divide-gray-50 dark:divide-gray-850">
+              <div className="divide-y divide-gray-55 dark:divide-gray-855">
                 {TOP_LEADERS.map((l, idx) => (
                   <div key={idx} className="flex items-center gap-2.5 p-3 hover:bg-gray-50 dark:hover:bg-gray-955 transition-colors">
                     <div className={`h-7 w-7 rounded-lg bg-gradient-to-br ${l.color} flex items-center justify-center text-white font-bold text-[9px] shrink-0`}>{l.initial}</div>
@@ -532,7 +498,7 @@ export default function NewsPOCSectorNewsHome() {
 
             {/* Newsletter Subscription */}
             <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-xl p-4 shadow-xs space-y-3">
-              <div className="flex items-center gap-2 border-b border-gray-100 dark:border-gray-850 pb-2">
+              <div className="flex items-center gap-2 border-b border-gray-100 dark:border-gray-855 pb-2">
                 <Mail className="h-4 w-4 text-blue-500" />
                 <span className="font-bold text-xs text-gray-900 dark:text-white uppercase tracking-wider">Sector Digest Newsletter</span>
               </div>
@@ -543,10 +509,139 @@ export default function NewsPOCSectorNewsHome() {
               </button>
             </div>
 
+            {/* Sector Pro Card at the bottom */}
+            <div className="bg-gradient-to-br from-slate-955 to-[#122644] text-white border border-slate-800 p-5 rounded-2xl shadow-xs space-y-4">
+              <div className="flex items-center gap-2">
+                <Crown className="h-4 w-4 text-amber-400" />
+                <span className="text-[10px] font-bold text-white uppercase tracking-wider">Unlock Sector Pro Access</span>
+              </div>
+              <ul className="space-y-1.5 text-[10px] text-slate-300">
+                {[
+                  "Interactive 50-Sector Directory",
+                  "Customs & Tariff Phase-Out Heatmaps",
+                  "Global Sourcing Opportunities Registry"
+                ].map((item, idx) => (
+                  <li key={idx} className="flex items-center gap-1.5">
+                    <CheckCircle className="h-3 w-3 text-emerald-400 shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <Link href="/eoi" className="block text-center bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold text-xs py-2.5 rounded-lg transition-colors">
+                Learn More →
+              </Link>
+            </div>
+
           </div>
 
         </div>
       </section>
+
+      {/* ── SECTOR PERFORMANCE DASHBOARD ── */}
+      <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
+            <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Sector Performance Dashboard</h2>
+            <span className="text-[9px] font-bold text-gray-400">Macroeconomic Metrics</span>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {PERFORMANCE_METRICS.map((pm, idx) => {
+              const PMIcon = pm.icon;
+              return (
+                <div key={idx} className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs space-y-2">
+                  <PMIcon className={`h-6 w-6 ${pm.color}`} />
+                  <span className="text-[9px] font-bold text-gray-400 uppercase block">{pm.label}</span>
+                  <div className="font-display text-xl md:text-2xl font-bold text-gray-900 dark:text-white">{pm.val}</div>
+                  <span className="text-[9px] font-bold text-emerald-500 block">{pm.change}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── BROWSE 50 SECTORS GRID ── */}
+      <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
+            <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Browse 50 Industry Sectors</h2>
+            <Link href="/en/news-poc/sector-news/all" className="text-[10px] font-bold text-blue-500 hover:underline uppercase">View Master Directory</Link>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+            {SECTORS_50_GRID.map((sec) => (
+              <Link key={sec.code} href="/eoi" className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-3.5 rounded-xl text-center hover:shadow-sm hover:border-blue-500 transition-all group">
+                <span className="text-2xl block mb-1">{sec.icon}</span>
+                <span className="text-[9px] font-mono text-gray-400 font-bold block">{sec.code}</span>
+                <span className="font-bold text-[10px] text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors block truncate">{sec.name}</span>
+                <span className="text-[8px] text-emerald-500 font-bold block mt-0.5">{sec.growth} YoY</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── PREMIUM Sector Reports (Moved to bottom) ── */}
+      <section className="mx-auto max-w-7xl px-4 pt-10 pb-6 lg:px-6">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
+            <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Premium Sector Intelligence Reports</h2>
+            <Link href="/en/news-poc/sector-news/intelligence" className="text-[10px] font-bold text-blue-500 hover:underline uppercase">View All Reports</Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {PREMIUM_REPORTS.map((rep, idx) => (
+              <div key={idx} className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-xl p-4 shadow-xs space-y-3 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between text-[8px] font-bold text-gray-400">
+                    <span>{rep.code}</span>
+                    <span className="text-amber-500">{rep.rating}</span>
+                  </div>
+                  <h4 className="text-xs font-bold text-gray-900 dark:text-white mt-1 leading-snug">{rep.title}</h4>
+                  <span className="text-[9px] text-gray-400 block mt-1">{rep.pages}</span>
+                </div>
+                <div className="pt-2 border-t border-gray-100 dark:border-gray-850 flex items-center justify-between">
+                  <span className="font-display text-sm font-bold text-gray-950 dark:text-white">{rep.price}</span>
+                  <Link href="/eoi" className="bg-emerald-50 hover:bg-emerald-600 text-white text-[9px] font-bold px-3 py-1.5 rounded-lg transition-colors">
+                    Buy Report
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Ticker Bulletin Detail Modal */}
+      {selectedBulletin && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+          <div className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4">
+            <div className="flex items-center justify-between border-b border-gray-150 dark:border-gray-855 pb-3">
+              <span className="bg-blue-100 dark:bg-blue-955 text-blue-600 dark:text-blue-400 text-[9px] font-bold px-2 py-0.5 rounded uppercase">
+                {selectedBulletin.cat}
+              </span>
+              <button 
+                onClick={() => setSelectedBulletin(null)}
+                className="text-gray-400 hover:text-gray-600 text-xs font-bold"
+              >
+                ✕ Close
+              </button>
+            </div>
+            <h3 className="font-display text-sm font-bold text-gray-955 dark:text-white leading-snug">
+              {selectedBulletin.text}
+            </h3>
+            <p className="text-[11px] text-gray-500 leading-relaxed font-normal">
+              {selectedBulletin.details}
+            </p>
+            <div className="pt-4 border-t border-gray-100 dark:border-gray-850 flex items-center justify-between gap-3 flex-wrap">
+              <span className="text-[10px] text-amber-500 font-bold flex items-center gap-1">
+                <Crown className="h-3.5 w-3.5" /> Subscriber Premium Access
+              </span>
+              <Link href="/eoi" className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-4 py-2 rounded-lg transition-colors">
+                Unlock Sector Accords Data
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

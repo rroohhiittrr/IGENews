@@ -637,7 +637,7 @@ export default function NewsPOCCatchAllPage() {
         </div>
 
         {/* Center Column: Market Intelligence, Rankings */}
-        <div className="lg:col-span-6 space-y-6">
+        <div className="lg:col-span-9 space-y-6">
           <div className="bg-white dark:bg-[#0f172a] border border-gray-205 dark:border-gray-800 p-5 rounded-xl shadow-xs space-y-4">
             <div className="flex justify-between items-center border-b border-gray-100 dark:border-gray-855 pb-2">
               <h4 className="text-xs font-bold text-gray-900 dark:text-white">India Market Intelligence</h4>
@@ -672,7 +672,7 @@ export default function NewsPOCCatchAllPage() {
             </div>
             <table className="w-full text-left text-[11px] border-collapse">
               <thead>
-                <tr className="text-gray-450 border-b border-gray-100 dark:border-gray-850 font-bold">
+                <tr className="text-gray-450 border-b border-gray-100 dark:border-gray-855 font-bold">
                   <th className="pb-2">MARKET</th>
                   <th className="pb-2">OPP SCORE</th>
                   <th className="pb-2">GROWTH EST.</th>
@@ -694,33 +694,6 @@ export default function NewsPOCCatchAllPage() {
                 </tr>
               </tbody>
             </table>
-          </div>
-        </div>
-
-        {/* Right Column: Live Discussion */}
-        <div className="lg:col-span-3 bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden shadow-xs min-h-[320px] flex flex-col justify-between">
-          <div className="bg-gray-50 dark:bg-gray-955 p-3 border-b border-gray-100 dark:border-gray-855 flex items-center justify-between">
-            <span className="text-[10px] font-bold text-gray-900">LIVE DISCUSSION</span>
-            <span className="bg-blue-600 text-white text-[7px] px-1.5 py-0.5 rounded font-mono">24 Online</span>
-          </div>
-
-          <div className="p-3 space-y-2.5 flex-1 overflow-y-auto text-[10px] leading-snug">
-            <div>
-              <span className="font-bold text-blue-500 block">Marcus Chen <span className="text-[8px] text-gray-455 ml-1">APAC Logistics</span></span>
-              <p className="text-gray-655 dark:text-gray-350">The $12B India-UAE CEPA figures look highly accurate. Port logistics in Gujarat are scaling.</p>
-            </div>
-            <div>
-              <span className="font-bold text-orange-500 block">Priya Sharma <span className="text-[8px] text-gray-455 ml-1">Trade Policy</span></span>
-              <p className="text-gray-650 dark:text-gray-350">CEPA frameworks allow for expedited customs clearances. Very bullish.</p>
-            </div>
-          </div>
-
-          <div className="p-2 border-t border-gray-100 dark:border-gray-850">
-            <input 
-              type="text" 
-              placeholder="Contribute to discussion..."
-              className="w-full px-2.5 py-1.5 rounded-lg border border-gray-300 dark:border-gray-850 bg-gray-55 dark:bg-gray-955 text-[10px] outline-none"
-            />
           </div>
         </div>
       </div>
@@ -1001,16 +974,15 @@ export default function NewsPOCCatchAllPage() {
         </div>
       </div>
 
-      {/* Hero Section & Live Discussions */}
+      {/* Hero Section */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
         {/* Hero Section */}
-        <div className="lg:col-span-8 relative rounded-2xl overflow-hidden bg-slate-950 text-white min-h-[360px] flex flex-col justify-end p-8 border border-slate-900 shadow-sm group">
+        <div className="lg:col-span-12 relative rounded-2xl overflow-hidden bg-slate-950 text-white min-h-[360px] flex flex-col justify-end p-8 border border-slate-900 shadow-sm group">
           <div 
             className="absolute inset-0 z-0 bg-cover bg-center opacity-30 group-hover:scale-102 transition-transform duration-300"
             style={{ backgroundImage: `url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=800&auto=format&fit=crop&q=80')` }}
           />
-          <div className="absolute inset-0 z-0 bg-gradient-to-t from-slate-955 via-slate-950/40 to-transparent" />
+          <div className="absolute inset-0 z-0 bg-gradient-to-t from-slate-955 via-slate-955/40 to-transparent" />
           
           <div className="relative z-10 space-y-3">
             <div className="flex gap-2">
@@ -1026,33 +998,6 @@ export default function NewsPOCCatchAllPage() {
               <span>📅 Oct 2024</span>
             </div>
           </div>
-        </div>
-
-        {/* Live Discussions */}
-        <div className="lg:col-span-4 bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 rounded-xl flex flex-col justify-between overflow-hidden shadow-xs">
-          <div className="bg-gray-50 dark:bg-gray-955 p-3 border-b border-gray-100 dark:border-gray-855 flex items-center justify-between">
-            <span className="text-[10px] font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
-              LIVE DISCUSSIONS
-            </span>
-            <span className="bg-red-500 text-white text-[8px] font-bold px-2 py-0.5 rounded-sm animate-pulse">● LIVE NOW</span>
-          </div>
-
-          <div className="p-3 space-y-3 flex-1 overflow-y-auto text-[10px] leading-snug">
-            {[
-              { author: "Sarah Jenkins", role: "CEO LogiGlobal", msg: "Decoupling isn't just about regional boundaries; it's about redefining operational redundancy." },
-              { author: "Mark Tan", role: "CTO SemiStream", msg: "The hardware bottleneck is real. We are looking at a 12-month pivot in supply routing." },
-              { author: "Rachel Wu", role: "CXO GreenHydrogen", msg: "Investment in grid stability is the quietest but most vital trend of this fiscal year." }
-            ].map((chat, idx) => (
-              <div key={idx} className="border-b border-gray-50 dark:border-gray-850 pb-2 last:border-0 last:pb-0">
-                <span className="font-bold text-blue-500 block">{chat.author} <span className="text-[8px] text-gray-400 ml-1">{chat.role}</span></span>
-                <p className="text-gray-650 dark:text-gray-305 mt-0.5 font-normal">{chat.msg}</p>
-              </div>
-            ))}
-          </div>
-
-          <button className="m-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-[10px] py-2 rounded-lg transition-all">
-            Join Live Dialogue
-          </button>
         </div>
       </div>
 
@@ -1532,39 +1477,8 @@ export default function NewsPOCCatchAllPage() {
           </div>
         </div>
 
-        {/* Right Column: Live Chat & AI Recommendations (col-span-3) */}
+        {/* Right Column: AI Recommendations (col-span-3) */}
         <div className="lg:col-span-3 space-y-6">
-          
-          {/* Live Intel Feed widget */}
-          <div className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 rounded-xl overflow-hidden flex flex-col justify-between shadow-xs min-h-[300px]">
-            <div className="bg-gray-50 dark:bg-gray-955 p-3 border-b border-gray-100 dark:border-gray-855 flex items-center justify-between">
-              <span className="text-[10px] font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-red-500 animate-pulse" /> LIVE INTEL FEED
-              </span>
-              <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-sm">● LIVE</span>
-            </div>
-
-            {/* Chat history list */}
-            <div className="p-3 space-y-2.5 flex-1 max-h-[200px] overflow-y-auto text-[10px] leading-snug">
-              <div>
-                <span className="font-bold text-blue-500 block">A. Vance <span className="bg-gray-100 dark:bg-gray-855 text-gray-455 text-[7px] px-1 rounded ml-1">Analyst</span></span>
-                <p className="text-gray-650 dark:text-gray-350">The export shift in Vietnam is faster than predicted. Supply chain nodes are migrating.</p>
-              </div>
-              <div>
-                <span className="font-bold text-[#E63946] block">Dr. Chen <span className="bg-gray-100 dark:bg-gray-855 text-gray-455 text-[7px] px-1 rounded ml-1">Strategist</span></span>
-                <p className="text-gray-655 dark:text-gray-355">Agreed. Our HBM tracker shows 14% higher throughput in Da Nang zone.</p>
-              </div>
-            </div>
-
-            {/* Chat Input */}
-            <div className="p-2 border-t border-gray-100 dark:border-gray-850">
-              <input 
-                type="text" 
-                placeholder="Join discussion..."
-                className="w-full px-2.5 py-1.5 rounded-lg border border-gray-350 dark:border-gray-955 text-[10px] outline-none"
-              />
-            </div>
-          </div>
 
           {/* AI Recommendations panel */}
           <div className="bg-[#0f172a] text-white border border-gray-800 p-5 rounded-xl shadow-xs space-y-4">
@@ -3034,35 +2948,6 @@ export default function NewsPOCCatchAllPage() {
                 </Link>
               </div>
 
-              {/* ── Live Community Discussion ── */}
-              <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden shadow-xs">
-                <div className="bg-orange-500 text-white px-4 py-2.5 font-bold text-[10px] tracking-wider flex items-center justify-between">
-                  <span>● LIVE DISCUSSION</span>
-                  <MessageSquare className="h-3.5 w-3.5" />
-                </div>
-                <div className="p-4 space-y-3">
-                  {experts.map((expert, idx) => (
-                    <div key={idx} className={`${idx > 0 ? "border-t border-gray-50 dark:border-gray-850 pt-3" : ""}`}>
-                      <div className="flex items-center gap-1.5 mb-1">
-                        <span className="font-bold text-gray-900 dark:text-white text-xs block">{expert.name}</span>
-                        <span className={`${expert.color} text-white text-[7px] font-bold px-1 rounded`}>✓ {expert.badge}</span>
-                      </div>
-                      <p className="text-[10px] text-gray-500 leading-snug">
-                        {trendSlug === "most-liked"
-                          ? `"This story highlights a pivotal shift that could redefine ${idx === 0 ? "supply chain" : "policy"} frameworks for the next 5 years."`
-                          : trendSlug === "most-shared"
-                          ? `"Sharing patterns on this article suggest ${idx === 0 ? "institutional" : "retail"} audience interest is accelerating fast."`
-                          : `"The comment thread here is ${idx === 0 ? "one of the most technically dense" : "generating real regulatory"} discussions we've seen this quarter."`}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-                <div className="px-4 pb-4">
-                  <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-2 rounded-lg transition-colors">
-                    Join Discussion
-                  </button>
-                </div>
-              </div>
 
               {/* ── Featured Companies ── */}
               <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-4 rounded-xl shadow-xs space-y-3">

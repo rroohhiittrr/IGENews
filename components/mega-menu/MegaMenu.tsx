@@ -52,12 +52,19 @@ export default function MegaMenu() {
     { label: t("myLikes"), href: "/mynews/likes" },
   ];
 
+  const COMPANY_ITEMS = [
+    { label: "Registered Companies", href: "/company-news/registered/pages" },
+    { label: "Verified Companies", href: "/company-news/verified/pages" },
+    { label: "Top/Enterprise Companies", href: "/company-news/top/pages" },
+  ];
+
   const MENU_ITEMS = [
     { label: t("feed"), href: "/", subItems: FEED_ITEMS },
     { label: t("headlines"), href: "/headlines", subItems: HEADLINES_ITEMS },
     { label: t("trending"), href: "/trending", subItems: TRENDING_ITEMS },
     { label: t("categories"), href: "/categories/sector", subItems: CATEGORIES_ITEMS },
     { label: t("myNews"), href: "/mynews", subItems: MYNEWS_ITEMS },
+    { label: t("companyNews"), href: "/company-news", subItems: COMPANY_ITEMS },
   ];
 
   const isActive = (href: string) => {

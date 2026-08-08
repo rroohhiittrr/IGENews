@@ -104,7 +104,7 @@ const ADVISORY_MODULES = [
   { title: "SME Research Reports", desc: "Peer-reviewed Sector Whitepapers", icon: Download, locked: false, badge: "Free" },
   { title: "1:1 Expert Consultations", desc: "Book Live Video Advisory Sessions", icon: Calendar, locked: false, badge: "Pro" },
   { title: "AI Expert Matching", desc: "Instant AI Match with Verified SMEs", icon: Sparkles, locked: true, badge: "Pro" },
-  { title: "Live Expert AMAs", desc: "Fireside Discussions & Q&A Panels", icon: MessageSquare, locked: false, badge: "Free" },
+  { title: "Expert AMA Archive", desc: "Fireside Discussions & Q&A Panels", icon: MessageSquare, locked: false, badge: "Free" },
   { title: "Consultation Analytics", desc: "Track Advisory Sessions & ROI", icon: BarChart2, locked: true, badge: "Enterprise" },
   { title: "Custom Expert Briefs", desc: "Order Tailored B2B Market Briefings", icon: Briefcase, locked: true, badge: "Enterprise" }
 ];
@@ -158,6 +158,13 @@ export default function NewsPOCExpertNewsHome() {
   const [activeNewsTab, setActiveNewsTab] = useState("Latest");
   const [activeExpertTypeTab, setActiveExpertTypeTab] = useState("SME");
   const [carouselIdx, setCarouselIdx] = useState(0);
+  const [followedExperts, setFollowedExperts] = useState<string[]>([]);
+  const [selectedBulletin, setSelectedBulletin] = useState<{ text: string; cat: string; details: string } | null>(null);
+  const [bookingExpert, setBookingExpert] = useState<string | null>(null);
+  const [bookingDate, setBookingDate] = useState("2026-08-10");
+  const [bookingTime, setBookingTime] = useState("10:00 AM");
+  const [bookingQuery, setBookingQuery] = useState("");
+  const [bookingSuccess, setBookingSuccess] = useState(false);
 
   // Auto-advance featured carousel
   useEffect(() => {
@@ -211,147 +218,124 @@ export default function NewsPOCExpertNewsHome() {
                   />
                 </div>
                 <select className="bg-white/10 border border-white/20 text-white rounded-xl px-3 py-3 text-xs outline-none">
-                  <option className="bg-gray-900 text-white">All Sectors</option>
-                  <option className="bg-gray-900 text-white">AI & Cyber Security</option>
-                  <option className="bg-gray-900 text-white">Biotechnology</option>
-                  <option className="bg-gray-900 text-white">Semiconductors</option>
-                  <option className="bg-gray-900 text-white">FinTech</option>
+                  <option className="bg-gray-955 text-white">All Sectors</option>
+                  <option className="bg-gray-955 text-white">AI & Cyber Security</option>
+                  <option className="bg-gray-955 text-white">Biotechnology</option>
+                  <option className="bg-gray-955 text-white">Semiconductors</option>
+                  <option className="bg-gray-955 text-white">FinTech</option>
                 </select>
                 <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-3 rounded-xl transition-all text-sm shrink-0">
                   Search
                 </button>
               </div>
+            </div>
 
-              {/* 4 Action CTAs */}
-              <div className="flex flex-wrap gap-3">
-                <Link href="/eoi" className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition-all shadow-xs">
-                  <GraduationCap className="h-3.5 w-3.5" /> Register as Expert (ASME)
-                </Link>
-                <Link href="/eoi" className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition-all shadow-xs">
-                  <CheckCircle className="h-3.5 w-3.5" /> Verify Profile (SME Pro)
-                </Link>
-                <Link href="/eoi" className="bg-gradient-to-r from-amber-500 to-orange-600 text-gray-950 font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition-all shadow-xs">
-                  <Crown className="h-3.5 w-3.5" /> Go Enterprise
-                </Link>
-                <Link href="/eoi" className="bg-white/10 border border-white/20 hover:bg-white/20 text-white font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition-all">
-                  <Calendar className="h-3.5 w-3.5" /> Book Consultation
-                </Link>
+            {/* Live Expert Bulletin Feed Ticker */}
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-5 w-full lg:w-[400px] backdrop-blur-md shadow-xl shrink-0 space-y-4">
+              <div className="flex items-center justify-between border-b border-white/15 pb-2.5">
+                <div className="flex items-center gap-2">
+                  <div className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Advisory Bulletins</span>
+                </div>
+                <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Advisory Updates</span>
               </div>
-            </div>
-
-            {/* Quick Stats Panel */}
-            <div className="grid grid-cols-2 gap-3 shrink-0">
-              {[
-                { val: "15,400+", label: "Registered SMEs", icon: GraduationCap, color: "text-blue-400" },
-                { val: "4,800+", label: "Verified Experts", icon: CheckCircle, color: "text-emerald-400" },
-                { val: "850+", label: "Associate Experts", icon: Users, color: "text-amber-400" },
-                { val: "50", label: "Industry Sectors", icon: Globe, color: "text-purple-400" }
-              ].map((s, idx) => {
-                const SIcon = s.icon;
-                return (
-                  <div key={idx} className="bg-white/5 border border-white/10 rounded-xl p-4 text-center space-y-1.5 backdrop-blur-xs">
-                    <SIcon className={`h-5 w-5 mx-auto ${s.color}`} />
-                    <div className={`font-display text-xl font-bold ${s.color}`}>{s.val}</div>
-                    <div className="text-slate-400 text-[9px] font-semibold uppercase tracking-wider">{s.label}</div>
+              <div className="space-y-3.5">
+                {[
+                  { text: "Dr. K. Raghavan uploaded semiconductor supply chain mapping brief", time: "2 min ago", cat: "Semiconductors" },
+                  { text: "SME Pro Group launched consultation slots for Cleantech PLI applications", time: "14 min ago", cat: "Green Energy" },
+                  { text: "ASME Defense Advisory released draft aerospace offset guidelines", time: "1 hr ago", cat: "Aerospace" }
+                ].map((b, idx) => (
+                  <div 
+                    key={idx} 
+                    onClick={() => setSelectedBulletin({
+                      text: b.text,
+                      cat: b.cat,
+                      details: `Advisory Brief by certified subject matter expert: "${b.text}". This publication covers industrial compliance standards, capital subsidy applications, and B2B trade policy audits. Click below to retrieve the complete technical guide.`
+                    })}
+                    className="space-y-1 group/item cursor-pointer"
+                  >
+                    <div className="flex items-center justify-between text-[8px]">
+                      <span className="text-blue-400 font-bold uppercase">{b.cat}</span>
+                      <span className="text-slate-400">{b.time}</span>
+                    </div>
+                    <p className="text-[11px] font-medium text-slate-200 group-hover/item:text-blue-300 transition-colors leading-relaxed line-clamp-2">
+                      {b.text}
+                    </p>
                   </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-
-        {/* Submenu Quick Navigation Strip */}
-        <div className="relative z-10 border-t border-white/10 bg-white/5 backdrop-blur-xs">
-          <div className="mx-auto max-w-7xl px-4 lg:px-6 py-3 flex flex-wrap gap-2 items-center justify-between">
-            <span className="text-[9px] font-bold text-white/50 uppercase tracking-widest">Submenus:</span>
-            <div className="flex gap-2 flex-wrap text-xs">
-              {[
-                { label: "SME News", href: "/eoi", badge: "Primary" },
-                { label: "SME Pages", href: "/eoi", badge: "Directory" },
-                { label: "SME By Sector", href: "/eoi", badge: "Sectors" },
-                { label: "ASME News", href: "/eoi", badge: "Emerging" },
-                { label: "ASME Pages", href: "/eoi", badge: "Profiles" },
-                { label: "ASME By Sector", href: "/eoi", badge: "Industries" }
-              ].map((sub, idx) => (
-                <Link key={idx} href={sub.href} className="bg-white/10 hover:bg-white/20 border border-white/15 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all">
-                  <span>{sub.label}</span>
-                  <ChevronRight className="h-3 w-3 opacity-60" />
-                </Link>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          2. FEATURED EXPERT NEWS CAROUSEL & CARDS
+          2. FEATURED EXPERT BRIEFING (Hero Story)
       ══════════════════════════════════════════════════════════════════ */}
       <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
-        <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-4 mb-6">
-          <div className="flex items-center gap-3">
-            <h2 className="font-display text-lg font-bold text-gray-900 dark:text-white uppercase tracking-tight">Featured Expert Briefings</h2>
-            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-[8px] font-bold px-2 py-0.5 rounded-full uppercase">SME & ASME Spotlight</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <button onClick={() => setCarouselIdx((prev) => (prev - 1 + FEATURED_EXPERT_ARTICLES.length) % FEATURED_EXPERT_ARTICLES.length)} className="p-1.5 rounded-lg border border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-              <ChevronLeft className="h-3.5 w-3.5" />
-            </button>
-            <button onClick={() => setCarouselIdx((prev) => (prev + 1) % FEATURED_EXPERT_ARTICLES.length)} className="p-1.5 rounded-lg border border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-              <ChevronRight className="h-3.5 w-3.5" />
-            </button>
-            <Link href="/eoi" className="text-[10px] font-bold text-blue-500 hover:underline uppercase ml-2">View All</Link>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-          {FEATURED_EXPERT_ARTICLES.map((article, idx) => {
-            const badge = TIER_BADGE[article.tier];
-            const isActive = idx === carouselIdx;
-            return (
-              <div key={article.id} className={`bg-white dark:bg-[#0f172a] border rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-all group cursor-pointer ${isActive ? "border-blue-500 dark:border-blue-600 shadow-sm" : "border-gray-200 dark:border-gray-800"}`}>
-                {/* Banner header with gradient */}
-                <div className={`h-28 bg-gradient-to-br ${article.logoColor} relative flex items-center justify-between p-4`}>
-                  <div className="flex items-center gap-3">
-                    <div className="h-12 w-12 rounded-full bg-white/20 border border-white/40 flex items-center justify-center font-display text-sm font-bold text-white">
-                      {article.logo}
-                    </div>
-                    <div>
-                      <span className="font-bold text-xs text-white block leading-tight">{article.author}</span>
-                      <span className="text-[9px] text-white/80 block">{article.type}</span>
-                    </div>
-                  </div>
-                  <div className="flex flex-col items-end gap-1">
-                    <span className={`text-[7px] font-bold px-1.5 py-0.5 rounded ${badge.bg} ${badge.text}`}>
-                      {badge.label}
-                    </span>
-                    <span className="bg-black/40 text-amber-300 text-[8px] font-bold px-1.5 py-0.5 rounded flex items-center gap-0.5">
-                      <Star className="h-2.5 w-2.5 fill-amber-300 text-amber-300" /> {article.rating}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="p-4 space-y-2.5">
-                  <div className="flex items-center justify-between text-[9px] text-gray-400">
-                    <span className="bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 font-bold px-2 py-0.5 rounded border border-blue-100 dark:border-blue-900/30">
-                      {article.category}
-                    </span>
-                    <span className="font-semibold">{article.readTime}</span>
-                  </div>
-                  <h3 className="text-xs font-bold text-gray-950 dark:text-white leading-snug group-hover:text-blue-600 transition-colors line-clamp-2">{article.headline}</h3>
-                  <p className="text-[10px] text-gray-500 leading-relaxed font-normal line-clamp-2">{article.excerpt}</p>
-                  
-                  <div className="pt-2 border-t border-gray-100 dark:border-gray-850 flex items-center justify-between">
-                    <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400">Rate: {article.consultationRate}</span>
-                    <Link href="/eoi" className="bg-blue-600 hover:bg-blue-700 text-white text-[9px] font-bold px-2.5 py-1 rounded-lg transition-colors">
-                      Book Advisory
-                    </Link>
-                  </div>
-                </div>
+        <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#0a1826] to-[#102747] text-white min-h-[360px] flex flex-col justify-end p-8 border border-slate-800 shadow-lg group">
+          <div className="absolute inset-0 z-0 bg-cover bg-center opacity-20 group-hover:scale-102 transition-transform duration-300"
+            style={{ backgroundImage: `url(https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1200&auto=format&fit=crop&q=80)` }}
+          />
+          <div className="absolute inset-0 z-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent" />
+          <div className="relative z-10 space-y-4 max-w-4xl">
+            <div className="flex items-center gap-2">
+              <span className="bg-blue-600 text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase">FEATURED EXPERT BRIEFING</span>
+              <span className="text-[10px] text-slate-300 font-semibold">AI &amp; Cyber Security · SME · {FEATURED_EXPERT_ARTICLES[0].date}</span>
+            </div>
+            <h2 className="font-display text-2xl md:text-4xl font-bold leading-tight text-white group-hover:text-blue-300 transition-colors">
+              {FEATURED_EXPERT_ARTICLES[0].headline}
+            </h2>
+            <p className="text-slate-300 text-xs md:text-sm font-normal max-w-3xl leading-relaxed">
+              {FEATURED_EXPERT_ARTICLES[0].excerpt}
+            </p>
+            <div className="pt-4 flex flex-wrap items-center gap-6 border-t border-white/10">
+              <div>
+                <span className="block text-[8px] text-gray-400 uppercase">Author</span>
+                <span className="text-sm font-bold text-white">{FEATURED_EXPERT_ARTICLES[0].author}</span>
               </div>
-            );
-          })}
+              <div>
+                <span className="block text-[8px] text-gray-400 uppercase">Designation</span>
+                <span className="text-sm font-bold text-slate-300">{FEATURED_EXPERT_ARTICLES[0].designation}</span>
+              </div>
+              <div>
+                <span className="block text-[8px] text-gray-400 uppercase">Read Time</span>
+                <span className="text-sm font-bold text-amber-400">{FEATURED_EXPERT_ARTICLES[0].readTime}</span>
+              </div>
+              <div className="ml-auto flex items-center gap-2 flex-wrap">
+                <Link href="/eoi" className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2.5 rounded-lg transition-colors flex items-center gap-1.5 text-[10px]">
+                  READ FULL BRIEFING <ChevronRight className="h-3.5 w-3.5" />
+                </Link>
+                <button className="flex items-center gap-1 bg-blue-700/60 hover:bg-blue-600 text-white text-[9px] font-bold px-2.5 py-1.5 rounded-md transition-colors">🔗 LinkedIn</button>
+                <button className="flex items-center gap-1 bg-sky-600/60 hover:bg-sky-500 text-white text-[9px] font-bold px-2.5 py-1.5 rounded-md transition-colors">𝕏 Twitter</button>
+                <button className="flex items-center gap-1 bg-white/10 hover:bg-white/20 text-white text-[9px] font-bold px-2.5 py-1.5 rounded-md transition-colors">📋 Copy</button>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
+
+      {/* Submenu Quick Navigation Strip */}
+      <div className="relative z-10 border-y border-gray-200 dark:border-gray-800 bg-white/5 py-4 my-6">
+        <div className="mx-auto max-w-7xl px-4 lg:px-6 py-1 flex flex-wrap gap-2 items-center justify-between">
+          <span className="text-[9px] font-bold text-gray-500 dark:text-white/50 uppercase tracking-widest">Submenus:</span>
+          <div className="flex gap-2 flex-wrap text-xs">
+            {[
+              { label: "SME News", href: "/eoi", badge: "Primary" },
+              { label: "SME Pages", href: "/eoi", badge: "Directory" },
+              { label: "SME By Sector", href: "/eoi", badge: "Sectors" },
+              { label: "ASME News", href: "/eoi", badge: "Emerging" },
+              { label: "ASME Pages", href: "/eoi", badge: "Profiles" },
+              { label: "ASME By Sector", href: "/eoi", badge: "Industries" }
+            ].map((sub, idx) => (
+              <Link key={idx} href={sub.href} className="bg-white/10 hover:bg-white/20 border border-white/15 text-gray-700 dark:text-white text-[10px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all">
+                <span>{sub.label}</span>
+                <ChevronRight className="h-3 w-3 opacity-60" />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
 
       {/* ══════════════════════════════════════════════════════════════════
           3. MAIN CONTENT GRID (Latest News / Spotlight / Advisory / Rankings)
@@ -363,49 +347,90 @@ export default function NewsPOCExpertNewsHome() {
           <div className="col-span-12 lg:col-span-8 space-y-10">
 
             {/* LATEST EXPERT NEWS FEED */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
-                <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Latest Expert News Feed</h2>
-                <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-900 p-0.5 rounded-xl border border-gray-200 dark:border-gray-800">
-                  {NEWS_TABS.map((tab) => (
-                    <button
-                      key={tab}
-                      onClick={() => setActiveNewsTab(tab)}
-                      className={`px-2.5 py-1 rounded-lg text-[9px] font-bold transition-all ${activeNewsTab === tab ? "bg-white dark:bg-gray-800 text-blue-600 shadow-xs" : "text-gray-500 hover:text-gray-700"}`}
-                    >
-                      {tab}
-                    </button>
+            <div className="space-y-4 bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-xs">
+              <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-855 pb-4">
+                <div className="flex items-center gap-2">
+                  <div className="h-3 w-3 rounded-full bg-blue-600 animate-pulse" />
+                  <h3 className="font-display text-lg font-bold text-gray-900 dark:text-white uppercase tracking-wider">Latest Expert News Feed</h3>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="flex bg-gray-100 dark:bg-gray-900 p-0.5 rounded-xl border border-gray-200 dark:border-gray-800">
+                    {NEWS_TABS.map((tab) => (
+                      <button
+                        key={tab}
+                        onClick={() => setActiveNewsTab(tab)}
+                        className={`px-2.5 py-1 rounded-lg text-[9px] font-bold transition-all ${activeNewsTab === tab ? "bg-white dark:bg-gray-800 text-blue-600 shadow-xs" : "text-gray-500 hover:text-gray-700"}`}
+                      >
+                        {tab}
+                      </button>
+                    ))}
+                  </div>
+                  <Link href="/eoi" className="text-xs font-bold text-blue-500 hover:underline uppercase shrink-0">View All</Link>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-2">
+                {/* Left featured column (col-span-6) */}
+                <div className="lg:col-span-6 flex flex-col gap-4 group cursor-pointer">
+                  <div className="w-full h-52 md:h-64 rounded-2xl overflow-hidden bg-slate-900 border border-gray-200 dark:border-gray-850 relative shadow-xs shrink-0">
+                    <img 
+                      src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&auto=format&fit=crop&q=60" 
+                      alt="Featured expert news" 
+                      className="w-full h-full object-cover opacity-90 group-hover:scale-102 transition-transform duration-500"
+                    />
+                    <div className="absolute top-4 left-4 bg-blue-600 text-white text-[9px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-xs">
+                      SME INSIGHT
+                    </div>
+                  </div>
+                  <div className="space-y-2.5">
+                    <div className="flex items-center gap-2">
+                      <span className="bg-blue-50 dark:bg-blue-955/40 text-blue-600 dark:text-blue-400 font-extrabold text-[9px] px-2.5 py-0.5 rounded border border-blue-100 dark:border-blue-900/30 uppercase">
+                        {LATEST_EXPERT_ARTICLES[0].expert}
+                      </span>
+                      <span className="text-[10px] text-slate-400 font-semibold">• {LATEST_EXPERT_ARTICLES[0].time}</span>
+                    </div>
+                    <h4 className="font-display text-base font-bold text-gray-950 dark:text-white leading-snug group-hover:text-blue-600 transition-colors">
+                      {LATEST_EXPERT_ARTICLES[0].headline}
+                    </h4>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 font-normal leading-relaxed">
+                      Sovereign AI pipelines and enterprise data models are scaling rapidly across logistics hubs. Read the full trade analysis on advanced localization benefits and GoI regulatory framework compliance.
+                    </p>
+                    
+                    {/* Share row */}
+                    <div className="flex items-center gap-2 pt-2.5 border-t border-gray-100 dark:border-gray-800">
+                      <span className="text-[8px] font-bold text-gray-400 uppercase tracking-wider">Share:</span>
+                      <button className="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white text-[9px] font-bold px-2.5 py-0.5 rounded-md transition-colors">🔗 LinkedIn</button>
+                      <button className="flex items-center gap-1 bg-sky-500 hover:bg-sky-600 text-white text-[9px] font-bold px-2.5 py-0.5 rounded-md transition-colors">𝕏 Twitter</button>
+                      <button className="flex items-center gap-1 bg-green-500 hover:bg-green-600 text-white text-[9px] font-bold px-2.5 py-0.5 rounded-md transition-colors">💬 WhatsApp</button>
+                      <button className="flex items-center gap-1 border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-405 text-[9px] font-bold px-2.5 py-0.5 rounded-md hover:bg-gray-50 dark:hover:bg-gray-955 transition-colors">📋 Copy</button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right stream list (col-span-6) */}
+                <div className="lg:col-span-6 divide-y divide-gray-100 dark:divide-gray-850 space-y-4 lg:pl-4">
+                  {LATEST_EXPERT_ARTICLES.slice(1).map((item, idx) => (
+                    <div key={item.id} className={`hover:bg-gray-50 dark:hover:bg-gray-955 transition-colors group p-3.5 rounded-xl cursor-pointer ${idx > 0 ? "pt-4" : ""}`}>
+                      <div className="space-y-1.5">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="font-bold text-[10px] text-gray-950 dark:text-white flex items-center gap-1 truncate">
+                            {item.expert}
+                            <CheckCircle className="h-3 w-3 text-emerald-500 shrink-0" />
+                          </span>
+                          <span className="bg-blue-50 dark:bg-blue-955/30 text-blue-600 text-[8px] font-bold px-1.5 py-0.5 rounded uppercase">{item.type}</span>
+                          <span className="text-[9px] text-gray-400">· {item.time}</span>
+                        </div>
+                        <h4 className="text-xs font-bold text-gray-900 dark:text-white leading-snug group-hover:text-blue-600 transition-colors">
+                          {item.headline}
+                        </h4>
+                        <span className="text-[9px] text-gray-400 block truncate">{item.role} · {item.sector}</span>
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {LATEST_EXPERT_ARTICLES.map((item) => (
-                  <div key={item.id} className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-xl p-4 hover:shadow-sm hover:border-blue-300 dark:hover:border-blue-900 transition-all group">
-                    <div className="flex items-start gap-3">
-                      <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center font-bold text-white text-xs shrink-0 shadow-xs">
-                        {item.expert.split(" ").map(w => w[0]).slice(0, 2).join("")}
-                      </div>
-                      <div className="flex-1 space-y-1 min-w-0">
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="font-bold text-[9px] text-gray-900 dark:text-white truncate">{item.expert}</span>
-                          <span className="bg-blue-50 dark:bg-blue-950/30 text-blue-600 text-[7px] font-bold px-1.5 py-0.5 rounded">{item.type}</span>
-                          <span className="text-[8px] text-gray-400">· {item.sector}</span>
-                        </div>
-                        <h4 className="text-[10px] md:text-xs font-bold text-gray-950 dark:text-white leading-snug group-hover:text-blue-600 transition-colors">{item.headline}</h4>
-                        <div className="flex items-center justify-between text-[9px] text-gray-400 pt-1">
-                          <span>{item.time}</span>
-                          <div className="flex items-center gap-2">
-                            <span className="flex items-center gap-0.5"><Eye className="h-2.5 w-2.5" />{item.views}</span>
-                            <Bookmark className="h-2.5 w-2.5 hover:text-blue-500 cursor-pointer" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="text-center">
+              <div className="text-center pt-2">
                 <Link href="/eoi" className="text-blue-600 font-bold text-xs hover:underline flex items-center gap-1 justify-center">
                   Load More Expert News <ChevronRight className="h-3.5 w-3.5" />
                 </Link>
@@ -444,15 +469,65 @@ export default function NewsPOCExpertNewsHome() {
                       </div>
                       <div className="font-display font-bold text-xs text-emerald-600 dark:text-emerald-400">{expert.rate}</div>
                     </div>
-                    <Link href="/eoi" className="w-full bg-blue-600 hover:bg-blue-700 text-white text-[8px] font-bold py-1.5 rounded-lg block transition-colors">
+                    <button 
+                      onClick={() => {
+                        setBookingExpert(expert.name);
+                        setBookingSuccess(false);
+                      }}
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white text-[8px] font-bold py-1.5 rounded-lg block transition-colors"
+                    >
                       Book Advisory
-                    </Link>
+                    </button>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* EXPERT ADVISORY INTELLIGENCE MODULES */}
+            {/* EXPERT OF THE WEEK */}
+            <div className="relative bg-gradient-to-r from-[#0a1826] via-[#10273f] to-[#162d54] text-white rounded-3xl border border-slate-800 overflow-hidden shadow-lg">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-blue-400/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
+              <div className="relative z-10 p-6 space-y-4">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="bg-emerald-500 text-white text-[8px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-widest">🏆 Expert of the Week</span>
+                  <span className="text-slate-400 text-[10px] font-semibold">Week of Aug 5 – 11, 2026</span>
+                  <span className="text-[9px] text-slate-500 border border-slate-700 px-2 py-0.5 rounded-full">Editorial Pick</span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="h-14 w-14 rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 border-2 border-blue-400/30 flex items-center justify-center font-display text-lg font-bold text-white shrink-0">AT</div>
+                  <div>
+                    <h2 className="font-display text-xl font-bold">Dr. Aris Thorne</h2>
+                    <p className="text-slate-400 text-xs">Chief AI Strategist &amp; SME · NeuralCognition Labs</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-amber-400 text-[9px] font-bold flex items-center gap-0.5"><Star className="h-2.5 w-2.5 fill-amber-400" /> 4.9 Rating</span>
+                      <span className="text-[9px] text-slate-400">·</span>
+                      <span className="text-emerald-400 text-[9px] font-bold">$150/hr</span>
+                      <span className="text-[9px] text-slate-400">·</span>
+                      <span className="text-blue-400 text-[9px] font-bold">142 consultations</span>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-slate-300 text-sm font-normal leading-relaxed">
+                  <span className="text-blue-300 font-bold">Why in focus this week:</span> Dr. Thorne's paper on decentralized LLM pipelines for cross-border logistics gained 3,400 reads — the most-read expert briefing on IGE this week. His model reduces GDPR compliance overhead by 40% while maintaining cross-border data sovereignty.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="bg-blue-950/50 text-blue-400 border border-blue-900 text-[9px] font-bold px-2.5 py-1 rounded-full">📈 3.4K Reads This Week</span>
+                  <span className="bg-emerald-950/50 text-emerald-400 border border-emerald-900 text-[9px] font-bold px-2.5 py-1 rounded-full">✅ Verified SME</span>
+                  <span className="bg-purple-950/50 text-purple-400 border border-purple-900 text-[9px] font-bold px-2.5 py-1 rounded-full">🤖 AI &amp; Cyber Security</span>
+                </div>
+                <div className="flex gap-3">
+                  <Link href="/eoi" className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-5 py-2.5 rounded-lg transition-all flex items-center gap-1.5">Read Briefing <ChevronRight className="h-3.5 w-3.5" /></Link>
+                  <button 
+                    onClick={() => {
+                      setBookingExpert("Dr. Aris Thorne");
+                      setBookingSuccess(false);
+                    }}
+                    className="border border-white/20 text-white hover:bg-white/10 font-bold text-xs px-4 py-2.5 rounded-lg transition-all"
+                  >
+                    Book Advisory →
+                  </button>
+                </div>
+              </div>
+            </div>
             <div className="space-y-4">
               <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
                 <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Expert Advisory & Intelligence Services</h2>
@@ -546,37 +621,6 @@ export default function NewsPOCExpertNewsHome() {
           {/* ── RIGHT SIDEBAR ── */}
           <div className="col-span-12 lg:col-span-4 space-y-6">
 
-            {/* Persistent Upgrade / Monetization Card */}
-            <div className="bg-gradient-to-br from-slate-950 to-[#10273f] text-white border border-slate-800 p-5 rounded-2xl shadow-xs space-y-4">
-              <div className="flex items-center gap-2">
-                <GraduationCap className="h-4 w-4 text-amber-400" />
-                <span className="text-[9px] font-bold text-amber-400 uppercase tracking-widest">Expert Membership Benefits</span>
-              </div>
-              <ul className="space-y-2 text-[10px] text-slate-300">
-                {[
-                  "Verified SME Badge & Global Directory",
-                  "Direct 1:1 Video Consultation Bookings",
-                  "Publish Gated Research & Whitepapers",
-                  "Featured Placement on Sector Pages",
-                  "Lead Generation Forms for Corporate Advisory",
-                  "Advisory Analytics & Revenue Dashboard"
-                ].map((item, idx) => (
-                  <li key={idx} className="flex items-center gap-1.5">
-                    <CheckCircle className="h-3 w-3 text-emerald-400 shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <div className="space-y-2 pt-2">
-                <Link href="/eoi" className="block text-center bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs py-2.5 rounded-lg transition-colors">
-                  Verify SME Profile (Pro)
-                </Link>
-                <Link href="/eoi" className="block text-center bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-gray-950 font-bold text-xs py-2.5 rounded-lg transition-colors">
-                  Apply for Enterprise Expert
-                </Link>
-              </div>
-            </div>
-
             {/* Top SMEs Rankings */}
             <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden shadow-xs">
               <div className="px-4 py-2.5 bg-blue-600 text-white flex items-center justify-between font-bold text-xs">
@@ -627,30 +671,6 @@ export default function NewsPOCExpertNewsHome() {
               </div>
             </div>
 
-            {/* Live Expert Webinars & AMAs */}
-            <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-xl p-4 shadow-xs space-y-3">
-              <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-850 pb-2">
-                <span className="font-bold text-xs text-gray-900 dark:text-white uppercase tracking-wider">Live Expert AMAs & Webinars</span>
-                <span className="flex items-center gap-1 text-[8px] font-bold text-red-500"><span className="h-1.5 w-1.5 bg-red-500 rounded-full animate-pulse" /> LIVE</span>
-              </div>
-              
-              <div className="space-y-3">
-                {[
-                  { title: "Navigating AI Regulations in APAC Logistics", speaker: "Dr. Aris Thorne", time: "Today, 4 PM IST" },
-                  { title: "Biotech Export Benchmarks & EU Compliance", speaker: "Prof. Sunita Reddy", time: "Tomorrow, 2 PM IST" }
-                ].map((ama, idx) => (
-                  <div key={idx} className="bg-gray-50 dark:bg-gray-900/50 p-2.5 rounded-lg border border-gray-100 dark:border-gray-800 space-y-1">
-                    <span className="text-[8px] font-bold text-blue-600 uppercase block">{ama.time}</span>
-                    <h5 className="text-[10px] font-bold text-gray-900 dark:text-white leading-snug">{ama.title}</h5>
-                    <span className="text-[9px] text-gray-500 block">By {ama.speaker}</span>
-                    <Link href="/eoi" className="text-[9px] font-bold text-blue-600 hover:underline block pt-1">
-                      Register Now →
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            </div>
-
             {/* Most Read Expert Stories */}
             <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden shadow-xs">
               <div className="bg-amber-500 text-gray-950 px-4 py-2.5 flex items-center justify-between text-xs font-bold">
@@ -670,10 +690,153 @@ export default function NewsPOCExpertNewsHome() {
               </div>
             </div>
 
+            {/* Expert Membership Benefits Card at the bottom */}
+            <div className="bg-gradient-to-br from-slate-955 to-[#10273f] text-white border border-slate-800 p-5 rounded-2xl shadow-xs space-y-4">
+              <div className="flex items-center gap-2">
+                <Crown className="h-4 w-4 text-amber-400" />
+                <span className="text-[10px] font-bold text-white uppercase tracking-wider">Unlock Advisor Pro Access</span>
+              </div>
+              <ul className="space-y-1.5 text-[10px] text-slate-300">
+                {[
+                  "Certified SME 1:1 Consultation Access",
+                  "Premium Advisory Audit Report Downloads",
+                  "Direct B2B Client Lead Matching"
+                ].map((item, idx) => (
+                  <li key={idx} className="flex items-center gap-1.5">
+                    <CheckCircle className="h-3 w-3 text-emerald-400 shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <Link href="/eoi" className="block text-center bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold text-xs py-2.5 rounded-lg transition-colors">
+                Learn More →
+              </Link>
+            </div>
+
           </div>
 
         </div>
       </section>
+
+      {/* Ticker Bulletin Detail Modal */}
+      {selectedBulletin && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+          <div className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4">
+            <div className="flex items-center justify-between border-b border-gray-150 dark:border-gray-855 pb-3">
+              <span className="bg-blue-100 dark:bg-blue-955 text-blue-600 dark:text-blue-400 text-[9px] font-bold px-2 py-0.5 rounded uppercase">
+                {selectedBulletin.cat}
+              </span>
+              <button 
+                onClick={() => setSelectedBulletin(null)}
+                className="text-gray-400 hover:text-gray-600 text-xs font-bold"
+              >
+                ✕ Close
+              </button>
+            </div>
+            <h3 className="font-display text-sm font-bold text-gray-955 dark:text-white leading-snug">
+              {selectedBulletin.text}
+            </h3>
+            <p className="text-[11px] text-gray-500 leading-relaxed font-normal">
+              {selectedBulletin.details}
+            </p>
+            <div className="pt-4 border-t border-gray-100 dark:border-gray-855 flex items-center justify-between gap-3 flex-wrap">
+              <span className="text-[10px] text-amber-500 font-bold flex items-center gap-1">
+                <Crown className="h-3.5 w-3.5" /> Subscriber Premium Access
+              </span>
+              <Link href="/eoi" className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-4 py-2 rounded-lg transition-colors">
+                Unlock Advisory Accords Data
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Subject Matter Expert Advisory Booking Modal */}
+      {bookingExpert && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+          <div className="bg-white dark:bg-[#0f172a] border border-gray-255 dark:border-gray-800 rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4">
+            <div className="flex items-center justify-between border-b border-gray-150 dark:border-gray-855 pb-3">
+              <span className="text-[10px] font-bold text-gray-955 dark:text-white uppercase tracking-wider">
+                Book 1:1 Consultation
+              </span>
+              <button 
+                onClick={() => setBookingExpert(null)}
+                className="text-gray-400 hover:text-gray-650 text-xs font-bold"
+              >
+                ✕ Close
+              </button>
+            </div>
+
+            {bookingSuccess ? (
+              <div className="text-center py-6 space-y-3">
+                <div className="h-10 w-10 bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center mx-auto">
+                  <CheckCircle className="h-6 w-6" />
+                </div>
+                <h4 className="text-xs font-bold text-gray-955 dark:text-white uppercase">Request Successfully Submitted</h4>
+                <p className="text-[10px] text-gray-400 max-w-xs mx-auto leading-relaxed">
+                  Your appointment slot for <strong>{bookingDate}</strong> at <strong>{bookingTime}</strong> with <strong>{bookingExpert}</strong> has been saved. Our trade coordinators will email meeting access keys shortly.
+                </p>
+                <button 
+                  onClick={() => setBookingExpert(null)}
+                  className="bg-blue-650 hover:bg-blue-700 text-white font-bold text-xs px-5 py-2 rounded-lg transition-colors mt-2"
+                >
+                  Return to Portal
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="bg-slate-50 dark:bg-slate-950 p-3 rounded-lg border border-slate-100 dark:border-slate-850">
+                  <span className="text-[8px] text-slate-400 uppercase block font-semibold">Consulting Expert</span>
+                  <span className="text-xs font-bold text-slate-800 dark:text-white block mt-0.5">{bookingExpert}</span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-gray-400 uppercase">Select Date</label>
+                    <input 
+                      type="date" 
+                      value={bookingDate}
+                      onChange={(e) => setBookingDate(e.target.value)}
+                      className="w-full rounded-lg border border-gray-250 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-3 py-2 text-xs outline-none focus:border-blue-500 font-mono text-gray-955 dark:text-white"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-gray-400 uppercase">Available Time Slots</label>
+                    <select 
+                      value={bookingTime}
+                      onChange={(e) => setBookingTime(e.target.value)}
+                      className="w-full rounded-lg border border-gray-250 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-3 py-2 text-xs outline-none focus:border-blue-500 text-gray-955 dark:text-white"
+                    >
+                      <option>10:00 AM</option>
+                      <option>11:30 AM</option>
+                      <option>02:00 PM</option>
+                      <option>04:30 PM</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[9px] font-bold text-gray-400 uppercase">Briefly describe your advisory query</label>
+                  <textarea 
+                    value={bookingQuery}
+                    onChange={(e) => setBookingQuery(e.target.value)}
+                    placeholder="e.g. Sourcing regulations under India-UAE CEPA or semiconductor custom clearances..."
+                    rows={3}
+                    className="w-full rounded-lg border border-gray-250 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-3 py-2 text-xs outline-none focus:border-blue-500 font-normal leading-relaxed text-gray-955 dark:text-white"
+                  />
+                </div>
+
+                <button 
+                  onClick={() => setBookingSuccess(true)}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-2.5 rounded-lg transition-colors uppercase tracking-wider"
+                >
+                  Submit Booking Request
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
     </div>
   );

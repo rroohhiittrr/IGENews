@@ -105,6 +105,13 @@ const NEWS_TABS = ["Latest", "Trending", "Economy", "Trade", "Investment", "Tech
 
 export default function NewsPOCCountryNewsHome() {
   const [activeNewsTab, setActiveNewsTab] = useState("Latest");
+  const [followedCountries, setFollowedCountries] = useState<string[]>([]);
+  const [selectedBulletin, setSelectedBulletin] = useState<{ text: string; cat: string; details: string } | null>(null);
+  const [calcOrigin, setCalcOrigin] = useState("India");
+  const [calcDest, setCalcDest] = useState("UAE");
+  const [calcValue, setCalcValue] = useState("100000");
+  const [calcCategory, setCalcCategory] = useState("Gold");
+  const [calcResult, setCalcResult] = useState<{ rate: string; duty: string; savings: string; accord: string } | null>(null);
 
   return (
     <div className="bg-gray-50 dark:bg-[#070b12] text-gray-900 dark:text-gray-100 min-h-screen pb-16 transition-colors duration-300">
@@ -148,51 +155,52 @@ export default function NewsPOCCountryNewsHome() {
                   />
                 </div>
                 <select className="bg-white/10 border border-white/20 text-white rounded-xl px-3 py-3 text-xs outline-none">
-                  <option className="bg-gray-900 text-white">All Regions</option>
-                  <option className="bg-gray-900 text-white">Asia-Pacific (APAC)</option>
-                  <option className="bg-gray-900 text-white">Europe (EU)</option>
-                  <option className="bg-gray-900 text-white">Middle East (MENA)</option>
-                  <option className="bg-gray-900 text-white">North America (NAM)</option>
+                  <option className="bg-gray-955 text-white">All Regions</option>
+                  <option className="bg-gray-955 text-white">Asia-Pacific (APAC)</option>
+                  <option className="bg-gray-955 text-white">Europe (EU)</option>
+                  <option className="bg-gray-955 text-white">Middle East (MENA)</option>
+                  <option className="bg-gray-955 text-white">North America (NAM)</option>
                 </select>
                 <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-3 rounded-xl transition-all text-sm shrink-0">
                   Search
                 </button>
               </div>
-
-              {/* 4 Action CTAs */}
-              <div className="flex flex-wrap gap-3">
-                <Link href="/en/news-poc/country-news/my" className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition-all shadow-xs">
-                  <Flag className="h-3.5 w-3.5" /> My Country Dashboard
-                </Link>
-                <Link href="/en/news-poc/country-news/all" className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition-all shadow-xs">
-                  <Globe className="h-3.5 w-3.5" /> All 195 Countries Directory
-                </Link>
-                <Link href="/eoi" className="bg-gradient-to-r from-amber-500 to-orange-600 text-gray-950 font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition-all shadow-xs">
-                  <Download className="h-3.5 w-3.5" /> Country Reports
-                </Link>
-                <Link href="/eoi" className="bg-white/10 border border-white/20 hover:bg-white/20 text-white font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition-all">
-                  <Crown className="h-3.5 w-3.5" /> Upgrade to Pro
-                </Link>
-              </div>
             </div>
 
-            {/* Quick Stat Counter Panel */}
-            <div className="grid grid-cols-2 gap-3 shrink-0">
-              {[
-                { val: "195", label: "Global Countries", icon: Globe, color: "text-blue-400" },
-                { val: "$32.4T", label: "Bilateral Trade Output", icon: TrendingUp, color: "text-emerald-400" },
-                { val: "120+", label: "Bilateral Accords", icon: Scale, color: "text-amber-400" },
-                { val: "6", label: "Global Regions", icon: Compass, color: "text-purple-400" }
-              ].map((s, idx) => {
-                const SIcon = s.icon;
-                return (
-                  <div key={idx} className="bg-white/5 border border-white/10 rounded-xl p-4 text-center space-y-1.5 backdrop-blur-xs">
-                    <SIcon className={`h-5 w-5 mx-auto ${s.color}`} />
-                    <div className={`font-display text-xl font-bold ${s.color}`}>{s.val}</div>
-                    <div className="text-slate-400 text-[9px] font-semibold uppercase tracking-wider">{s.label}</div>
+            {/* Live Bilateral Alert Bulletin Ticker */}
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-5 w-full lg:w-[400px] backdrop-blur-md shadow-xl shrink-0 space-y-4">
+              <div className="flex items-center justify-between border-b border-white/15 pb-2.5">
+                <div className="flex items-center gap-2">
+                  <div className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Bilateral Bulletins</span>
+                </div>
+                <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">G2B & Corridor Alerts</span>
+              </div>
+              <div className="space-y-3.5">
+                {[
+                  { text: "India-GCC trade talks enter final bilateral tariff settlement round", time: "2 min ago", cat: "Trade Accords" },
+                  { text: "MoU signed for Chennai-Vladivostok maritime corridor expansion", time: "15 min ago", cat: "Logistics" },
+                  { text: "Union Cabinet approves 3 new bilateral aerospace tax treaties", time: "1 hr ago", cat: "Policy" }
+                ].map((b, idx) => (
+                  <div 
+                    key={idx} 
+                    onClick={() => setSelectedBulletin({
+                      text: b.text,
+                      cat: b.cat,
+                      details: `Detailed analysis of this ${b.cat} bulletin item: "${b.text}". The trade ministries are negotiating tariff phase-outs and logistics integration parameters. Under the bilateral frameworks, exporters can expect up to a 12% reduction in import customs duty.`
+                    })}
+                    className="space-y-1 group/item cursor-pointer"
+                  >
+                    <div className="flex items-center justify-between text-[8px]">
+                      <span className="text-blue-400 font-bold uppercase">{b.cat}</span>
+                      <span className="text-slate-400">{b.time}</span>
+                    </div>
+                    <p className="text-[11px] font-medium text-slate-200 group-hover/item:text-blue-300 transition-colors leading-relaxed line-clamp-2">
+                      {b.text}
+                    </p>
                   </div>
-                );
-              })}
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -217,200 +225,107 @@ export default function NewsPOCCountryNewsHome() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          2. FEATURED COUNTRY NEWS (SPOTLIGHT BILATERAL CORRIDOR)
-      ══════════════════════════════════════════════════════════════════ */}
-      <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
-        <div className="relative rounded-2xl overflow-hidden bg-slate-950 text-white min-h-[380px] flex flex-col justify-end p-8 border border-slate-900 shadow-sm group">
-          <div 
-            className="absolute inset-0 z-0 bg-cover bg-center opacity-30 group-hover:scale-102 transition-transform duration-300"
-            style={{ backgroundImage: `url(${FEATURED_CORRIDOR_STORY.image})` }}
-          />
-          <div className="absolute inset-0 z-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
-          
-          <div className="relative z-10 space-y-4 max-w-4xl">
-            <div className="flex items-center gap-2">
-              <span className="bg-blue-600 text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase">
-                BILATERAL SPOTLIGHT CORRIDOR
-              </span>
-              <span className="text-[10px] text-slate-300 font-semibold">
-                {FEATURED_CORRIDOR_STORY.flags} {FEATURED_CORRIDOR_STORY.corridor} · {FEATURED_CORRIDOR_STORY.date}
-              </span>
-            </div>
-
-            <h2 className="font-display text-2xl md:text-4xl font-bold leading-tight text-white group-hover:text-blue-300 transition-colors">
-              {FEATURED_CORRIDOR_STORY.headline}
-            </h2>
-            
-            <p className="text-slate-300 text-xs md:text-sm font-normal max-w-3xl leading-relaxed">
-              {FEATURED_CORRIDOR_STORY.summary}
-            </p>
-
-            <div className="pt-2 flex flex-wrap items-center gap-6 border-t border-white/10 pt-4 text-xs font-semibold text-slate-300">
-              {FEATURED_CORRIDOR_STORY.metrics.map((m, idx) => (
-                <div key={idx}>
-                  <span className="block text-[8px] text-gray-400 uppercase">{m.label}</span>
-                  <span className={`text-sm font-bold ${m.color}`}>{m.value}</span>
-                </div>
-              ))}
-              <div className="ml-auto">
-                <Link href="/eoi" className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2.5 rounded-lg transition-colors flex items-center gap-1.5 text-[10px]">
-                  READ CORRIDOR BRIEFING <ChevronRight className="h-3.5 w-3.5" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════════════
-          3. ECONOMIC DASHBOARD
-      ══════════════════════════════════════════════════════════════════ */}
-      <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
-        <div className="space-y-4">
-          <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
-            <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Global Economic Performance Scoreboard</h2>
-            <span className="text-[9px] font-bold text-gray-400">Macro Indicators</span>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {PERFORMANCE_METRICS.map((pm, idx) => {
-              const PMIcon = pm.icon;
-              return (
-                <div key={idx} className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs space-y-2">
-                  <PMIcon className={`h-6 w-6 ${pm.color}`} />
-                  <span className="text-[9px] font-bold text-gray-400 uppercase block">{pm.label}</span>
-                  <div className="font-display text-xl md:text-2xl font-bold text-gray-900 dark:text-white">{pm.val}</div>
-                  <span className="text-[9px] font-bold text-emerald-500 block">{pm.change}</span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════════════
-          4. BROWSE BY REGION
-      ══════════════════════════════════════════════════════════════════ */}
-      <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
-        <div className="space-y-4">
-          <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
-            <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Browse News by Global Region</h2>
-            <Link href="/en/news-poc/country-news/all" className="text-[10px] font-bold text-blue-500 hover:underline uppercase">View All 195 Countries</Link>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-            {REGIONS_GRID.map((reg) => (
-              <Link key={reg.code} href="/eoi" className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-3.5 rounded-xl text-center hover:shadow-sm hover:border-blue-500 transition-all group space-y-1">
-                <span className="text-2xl block mb-1">{reg.icon}</span>
-                <span className="font-bold text-[10px] text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors block leading-tight">{reg.name}</span>
-                <span className="text-[8px] text-gray-400 block">{reg.count}</span>
-                <span className="text-[8px] font-bold text-emerald-500 block">{reg.growth}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════════════
-          5. MAIN CONTENT GRID (Latest News / Country Spotlight / Trade Corridors / FDI)
+          2. FEATURED & LATEST COUNTRY NEWS GRID (2-Column)
       ══════════════════════════════════════════════════════════════════ */}
       <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
         <div className="grid grid-cols-12 gap-8">
+          {/* Featured Corridor Briefing (Left 8 cols) */}
+          <div className="col-span-12 lg:col-span-8">
+            <div className="relative rounded-2xl overflow-hidden bg-slate-950 text-white min-h-[380px] h-full flex flex-col justify-end p-8 border border-slate-900 shadow-sm group">
+              <div 
+                className="absolute inset-0 z-0 bg-cover bg-center opacity-30 group-hover:scale-102 transition-transform duration-300"
+                style={{ backgroundImage: `url(${FEATURED_CORRIDOR_STORY.image})` }}
+              />
+              <div className="absolute inset-0 z-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+              
+              <div className="relative z-10 space-y-4 max-w-4xl">
+                <div className="flex items-center gap-2">
+                  <span className="bg-blue-600 text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase">
+                    BILATERAL SPOTLIGHT CORRIDOR
+                  </span>
+                  <span className="text-[10px] text-slate-300 font-semibold">
+                    {FEATURED_CORRIDOR_STORY.flags} {FEATURED_CORRIDOR_STORY.corridor} · {FEATURED_CORRIDOR_STORY.date}
+                  </span>
+                </div>
 
-          {/* ── LEFT MAIN COLUMN ── */}
-          <div className="col-span-12 lg:col-span-8 space-y-10">
+                <h2 className="font-display text-xl md:text-3xl font-bold leading-tight text-white group-hover:text-blue-300 transition-colors">
+                  {FEATURED_CORRIDOR_STORY.headline}
+                </h2>
+                
+                <p className="text-slate-300 text-xs md:text-sm font-normal max-w-3xl leading-relaxed">
+                  {FEATURED_CORRIDOR_STORY.summary}
+                </p>
 
-            {/* LATEST COUNTRY NEWS (TABBED FEED) */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
-                <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Latest Country News Feed</h2>
-                <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-900 p-0.5 rounded-xl border border-gray-200 dark:border-gray-800">
-                  {NEWS_TABS.map((tab) => (
-                    <button
-                      key={tab}
-                      onClick={() => setActiveNewsTab(tab)}
-                      className={`px-2.5 py-1 rounded-lg text-[9px] font-bold transition-all ${activeNewsTab === tab ? "bg-white dark:bg-gray-800 text-blue-600 shadow-xs" : "text-gray-500 hover:text-gray-700"}`}
-                    >
-                      {tab}
-                    </button>
+                <div className="pt-2 flex flex-wrap items-center gap-6 border-t border-white/10 pt-4 text-xs font-semibold text-slate-300">
+                  {FEATURED_CORRIDOR_STORY.metrics.map((m, idx) => (
+                    <div key={idx}>
+                      <span className="block text-[8px] text-gray-400 uppercase">{m.label}</span>
+                      <span className={`text-xs font-bold ${m.color}`}>{m.value}</span>
+                    </div>
+                  ))}
+                  <div className="ml-auto flex items-center gap-1.5 flex-wrap">
+                    <Link href="/eoi" className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-lg transition-colors flex items-center gap-1.5 text-[9px]">
+                      READ BRIEFING <ChevronRight className="h-3 w-3" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Latest News Feed List (Right 4 cols) */}
+          <div className="col-span-12 lg:col-span-4">
+            <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow-xs h-full flex flex-col justify-between">
+              <div className="space-y-4 flex-1">
+                <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-850 pb-2">
+                  <h3 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">Latest News Feed</h3>
+                  <div className="flex items-center gap-0.5 bg-gray-100 dark:bg-gray-900 p-0.5 rounded-lg border border-gray-250 dark:border-gray-850">
+                    {["Latest", "Trade", "FDI"].slice(0, 3).map((tab) => (
+                      <button
+                        key={tab}
+                        onClick={() => setActiveNewsTab(tab)}
+                        className={`px-2 py-0.5 rounded text-[8.5px] font-bold transition-all ${activeNewsTab === tab ? "bg-white dark:bg-gray-800 text-blue-600 shadow-xs" : "text-gray-500 hover:text-gray-700"}`}
+                      >
+                        {tab}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-3.5">
+                  {LATEST_COUNTRY_NEWS.slice(0, 3).map((item) => (
+                    <div key={item.id} className="space-y-1 group cursor-pointer border-b border-gray-50 dark:border-gray-900/50 pb-2.5 last:border-0 last:pb-0">
+                      <div className="flex items-center gap-1.5 flex-wrap text-[8px]">
+                        <span className="font-bold text-blue-500">{item.flag} {item.country}</span>
+                        <span className="text-gray-400">{item.date}</span>
+                        {item.premium && <Lock className="h-2.5 w-2.5 text-amber-500" />}
+                      </div>
+                      <h4 className="text-[11px] font-bold text-gray-900 dark:text-white leading-snug group-hover:text-blue-500 transition-colors line-clamp-2">
+                        {item.title}
+                      </h4>
+                    </div>
                   ))}
                 </div>
               </div>
-
-              <div className="space-y-3">
-                {LATEST_COUNTRY_NEWS.map((item) => (
-                  <div key={item.id} className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-xl p-4 hover:shadow-sm hover:border-blue-300 dark:hover:border-blue-900 transition-all group">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="space-y-1.5 flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-[9px] font-bold text-blue-600 bg-blue-50 dark:bg-blue-950/20 px-2 py-0.5 rounded border border-blue-100/40">
-                            {item.flag} {item.country}
-                          </span>
-                          <span className="text-[9px] text-gray-400">{item.date} · {item.readTime}</span>
-                          {item.premium && <Lock className="h-3 w-3 text-amber-500" />}
-                        </div>
-                        <h3 className="text-xs md:text-sm font-bold text-gray-950 dark:text-white leading-snug group-hover:text-blue-600 transition-colors">
-                          {item.title}
-                        </h3>
-                        <div className="flex items-center justify-between text-[9px] text-gray-400 pt-1">
-                          <span>By {item.author}</span>
-                          <div className="flex items-center gap-3">
-                            <span className="flex items-center gap-0.5"><Eye className="h-3 w-3" />{item.views}</span>
-                            <Bookmark className="h-3 w-3 hover:text-blue-500 cursor-pointer" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="text-center">
-                <Link href="/eoi" className="text-blue-600 font-bold text-xs hover:underline flex items-center gap-1 justify-center">
-                  Load More Country News <ChevronRight className="h-3.5 w-3.5" />
-                </Link>
-              </div>
+              
+              <Link href="/eoi" className="block text-center border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900 text-gray-700 dark:text-slate-300 font-bold text-[10px] py-2 rounded-lg transition-colors mt-4">
+                View All Country News →
+              </Link>
             </div>
+          </div>
+        </div>
+      </section>
 
-            {/* COUNTRY SPOTLIGHT CARD */}
-            <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-xs space-y-4">
-              <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-850 pb-3">
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">{COUNTRY_SPOTLIGHT.flag}</span>
-                  <div>
-                    <h3 className="font-bold text-base text-gray-900 dark:text-white">{COUNTRY_SPOTLIGHT.name}</h3>
-                    <span className="text-[9px] text-gray-400">Capital: {COUNTRY_SPOTLIGHT.capital}</span>
-                  </div>
-                </div>
-                <Link href="/eoi" className="bg-blue-600 text-white font-bold text-[9px] px-3 py-1.5 rounded-lg">
-                  View Full Country Profile
-                </Link>
-              </div>
+      {/* ══════════════════════════════════════════════════════════════════
+          3. MAIN CONTENT GRID (Corridors, FDI, Economic Indicators, Regions, and Right Sidebar)
+      ══════════════════════════════════════════════════════════════════ */}
+      <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
+        <div className="grid grid-cols-12 gap-8">
+          
+          {/* ── LEFT MAIN COLUMN ── */}
+          <div className="col-span-12 lg:col-span-8 space-y-10">
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-                <div className="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl">
-                  <span className="text-[8px] font-bold text-gray-400 uppercase block">GDP Nominal</span>
-                  <span className="font-display text-sm font-bold text-gray-900 dark:text-white mt-0.5 block">{COUNTRY_SPOTLIGHT.gdp}</span>
-                </div>
-                <div className="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl">
-                  <span className="text-[8px] font-bold text-gray-400 uppercase block">GDP Growth</span>
-                  <span className="font-display text-sm font-bold text-emerald-500 mt-0.5 block">{COUNTRY_SPOTLIGHT.growth}</span>
-                </div>
-                <div className="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl">
-                  <span className="text-[8px] font-bold text-gray-400 uppercase block">Bilateral Trade</span>
-                  <span className="font-display text-sm font-bold text-blue-600 mt-0.5 block">{COUNTRY_SPOTLIGHT.tradeWithIndia}</span>
-                </div>
-                <div className="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl">
-                  <span className="text-[8px] font-bold text-gray-400 uppercase block">FDI Inflows</span>
-                  <span className="font-display text-sm font-bold text-purple-600 mt-0.5 block">{COUNTRY_SPOTLIGHT.fdiInflows}</span>
-                </div>
-              </div>
-
-              <p className="text-xs text-gray-600 dark:text-gray-400 italic font-normal leading-relaxed border-t border-gray-100 dark:border-gray-850 pt-3">
-                💡 {COUNTRY_SPOTLIGHT.highlight}
-              </p>
-            </div>
-
-            {/* BILATERAL TRADE CORRIDORS TABLE */}
+            {/* A. Top Bilateral Trade Corridors */}
             <div className="space-y-4">
               <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
                 <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Top Bilateral Trade Corridors</h2>
@@ -430,7 +345,7 @@ export default function NewsPOCCountryNewsHome() {
                   </thead>
                   <tbody className="divide-y divide-gray-100 dark:divide-gray-850">
                     {BILATERAL_CORRIDORS_TABLE.map((row, idx) => (
-                      <tr key={idx} className="hover:bg-gray-50 dark:hover:bg-gray-950 transition-colors">
+                      <tr key={idx} className="hover:bg-gray-50 dark:hover:bg-gray-955 transition-colors">
                         <td className="p-3.5 font-bold text-gray-900 dark:text-white">{row.flags} {row.corridor}</td>
                         <td className="p-3.5 font-bold text-blue-600">{row.value}</td>
                         <td className="p-3.5 font-bold text-emerald-500">{row.growth}</td>
@@ -443,7 +358,7 @@ export default function NewsPOCCountryNewsHome() {
               </div>
             </div>
 
-            {/* INVESTMENT OPPORTUNITIES (FDI & PROJECTS) */}
+            {/* B. High-Yield FDI & Infrastructure Projects */}
             <div className="space-y-4">
               <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
                 <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">High-Yield FDI & Infrastructure Projects</h2>
@@ -454,9 +369,11 @@ export default function NewsPOCCountryNewsHome() {
                 {FDI_PROJECTS.map((proj, idx) => (
                   <div key={idx} className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-xl p-4 shadow-xs space-y-3 flex flex-col justify-between">
                     <div className="space-y-1.5">
-                      <span className="text-[8px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/20 px-2 py-0.5 rounded">
-                        {proj.sector}
-                      </span>
+                      <Link href="/en/news-poc/sector-news" className="inline-block hover:opacity-85">
+                        <span className="text-[8px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/20 px-2 py-0.5 rounded">
+                          {proj.sector}
+                        </span>
+                      </Link>
                       <h4 className="text-xs font-bold text-gray-900 dark:text-white leading-snug">{proj.title}</h4>
                       <p className="text-[10px] text-gray-500">Location: {proj.location}</p>
                     </div>
@@ -464,7 +381,7 @@ export default function NewsPOCCountryNewsHome() {
                     <div className="pt-2 border-t border-gray-100 dark:border-gray-850 flex items-center justify-between">
                       <span className="font-display text-sm font-bold text-emerald-600">{proj.value}</span>
                       <Link href="/eoi" className="bg-blue-600 hover:bg-blue-700 text-white text-[9px] font-bold px-2.5 py-1 rounded-lg">
-                        Explore Project
+                        Explore
                       </Link>
                     </div>
                   </div>
@@ -472,7 +389,229 @@ export default function NewsPOCCountryNewsHome() {
               </div>
             </div>
 
-            {/* AI COUNTRY INTELLIGENCE (PREMIUM FORECASTS) */}
+            {/* C. Global Economic Performance Scoreboard */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
+                <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Global Economic Performance Scoreboard</h2>
+                <span className="text-[9px] font-bold text-gray-400">Macro Indicators</span>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {PERFORMANCE_METRICS.map((pm, idx) => {
+                  const PMIcon = pm.icon;
+                  return (
+                    <div key={idx} className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-4 rounded-xl shadow-xs space-y-2">
+                      <PMIcon className={`h-5 w-5 ${pm.color}`} />
+                      <span className="text-[8px] font-bold text-gray-400 uppercase block">{pm.label}</span>
+                      <div className="font-display text-lg font-bold text-gray-900 dark:text-white leading-tight">{pm.val}</div>
+                      <span className="text-[8px] font-bold text-emerald-500 block">{pm.change}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Interactive Tariff & Customs Calculator */}
+            <div className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 rounded-2xl p-6 shadow-sm space-y-5">
+              <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-855 pb-3">
+                <div className="flex items-center gap-2">
+                  <Coins className="h-4.5 w-4.5 text-blue-500" />
+                  <h2 className="font-display text-xs font-bold text-gray-955 dark:text-white uppercase tracking-wider">
+                    CEPA Tariff &amp; Customs Calculator
+                  </h2>
+                </div>
+                <span className="bg-blue-100 dark:bg-blue-955 text-blue-600 dark:text-blue-400 text-[8px] font-bold px-2 py-0.5 rounded uppercase">
+                  Bilateral Accords Active
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+                {/* Inputs */}
+                <div className="md:col-span-5 space-y-4">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1.5">
+                      <label className="text-[9px] font-bold text-gray-400 uppercase">Origin</label>
+                      <select 
+                        value={calcOrigin} 
+                        onChange={(e) => setCalcOrigin(e.target.value)}
+                        className="w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-3 py-2 text-xs outline-none focus:border-blue-500"
+                      >
+                        <option>India</option>
+                        <option>UAE</option>
+                        <option>USA</option>
+                      </select>
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-[9px] font-bold text-gray-400 uppercase">Destination</label>
+                      <select 
+                        value={calcDest} 
+                        onChange={(e) => setCalcDest(e.target.value)}
+                        className="w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-3 py-2 text-xs outline-none focus:border-blue-500"
+                      >
+                        <option>UAE</option>
+                        <option>India</option>
+                        <option>USA</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-[9px] font-bold text-gray-400 uppercase">Declared Value (USD)</label>
+                    <input 
+                      type="number" 
+                      value={calcValue} 
+                      onChange={(e) => setCalcValue(e.target.value)}
+                      placeholder="e.g. 100000"
+                      className="w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-3 py-2 text-xs outline-none focus:border-blue-500 font-mono"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-[9px] font-bold text-gray-400 uppercase">Product Category</label>
+                    <select 
+                      value={calcCategory} 
+                      onChange={(e) => setCalcCategory(e.target.value)}
+                      className="w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-3 py-2 text-xs outline-none focus:border-blue-500"
+                    >
+                      <option>Gold</option>
+                      <option>Electronics</option>
+                      <option>Petrochemicals</option>
+                      <option>Agriculture</option>
+                    </select>
+                  </div>
+
+                  <button 
+                    onClick={() => {
+                      const val = parseFloat(calcValue) || 0;
+                      if (calcOrigin === calcDest) {
+                        setCalcResult({
+                          rate: "0.0%",
+                          duty: "$0",
+                          savings: "$0",
+                          accord: "Domestic Trade (No Customs Duty)"
+                        });
+                        return;
+                      }
+
+                      if (calcOrigin === "India" && calcDest === "UAE") {
+                        if (calcCategory === "Gold") {
+                          setCalcResult({
+                            rate: "5.0% Preferential Rate",
+                            duty: `$${(val * 0.05).toLocaleString(undefined, { maximumFractionDigits: 0 })}`,
+                            savings: `$${(val * 0.05).toLocaleString(undefined, { maximumFractionDigits: 0 })} (CEPA Concession Applied)`,
+                            accord: "India-UAE CEPA Accord"
+                          });
+                        } else if (calcCategory === "Petrochemicals") {
+                          setCalcResult({
+                            rate: "0.0% Preferred Tariff",
+                            duty: "$0",
+                            savings: `$${(val * 0.075).toLocaleString(undefined, { maximumFractionDigits: 0 })} (Full Exemption)`,
+                            accord: "India-UAE CEPA Accord"
+                          });
+                        } else {
+                          setCalcResult({
+                            rate: "3.5%",
+                            duty: `$${(val * 0.035).toLocaleString(undefined, { maximumFractionDigits: 0 })}`,
+                            savings: `$${(val * 0.04).toLocaleString(undefined, { maximumFractionDigits: 0 })}`,
+                            accord: "India-UAE CEPA Accord"
+                          });
+                        }
+                      } else if (calcOrigin === "UAE" && calcDest === "India") {
+                        if (calcCategory === "Gold") {
+                          setCalcResult({
+                            rate: "10.0% Concession rate",
+                            duty: `$${(val * 0.1).toLocaleString(undefined, { maximumFractionDigits: 0 })}`,
+                            savings: `$${(val * 0.05).toLocaleString(undefined, { maximumFractionDigits: 0 })} (CEPA Tariff Concession)`,
+                            accord: "India-UAE CEPA Accord"
+                          });
+                        } else {
+                          setCalcResult({
+                            rate: "7.5%",
+                            duty: `$${(val * 0.075).toLocaleString(undefined, { maximumFractionDigits: 0 })}`,
+                            savings: `$${(val * 0.025).toLocaleString(undefined, { maximumFractionDigits: 0 })}`,
+                            accord: "India-UAE CEPA Accord"
+                          });
+                        }
+                      } else {
+                        // USA
+                        setCalcResult({
+                          rate: "12.5% MFN rate",
+                          duty: `$${(val * 0.125).toLocaleString(undefined, { maximumFractionDigits: 0 })}`,
+                          savings: "$0 (No Active Preferential Trade Accord)",
+                          accord: "Standard WTO MFN Schedules"
+                        });
+                      }
+                    }}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-2 rounded-lg transition-colors uppercase tracking-wider"
+                  >
+                    Calculate Tariff Concessions
+                  </button>
+                </div>
+
+                {/* Outputs */}
+                <div className="md:col-span-7 bg-gray-55 dark:bg-gray-900/50 rounded-xl p-5 border border-gray-100 dark:border-gray-800 flex flex-col justify-center space-y-4 min-h-[200px]">
+                  {calcResult ? (
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[9px] font-bold text-gray-400 uppercase">Bilateral Framework</span>
+                        <span className="bg-emerald-100 dark:bg-emerald-950/40 text-emerald-650 dark:text-emerald-400 text-[8px] font-bold px-2 py-0.5 rounded uppercase font-mono">
+                          {calcResult.accord}
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1">
+                          <span className="text-[9px] text-gray-400 block uppercase">Duty Rate</span>
+                          <div className="text-sm font-bold text-gray-955 dark:text-white font-mono">{calcResult.rate}</div>
+                        </div>
+                        <div className="space-y-1">
+                          <span className="text-[9px] text-gray-400 block uppercase font-bold">Duty Payable</span>
+                          <div className="text-sm font-bold text-blue-650 dark:text-blue-400 font-mono">{calcResult.duty}</div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-1 border-t border-gray-150 dark:border-gray-855 pt-3">
+                        <span className="text-[9px] text-emerald-500 font-bold block uppercase">Net Concession Savings</span>
+                        <div className="text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">{calcResult.savings}</div>
+                      </div>
+
+                      <p className="text-[9px] text-gray-400 leading-relaxed font-normal">
+                        * Calculations are estimates based on active preferential tariff schedules and certificate of origin registry databases. Review official customs codes before clearing manifests.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="text-center py-8 space-y-2">
+                      <Compass className="h-8 w-8 text-gray-300 mx-auto" />
+                      <h5 className="text-xs font-bold text-gray-450 uppercase">No Active Calculation</h5>
+                      <p className="text-[10px] text-gray-400 max-w-xs mx-auto leading-relaxed font-normal">
+                        Select origin, destination, category, and enter value to query available trade accord concession tariffs.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* D. Browse News by Global Region */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
+                <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Browse News by Global Region</h2>
+                <Link href="/en/news-poc/country-news/all" className="text-[10px] font-bold text-blue-500 hover:underline uppercase">View All 195 Countries</Link>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+                {REGIONS_GRID.map((reg) => (
+                  <Link key={reg.code} href="/eoi" className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-3 rounded-xl text-center hover:shadow-sm hover:border-blue-500 transition-all group space-y-1">
+                    <span className="text-xl block mb-1">{reg.icon}</span>
+                    <span className="font-bold text-[10px] text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors block leading-tight">{reg.name}</span>
+                    <span className="text-[8px] text-gray-450 block">{reg.count}</span>
+                    <span className="text-[8px] font-bold text-emerald-500 block">{reg.growth}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* E. AI Risk & Growth Forecasts */}
             <div className="bg-gradient-to-br from-[#0b192e] to-[#142d52] text-white p-6 rounded-2xl border border-slate-800 shadow-lg space-y-5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -500,9 +639,48 @@ export default function NewsPOCCountryNewsHome() {
                   Unlock AI Country Forecasts
                 </Link>
                 <Link href="/eoi" className="border border-white/20 hover:bg-white/10 text-white font-bold text-xs px-5 py-2.5 rounded-xl transition-all">
-                  Download Sample Country Risk Matrix
+                  Download Risk Matrix
                 </Link>
               </div>
+            </div>
+
+            {/* F. Bilateral Country Spotlight Curation */}
+            <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-xs space-y-4">
+              <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-850 pb-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl">{COUNTRY_SPOTLIGHT.flag}</span>
+                  <div>
+                    <h3 className="font-bold text-base text-gray-900 dark:text-white">{COUNTRY_SPOTLIGHT.name}</h3>
+                    <span className="text-[9px] text-gray-450">Capital: {COUNTRY_SPOTLIGHT.capital}</span>
+                  </div>
+                </div>
+                <Link href="/eoi" className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-[9px] px-3 py-1.5 rounded-lg transition-colors">
+                  View Full Country Profile
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                <div className="p-3 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
+                  <span className="text-[8px] font-bold text-gray-400 uppercase block">GDP Nominal</span>
+                  <span className="font-display text-sm font-bold text-gray-900 dark:text-white mt-0.5 block">{COUNTRY_SPOTLIGHT.gdp}</span>
+                </div>
+                <div className="p-3 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
+                  <span className="text-[8px] font-bold text-gray-400 uppercase block">GDP Growth</span>
+                  <span className="font-display text-sm font-bold text-emerald-500 mt-0.5 block">{COUNTRY_SPOTLIGHT.growth}</span>
+                </div>
+                <div className="p-3 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
+                  <span className="text-[8px] font-bold text-gray-400 uppercase block">Bilateral Trade</span>
+                  <span className="font-display text-sm font-bold text-blue-600 mt-0.5 block">{COUNTRY_SPOTLIGHT.tradeWithIndia}</span>
+                </div>
+                <div className="p-3 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
+                  <span className="text-[8px] font-bold text-gray-400 uppercase block">FDI Inflows</span>
+                  <span className="font-display text-sm font-bold text-purple-600 mt-0.5 block">{COUNTRY_SPOTLIGHT.fdiInflows}</span>
+                </div>
+              </div>
+
+              <p className="text-xs text-gray-500 italic font-normal leading-relaxed border-t border-gray-100 dark:border-gray-850 pt-3">
+                💡 {COUNTRY_SPOTLIGHT.highlight}
+              </p>
             </div>
 
           </div>
@@ -510,32 +688,47 @@ export default function NewsPOCCountryNewsHome() {
           {/* ── RIGHT SIDEBAR ── */}
           <div className="col-span-12 lg:col-span-4 space-y-6">
 
-            {/* Persistent Upgrade Banner */}
-            <div className="bg-gradient-to-br from-slate-950 to-[#102747] text-white border border-slate-800 p-5 rounded-2xl shadow-xs space-y-4">
-              <div className="flex items-center gap-2">
-                <Crown className="h-4 w-4 text-amber-400" />
-                <span className="text-[9px] font-bold text-amber-400 uppercase tracking-widest">Upgrade to Country Pro</span>
-              </div>
-              <ul className="space-y-2 text-[10px] text-slate-300">
-                {[
-                  "195 Bilateral Trade Dashboards",
-                  "AI Tariff & Country Risk Index",
-                  "Downloadable Country Reports & PDF Datapacks",
-                  "FDI Investment Opportunity Alerts",
-                  "Embassy & Trade Mission Contacts"
-                ].map((item, idx) => (
-                  <li key={idx} className="flex items-center gap-1.5">
-                    <CheckCircle className="h-3 w-3 text-emerald-400 shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <div className="space-y-2 pt-2">
-                <Link href="/eoi" className="block text-center bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs py-2.5 rounded-lg transition-colors">
-                  Get Pro Membership
-                </Link>
-                <Link href="/eoi" className="block text-center bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-gray-950 font-bold text-xs py-2.5 rounded-lg transition-colors">
-                  Go Enterprise
+            {/* Country of the Week Card */}
+            <div className="relative bg-gradient-to-br from-[#0b192e] to-[#142d52] text-white border border-slate-800 p-5 rounded-2xl shadow-sm space-y-4 overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-400/5 rounded-full -translate-y-1/2 translate-x-1/3 blur-xl" />
+              <div className="relative z-10 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="bg-blue-500 text-white text-[8px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-widest">📅 Country of the Week</span>
+                  <button 
+                    onClick={() => {
+                      setFollowedCountries(prev => prev.includes("United Arab Emirates") ? prev.filter(c => c !== "United Arab Emirates") : [...prev, "United Arab Emirates"]);
+                    }}
+                    className={`text-[8px] font-bold px-2 py-0.5 rounded-md transition-all ${
+                      followedCountries.includes("United Arab Emirates")
+                        ? "bg-emerald-500 text-white"
+                        : "bg-white/10 text-white hover:bg-white/20"
+                    }`}
+                  >
+                    {followedCountries.includes("United Arab Emirates") ? "Following" : "+ Watchlist"}
+                  </button>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <span className="text-3xl">🇦🇪</span>
+                  <div>
+                    <span className="font-display font-bold text-sm block leading-tight">United Arab Emirates</span>
+                    <span className="text-[9px] text-slate-450">Middle East · CEPA Partner</span>
+                  </div>
+                </div>
+                <p className="text-slate-350 text-[10px] leading-relaxed font-normal">
+                  Non-oil trade corridor surpasses $87B under CEPA, Jebel Ali Port logs record throughput, and ADIA commits fresh $4.2B into Indian infrastructure.
+                </p>
+                <div className="grid grid-cols-2 gap-2 pt-1.5 border-t border-white/10">
+                  <div className="text-center bg-white/5 p-2 rounded-lg">
+                    <div className="text-[10px] font-bold text-emerald-400">+18.4%</div>
+                    <div className="text-[8px] text-slate-400">Trade Growth</div>
+                  </div>
+                  <div className="text-center bg-white/5 p-2 rounded-lg">
+                    <div className="text-[10px] font-bold text-amber-400">$87.2B</div>
+                    <div className="text-[8px] text-slate-400">Bilateral Value</div>
+                  </div>
+                </div>
+                <Link href="/eoi" className="block text-center bg-blue-600 hover:bg-blue-700 text-white font-bold text-[10px] py-2 rounded-lg transition-all">
+                  Read Full Coverage →
                 </Link>
               </div>
             </div>
@@ -560,7 +753,7 @@ export default function NewsPOCCountryNewsHome() {
               </div>
             </div>
 
-            {/* Top Country Leaders */}
+            {/* Top Global Leaders */}
             <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden shadow-xs">
               <div className="px-4 py-2.5 bg-purple-600 text-white flex items-center justify-between font-bold text-xs">
                 <span>Top Global Leaders</span>
@@ -580,7 +773,7 @@ export default function NewsPOCCountryNewsHome() {
               </div>
             </div>
 
-            {/* Premium Reports Store Card */}
+            {/* Premium Research Reports */}
             <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-xl p-4 shadow-xs space-y-3">
               <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-850 pb-2">
                 <span className="font-bold text-xs text-gray-900 dark:text-white uppercase tracking-wider">Country Research Reports</span>
@@ -599,7 +792,7 @@ export default function NewsPOCCountryNewsHome() {
               </div>
             </div>
 
-            {/* Newsletter Subscription */}
+            {/* Country Brief Newsletter */}
             <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-xl p-4 shadow-xs space-y-3">
               <div className="flex items-center gap-2 border-b border-gray-100 dark:border-gray-850 pb-2">
                 <Mail className="h-4 w-4 text-blue-500" />
@@ -612,10 +805,64 @@ export default function NewsPOCCountryNewsHome() {
               </button>
             </div>
 
+            {/* Simplified Upgrade Teaser (Moved to bottom) */}
+            <div className="bg-gradient-to-br from-[#0b192e] to-[#142d52] text-white border border-slate-800 p-5 rounded-2xl shadow-xs space-y-4">
+              <div className="flex items-center gap-2">
+                <Crown className="h-4 w-4 text-amber-400" />
+                <span className="text-[10px] font-bold text-white uppercase tracking-wider">Unlock Country Pro Access</span>
+              </div>
+              <ul className="space-y-1.5 text-[10px] text-slate-300">
+                {[
+                  "195 Bilateral Trade Dashboards",
+                  "AI Tariff & Country Risk Index",
+                  "FDI Opportunity Alerts"
+                ].map((item, idx) => (
+                  <li key={idx} className="flex items-center gap-1.5">
+                    <CheckCircle className="h-3 w-3 text-emerald-400 shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <Link href="/eoi" className="block text-center bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold text-xs py-2.5 rounded-lg transition-colors">
+                Learn More →
+              </Link>
+            </div>
           </div>
-
         </div>
       </section>
+
+      {/* Ticker Bulletin Detail Modal */}
+      {selectedBulletin && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+          <div className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4">
+            <div className="flex items-center justify-between border-b border-gray-150 dark:border-gray-850 pb-3">
+              <span className="bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 text-[9px] font-bold px-2 py-0.5 rounded uppercase">
+                {selectedBulletin.cat}
+              </span>
+              <button 
+                onClick={() => setSelectedBulletin(null)}
+                className="text-gray-400 hover:text-gray-600 text-xs font-bold"
+              >
+                ✕ Close
+              </button>
+            </div>
+            <h3 className="font-display text-sm font-bold text-gray-955 dark:text-white leading-snug">
+              {selectedBulletin.text}
+            </h3>
+            <p className="text-[11px] text-gray-500 leading-relaxed font-normal">
+              {selectedBulletin.details}
+            </p>
+            <div className="pt-4 border-t border-gray-100 dark:border-gray-850 flex items-center justify-between gap-3 flex-wrap">
+              <span className="text-[10px] text-amber-500 font-bold flex items-center gap-1">
+                <Crown className="h-3.5 w-3.5" /> Subscriber Premium Access
+              </span>
+              <Link href="/eoi" className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-4 py-2 rounded-lg transition-colors">
+                Unlock Trade Accords Data
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
