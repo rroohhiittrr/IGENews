@@ -108,6 +108,16 @@ const FEED_ITEMS: FeedItem[] = [
 export default function NewsPOCFeedHome() {
   const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annual">("monthly");
   const [feedTimeFilter, setFeedTimeFilter] = useState<"now" | "today" | "week" | "all">("now");
+  const [selectedSector, setSelectedSector] = useState("All");
+  const [bookmarkedIds, setBookmarkedIds] = useState<string[]>([]);
+  const [activeShareId, setActiveShareId] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [copiedPostId, setCopiedPostId] = useState<string | null>(null);
+  const [feedUpvotes, setFeedUpvotes] = useState<Record<string, number>>({
+    "feed-1": 142,
+    "feed-2": 98,
+    "feed-3": 210
+  });
 
   return (
     <div className="bg-gray-50 dark:bg-[#070b12] text-gray-900 dark:text-gray-100 min-h-screen pb-12 transition-colors duration-300">
@@ -296,56 +306,140 @@ export default function NewsPOCFeedHome() {
           </div>
         </div>
 
+        {/* Horizontal scrollbar of sector chips */}
+        <div className="flex gap-2 pb-4 mb-4 overflow-x-auto scrollbar-hide border-b border-gray-150 dark:border-gray-850">
+          {["All", "HEALTHCARE & PHARMA", "FINANCE & BANKING", "SUSTAINABLE ENERGY"].map((sector) => (
+            <button
+              key={sector}
+              onClick={() => setSelectedSector(sector)}
+              className={`px-3 py-1.5 rounded-full text-[10px] font-bold uppercase transition-all whitespace-nowrap ${
+                selectedSector === sector
+                  ? "bg-blue-600 text-white shadow-xs"
+                  : "bg-gray-100 dark:bg-gray-900 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 border border-gray-200 dark:border-gray-800"
+              }`}
+            >
+              {sector === "All" ? "All Sectors" : sector.replace("HEALTHCARE & PHARMA", "Healthcare").replace("FINANCE & BANKING", "Finance").replace("SUSTAINABLE ENERGY", "Energy")}
+            </button>
+          ))}
+        </div>
+
         {/* News Feed Items Stack */}
         <div className="space-y-6">
-          {FEED_ITEMS.map((item) => (
-            <div 
-              key={item.id} 
-              className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden p-6 md:p-8 flex flex-col md:flex-row gap-6 shadow-xs hover:shadow-md transition-all duration-200 group"
-            >
-              {/* Left text panel */}
-              <div className="flex-1 flex flex-col justify-between space-y-4">
-                <Link href={`/en/news-poc/article/${item.id}`} className="space-y-2 block group">
-                  <span className="inline-block border border-cyan-500/20 text-cyan-600 dark:text-cyan-400 bg-cyan-50/20 px-2.5 py-0.5 rounded text-[9px] font-bold">
-                    {item.category}
-                  </span>
-                  
-                  <h3 className="text-base md:text-lg font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug">
-                    {item.title}
-                  </h3>
-                  
-                  <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 leading-relaxed font-normal">
-                    {item.excerpt}
-                  </p>
-                </Link>
-
-                <div className="pt-2 flex flex-wrap items-center justify-between gap-4 border-t border-gray-100 dark:border-gray-850 text-[11px] text-gray-500 font-semibold">
-                  <div className="flex items-center gap-4">
-                    <Link
-                      href={`/en/news-poc/article/${item.id}`}
-                      className="bg-[#1E3A5F] hover:bg-[#152e4f] text-white font-bold text-[10px] px-4 py-2 rounded transition-colors"
-                    >
-                      READ FULL ARTICLE
-                    </Link>
-                    <span className="flex items-center gap-1">
-                      MARKET IMPACT: <span className={item.impactColor}>{item.impact}</span>
+          {FEED_ITEMS
+            .filter((item) => selectedSector === "All" || item.category === selectedSector)
+            .map((item) => (
+              <div 
+                key={item.id} 
+                className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden p-6 md:p-8 flex flex-col md:flex-row gap-6 shadow-xs hover:shadow-md transition-all duration-200 group"
+              >
+                {/* Left text panel */}
+                <div className="flex-1 flex flex-col justify-between space-y-4">
+                  <Link href={`/en/news-poc/article/${item.id}`} className="space-y-2 block group">
+                    <span className="inline-block border border-cyan-500/20 text-cyan-600 dark:text-cyan-400 bg-cyan-50/20 px-2.5 py-0.5 rounded text-[9px] font-bold">
+                      {item.category}
                     </span>
-                  </div>
+                    
+                    <h3 className="text-base md:text-lg font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug">
+                      {item.title}
+                    </h3>
+                    
+                    <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 leading-relaxed font-normal">
+                      {item.excerpt}
+                    </p>
+                  </Link>
 
-                  <div className="flex items-center gap-4">
-                    <span>{item.readers}</span>
-                    <span>•</span>
-                    <span>{item.time}</span>
-                    <span className="text-gray-300">|</span>
-                    <div className="flex items-center gap-3">
-                      <button className="hover:text-red-500"><ThumbsUp className="h-3.5 w-3.5" /></button>
-                      <button className="hover:text-blue-500"><MessageCircle className="h-3.5 w-3.5" /></button>
-                      <button className="hover:text-blue-500"><Share2 className="h-3.5 w-3.5" /></button>
-                      <button className="hover:text-blue-500"><Bookmark className="h-3.5 w-3.5" /></button>
+                  <div className="pt-2 flex flex-wrap items-center justify-between gap-4 border-t border-gray-100 dark:border-gray-850 text-[11px] text-gray-500 font-semibold">
+                    <div className="flex items-center gap-4">
+                      <Link
+                        href={`/en/news-poc/article/${item.id}`}
+                        className="bg-[#1E3A5F] hover:bg-[#152e4f] text-white font-bold text-[10px] px-4 py-2 rounded transition-colors"
+                      >
+                        READ FULL ARTICLE
+                      </Link>
+                      <span className="flex items-center gap-1">
+                        MARKET IMPACT: <span className={item.impactColor}>{item.impact}</span>
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                      <span>{item.readers}</span>
+                      <span>•</span>
+                      <span>{item.time}</span>
+                      <span className="text-gray-300">|</span>
+                      <div className="flex items-center gap-3">
+                        <button 
+                          onClick={() => {
+                            setFeedUpvotes(prev => ({
+                              ...prev,
+                              [item.id]: (prev[item.id] || 12) + 1
+                            }));
+                            setToastMessage("Insight upvoted!");
+                            setTimeout(() => setToastMessage(null), 2500);
+                          }}
+                          className="flex items-center gap-1 hover:text-red-500"
+                        >
+                          <ThumbsUp className="h-3.5 w-3.5" /> 
+                          <span>{feedUpvotes[item.id] || 12}</span>
+                        </button>
+                        <button className="hover:text-blue-500"><MessageCircle className="h-3.5 w-3.5" /></button>
+                        
+                        <div className="relative">
+                          <button 
+                            onClick={() => setActiveShareId(prev => prev === item.id ? null : item.id)}
+                            className="hover:text-blue-500"
+                          >
+                            <Share2 className="h-3.5 w-3.5" />
+                          </button>
+                          {activeShareId === item.id && (
+                            <div className="absolute right-0 bottom-6 z-20 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-2 shadow-lg flex flex-col gap-1 text-[10px] w-28 text-left">
+                              <button 
+                                onClick={() => {
+                                  setCopiedPostId(item.id);
+                                  setToastMessage("Copied to clipboard ✓");
+                                  setTimeout(() => {
+                                    setCopiedPostId(null);
+                                    setToastMessage(null);
+                                  }, 2000);
+                                  setActiveShareId(null);
+                                }}
+                                className="hover:bg-gray-50 dark:hover:bg-gray-800 p-1 rounded text-gray-700 dark:text-gray-300"
+                              >
+                                {copiedPostId === item.id ? "Copied ✓" : "Copy Link"}
+                              </button>
+                              <button 
+                                onClick={() => {
+                                  alert("Sharing to LinkedIn");
+                                  setActiveShareId(null);
+                                }}
+                                className="hover:bg-gray-50 dark:hover:bg-gray-800 p-1 rounded text-gray-700 dark:text-gray-300"
+                              >
+                                Share to LinkedIn
+                              </button>
+                            </div>
+                          )}
+                        </div>
+
+                        <button 
+                          onClick={() => {
+                            setBookmarkedIds(prev => 
+                              prev.includes(item.id) 
+                                ? prev.filter(id => id !== item.id) 
+                                : [...prev, item.id]
+                            );
+                            const isBookmarking = !bookmarkedIds.includes(item.id);
+                            setToastMessage(isBookmarking ? "Saved to My Bookmarks" : "Removed from Bookmarks");
+                            setTimeout(() => setToastMessage(null), 2500);
+                          }}
+                          className={`hover:text-amber-500 transition-colors ${
+                            bookmarkedIds.includes(item.id) ? "text-amber-500 fill-amber-500" : ""
+                          }`}
+                        >
+                          <Bookmark className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
               {/* Right Image panel — clicking also goes to article */}
               <Link href={`/en/news-poc/article/${item.id}`} className="w-full md:w-80 h-48 md:h-full min-h-[160px] rounded-xl overflow-hidden relative block">
@@ -765,6 +859,13 @@ export default function NewsPOCFeedHome() {
 
         </div>
       </section>
+
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed bottom-4 right-4 z-50 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-4 py-2.5 rounded-lg shadow-lg text-xs font-bold transition-all">
+          {toastMessage}
+        </div>
+      )}
 
     </div>
   );

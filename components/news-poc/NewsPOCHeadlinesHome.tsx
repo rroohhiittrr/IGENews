@@ -5,12 +5,27 @@ import { useState, useEffect } from "react";
 import { 
   Newspaper, Clock, ArrowUpRight, TrendingUp, RefreshCw, Lock, 
   ShieldAlert, FileText, ExternalLink, Eye, Share2, Compass, 
-  BookOpen, UserCheck, BarChart2, ChevronRight, Play, CheckCircle
+  BookOpen, UserCheck, BarChart2, ChevronRight, Play, CheckCircle,
+  Sparkles, Bell
 } from "lucide-react";
 
 export default function NewsPOCHeadlinesHome() {
   const [activeTab, setActiveTab] = useState<"all" | "markets" | "tech">("all");
   const [tickerOffset, setTickerOffset] = useState(0);
+  const [followedLeaders, setFollowedLeaders] = useState<string[]>([]);
+  const [followedCorps, setFollowedCorps] = useState<string[]>([]);
+  const [policyInput, setPolicyInput] = useState("EU Carbon Tax (CBAM)");
+  const [hsCodeInput, setHsCodeInput] = useState("");
+  const [exposureResult, setExposureResult] = useState<{ risk: string; score: string; rate: string; text: string } | null>(null);
+
+  // Phase 11 Interactive States
+  const [headlineCategory, setHeadlineCategory] = useState<"all" | "critical" | "policy" | "accords">("all");
+  const [showNotificationDrawer, setShowNotificationDrawer] = useState(false);
+  const [downloadingPacketId, setDownloadingPacketId] = useState<string | null>(null);
+  const [activeAlerts, setActiveAlerts] = useState([
+    { id: "alt-1", message: "URGENT: Suez Canal shipping delays expected to exceed 48 hrs due to logistics bottleneck.", type: "critical" },
+    { id: "alt-2", message: "POLICY WATCH: UAE CEPA tariff reductions now active for selected chemical compounds.", type: "info" }
+  ]);
 
   // Auto scroll breaking news ticker
   useEffect(() => {
@@ -41,11 +56,55 @@ export default function NewsPOCHeadlinesHome() {
       
       {/* Page Title fold */}
       <section className="mx-auto max-w-7xl px-4 pt-6 lg:px-6">
-        <div className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-800 pb-3">
-          <Newspaper className="h-5 w-5 text-blue-500" />
-          <h1 className="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white uppercase">
-            Headlines
-          </h1>
+        <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
+          <div className="flex items-center gap-2">
+            <Newspaper className="h-5 w-5 text-blue-500" />
+            <h1 className="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white uppercase">
+              Headlines
+            </h1>
+          </div>
+
+          <div className="relative">
+            <button 
+              onClick={() => setShowNotificationDrawer(!showNotificationDrawer)}
+              className="relative p-2 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+            >
+              <Bell className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+              {activeAlerts.length > 0 && (
+                <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500 animate-pulse" />
+              )}
+            </button>
+            {showNotificationDrawer && (
+              <div className="absolute right-0 top-10 z-30 w-80 bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 rounded-xl p-4 shadow-xl space-y-3 text-left">
+                <div className="flex items-center justify-between border-b border-gray-150 dark:border-gray-855 pb-2">
+                  <span className="text-[10px] font-bold text-gray-900 dark:text-white uppercase tracking-wider">Emergency Bulletins</span>
+                  <button 
+                    onClick={() => setActiveAlerts([])}
+                    className="text-[9px] text-blue-500 font-bold hover:underline"
+                  >
+                    Clear All
+                  </button>
+                </div>
+                {activeAlerts.length === 0 ? (
+                  <p className="text-[11px] text-gray-500">No active alerts or shipping notices.</p>
+                ) : (
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    {activeAlerts.map((alert) => (
+                      <div key={alert.id} className="p-2 rounded bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-850 space-y-1.5">
+                        <p className="text-[10px] text-gray-700 dark:text-gray-300 leading-normal">{alert.message}</p>
+                        <button 
+                          onClick={() => setActiveAlerts(prev => prev.filter(a => a.id !== alert.id))}
+                          className="text-[8px] text-gray-400 hover:text-gray-600 block text-right w-full font-semibold uppercase"
+                        >
+                          ✕ Clear
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
@@ -163,82 +222,59 @@ export default function NewsPOCHeadlinesHome() {
                 Top Headlines
               </h3>
               <div className="flex bg-gray-100 dark:bg-gray-900 p-0.5 rounded-lg border border-gray-250 dark:border-gray-800">
-                {(["all", "markets", "tech"] as const).map((tab) => (
+                {(["all", "critical", "policy", "accords"] as const).map((cat) => (
                   <button
-                    key={tab}
-                    onClick={() => setActiveTab(tab)}
-                    className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all uppercase ${
-                      activeTab === tab 
+                    key={cat}
+                    onClick={() => setHeadlineCategory(cat)}
+                    className={`px-2.5 py-1 text-[9px] font-bold rounded-md transition-all uppercase ${
+                      headlineCategory === cat 
                         ? "bg-white dark:bg-gray-800 text-blue-600 dark:text-white shadow-2xs" 
                         : "text-gray-500 hover:text-gray-700"
                     }`}
                   >
-                    {tab === "all" ? "All News" : tab}
+                    {cat === "all" ? "All News" : cat === "critical" ? "Critical" : cat === "policy" ? "Policies" : "Accords"}
                   </button>
                 ))}
               </div>
             </div>
 
             <div className="space-y-6">
-              {topHeadlines[activeTab].map((story, idx) => (
-                <Link key={idx} href="/en/news-poc/article/sec-1" className="flex gap-6 items-start group pb-6 border-b border-gray-100 dark:border-gray-850 last:border-0 last:pb-0 block">
-                  <span className="font-display text-3xl font-extrabold text-gray-200 dark:text-gray-800 group-hover:text-blue-500 transition-colors leading-none">
-                    {story.num}
-                  </span>
-                  <div className="flex-1 space-y-2">
-                    <span className="text-[9px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider block">
-                      {story.category}
+              {topHeadlines[activeTab]
+                .filter((story) => {
+                  if (headlineCategory === "all") return true;
+                  if (headlineCategory === "critical") return story.category.includes("SEMI") || story.category.includes("AI") || story.category.includes("TECH");
+                  if (headlineCategory === "policy") return story.title.toLowerCase().includes("investments") || story.title.toLowerCase().includes("scheme") || story.title.toLowerCase().includes("rule");
+                  if (headlineCategory === "accords") return story.title.toLowerCase().includes("partnership") || story.title.toLowerCase().includes("retail") || story.title.toLowerCase().includes("expansion");
+                  return true;
+                })
+                .map((story, idx) => (
+                  <Link key={idx} href="/en/news-poc/article/sec-1" className="flex gap-6 items-start group pb-6 border-b border-gray-100 dark:border-gray-850 last:border-0 last:pb-0 block">
+                    <span className="font-display text-3xl font-extrabold text-gray-200 dark:text-gray-800 group-hover:text-blue-500 transition-colors leading-none">
+                      {story.num}
                     </span>
-                    <h4 className="text-sm font-bold text-gray-950 dark:text-white group-hover:text-blue-600 transition-colors leading-snug">
-                      {story.title}
-                    </h4>
-                    <p className="text-xs text-gray-500 leading-relaxed font-normal">
-                      {story.desc}
-                    </p>
-                    <div className="flex items-center gap-3 text-[10px] text-gray-400 font-semibold pt-1">
-                      <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {story.date}</span>
-                      <span>•</span>
-                      <span>{story.readTime}</span>
+                    <div className="flex-1 space-y-2">
+                      <span className="text-[9px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider block">
+                        {story.category}
+                      </span>
+                      <h4 className="text-sm font-bold text-gray-955 dark:text-white group-hover:text-blue-600 transition-colors leading-snug">
+                        {story.title}
+                      </h4>
+                      <p className="text-xs text-gray-500 leading-relaxed font-normal">
+                        {story.desc}
+                      </p>
+                      <div className="flex items-center gap-3 text-[10px] text-gray-400 font-semibold pt-1">
+                        <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {story.date}</span>
+                        <span>•</span>
+                        <span>{story.readTime}</span>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                ))}
             </div>
           </div>
 
           {/* Right Column: Live Updates & Policy Tracker widget */}
           <div className="lg:col-span-4 space-y-6">
-            
-            {/* Live updates list */}
-            <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden shadow-xs flex flex-col justify-between min-h-[300px]">
-              <div className="bg-gray-50 dark:bg-gray-955 p-3.5 border-b border-gray-100 dark:border-gray-855 flex items-center justify-between">
-                <span className="text-[10px] font-bold text-gray-900 dark:text-white flex items-center gap-1.5 uppercase">
-                  ● Live Updates
-                </span>
-                <button className="p-1 text-gray-400 hover:text-gray-650 rounded-lg">
-                  <RefreshCw className="h-3.5 w-3.5" />
-                </button>
-              </div>
-
-              <div className="p-4 space-y-4 flex-1 text-xs">
-                {[
-                  { time: "11:24 AM", desc: "India finalises new PLI scheme for advanced electronics manufacturing hubs." },
-                  { time: "11:18 AM", desc: "EU proposes new carbon border adjustment framework for steel imports." },
-                  { time: "11:10 AM", desc: "RBI keeps repo rate unchanged. Impacts high-yield bonds." }
-                ].map((update, idx) => (
-                  <div key={idx} className="flex gap-3 items-start border-l-2 border-blue-500 pl-3">
-                    <div className="space-y-1">
-                      <span className="text-[9px] font-bold text-gray-450 block">{update.time}</span>
-                      <p className="text-xs text-gray-655 dark:text-gray-350 leading-relaxed font-normal">{update.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <button className="m-4 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-bold text-[10px] py-2 rounded-lg hover:bg-gray-50 transition-colors uppercase">
-                View All Updates
-              </button>
-            </div>
 
             {/* Policy Tracker block */}
             <div className="bg-slate-950 text-white border border-slate-900 p-5 rounded-2xl shadow-xs space-y-4">
@@ -362,12 +398,29 @@ export default function NewsPOCHeadlinesHome() {
                   </span>
                 </div>
                 <div className="p-4 space-y-2">
-                  <h5 className="text-xs font-bold text-gray-900 dark:text-white leading-snug line-clamp-2 min-h-[32px] group-hover:text-blue-500 transition-colors">
-                    {corp.title}
-                  </h5>
-                  <span className="text-[9px] text-gray-400 block font-semibold">
-                    {corp.date} • {corp.type}
-                  </span>
+                  <Link href="/en/news-poc/company-news">
+                    <h5 className="text-xs font-bold text-gray-900 dark:text-white leading-snug line-clamp-2 min-h-[32px] hover:text-blue-500 transition-colors">
+                      {corp.title}
+                    </h5>
+                  </Link>
+                  <div className="flex items-center justify-between pt-1">
+                    <span className="text-[9px] text-gray-400 block font-semibold">
+                      {corp.date} • {corp.type}
+                    </span>
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setFollowedCorps(prev => prev.includes(corp.title) ? prev.filter(c => c !== corp.title) : [...prev, corp.title]);
+                      }}
+                      className={`text-[8px] font-bold px-2 py-1 rounded transition-colors ${
+                        followedCorps.includes(corp.title) 
+                          ? "bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400"
+                          : "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 text-gray-700 dark:text-gray-300"
+                      }`}
+                    >
+                      {followedCorps.includes(corp.title) ? "Following" : "+ Follow"}
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -385,9 +438,7 @@ export default function NewsPOCHeadlinesHome() {
             <button className="text-[10px] font-bold text-blue-500 hover:underline uppercase tracking-wider">
               View Influence Index
             </button>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-6">
             {[
               { name: "Elon Musk", role: "1.2K mentions" },
               { name: "Elena Rostova", role: "980 mentions" },
@@ -396,15 +447,30 @@ export default function NewsPOCHeadlinesHome() {
               { name: "Marcus Thorne", role: "650 mentions" }
             ].map((lead, idx) => (
               <div key={idx} className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-4 rounded-xl text-center shadow-3xs flex flex-col items-center gap-2.5">
-                <div className="h-12 w-12 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-600 text-white font-bold flex items-center justify-center text-sm uppercase">
+                <Link href="/en/news-poc/leader-news" className="h-12 w-12 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-600 text-white font-bold flex items-center justify-center text-sm uppercase hover:scale-105 transition-transform">
                   {lead.name.charAt(0)}
-                </div>
+                </Link>
                 <div>
-                  <span className="font-bold text-gray-950 dark:text-white block text-xs">{lead.name}</span>
+                  <Link href="/en/news-poc/leader-news" className="font-bold text-gray-955 dark:text-white block text-xs hover:text-blue-550 transition-colors">
+                    {lead.name}
+                  </Link>
                   <span className="text-[9px] text-gray-450 block font-mono mt-0.5">{lead.role}</span>
                 </div>
+                <button
+                  onClick={() => {
+                    setFollowedLeaders(prev => prev.includes(lead.name) ? prev.filter(l => l !== lead.name) : [...prev, lead.name]);
+                  }}
+                  className={`text-[8px] font-bold px-2.5 py-1 rounded transition-all ${
+                    followedLeaders.includes(lead.name)
+                      ? "bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400"
+                      : "bg-blue-50 dark:bg-blue-900/50 hover:bg-blue-100 text-blue-600 dark:text-blue-400"
+                  }`}
+                >
+                  {followedLeaders.includes(lead.name) ? "Following" : "+ Follow"}
+                </button>
               </div>
             ))}
+          </div>
           </div>
         </div>
       </section>
@@ -413,22 +479,34 @@ export default function NewsPOCHeadlinesHome() {
       <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
         <div className="bg-slate-950 text-white border border-slate-900 p-8 rounded-3xl relative overflow-hidden shadow-lg space-y-6">
           <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1000&auto=format&fit=crop&q=80')] bg-cover opacity-10" />
-          
           <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-6 border-b border-white/10">
             <div className="space-y-2">
               <span className="bg-amber-400/10 text-amber-400 border border-amber-400/20 text-[9px] font-bold px-2.5 py-0.5 rounded tracking-wider uppercase block w-max">
                 SUBSCRIBER EXCLUSIVE
               </span>
               <h3 className="font-display text-xl md:text-3xl font-bold leading-tight">
-                Intelligence that moves markets.
+                Unlock Corporate Intelligence Pro.
               </h3>
               <p className="text-xs md:text-sm text-slate-350 font-normal leading-relaxed max-w-2xl">
-                Unlock deep-dive analysis, proprietary datasets, and executive interviews from the world's most influential decision makers.
+                Get full access to 5,000+ verified corporate profiles, bilateral supply chain directories, and high-yielding B2B trade intelligence leads.
               </p>
             </div>
-            <button className="bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold text-xs px-6 py-3 rounded-lg transition-colors whitespace-nowrap">
+            <Link href="/eoi" className="bg-amber-500 hover:bg-amber-600 text-gray-955 font-bold text-xs px-6 py-3 rounded-lg transition-colors whitespace-nowrap block">
               Get Premium Access
-            </button>
+            </Link>
+          </div>
+
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs pb-4">
+            {[
+              "5,000+ Company Intelligence Profiles",
+              "Bilateral Sourcing & Supply Chain Leads",
+              "Verified Supplier Badges & Priority Expo Access"
+            ].map((benefit, idx) => (
+              <div key={idx} className="flex items-center gap-2 text-slate-300">
+                <CheckCircle className="h-4 w-4 text-amber-400 shrink-0" />
+                <span>{benefit}</span>
+              </div>
+            ))}
           </div>
 
           {/* Locked preview cards */}
@@ -506,6 +584,171 @@ export default function NewsPOCHeadlinesHome() {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* AI Policy Impact Exposure Checker */}
+          <div className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 rounded-2xl p-6 shadow-sm space-y-5">
+            <div className="flex items-center gap-2 border-b border-gray-100 dark:border-gray-855 pb-3">
+              <Sparkles className="h-4.5 w-4.5 text-amber-500" />
+              <h4 className="font-display text-xs font-bold text-gray-955 dark:text-white uppercase tracking-wider">
+                AI Policy Impact &amp; HS Code Exposure Checker
+              </h4>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+              {/* Inputs */}
+              <div className="md:col-span-5 space-y-4">
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold text-gray-400 uppercase">Select Active Policy</label>
+                  <select 
+                    value={policyInput}
+                    onChange={(e) => setPolicyInput(e.target.value)}
+                    className="w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-3 py-2 text-xs outline-none focus:border-blue-500"
+                  >
+                    <option>EU Carbon Tax (CBAM)</option>
+                    <option>US Critical Tech Defense Accord</option>
+                    <option>India-UAE CEPA Tariff Schedules</option>
+                  </select>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold text-gray-400 uppercase">Enter 2-Digit HS Product Code</label>
+                  <input 
+                    type="text" 
+                    placeholder="e.g. 72 (Iron & Steel), 85 (Electrical Machinery)" 
+                    value={hsCodeInput}
+                    onChange={(e) => setHsCodeInput(e.target.value)}
+                    className="w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-3 py-2 text-xs outline-none focus:border-blue-500"
+                  />
+                </div>
+
+                <button 
+                  onClick={() => {
+                    const hs = parseInt(hsCodeInput);
+                    if (isNaN(hs) || hsCodeInput.trim() === "") {
+                      setExposureResult({
+                        risk: "LOW RISK",
+                        score: "15%",
+                        rate: "0.0%",
+                        text: "Product code not matching high-risk sectors under current policy revisions. Standard tariffs apply."
+                      });
+                      return;
+                    }
+                    if (policyInput.includes("EU Carbon")) {
+                      if (hs === 72 || hs === 73 || hs === 76) {
+                        setExposureResult({
+                          risk: "SEVERE EXPOSURE",
+                          score: "92%",
+                          rate: "28.5% Import Tax",
+                          text: "CBAM high-emission regulation applies. Immediate carbon emission reporting and audit sheets required to prevent supply penalties."
+                        });
+                      } else {
+                        setExposureResult({
+                          risk: "MODERATE EXPOSURE",
+                          score: "45%",
+                          rate: "4.2% Tariff Adjust",
+                          text: "Secondary packaging emission standard applies. Ensure supplier compliance logs are updated annually."
+                        });
+                      }
+                    } else if (policyInput.includes("US Critical")) {
+                      if (hs === 85 || hs === 84) {
+                        setExposureResult({
+                          risk: "SEVERE EXPOSURE",
+                          score: "88%",
+                          rate: "Tech Sourcing Restrictions",
+                          text: "iCET critical aerospace avionics and semiconductor rules apply. Require export control certification keys before cargo load."
+                        });
+                      } else {
+                        setExposureResult({
+                          risk: "LOW RISK",
+                          score: "10%",
+                          rate: "Standard Tariff",
+                          text: "Non-defense commodity category. No active export restriction flags detected."
+                        });
+                      }
+                    } else {
+                      if (hs === 71 || hs === 39) {
+                        setExposureResult({
+                          risk: "DUTY CONCESSION (SAVINGS)",
+                          score: "95%",
+                          rate: "0% Duty Rate (CEPA)",
+                          text: "CEPA Bilateral Accord applies. Net zero duty rate active for registered importers utilizing Form-A certificate."
+                        });
+                      } else {
+                        setExposureResult({
+                          risk: "LOW RISK",
+                          score: "20%",
+                          rate: "5.0% Standard Duty",
+                          text: "Outside preferential concession schedules. standard custom duties apply."
+                        });
+                      }
+                    }
+                  }}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-2 rounded-lg transition-colors uppercase tracking-wider"
+                >
+                  Assess Compliance Exposure
+                </button>
+              </div>
+
+              {/* Results */}
+              <div className="md:col-span-7 bg-gray-55 dark:bg-gray-900/50 rounded-xl p-5 border border-gray-100 dark:border-gray-800 flex flex-col justify-center space-y-4 min-h-[180px]">
+                {exposureResult ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className={`text-[9px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider ${
+                        exposureResult.risk.includes("SEVERE") 
+                          ? "bg-red-100 dark:bg-red-950/40 text-red-650 dark:text-red-400"
+                          : exposureResult.risk.includes("MODERATE")
+                          ? "bg-amber-100 dark:bg-amber-955/40 text-amber-600 dark:text-amber-400"
+                          : "bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400"
+                      }`}>
+                        {exposureResult.risk}
+                      </span>
+                      <span className="text-[10px] text-gray-400 font-semibold">Risk Score: <strong className="text-gray-950 dark:text-white">{exposureResult.score}</strong></span>
+                    </div>
+
+                    <div className="space-y-1">
+                      <span className="text-[9px] text-gray-400 block uppercase">Policy Tariff Delta</span>
+                      <div className="text-sm font-bold text-gray-955 dark:text-white font-mono">{exposureResult.rate}</div>
+                    </div>
+
+                    <p className="text-[10px] text-gray-500 leading-relaxed font-normal">
+                      {exposureResult.text}
+                    </p>
+
+                    <div className="pt-2 border-t border-gray-150 dark:border-gray-855 flex items-center justify-between">
+                      <span className="text-[8px] text-slate-400 uppercase">Checked via IGE Policy AI Engine</span>
+                      {downloadingPacketId === "packet-dl" ? (
+                        <span className="text-[9px] text-emerald-500 font-bold flex items-center gap-1">
+                          <RefreshCw className="h-3 w-3 animate-spin" /> Downloading Packet...
+                        </span>
+                      ) : (
+                        <button 
+                          onClick={() => {
+                            setDownloadingPacketId("packet-dl");
+                            setTimeout(() => {
+                              setDownloadingPacketId(null);
+                              alert("Accord Compliance Packet compiled successfully. PDF download started.");
+                            }, 2000);
+                          }}
+                          className="text-[9px] font-bold text-blue-500 hover:underline"
+                        >
+                          Download Accord Compliance Packet →
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-6 space-y-2">
+                    <ShieldAlert className="h-8 w-8 text-gray-300 mx-auto" />
+                    <h5 className="text-xs font-bold text-gray-450 uppercase">No Active Assessment</h5>
+                    <p className="text-[10px] text-gray-400 max-w-xs mx-auto leading-relaxed">
+                      Enter your product's 2-digit HS Code above to analyze legislative compliance risk and tariff deltas under active policies.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </section>

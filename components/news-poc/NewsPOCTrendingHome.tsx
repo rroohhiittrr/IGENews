@@ -13,6 +13,8 @@ export default function NewsPOCTrendingHome() {
   const [sentimentVal, setSentimentVal] = useState(60);
   const [aiPlus, setAiPlus] = useState(true);
   const [activeRange, setActiveRange] = useState<"now" | "today" | "week" | "all">("now");
+  const [trackedTrends, setTrackedTrends] = useState<string[]>([]);
+  const [toastMsg, setToastMsg] = useState<string | null>(null);
 
   const [chatLikes, setChatLikes] = useState({
     marcus1: 234,
@@ -107,7 +109,7 @@ export default function NewsPOCTrendingHome() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           
           {/* Hero Top Trend card */}
-          <div className="lg:col-span-8 relative rounded-3xl overflow-hidden bg-slate-950 text-white min-h-[360px] lg:min-h-[460px] flex flex-col justify-end p-8 border border-slate-900 shadow-sm group">
+          <div className="lg:col-span-12 relative rounded-3xl overflow-hidden bg-slate-950 text-white min-h-[360px] lg:min-h-[460px] flex flex-col justify-end p-8 border border-slate-900 shadow-sm group">
             <div 
               className="absolute inset-0 z-0 bg-cover bg-center group-hover:scale-102 transition-transform duration-350"
               style={{ backgroundImage: `url('https://images.unsplash.com/photo-1558441719-ff34b0524a24?w=800&auto=format&fit=crop&q=80')` }}
@@ -125,65 +127,55 @@ export default function NewsPOCTrendingHome() {
                 Rising demand EV batteries and strong export orders drive significant across regional market.
               </p>
               <div className="flex gap-3 pt-2">
-                <Link href="/en/news-poc/article/sec-1" className="bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold text-xs px-5 py-2.5 rounded transition-all">
+                <Link href="/en/news-poc/article/sec-1" className="bg-amber-50 hover:bg-amber-600 text-gray-955 font-bold text-xs px-5 py-2.5 rounded transition-all">
                   View Analysis
                 </Link>
-                <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-5 py-2.5 rounded transition-all">
-                  Track Trend
+                <button 
+                  onClick={() => {
+                    const isTracking = trackedTrends.includes("ev-battery");
+                    setTrackedTrends(prev => isTracking ? prev.filter(t => t !== "ev-battery") : [...prev, "ev-battery"]);
+                    setToastMsg(isTracking ? "Removed trend from watch list" : "Now tracking EV Battery Export trends ✓");
+                    setTimeout(() => setToastMsg(null), 2500);
+                  }}
+                  className={`font-bold text-xs px-5 py-2.5 rounded transition-all ${
+                    trackedTrends.includes("ev-battery")
+                      ? "bg-emerald-600 hover:bg-emerald-700 text-white"
+                      : "bg-blue-650 hover:bg-blue-700 text-white"
+                  }`}
+                >
+                  {trackedTrends.includes("ev-battery") ? "Tracking ✓" : "Track Trend"}
                 </button>
               </div>
             </div>
           </div>
-
-          {/* Right column: Live Discussion */}
-          <div className="lg:col-span-4 bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-3xl overflow-hidden shadow-xs flex flex-col justify-between min-h-[460px]">
-            <div className="bg-orange-500 text-white p-4 font-bold text-xs tracking-wider flex items-center justify-between">
-              <span>● LIVE DISCUSSION</span>
-              <MessageSquare className="h-4 w-4" />
-            </div>
-
-            {/* Comments list */}
-            <div className="p-4 space-y-4 flex-1 overflow-y-auto text-[11px] max-h-[320px]">
-              {[
-                { key: "marcus1", name: "Marcus Chen", role: "Supply Chain Director", text: "The bilateral map feature saved us 3 weeks of research on ASEAN corridors. Game-changer for supply chain optimization!", expert: true },
-                { key: "priya1", name: "Priya Sharma", role: "Trade Policy Analyst", text: "AI Plus predictions have been 87% accurate for our quarterly forecasts. The sentiment analysis is phenomenal!", analyst: true, cta: true },
-                { key: "marcus2", name: "Marcus Chen", role: "Supply Chain Director", text: "The bilateral map feature saved us 3 weeks of research on ASEAN corridors. Game-changer for supply chain optimization!", expert: true }
-              ].map((comment, idx) => (
-                <div key={idx} className="border-b border-gray-100 dark:border-gray-850 pb-3 last:border-0 last:pb-0">
-                  <div className="flex items-center justify-between mb-1">
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-bold text-gray-950 dark:text-white block">{comment.name}</span>
-                      {comment.expert && <span className="bg-blue-500 text-white text-[7px] font-bold px-1 rounded">✓ Expert</span>}
-                      {comment.analyst && <span className="bg-emerald-500 text-white text-[7px] font-bold px-1 rounded">✓ Analyst</span>}
-                    </div>
-                    <span className="text-[9px] text-gray-400 font-semibold">2 min ago</span>
-                  </div>
-                  <p className="text-gray-655 dark:text-gray-400 font-normal leading-relaxed">{comment.text}</p>
-                  
-                  <div className="flex items-center justify-between mt-2 pt-1 border-t border-gray-50 dark:border-gray-850">
-                    <button 
-                      onClick={() => incrementLike(comment.key as keyof typeof chatLikes)}
-                      className="flex items-center gap-1 text-[10px] text-gray-400 hover:text-red-500"
-                    >
-                      <ThumbsUp className="h-3 w-3" /> {chatLikes[comment.key as keyof typeof chatLikes]}
-                    </button>
-                    <button className="text-[10px] text-gray-450 hover:underline">Reply</button>
-                    {comment.cta && (
-                      <button className="bg-gray-955 hover:bg-gray-855 text-white font-bold text-[8px] px-2 py-0.5 rounded">
-                        Ready to help!
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <button className="m-4 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-2.5 rounded-lg transition-colors">
-              Join Discussion
-            </button>
-          </div>
         </div>
       </section>
+
+      {/* AI Plus Executive Intelligence Summary */}
+      {aiPlus && (
+        <section className="mx-auto max-w-7xl px-4 pt-6 lg:px-6">
+          <div className="bg-gradient-to-r from-blue-900/10 via-indigo-900/5 to-slate-900/10 dark:from-blue-950/40 dark:to-slate-950/20 border border-blue-200/40 dark:border-blue-900/40 rounded-2xl p-5 shadow-xs space-y-3">
+            <div className="flex items-center gap-1.5 text-blue-650 dark:text-blue-400 font-bold text-xs">
+              <Sparkles className="h-4 w-4 text-blue-500 animate-pulse" />
+              <span>AI Plus: Executive Briefing & Forecast Summary</span>
+            </div>
+            <ul className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-normal text-gray-700 dark:text-gray-300">
+              <li className="space-y-1 bg-white dark:bg-[#0f172a]/40 border border-gray-150 dark:border-gray-850 p-3 rounded-xl">
+                <span className="font-semibold text-gray-900 dark:text-white block uppercase text-[9px] text-blue-500">Key Driver</span>
+                PMI manufacturing expansion and sub-component localization laws are forcing battery suppliers to regionalize APAC stockpiles.
+              </li>
+              <li className="space-y-1 bg-white dark:bg-[#0f172a]/40 border border-gray-150 dark:border-gray-850 p-3 rounded-xl">
+                <span className="font-semibold text-gray-900 dark:text-white block uppercase text-[9px] text-emerald-500">Tariff Forecast</span>
+                We project a 4.5% tariff reduction on raw copper-foil subcomponents between Vietnam and India by Q3 2026.
+              </li>
+              <li className="space-y-1 bg-white dark:bg-[#0f172a]/40 border border-gray-150 dark:border-gray-855 p-3 rounded-xl">
+                <span className="font-semibold text-gray-900 dark:text-white block uppercase text-[9px] text-amber-500">Supply Chain Risk</span>
+                Lithium carbonate raw supply contracts have stabilized. However, local storage cells face a moderate 12% warehousing premium.
+              </li>
+            </ul>
+          </div>
+        </section>
+      )}
 
       {/* Pill Time Filters */}
       <section className="mx-auto max-w-7xl px-4 pt-8 lg:px-6">
@@ -538,6 +530,13 @@ export default function NewsPOCTrendingHome() {
           </div>
         </div>
       </section>
+
+      {/* Toast Notification */}
+      {toastMsg && (
+        <div className="fixed bottom-4 right-4 z-50 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-4 py-2.5 rounded-lg shadow-lg text-xs font-bold transition-all">
+          {toastMsg}
+        </div>
+      )}
 
     </div>
   );
