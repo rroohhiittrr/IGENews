@@ -37,8 +37,7 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
         description: "News feed filtered by sectors.",
         subSubItems: [
           { label: "My Sector", slug: "my", description: "Personalized news from your selected sectors." },
-          { label: "All Sector", slug: "all", description: "Read sample news from all 50 sectors." },
-          { label: "Sector Intelligence", slug: "intelligence", description: "Deep sector analytical reports and AI forecasts." }
+          { label: "All Sector", slug: "all", description: "Read sample news from all 50 sectors." }
         ]
       },
       {
@@ -47,8 +46,7 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
         description: "News feed filtered by industry tags.",
         subSubItems: [
           { label: "My Industry", slug: "my", description: "Personalized feed for your selected industry segments." },
-          { label: "All Industry", slug: "all", description: "Read sample news from 1,300+ industries." },
-          { label: "Industry Intelligence", slug: "intelligence", description: "Deep industrial growth trends and bar charts." }
+          { label: "All Industry", slug: "all", description: "Read sample news from 1,300+ industries." }
         ]
       },
       {
@@ -57,8 +55,7 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
         description: "Bilateral country news stream.",
         subSubItems: [
           { label: "My Country", slug: "my", description: "News affecting your selected countries." },
-          { label: "All Country", slug: "all", description: "Bilateral news for 195 countries." },
-          { label: "Country Intelligence", slug: "intelligence", description: "Bilateral trade data and investment signals." }
+          { label: "All Country", slug: "all", description: "Bilateral news for 195 countries." }
         ]
       },
       {
@@ -67,18 +64,7 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
         description: "Executive intelligence feed.",
         subSubItems: [
           { label: "My Leader", slug: "my", description: "Activity updates from your followed leaders." },
-          { label: "All Leader", slug: "all", description: "Feed showing news of all 150 leaders." },
-          { label: "Leader Intelligence", slug: "intelligence", description: "AI-powered leadership trends and market movements." }
-        ]
-      },
-      {
-        label: "Reader Feed",
-        slug: "reader",
-        description: "Feed segmented by reader profiles.",
-        subSubItems: [
-          { label: "My Reader", slug: "my", description: "Personalized stream customized to your reader type." },
-          { label: "All Reader", slug: "all", description: "Sample feeds across 600 reader types." },
-          { label: "Reader Intelligence", slug: "intelligence", description: "Audience analytics and intelligence." }
+          { label: "All Leader", slug: "all", description: "Feed showing news of all 150 leaders." }
         ]
       }
     ]
@@ -255,6 +241,12 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
           { label: "By Sector", slug: "sector", description: "Top leaders categorized by sector." },
           { label: "All Sector", slug: "all", description: "Full database of top market leaders." }
         ]
+      },
+      {
+        label: "Leader Intelligence",
+        slug: "intelligence",
+        description: "C-suite strategic moves, executive quotes, leadership trends, and predictive signals.",
+        subSubItems: []
       }
     ]
   },
@@ -302,18 +294,30 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
         label: "All Sector",
         slug: "all",
         description: "Comprehensive feed covering all 50 sectors.",
-        subSubItems: []
+        subSubItems: [
+          { label: "50 Sector Directory", slug: "directory", description: "Master index of all 50 sectors." },
+          { label: "1,350+ Industries", slug: "industries", description: "Granular sub-industry taxonomy." }
+        ]
       },
       {
         label: "Sector Engagement",
         slug: "engagement",
         description: "Crowd popularity, sector discussions, and active polls.",
-        subSubItems: []
+        subSubItems: [
+          { label: "Sector Polls", slug: "polls", description: "Live sentiment & export outlook polls." },
+          { label: "Discussion Hub", slug: "discussions", description: "Industry peer comments & Q&A." }
+        ]
       },
       {
         label: "Sector Intelligence",
         slug: "intelligence",
         description: "Merged sector reports, KPIs, and predictive charts.",
+        subSubItems: []
+      },
+      {
+        label: "Industry Intelligence",
+        slug: "industry",
+        description: "1,350+ industry growth trends, production metrics, and AI recommendations.",
         subSubItems: []
       }
     ]
@@ -330,13 +334,19 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
         label: "My Country",
         slug: "my",
         description: "Bilateral trade details for your chosen countries.",
-        subSubItems: []
+        subSubItems: [
+          { label: "My Country Feed", slug: "feed", description: "Personalized stream for selected countries." },
+          { label: "Trade Leads & Metrics", slug: "metrics", description: "Bilateral economic indicators." }
+        ]
       },
       {
         label: "All Country",
         slug: "all",
         description: "Full directory of 195 countries with bilateral trade graphs.",
-        subSubItems: []
+        subSubItems: [
+          { label: "195 Countries Directory", slug: "directory", description: "Full global country index." },
+          { label: "Bilateral Corridor Matrix", slug: "matrix", description: "Compare any two nations side-by-side." }
+        ]
       },
       {
         label: "Country Intelligence",
@@ -398,7 +408,7 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
     label: "My News",
     slug: "my-news",
     icon: "👤",
-    purpose: "Personal workspace for trade news bookmarks, contributions, and analytics.",
+    purpose: "Personal workspace for trade news bookmarks, reader intelligence, and analytics.",
     tier: "Verified/Pro",
     subItems: [
       {
@@ -418,9 +428,9 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
         ]
       },
       {
-        label: "My Contribution",
-        slug: "contribution",
-        description: "Review your submitted press releases and article bookmarks.",
+        label: "Reader Intelligence",
+        slug: "intelligence",
+        description: "Audience analytics, reading habits & content intelligence.",
         subSubItems: []
       }
     ]

@@ -234,7 +234,7 @@ function generateCompanyDetail(card: CompanyCard): CompanyDetail {
 const NEWS_CATEGORIES = ['Product Launch', 'Deal Announcement', 'Financial Update', 'Milestone', 'Partnership', 'Investment', 'ESG', 'Announcement'] as const;
 
 function generateNewsCard(company: CompanyCard, override: Partial<NewsCard> = {}): NewsCard {
-  const category = seededChoice(NEWS_CATEGORIES as any);
+  const category = seededChoice(NEWS_CATEGORIES as unknown as string[]);
   const daysAgo = Math.floor(seededRandom() * 30);
   const publishedAt = new Date(Date.now() - daysAgo * 86400000).toISOString();
   

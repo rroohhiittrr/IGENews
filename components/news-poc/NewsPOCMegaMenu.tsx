@@ -93,19 +93,13 @@ export default function NewsPOCMegaMenu() {
                           <div key={sub.slug} className="space-y-2">
                             {/* Sub-menu title */}
                             <div>
-                              {hasSubSub ? (
-                                <span className="block text-[11px] font-bold uppercase tracking-wider text-gray-505 dark:text-gray-400">
-                                  {sub.label}
-                                </span>
-                              ) : (
-                                <Link
-                                  href={`/news-poc/${item.slug}/${sub.slug}`}
-                                  onClick={() => setOpenIndex(null)}
-                                  className="block text-[11px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 hover:underline"
-                                >
-                                  {sub.label}
-                                </Link>
-                              )}
+                              <Link
+                                href={`/news-poc/${item.slug}/${sub.slug}`}
+                                onClick={() => setOpenIndex(null)}
+                                className="block text-[11px] font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:underline"
+                              >
+                                {sub.label}
+                              </Link>
                               <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5 leading-snug">
                                 {sub.description}
                               </p>

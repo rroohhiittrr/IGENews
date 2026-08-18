@@ -1,7 +1,17 @@
 "use client";
 
+import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import RegisteredLeaderNewsView from "./RegisteredLeaderNewsView";
+import RegisteredLeaderPagesView from "./RegisteredLeaderPagesView";
+import RegisteredLeaderBySectorView from "./RegisteredLeaderBySectorView";
+import RegisteredLeaderAllSectorsView from "./RegisteredLeaderAllSectorsView";
+import VerifiedLeaderNewsView from "./VerifiedLeaderNewsView";
+import VerifiedLeaderPagesView from "./VerifiedLeaderPagesView";
+import TopLeaderNewsView from "./TopLeaderNewsView";
+import TopLeaderPagesView from "./TopLeaderPagesView";
+import NewsPOCLeaderIntelligenceView from "./NewsPOCLeaderIntelligenceView";
 import type { ComponentType, ReactNode } from "react";
 import {
   ArrowLeft,
@@ -37,8 +47,8 @@ import {
   Zap
 } from "lucide-react";
 
-type Tier = "registered" | "verified" | "top";
-type View = "news" | "pages" | "sector" | "all";
+type Tier = "registered" | "verified" | "top" | "intelligence";
+type View = "news" | "pages" | "sector" | "all" | "signals" | "influence" | "briefs";
 type IconType = ComponentType<{ className?: string }>;
 
 interface Props {
@@ -117,14 +127,35 @@ const TIER_CONFIG: Record<Tier, {
     searchRank: "Homepage priority",
     analytics: "Advanced + CRM",
     leadGen: "CRM integrated"
+  },
+  intelligence: {
+    label: "Leader Intelligence",
+    sublabel: "C-Suite Strategic Moves & Predictive Signals",
+    purpose: "Track market-moving executive statements, AI leadership influence ratings, and bilateral CEO board decisions.",
+    icon: Sparkles,
+    gradFrom: "from-purple-600",
+    gradTo: "to-indigo-800",
+    badgeBg: "bg-purple-600",
+    textAccent: "text-purple-600",
+    softBg: "bg-purple-50 dark:bg-purple-950/20",
+    softBorder: "border-purple-200 dark:border-purple-900",
+    button: "bg-purple-600 hover:bg-purple-700 text-white",
+    badgeLabel: "Leader Intelligence",
+    newsLimit: "Full C-Suite access",
+    searchRank: "C-Suite Signal Radar",
+    analytics: "Predictive V4 AI models",
+    leadGen: "Board Advisory Inquiry"
   }
 };
 
-const VIEW_LABELS: Record<View, string> = {
+const VIEW_LABELS: Record<string, string> = {
   news: "News",
   pages: "Pages",
   sector: "By Sector",
-  all: "All Sectors"
+  all: "All Sectors",
+  signals: "Signals",
+  influence: "Influence",
+  briefs: "Briefs"
 };
 
 const LEADERS: Record<Tier, {
@@ -186,6 +217,21 @@ const LEADERS: Record<Tier, {
     achievements: ["Scaled AI-first enterprise strategy", "Expanded global cloud leadership", "Led high-impact executive transformation"],
     coverage: ["Sponsored leadership story", "Board strategy report", "Global executive news feature"],
     interviews: ["Executive roundtable", "Enterprise media interview"]
+  },
+  intelligence: {
+    name: "N. Chandrasekaran",
+    role: "Chairman",
+    company: "Tata Sons",
+    sector: "Conglomerate & Tech",
+    country: "India & Global",
+    photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=320&auto=format&fit=crop&q=70",
+    initials: "NC",
+    influence: "98.2",
+    followers: "240K",
+    about: "Executive leadership intelligence profile with real-time C-suite statement tracking, predictive FDI signals, and bilateral AI alliance benchmarks.",
+    achievements: ["Spearheaded $14B Tata-NVIDIA Sovereign AI supercluster", "Led greenfield semiconductor fab in Gujarat", "Accelerated global EV supply chain reshoring"],
+    coverage: ["Sovereign AI Infrastructure Keynote", "Bilateral Trade Accord Statement", "Semiconductor Fab Expansion Report"],
+    interviews: ["Global C-Suite Policy Dialogue", "CEO Strategy Roundtable"]
   }
 };
 
@@ -198,46 +244,141 @@ const NEWS_ITEMS = [
 ];
 
 const TRENDING_ITEMS = [
-  "Board changes in AI infrastructure companies",
-  "Women leaders driving biotech growth",
-  "Executive movements in EV supply chains",
-  "Leadership awards season nominations",
-  "M&A signals from enterprise technology firms"
+  { title: "Cross-border battery JV signed by automotive leadership panel", score: "98%", category: "JV & Deals" },
+  { title: "AI infrastructure mandate approved by leading IT enterprise council", score: "95%", category: "Policy & AI" },
+  { title: "Pharma export corridor expanded with new bilateral healthcare pact", score: "92%", category: "Trade" }
 ];
 
-const SECTORS = [
-  { name: "Technology and AI", leaders: "12,400", growth: "+31%", top: "Satya Nadella", signal: "AI governance and cloud capex" },
-  { name: "Healthcare and Pharma", leaders: "8,850", growth: "+18%", top: "Kiran Mazumdar-Shaw", signal: "Biologics and affordable care" },
-  { name: "Finance and FinTech", leaders: "9,620", growth: "+22%", top: "Nandan Nilekani", signal: "Digital payment infrastructure" },
-  { name: "Energy and Climate", leaders: "6,410", growth: "+27%", top: "Sumant Sinha", signal: "Green hydrogen and grid storage" },
-  { name: "Automotive and EV", leaders: "5,780", growth: "+24%", top: "Bhavish Aggarwal", signal: "Battery supply chain localization" },
-  { name: "Logistics and Trade", leaders: "4,950", growth: "+16%", top: "Suresh Narayanan", signal: "Cross-border supply resilience" },
-  { name: "Manufacturing", leaders: "7,120", growth: "+14%", top: "N Chandrasekaran", signal: "Factory digitization" },
-  { name: "Agriculture and Food", leaders: "3,880", growth: "+11%", top: "Sanjiv Puri", signal: "Agri exports and food security" }
+const SECTOR_LEADER_CARDS = [
+  { name: "Sunil Varma", role: "MD, AeroGrid Dynamics", sector: "Defence and Aerospace", score: "91.8", signal: "Capex expansion" },
+  { name: "Pooja Hegde", role: "CEO, NexaVolt Energy", sector: "Renewable Energy", score: "93.4", signal: "Green hydrogen lead" },
+  { name: "Devendra Rao", role: "Founder, AgriSmart India", sector: "Agriculture and Food", score: "88.7", signal: "Precision drone rollout" }
 ];
 
 const DIRECTORY_ROWS = [
-  { sector: "Technology and AI", leaders: "12,400", verified: "3,120", top: "420", country: "Global", heat: "Very High" },
-  { sector: "Healthcare and Pharma", leaders: "8,850", verified: "1,880", top: "230", country: "India, US, EU", heat: "High" },
-  { sector: "Finance and FinTech", leaders: "9,620", verified: "2,240", top: "310", country: "Global", heat: "High" },
-  { sector: "Energy and Climate", leaders: "6,410", verified: "1,460", top: "260", country: "APAC, EU", heat: "Very High" },
-  { sector: "Automotive and EV", leaders: "5,780", verified: "1,020", top: "190", country: "India, China, EU", heat: "Rising" },
-  { sector: "Logistics and Trade", leaders: "4,950", verified: "880", top: "150", country: "Global", heat: "Rising" },
-  { sector: "Manufacturing", leaders: "7,120", verified: "1,340", top: "210", country: "India, ASEAN", heat: "Stable" }
+  { sector: "AI & Cyber Security", leaders: "184 Leaders", verified: "42 Pro", top: "12 Top", country: "Global", heat: "Very High" },
+  { sector: "Automotive & EV", leaders: "210 Leaders", verified: "56 Pro", top: "18 Top", country: "India & SEA", heat: "High" },
+  { sector: "Healthcare & Biotech", leaders: "165 Leaders", verified: "38 Pro", top: "14 Top", country: "India, US, EU", heat: "High" },
+  { sector: "Energy & Sustainability", leaders: "195 Leaders", verified: "49 Pro", top: "16 Top", country: "Global", heat: "Very High" },
+  { sector: "FinTech & Payments", leaders: "230 Leaders", verified: "62 Pro", top: "20 Top", country: "India & ME", heat: "High" }
 ];
 
-const TOP_LEADERS = [
-  { rank: 1, name: "Satya Nadella", company: "Microsoft", score: "97.5", sector: "Technology" },
-  { rank: 2, name: "Kiran Mazumdar-Shaw", company: "Biocon", score: "95.1", sector: "Healthcare" },
-  { rank: 3, name: "N Chandrasekaran", company: "Tata Group", score: "94.8", sector: "Manufacturing" },
-  { rank: 4, name: "Nandan Nilekani", company: "Infosys", score: "93.9", sector: "FinTech" },
-  { rank: 5, name: "Falguni Nayar", company: "Nykaa", score: "92.7", sector: "Retail" }
+const AI_LEADERSHIP_PREVIEWS: Record<string, { summary: string; focus: string; priorities: string; developments: string; outlook: string }> = {
+  "Jensen Huang": {
+    summary: "Recent activity outlines an aggressive strategy to establish sovereign cloud and compute networks globally, bypassing conventional centralized datacentres.",
+    focus: "Sovereign compute, customized GPU architecture, regional fab integrations.",
+    priorities: "Acquiring strategic land and energy pipelines, signing regional fabricator commitments.",
+    developments: "Signed hardware allocation pacts with major Western and South Asian regional providers.",
+    outlook: "Expect Nvidia to secure local market shares through bespoke national infrastructure deployments."
+  },
+  "Nandan Nilekani": {
+    summary: "Advocating for unified open-source standards to allow digital public infrastructure (DPI) to compete against monopolistic corporate models.",
+    focus: "Open-source AI rails, digital identity standardization, national computing nodes.",
+    priorities: "Consolidating dataset consensus standards across government and business stakeholders.",
+    developments: "Presented strategic blueprints at global forums for national tech interoperability.",
+    outlook: "Likely to shape regional digital compliance and public database sharing models."
+  },
+  "Shaktikanta Das": {
+    summary: "Focusing heavily on bilateral UPI corridors and central bank digital currencies (CBDC) to optimize treasury flows and direct trade settlements.",
+    focus: "Direct currency clearing networks, UPI SAARC terminals, sovereign debt settlement.",
+    priorities: "Minimizing US Dollar conversion dependencies for South Asian imports.",
+    developments: "Established pilot clearing lines for bilateral energy trade with regional suppliers.",
+    outlook: "UPI is projected to displace legacy SWIFT routes for 40% of neighboring trade transactions by 2028."
+  }
+};
+
+const LEADER_INTELLIGENCE_KPIS = [
+  { label: "Top Strategic Alliance", val: "Tata-NVIDIA $14B", sub: "100k GPU Sovereign Supercluster", color: "text-amber-500", icon: Crown },
+  { label: "Tracked C-Suite Leaders", val: "1,840 Figures", sub: "CEOs, Ministers & Board Chairs", color: "text-purple-600", icon: Users },
+  { label: "Executive Forward Sentiment", val: "+28.4% Net Pos", sub: "Q3 Capex & Reshoring Guidance", color: "text-emerald-500", icon: TrendingUp },
+  { label: "Strategic Alerts Active", val: "14 C-Suite Alerts", sub: "Cross-Border M&A & Board Moves", color: "text-blue-500", icon: Bell }
 ];
 
-function isLocked(tier: Tier, required: Tier) {
-  const order: Record<Tier, number> = { registered: 0, verified: 1, top: 2 };
-  return order[tier] < order[required];
-}
+const EXECUTIVE_STATEMENTS_DATA = [
+  {
+    name: "N. Chandrasekaran",
+    role: "Chairman, Tata Sons",
+    company: "Tata Group",
+    badge: "Sovereign AI Signal",
+    quote: "Building indigenous AI computing infrastructure and semiconductor fabrication in India is not merely an enterprise opportunity; it is foundational to our sovereign technological resilience over the next three decades.",
+    context: "India Global AI Summit Keynote",
+    date: "4 hours ago",
+    score: "98 Influence",
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80"
+  },
+  {
+    name: "Jensen Huang",
+    role: "Founder & CEO, NVIDIA",
+    company: "NVIDIA Corp",
+    badge: "Global Tech Signal",
+    quote: "India has the data, the scale of computer scientists, and the manufacturing momentum. There is no doubt India will produce its own sovereign AI models powering global enterprise supply chains.",
+    context: "Bilateral Technology Partnership Forum",
+    date: "8 hours ago",
+    score: "97 Influence",
+    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80"
+  },
+  {
+    name: "Jonathan Reynolds",
+    role: "UK Secretary of State for Business & Trade",
+    company: "Department for Business & Trade, UK",
+    badge: "Policy Statement",
+    quote: "India's emergence as an advanced manufacturing and renewable energy export hub represents the defining bilateral partnership opportunity for British industry over the next decade.",
+    context: "UK-India Trade Agreement Round 14",
+    date: "14 hours ago",
+    score: "95 Influence",
+    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&auto=format&fit=crop&q=80"
+  },
+  {
+    name: "Elena Rostova",
+    role: "Global Head of Supply Chain, Pacific Logistics Group",
+    company: "Pacific Logistics",
+    badge: "Logistics Signal",
+    quote: "We are reallocating 30% of our multimodal corridor budget into the India-Middle East-Europe Economic Corridor (IMEC), routing directly through Mundra and Jebel Ali.",
+    context: "Global Maritime & Port Summit",
+    date: "1 day ago",
+    score: "92 Influence",
+    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80"
+  }
+];
+
+const PREDICTIVE_LEADER_SIGNALS = [
+  {
+    name: "C-Suite Semiconductor Capex Commitment",
+    sig: "SIGNAL: HIGH CONVICTION (94%)",
+    desc: "Over 40 Tier-1 semiconductor and OSAT CEOs have greenlit secondary facility budgets in Dholera and Sanand for Q4 2026 groundbreakings.",
+    w: "94%",
+    color: "bg-purple-600"
+  },
+  {
+    name: "Cross-Border Sovereign Wealth Direct Co-Investment",
+    sig: "SIGNAL: ACCELERATING (89%)",
+    desc: "Gulf and Singaporean sovereign wealth funds shifting direct equity allocations toward Indian renewable energy port terminals.",
+    w: "89%",
+    color: "bg-emerald-500"
+  },
+  {
+    name: "Executive Multimodal Corridor Routing Pivots",
+    sig: "SIGNAL: STRATEGIC SHIFT (84%)",
+    desc: "Fortune 500 logistics leaders routing high-value container volumes via IMEC and INSTC corridors ahead of carbon tax deadlines.",
+    w: "84%",
+    color: "bg-amber-500"
+  }
+];
+
+const LEADER_INFLUENCE_SCORECARDS = [
+  { name: "N. Chandrasekaran", title: "Chairman, Tata Sons", sector: "Conglomerate & Tech", score: 98, trend: "▲ +4", signal: "Sovereign AI Lead", badge: "Global Tier-1" },
+  { name: "Jensen Huang", title: "CEO, NVIDIA", sector: "AI & Semiconductors", score: 97, trend: "▲ +6", signal: "Enterprise GPU Clusters", badge: "Global Titan" },
+  { name: "Mukesh Ambani", title: "Chairman, Reliance Industries", sector: "Energy & Telecom", score: 96, trend: "▲ +2", signal: "Green Hydrogen Hub", badge: "Global Tier-1" },
+  { name: "Dr. Lisa Su", title: "CEO, AMD", sector: "Semiconductors", score: 94, trend: "▲ +5", signal: "R&D Campus Scaling", badge: "Tech Leader" },
+  { name: "Sheikh Tahnoon bin Zayed", title: "Chairman, ADQ / G42", sector: "Sovereign Capital & AI", score: 95, trend: "▲ +3", signal: "Indo-Gulf Capital Axis", badge: "Capital Leader" }
+];
+
+const LEADER_RESEARCH_BRIEFS = [
+  { id: "lead-rep-1", title: "2026 Global C-Suite Outlook: Supply Chain Reshoring to India & Southeast Asia", code: "BRIEF-CEO-01", price: "$299", pages: "92 pages", rating: "4.9 ★", downloads: 1820 },
+  { id: "lead-rep-2", title: "Bilateral Trade Ministers Strategy Brief: IMEC Multimodal Transit Accords", code: "BRIEF-POL-04", price: "$249", pages: "78 pages", rating: "4.9 ★", downloads: 1450 },
+  { id: "lead-rep-3", title: "Sovereign AI Compute Infrastructure: C-Suite Implementation Playbook", code: "BRIEF-AI-12", price: "$199", pages: "64 pages", rating: "4.8 ★", downloads: 1210 },
+  { id: "lead-rep-4", title: "Cross-Border Tariff Risk & Boardroom Governance Playbook", code: "BRIEF-GOV-08", price: "$149", pages: "54 pages", rating: "4.7 ★", downloads: 890 }
+];
 
 function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
@@ -256,63 +397,37 @@ function SectionTitle({ title, action }: { title: string; action?: ReactNode }) 
   );
 }
 
-function LockedNote({ label, tierName = "Verified" }: { label: string; tierName?: string }) {
-  return (
-    <div className="rounded-xl border border-purple-200 dark:border-purple-900 bg-purple-50 dark:bg-purple-950/20 p-3 flex items-center gap-2">
-      <Lock className="h-4 w-4 text-purple-600 shrink-0" />
-      <p className="text-[10px] font-semibold text-purple-700 dark:text-purple-300">{label}</p>
-      <Link href="/eoi" className="ml-auto shrink-0 text-[9px] font-bold text-purple-600 hover:underline">
-        Upgrade to {tierName}
-      </Link>
-    </div>
-  );
-}
-
 export default function NewsPOCLeaderNewsSubmenu({ tier, view }: Props) {
   const router = useRouter();
   const tc = TIER_CONFIG[tier];
   const TierIcon = tc.icon;
   const leader = LEADERS[tier];
   const tierPath = "/en/news-poc/leader-news";
+  const [aiPreviewLeader, setAiPreviewLeader] = useState("Jensen Huang");
 
   const SubMenuTabs = () => (
     <div className="mx-auto max-w-7xl px-4 lg:px-6">
       <div className="flex items-center gap-2 py-4 border-b border-gray-200 dark:border-gray-800">
         <button
-          onClick={() => router.back()}
+          onClick={() => router.push(tierPath)}
           className="p-2 rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-purple-300 transition-all mr-1"
           aria-label="Go back"
         >
           <ArrowLeft className="h-4 w-4" />
         </button>
-        <div className={`bg-gradient-to-r ${tc.gradFrom} ${tc.gradTo} text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 shrink-0`}>
+        <div className={`bg-gradient-to-r ${tc.gradFrom} ${tc.gradTo} text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 shrink-0 shadow-xs`}>
           <TierIcon className="h-3.5 w-3.5" />
           <span className="text-[10px] font-bold">{tc.label}</span>
         </div>
         <div className="flex gap-1 flex-wrap">
-          {(["news", "pages", "sector", "all"] as View[]).map((item) => (
+          {(["registered", "verified", "top", "intelligence"] as Tier[]).map((item) => (
             <button
               key={item}
-              onClick={() => router.push(`${tierPath}/${tier}/${item}`)}
+              onClick={() => router.push(item === "intelligence" ? `${tierPath}/intelligence` : `${tierPath}/${item}/news`)}
               className={`px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all ${
-                view === item
+                tier === item
                   ? "bg-purple-600 text-white shadow-xs"
                   : "bg-gray-100 dark:bg-gray-900 text-gray-500 hover:text-purple-600"
-              }`}
-            >
-              {VIEW_LABELS[item]}
-            </button>
-          ))}
-        </div>
-        <div className="ml-auto flex gap-1 bg-gray-100 dark:bg-gray-900 p-0.5 rounded-xl border border-gray-200 dark:border-gray-800">
-          {(["registered", "verified", "top"] as Tier[]).map((item) => (
-            <button
-              key={item}
-              onClick={() => router.push(`${tierPath}/${item}/${view}`)}
-              className={`px-2.5 py-1 rounded-lg text-[9px] font-bold transition-all ${
-                tier === item
-                  ? "bg-white dark:bg-gray-800 shadow-xs text-gray-900 dark:text-white"
-                  : "text-gray-400 hover:text-gray-600"
               }`}
             >
               {TIER_CONFIG[item].label}
@@ -324,7 +439,7 @@ export default function NewsPOCLeaderNewsSubmenu({ tier, view }: Props) {
   );
 
   const UpgradeCTA = ({ compact = false }: { compact?: boolean }) => {
-    if (tier === "top") return null;
+    if (tier === "top" || tier === "intelligence") return null;
     const nextTier: Tier = tier === "registered" ? "verified" : "top";
     const nextConfig = TIER_CONFIG[nextTier];
 
@@ -363,29 +478,62 @@ export default function NewsPOCLeaderNewsSubmenu({ tier, view }: Props) {
               <span className="text-[10px] font-bold uppercase tracking-widest text-white/70">{tc.sublabel}</span>
             </div>
             <h1 className="font-display text-2xl md:text-4xl font-bold tracking-tight">{title}</h1>
-            <p className="text-sm text-white/80 leading-relaxed font-normal">{description}</p>
+            <p className="text-sm text-white/85 leading-relaxed font-normal">{description}</p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 min-w-0 lg:min-w-[520px]">
-            {[
-              { label: "Access", value: tc.newsLimit },
-              { label: "Search", value: tc.searchRank },
-              { label: "Analytics", value: tc.analytics },
-              { label: "Leads", value: tc.leadGen }
-            ].map((item) => (
-              <div key={item.label} className="bg-white/10 border border-white/15 rounded-xl p-3">
-                <div className="text-[8px] font-bold uppercase text-white/50">{item.label}</div>
-                <div className="text-xs font-bold mt-1 leading-tight">{item.value}</div>
-              </div>
-            ))}
+          
+          <div className="flex gap-2">
+            <Link href="/eoi" className="bg-white text-gray-950 font-bold text-xs px-4 py-2.5 rounded-xl hover:bg-gray-100 transition-all">
+              Claim Profile
+            </Link>
+            <Link href="/eoi" className="bg-white/15 border border-white/20 text-white font-bold text-xs px-4 py-2.5 rounded-xl hover:bg-white/25 transition-all">
+              Executive Advisory
+            </Link>
           </div>
         </div>
       </div>
     </section>
   );
 
+  // VIEW: LEADER INTELLIGENCE (C-Suite Strategic Moves & Predictive Signals)
+  if (tier === "intelligence") {
+    return (
+      <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100">
+        <SubMenuTabs />
+        <NewsPOCLeaderIntelligenceView />
+      </div>
+    );
+  }
+
+  // VIEW 1: NEWS
   if (view === "news") {
-    const lockedAi = tier === "registered";
-    const visibleNews = tier === "registered" ? NEWS_ITEMS.slice(0, 3) : NEWS_ITEMS;
+    if (tier === "registered") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100">
+          <SubMenuTabs />
+          <RegisteredLeaderNewsView />
+        </div>
+      );
+    }
+
+    if (tier === "verified") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100">
+          <SubMenuTabs />
+          <VerifiedLeaderNewsView />
+        </div>
+      );
+    }
+
+    if (tier === "top") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100">
+          <SubMenuTabs />
+          <TopLeaderNewsView />
+        </div>
+      );
+    }
+
+    const visibleNews = NEWS_ITEMS;
 
     return (
       <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
@@ -438,97 +586,39 @@ export default function NewsPOCLeaderNewsSubmenu({ tier, view }: Props) {
               </Card>
 
               <div className="space-y-3">
-                <SectionTitle title="Latest Feed" action={<span className="text-[10px] font-bold text-gray-400">{tc.newsLimit}</span>} />
-                {visibleNews.map((item) => {
-                  const itemLocked = item.premium && tier === "registered";
-                  return (
-                    <Card key={item.title} className={`p-4 ${itemLocked ? "opacity-80" : ""}`}>
-                      <div className="flex items-start gap-3">
-                        <div className={`h-11 w-11 rounded-xl ${tc.badgeBg} flex items-center justify-center text-white font-bold shrink-0`}>
-                          {item.leader.split(" ").map((word) => word[0]).slice(0, 2).join("")}
-                        </div>
-                        <div className="flex-1 min-w-0 space-y-1">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-[8px] font-bold px-2 py-0.5 rounded bg-purple-50 dark:bg-purple-950/20 text-purple-600">{item.type}</span>
-                            <span className="text-[9px] text-gray-400">{item.sector}</span>
-                            {itemLocked && <Lock className="h-3 w-3 text-gray-400" />}
-                          </div>
-                          <h3 className="text-sm font-bold text-gray-950 dark:text-white leading-snug hover:text-purple-600">{item.title}</h3>
-                          <div className="flex items-center justify-between text-[9px] text-gray-400">
-                            <span>{item.leader} - {item.time}</span>
-                            <span className="flex items-center gap-1"><Eye className="h-3 w-3" />{item.views}</span>
-                          </div>
-                        </div>
+                <SectionTitle title="Latest Executive Updates" />
+                {visibleNews.map((item, idx) => (
+                  <Card key={idx} className="p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 hover:border-purple-400 transition-colors">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[8px] font-bold uppercase tracking-wider text-purple-600 bg-purple-50 dark:bg-purple-950 px-1.5 py-0.5 rounded">
+                          {item.type}
+                        </span>
+                        <span className="text-[10px] text-gray-400">{item.time}</span>
                       </div>
-                    </Card>
-                  );
-                })}
-                {tier === "registered" && <LockedNote label="Free access is limited. Unlimited leader news, saved articles, alerts, and premium reports unlock with Verified." />}
+                      <h3 className="text-xs font-bold text-gray-900 dark:text-white">{item.title}</h3>
+                      <p className="text-[11px] text-gray-500">Executive: <span className="font-semibold text-gray-700 dark:text-gray-300">{item.leader}</span> · Sector: {item.sector}</p>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <Link href="/en/news-poc/article/lea-1" className="text-[10px] font-bold text-purple-600 hover:underline">Read →</Link>
+                    </div>
+                  </Card>
+                ))}
               </div>
             </div>
 
-            <div className="col-span-12 lg:col-span-4 space-y-5">
-              <Card className="p-4 space-y-3">
-                <SectionTitle title="Trending News" />
-                <div className="space-y-2">
-                  {TRENDING_ITEMS.map((item, index) => (
-                    <div key={item} className="flex items-start gap-2 border-b border-gray-100 dark:border-gray-850 pb-2 last:border-0">
-                      <span className="font-display text-sm font-extrabold text-gray-200 dark:text-gray-800 w-5">{index + 1}</span>
-                      <p className="text-xs font-bold text-gray-800 dark:text-gray-200 leading-snug">{item}</p>
-                    </div>
-                  ))}
-                </div>
-              </Card>
-
-              <Card className="p-4 space-y-3">
-                <SectionTitle title="Publish CTA" />
-                {tier === "registered" ? (
-                  <LockedNote label="Publishing leadership stories is locked for registered leaders." />
-                ) : (
-                  <Link href="/eoi" className={`${tc.button} w-full rounded-lg py-2.5 text-xs font-bold flex items-center justify-center gap-1.5`}>
-                    <Plus className="h-3.5 w-3.5" /> Publish Leadership News
-                  </Link>
-                )}
-                <p className="text-[10px] text-gray-500">Editorial upsells include SME/ASME articles, sponsored leadership stories, and PR media coverage.</p>
-              </Card>
-
-              <Card className="p-4 space-y-3">
-                <SectionTitle title="AI Trend Insights" action={lockedAi ? <Lock className="h-3.5 w-3.5 text-gray-400" /> : <Sparkles className="h-3.5 w-3.5 text-amber-500" />} />
-                {lockedAi ? (
-                  <LockedNote label="AI summaries, predictive insights, and alerts unlock with Verified." />
-                ) : (
-                  <div className="grid grid-cols-2 gap-3">
-                    {[
-                      { label: "Sentiment", value: "74%", icon: Star },
-                      { label: "Exec Moves", value: "142", icon: TrendingUp },
-                      { label: "M&A Signals", value: "28", icon: Target },
-                      { label: "Alerts", value: "16", icon: Bell }
-                    ].map((stat) => {
-                      const StatIcon = stat.icon;
-                      return (
-                        <div key={stat.label} className="rounded-xl bg-gray-50 dark:bg-gray-900 p-3 text-center">
-                          <StatIcon className={`h-4 w-4 mx-auto ${tc.textAccent}`} />
-                          <div className="font-display text-lg font-bold text-gray-950 dark:text-white">{stat.value}</div>
-                          <div className="text-[8px] font-bold uppercase text-gray-400">{stat.label}</div>
-                        </div>
-                      );
-                    })}
+            <div className="col-span-12 lg:col-span-4 space-y-6">
+              <UpgradeCTA />
+              <Card className="p-5 space-y-3">
+                <SectionTitle title="Trending Executive Topics" />
+                {TRENDING_ITEMS.map((item, idx) => (
+                  <div key={idx} className="p-2.5 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 space-y-1">
+                    <span className="text-[8px] font-bold text-purple-600 uppercase">{item.category}</span>
+                    <h4 className="text-xs font-bold text-gray-900 dark:text-white">{item.title}</h4>
+                    <span className="text-[9px] text-emerald-500 font-bold">{item.score} positive sentiment</span>
                   </div>
-                )}
+                ))}
               </Card>
-
-              {tier === "top" && (
-                <Card className="p-4 space-y-3 border-amber-300 dark:border-amber-900">
-                  <SectionTitle title="Sponsored Slots" action={<Crown className="h-3.5 w-3.5 text-amber-500" />} />
-                  {["Homepage leader spotlight", "Sector ranking sponsor", "Executive interview promo"].map((slot) => (
-                    <div key={slot} className="rounded-lg bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 p-3 text-xs font-bold text-amber-700 dark:text-amber-300">
-                      {slot}
-                    </div>
-                  ))}
-                </Card>
-              )}
-
-              <UpgradeCTA compact />
             </div>
           </div>
         </section>
@@ -536,331 +626,140 @@ export default function NewsPOCLeaderNewsSubmenu({ tier, view }: Props) {
     );
   }
 
+  // VIEW 2: PAGES
   if (view === "pages") {
-    return (
-      <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
-        <SubMenuTabs />
-        <section className={`bg-gradient-to-br ${tc.gradFrom} ${tc.gradTo} text-white`}>
-          <div className="mx-auto max-w-7xl px-4 py-10 lg:px-6">
-            <div className="flex flex-col md:flex-row gap-6 md:items-end">
-              <img src={leader.photo} alt={leader.name} className="h-28 w-28 rounded-2xl object-cover border-4 border-white/25 shadow-lg" />
-              <div className="flex-1 space-y-2">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h1 className="font-display text-3xl font-bold">{leader.name}</h1>
-                  <span className="rounded-full bg-white/20 border border-white/25 px-2 py-1 text-[9px] font-bold flex items-center gap-1">
-                    {tier === "top" ? <Crown className="h-3 w-3" /> : tier === "verified" ? <CheckCircle className="h-3 w-3" /> : <User className="h-3 w-3" />}
-                    {tc.badgeLabel}
-                  </span>
-                </div>
-                <p className="text-sm text-white/85">{leader.role}, {leader.company}</p>
-                <div className="flex flex-wrap gap-3 text-[10px] font-semibold text-white/70">
-                  <span className="flex items-center gap-1"><Briefcase className="h-3 w-3" />{leader.sector}</span>
-                  <span className="flex items-center gap-1"><Globe className="h-3 w-3" />{leader.country}</span>
-                  <span className="flex items-center gap-1"><Users className="h-3 w-3" />{leader.followers} followers</span>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-2 min-w-52">
-                <div className="rounded-xl bg-white/10 border border-white/20 p-3 text-center">
-                  <div className="font-display text-2xl font-bold">{leader.influence}</div>
-                  <div className="text-[8px] font-bold uppercase text-white/60">Influence Score</div>
-                </div>
-                <div className="rounded-xl bg-white/10 border border-white/20 p-3 text-center">
-                  <div className="font-display text-2xl font-bold">{leader.followers}</div>
-                  <div className="text-[8px] font-bold uppercase text-white/60">Followers</div>
-                </div>
-              </div>
-            </div>
+    if (tier === "registered") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100">
+          <SubMenuTabs />
+          <RegisteredLeaderPagesView />
+        </div>
+      );
+    }
+
+    if (tier === "top") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
+          <SubMenuTabs />
+          <div className="mx-auto max-w-7xl px-4 pt-8 lg:px-6">
+            <TopLeaderPagesView />
           </div>
-        </section>
+        </div>
+      );
+    }
 
-        <section className="mx-auto max-w-7xl px-4 pt-8 lg:px-6">
-          <div className="grid grid-cols-12 gap-8">
-            <div className="col-span-12 lg:col-span-8 space-y-6">
-              <Card className="p-6 space-y-4">
-                <SectionTitle title="About / Bio" />
-                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed font-normal">{leader.about}</p>
-                {tier === "registered" && <LockedNote label="Custom banner, AI profile insights, downloads, and verified badge unlock with Verified." />}
-              </Card>
-
-              <Card className="p-6 space-y-4">
-                <SectionTitle title="Achievements" action={<Award className={`h-4 w-4 ${tc.textAccent}`} />} />
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  {leader.achievements.map((item) => (
-                    <div key={item} className={`${tc.softBg} ${tc.softBorder} border rounded-xl p-4`}>
-                      <Trophy className={`h-5 w-5 ${tc.textAccent} mb-2`} />
-                      <p className="text-xs font-bold text-gray-800 dark:text-gray-200 leading-snug">{item}</p>
-                    </div>
-                  ))}
-                </div>
-              </Card>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card className="p-5 space-y-4">
-                  <SectionTitle title="Media Coverage" />
-                  {leader.coverage.map((item, index) => (
-                    <div key={item} className="flex items-center gap-3 border-b border-gray-100 dark:border-gray-850 pb-3 last:border-0">
-                      <FileText className={`h-4 w-4 ${tc.textAccent}`} />
-                      <div>
-                        <p className="text-xs font-bold text-gray-900 dark:text-white">{item}</p>
-                        <p className="text-[9px] text-gray-400">iGEN Editorial - Article {index + 1}</p>
-                      </div>
-                    </div>
-                  ))}
-                  {isLocked(tier, "verified") && <LockedNote label="SME/ASME editorial articles are available for higher-tier Verified and Enterprise leaders." />}
-                </Card>
-
-                <Card className="p-5 space-y-4">
-                  <SectionTitle title="Interviews" />
-                  {leader.interviews.map((item) => (
-                    <div key={item} className="rounded-xl bg-gray-50 dark:bg-gray-900 p-3 flex items-center gap-3">
-                      <Mic className={`h-4 w-4 ${tc.textAccent}`} />
-                      <p className="text-xs font-bold text-gray-900 dark:text-white">{item}</p>
-                    </div>
-                  ))}
-                  <Link href="/eoi" className={`${tc.button} rounded-lg py-2.5 text-xs font-bold flex items-center justify-center gap-1.5`}>
-                    <Calendar className="h-3.5 w-3.5" /> Book Executive Interview
-                  </Link>
-                </Card>
-              </div>
-            </div>
-
-            <div className="col-span-12 lg:col-span-4 space-y-5">
-              <Card className="overflow-hidden">
-                <div className={`bg-gradient-to-r ${tc.gradFrom} ${tc.gradTo} p-4 text-white`}>
-                  <h3 className="font-bold text-sm">Lead Generation</h3>
-                  <p className="text-[10px] text-white/75">{tc.leadGen}</p>
-                </div>
-                <div className="p-4 space-y-2">
-                  <input className="w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-3 py-2 text-xs outline-none focus:border-purple-500" placeholder="Work email" />
-                  <select className="w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-3 py-2 text-xs outline-none">
-                    <option>Book meeting</option>
-                    <option>Media inquiry</option>
-                    <option>Partnership</option>
-                    <option>Invite to awards</option>
-                  </select>
-                  <textarea rows={3} className="w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-3 py-2 text-xs outline-none focus:border-purple-500 resize-none" placeholder="Message" />
-                  <button className={`${tc.button} w-full rounded-lg py-2.5 text-xs font-bold`}>
-                    Book Meeting CTA
-                  </button>
-                </div>
-              </Card>
-
-              <Card className="p-4 space-y-3">
-                <SectionTitle title="Analytics" action={tier === "registered" ? <Lock className="h-3.5 w-3.5 text-gray-400" /> : <BarChart2 className={`h-3.5 w-3.5 ${tc.textAccent}`} />} />
-                {tier === "registered" ? (
-                  <LockedNote label="Profile analytics are locked for free leaders." />
-                ) : (
-                  <div className="space-y-2">
-                    {[
-                      { label: "Profile Views", value: tier === "top" ? "82.4K" : "14.8K", change: "+24%" },
-                      { label: "Business Enquiries", value: tier === "top" ? "328" : "64", change: "+19%" },
-                      { label: "Media Mentions", value: tier === "top" ? "1,240" : "186", change: "+31%" }
-                    ].map((stat) => (
-                      <div key={stat.label} className="flex justify-between text-xs">
-                        <span className="text-gray-500">{stat.label}</span>
-                        <span className="font-bold text-gray-950 dark:text-white">{stat.value} <span className="text-emerald-500 text-[9px]">{stat.change}</span></span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </Card>
-
-              <Card className="p-4 space-y-3">
-                <SectionTitle title="Premium Assets" />
-                {[
-                  { label: "Download profile brief", icon: Download, locked: tier === "registered" },
-                  { label: "AI leadership insights", icon: Sparkles, locked: tier === "registered" },
-                  { label: "API access", icon: Zap, locked: tier !== "top" },
-                  { label: "Board network map", icon: Users, locked: tier !== "top" }
-                ].map((item) => {
-                  const ItemIcon = item.icon;
-                  return (
-                    <div key={item.label} className="flex items-center justify-between rounded-lg bg-gray-50 dark:bg-gray-900 p-3">
-                      <span className="text-xs font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2"><ItemIcon className="h-3.5 w-3.5" />{item.label}</span>
-                      {item.locked ? <Lock className="h-3 w-3 text-gray-400" /> : <CheckCircle className="h-3 w-3 text-emerald-500" />}
-                    </div>
-                  );
-                })}
-              </Card>
-
-              <UpgradeCTA compact />
-            </div>
-          </div>
-        </section>
-      </div>
-    );
-  }
-
-  if (view === "sector") {
     return (
       <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
         <SubMenuTabs />
         <TierHero
-          title="Leadership by Sector"
-          description="Discover sector leaders, rankings, market trends, executive movements, and upgrade pathways for deeper competitive research."
+          title={`${tc.label} Leader Pages Profile`}
+          description={leader.about}
         />
+
         <section className="mx-auto max-w-7xl px-4 pt-8 lg:px-6 space-y-8">
-          <Card className="p-4 flex flex-wrap gap-3 items-center">
-            <div className="relative flex-1 min-w-56">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
-              <input className="w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 py-2.5 pl-9 pr-3 text-xs outline-none focus:border-purple-500" placeholder="Search sectors, leaders, companies..." />
+          <Card className="p-6 space-y-6">
+            <div className="flex flex-col md:flex-row items-start gap-6 border-b border-gray-100 dark:border-gray-800 pb-6">
+              <img src={leader.photo} alt={leader.name} className="h-24 w-24 rounded-2xl object-cover border-2 border-purple-300" />
+              <div className="space-y-1 flex-1">
+                <div className="flex items-center gap-2">
+                  <h2 className="text-xl font-bold text-gray-950 dark:text-white">{leader.name}</h2>
+                  <span className={`text-[9px] font-bold px-2 py-0.5 rounded text-white ${tc.badgeBg}`}>{tc.badgeLabel}</span>
+                </div>
+                <p className="text-xs text-gray-600 dark:text-gray-300">{leader.role} at <span className="font-bold">{leader.company}</span></p>
+                <div className="flex items-center gap-4 text-[10px] text-gray-400 pt-2">
+                  <span>Sector: {leader.sector}</span>
+                  <span>Geography: {leader.country}</span>
+                  <span className="text-emerald-500 font-bold">Influence: {leader.influence}/100</span>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <Link href="/eoi" className={`${tc.button} text-xs font-bold px-4 py-2 rounded-xl`}>Connect / Inquire</Link>
+              </div>
             </div>
-            <select className="rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-3 py-2.5 text-xs outline-none">
-              <option>All Regions</option>
-              <option>India</option>
-              <option>APAC</option>
-              <option>Global</option>
-            </select>
-            <Link href="/eoi" className={`${tc.button} rounded-lg px-4 py-2.5 text-xs font-bold flex items-center gap-1.5`}>
-              <Plus className="h-3.5 w-3.5" /> Register Leader
-            </Link>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Card className="p-4 space-y-2">
+                <h4 className="text-xs font-bold text-gray-900 dark:text-white">Key Achievements</h4>
+                <ul className="text-[10px] text-gray-500 space-y-1 list-disc pl-4">
+                  {leader.achievements.map((a, i) => <li key={i}>{a}</li>)}
+                </ul>
+              </Card>
+              <Card className="p-4 space-y-2">
+                <h4 className="text-xs font-bold text-gray-900 dark:text-white">Editorial Coverage</h4>
+                <ul className="text-[10px] text-gray-500 space-y-1 list-disc pl-4">
+                  {leader.coverage.map((c, i) => <li key={i}>{c}</li>)}
+                </ul>
+              </Card>
+              <Card className="p-4 space-y-2">
+                <h4 className="text-xs font-bold text-gray-900 dark:text-white">Interviews & Appearances</h4>
+                <ul className="text-[10px] text-gray-500 space-y-1 list-disc pl-4">
+                  {leader.interviews.map((intv, i) => <li key={i}>{intv}</li>)}
+                </ul>
+              </Card>
+            </div>
           </Card>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            {SECTORS.map((sector) => (
-              <Card key={sector.name} className="p-4 hover:border-purple-300 dark:hover:border-purple-900 transition-all">
-                <div className="flex items-start justify-between gap-3">
-                  <div className={`h-10 w-10 rounded-xl ${tc.softBg} ${tc.softBorder} border flex items-center justify-center`}>
-                    <Globe className={`h-5 w-5 ${tc.textAccent}`} />
-                  </div>
-                  <span className="text-[10px] font-bold text-emerald-500">{sector.growth}</span>
-                </div>
-                <h3 className="font-bold text-sm text-gray-950 dark:text-white mt-4">{sector.name}</h3>
-                <p className="text-[10px] text-gray-500 mt-1">{sector.leaders} leaders tracked</p>
-                <p className="text-[10px] text-gray-400 mt-2">Top: <span className="font-bold text-gray-700 dark:text-gray-300">{sector.top}</span></p>
-                <p className="text-[10px] text-purple-600 font-semibold mt-2">{sector.signal}</p>
-              </Card>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-12 gap-8">
-            <div className="col-span-12 lg:col-span-7">
-              <Card className="overflow-hidden">
-                <div className="bg-purple-600 text-white px-4 py-3 flex items-center justify-between">
-                  <h2 className="font-bold text-sm">Top Leaders per Sector</h2>
-                  {isLocked(tier, "verified") && <Lock className="h-4 w-4" />}
-                </div>
-                <div className="divide-y divide-gray-100 dark:divide-gray-850">
-                  {TOP_LEADERS.map((item) => (
-                    <div key={item.rank} className="p-4 flex items-center gap-3">
-                      <span className="font-display text-lg font-extrabold text-gray-200 dark:text-gray-800 w-6">{item.rank}</span>
-                      <div className={`h-9 w-9 rounded-xl ${tc.badgeBg} text-white flex items-center justify-center text-xs font-bold`}>
-                        {item.name.split(" ").map((word) => word[0]).slice(0, 2).join("")}
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-xs font-bold text-gray-950 dark:text-white">{item.name}</p>
-                        <p className="text-[9px] text-gray-400">{item.company} - {item.sector}</p>
-                      </div>
-                      <span className="font-display text-sm font-bold text-purple-600">{item.score}</span>
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            </div>
-
-            <div className="col-span-12 lg:col-span-5 space-y-5">
-              <Card className="p-5 space-y-4">
-                <SectionTitle title="Industry Insights" action={<Sparkles className="h-4 w-4 text-amber-500" />} />
-                {[
-                  "Sector rankings reveal faster movement in AI, healthtech, and clean energy.",
-                  "Emerging leaders are gaining share through verified editorial coverage.",
-                  "Enterprise users can forecast executive changes and export reports."
-                ].map((item) => (
-                  <div key={item} className="rounded-xl bg-gray-50 dark:bg-gray-900 p-3 text-xs font-semibold text-gray-700 dark:text-gray-300">
-                    {item}
-                  </div>
-                ))}
-                {tier === "registered" && <LockedNote label="Sector rankings, emerging leader lists, and market trend reports unlock with Verified." />}
-              </Card>
-              <UpgradeCTA compact />
-            </div>
-          </div>
         </section>
       </div>
     );
+  }
+
+  // VIEW 3: BY SECTOR
+  if (view === "sector") {
+    if (tier === "registered") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100">
+          <SubMenuTabs />
+          <RegisteredLeaderBySectorView />
+        </div>
+      );
+    }
+  }
+
+  // VIEW 4: ALL SECTORS
+  if (view === "all") {
+    if (tier === "registered") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100">
+          <SubMenuTabs />
+          <RegisteredLeaderAllSectorsView />
+        </div>
+      );
+    }
   }
 
   return (
     <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
       <SubMenuTabs />
       <TierHero
-        title="All Leadership Sectors"
-        description="Use the complete sector directory, featured sectors, statistics, heatmaps, exports, and saved dashboards to navigate leadership intelligence."
+        title={`All 50 Sectors Leader Registry`}
+        description="Comprehensive directory of executive figures, CXOs, founders, and industry leaders mapped across 50 sectors."
       />
+
       <section className="mx-auto max-w-7xl px-4 pt-8 lg:px-6 space-y-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {[
-            { label: "Total Leaders", value: "58,900+", icon: Users },
-            { label: "Verified Profiles", value: "12,640", icon: CheckCircle },
-            { label: "Enterprise Leaders", value: "1,770", icon: Crown },
-            { label: "Sectors Covered", value: "50+", icon: Globe }
-          ].map((stat) => {
-            const StatIcon = stat.icon;
-            return (
-              <Card key={stat.label} className="p-5">
-                <StatIcon className={`h-5 w-5 ${tc.textAccent}`} />
-                <div className="font-display text-2xl font-bold text-gray-950 dark:text-white mt-3">{stat.value}</div>
-                <div className="text-[10px] font-bold uppercase text-gray-400">{stat.label}</div>
-              </Card>
-            );
-          })}
-        </div>
-
-        {(tier === "verified" || tier === "top") && (
-          <Card className="p-5 space-y-4">
-            <SectionTitle title="Featured Sectors" action={<Star className="h-4 w-4 text-amber-500" />} />
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-              {SECTORS.slice(0, 4).map((sector) => (
-                <div key={sector.name} className={`${tc.softBg} ${tc.softBorder} border rounded-xl p-4`}>
-                  <p className="font-bold text-sm text-gray-950 dark:text-white">{sector.name}</p>
-                  <p className="text-[10px] text-gray-500 mt-1">{sector.signal}</p>
-                </div>
-              ))}
-            </div>
-          </Card>
-        )}
-
-        <Card className="overflow-hidden">
-          <div className="p-4 flex flex-wrap gap-3 items-center border-b border-gray-200 dark:border-gray-800">
-            <div className="relative flex-1 min-w-56">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
-              <input className="w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 py-2.5 pl-9 pr-3 text-xs outline-none focus:border-purple-500" placeholder="Search full sector directory..." />
-            </div>
-            <button className="rounded-lg border border-gray-200 dark:border-gray-800 px-3 py-2.5 text-xs font-bold text-gray-600 dark:text-gray-300 flex items-center gap-1.5">
-              <Filter className="h-3.5 w-3.5" /> Advanced Filters
-              {tier === "registered" && <Lock className="h-3 w-3" />}
-            </button>
-            <button className={`${tc.button} rounded-lg px-3 py-2.5 text-xs font-bold flex items-center gap-1.5`}>
-              <Download className="h-3.5 w-3.5" /> Export
-              {tier !== "top" && <Lock className="h-3 w-3" />}
-            </button>
-          </div>
+        <Card className="p-6 space-y-4">
+          <SectionTitle title="Sector-Wise Leadership Directory" />
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-gray-50 dark:bg-gray-900 text-[9px] uppercase tracking-wider text-gray-400">
-                <tr>
-                  <th className="px-4 py-3 font-bold">Sector</th>
-                  <th className="px-4 py-3 font-bold">Leader Count</th>
-                  <th className="px-4 py-3 font-bold">Verified</th>
-                  <th className="px-4 py-3 font-bold">Enterprise</th>
-                  <th className="px-4 py-3 font-bold">Country Rank</th>
-                  <th className="px-4 py-3 font-bold">Heatmap</th>
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="bg-gray-50 dark:bg-gray-900 text-gray-400 font-bold border-b border-gray-200 dark:border-gray-800">
+                  <th className="p-3">SECTOR</th>
+                  <th className="p-3">TOTAL LEADERS</th>
+                  <th className="p-3">VERIFIED</th>
+                  <th className="p-3">ENTERPRISE TOP</th>
+                  <th className="p-3">GEOGRAPHY</th>
+                  <th className="p-3">HEAT INDEX</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-850">
-                {DIRECTORY_ROWS.map((row) => (
-                  <tr key={row.sector} className="hover:bg-gray-50 dark:hover:bg-gray-900/60">
-                    <td className="px-4 py-3 font-bold text-gray-950 dark:text-white">{row.sector}</td>
-                    <td className="px-4 py-3 text-gray-600 dark:text-gray-300">{row.leaders}</td>
-                    <td className="px-4 py-3 text-emerald-600 font-bold">{row.verified}</td>
-                    <td className="px-4 py-3 text-amber-600 font-bold">{row.top}</td>
-                    <td className="px-4 py-3 text-gray-500">{row.country}</td>
-                    <td className="px-4 py-3">
-                      <span className={`rounded-full px-2 py-1 text-[9px] font-bold ${
-                        row.heat === "Very High" ? "bg-purple-100 text-purple-700 dark:bg-purple-950/30 dark:text-purple-300" :
-                        row.heat === "High" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300" :
-                        "bg-gray-100 text-gray-600 dark:bg-gray-900 dark:text-gray-300"
-                      }`}>
+                {DIRECTORY_ROWS.map((row, idx) => (
+                  <tr key={idx} className="hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors">
+                    <td className="p-3 font-bold text-gray-900 dark:text-white">{row.sector}</td>
+                    <td className="p-3 font-semibold text-gray-600 dark:text-gray-300">{row.leaders}</td>
+                    <td className="p-3 text-emerald-600 font-bold">{row.verified}</td>
+                    <td className="p-3 text-amber-600 font-bold">{row.top}</td>
+                    <td className="p-3 text-gray-400">{row.country}</td>
+                    <td className="p-3">
+                      <span className="text-[8px] font-bold px-2 py-0.5 rounded bg-purple-50 dark:bg-purple-950 text-purple-600 border border-purple-200 dark:border-purple-800">
                         {row.heat}
                       </span>
                     </td>
@@ -870,28 +769,6 @@ export default function NewsPOCLeaderNewsSubmenu({ tier, view }: Props) {
             </table>
           </div>
         </Card>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <Card className="p-5 space-y-3">
-            <SectionTitle title="Industry Statistics" />
-            {["Leadership heatmaps", "Country rankings", "AI recommendations", "Saved dashboards"].map((item) => (
-              <div key={item} className="flex items-center justify-between rounded-lg bg-gray-50 dark:bg-gray-900 p-3">
-                <span className="text-xs font-bold text-gray-800 dark:text-gray-200">{item}</span>
-                {tier === "top" || (tier === "verified" && item !== "Country rankings") ? <CheckCircle className="h-3.5 w-3.5 text-emerald-500" /> : <Lock className="h-3.5 w-3.5 text-gray-400" />}
-              </div>
-            ))}
-          </Card>
-          <Card className="p-5 space-y-3">
-            <SectionTitle title="Revenue Opportunities" />
-            {["Featured Leader Profile", "Sponsored Leadership Stories", "PR and Media Coverage", "Leadership Awards"].map((item) => (
-              <Link key={item} href="/eoi" className="flex items-center justify-between rounded-lg bg-purple-50 dark:bg-purple-950/20 p-3 text-xs font-bold text-purple-700 dark:text-purple-300">
-                {item}
-                <ChevronRight className="h-3.5 w-3.5" />
-              </Link>
-            ))}
-          </Card>
-          <UpgradeCTA />
-        </div>
       </section>
     </div>
   );

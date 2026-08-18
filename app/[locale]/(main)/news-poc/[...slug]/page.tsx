@@ -27,6 +27,10 @@ import NewsPOCCommunitiesSubmenu from "@/components/news-poc/NewsPOCCommunitiesS
 import NewsPOCMyNewsHome from "@/components/news-poc/NewsPOCMyNewsHome";
 import NewsPOCMyNewsSubmenu from "@/components/news-poc/NewsPOCMyNewsSubmenu";
 import NewsPOCArticleDetail from "@/components/news-poc/NewsPOCArticleDetail";
+import NewsPOCAllIndustryView from "@/components/news-poc/NewsPOCAllIndustryView";
+import NewsPOCAllCountryView from "@/components/news-poc/NewsPOCAllCountryView";
+import NewsPOCAllLeaderView from "@/components/news-poc/NewsPOCAllLeaderView";
+import NewsPOCFullDiscoveryView from "@/components/news-poc/NewsPOCFullDiscoveryView";
 import { IGEN_50_SECTORS } from "@/components/news-poc/igenTaxonomyData";
 
 // Mock database for sub-feeds
@@ -72,9 +76,86 @@ const READERS_LIST = [
 // Mock articles data keyed by Category (Sector, Industry, Country, Leader, Reader)
 const MOCK_CATEGORY_ARTICLES: Record<string, any[]> = {
   sector: [
-    { id: "sec-1", title: "India's Tech Sector Volatility Eases Amid Solid Q1 Domestic Demand", excerpt: "Strategic software developments and SaaS expansions secure a stable growth path for domestic tech service providers, offsetting US corporate spend slows.", sector: "Electronics & IT (S16)", country: "Domestic Trade", readTime: "5 min read", date: "10m ago", likes: 140, comments: 12, isPremium: false, image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=500&auto=format&fit=crop&q=60" },
-    { id: "sec-2", title: "Agricultural drone sprayers approved for 1,200 rural districts", excerpt: "Ministry of Agriculture introduces direct capital grants to purchase indigenous unmanned flight hardware for farming societies.", sector: "Agriculture (S01)", country: "Domestic", readTime: "6 min read", date: "2 hrs ago", likes: 98, comments: 5, isPremium: true, image: "https://images.unsplash.com/photo-1508614589041-895b88991e3e?w=500&auto=format&fit=crop&q=60" },
-    { id: "sec-3", title: "Union Budget: Clean Energy Infrastructure gets $12B allocation booster", excerpt: "Renewable energy sector welcomes mega grid interconnectivity funding to secure remote solar farms into national power lines.", sector: "Energy & Sustainability (S17)", country: "India-France Bilateral", readTime: "8 min read", date: "1 day ago", likes: 312, comments: 24, isPremium: false, image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=500&auto=format&fit=crop&q=60" }
+    { 
+      id: "sec-1", 
+      title: "India's Tech Sector Volatility Eases Amid Solid Q1 Domestic Demand", 
+      excerpt: "Strategic software developments and SaaS expansions secure a stable growth path for domestic tech service providers, offsetting US corporate spend slows.", 
+      sector: "Electronics & IT (S16)", 
+      ministry: "Ministry of Electronics & IT",
+      author: "Priya Sundaram · Trade Analyst",
+      country: "Domestic Trade", 
+      readTime: "5 min read", 
+      date: "10m ago", 
+      likes: 140, 
+      comments: 12, 
+      impact: "+14.2% Growth",
+      isPremium: false, 
+      image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600&auto=format&fit=crop&q=80" 
+    },
+    { 
+      id: "sec-2", 
+      title: "Agricultural drone sprayers approved for 1,200 rural districts", 
+      excerpt: "Ministry of Agriculture introduces direct capital grants to purchase indigenous unmanned flight hardware for farming societies.", 
+      sector: "Agriculture (S01)", 
+      ministry: "Ministry of Agriculture & Farmers Welfare",
+      author: "Dr. Ramesh Nair · Agri Policy",
+      country: "Domestic", 
+      readTime: "6 min read", 
+      date: "2 hrs ago", 
+      likes: 98, 
+      comments: 5, 
+      impact: "+18.5% Efficiency",
+      isPremium: true, 
+      image: "https://images.unsplash.com/photo-1508614589041-895b88991e3e?w=600&auto=format&fit=crop&q=80" 
+    },
+    { 
+      id: "sec-3", 
+      title: "Union Budget: Clean Energy Infrastructure gets $12B allocation booster", 
+      excerpt: "Renewable energy sector welcomes mega grid interconnectivity funding to secure remote solar farms into national power lines.", 
+      sector: "Energy & Sustainability (S17)", 
+      ministry: "Ministry of New & Renewable Energy",
+      author: "Vikram Sengupta · Energy Lead",
+      country: "India-France Bilateral", 
+      readTime: "8 min read", 
+      date: "1 day ago", 
+      likes: 312, 
+      comments: 24, 
+      impact: "+22.4% Capex",
+      isPremium: false, 
+      image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600&auto=format&fit=crop&q=80" 
+    },
+    { 
+      id: "sec-4", 
+      title: "Semiconductor OSAT Substrate Scaling Accelerates in Tamil Nadu Hubs", 
+      excerpt: "Advanced high-density glass packaging facilities reach commercial production benchmarks, reducing dependence on East Asian packaging lines.", 
+      sector: "Semiconductors (S46)", 
+      ministry: "India Semiconductor Mission",
+      author: "Arun Kulkarni · Tech Hardware",
+      country: "India-Taiwan Bilateral", 
+      readTime: "5 min read", 
+      date: "3 hrs ago", 
+      likes: 245, 
+      comments: 19, 
+      impact: "+38.2% YoY",
+      isPremium: true, 
+      image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&auto=format&fit=crop&q=80" 
+    },
+    { 
+      id: "sec-5", 
+      title: "Next-Gen Commercial EV Battery Interoperability Protocol Finalized", 
+      excerpt: "New standardized battery-swapping architecture across 60 freight transit corridors cuts fleet turnaround times by 45%.", 
+      sector: "Automotive & EV (S45)", 
+      ministry: "Ministry of Heavy Industries",
+      author: "Sunita Rao · Auto Logistics",
+      country: "Domestic & SEA", 
+      readTime: "4 min read", 
+      date: "5 hrs ago", 
+      likes: 178, 
+      comments: 14, 
+      impact: "+26.0% Adoption",
+      isPremium: false, 
+      image: "https://images.unsplash.com/photo-1558441719-8b89ec691456?w=600&auto=format&fit=crop&q=80" 
+    }
   ],
   industry: [
     { id: "ind-1", title: "OSAT Semiconductor Packaging Facilities Face Shortages in Taiwan Corridors", excerpt: "Silicon fabrication logistics slow down. Indian assembly plants prepare to increase buffer stocks for silicon wafers.", sector: "Semiconductors (S46)", country: "India-Taiwan Bilateral", readTime: "4 min read", date: "15m ago", likes: 204, comments: 18, isPremium: false, image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&auto=format&fit=crop&q=60" },
@@ -123,6 +204,28 @@ export default function NewsPOCCatchAllPage() {
 
   const [activeSub, setActiveSub] = useState<string>(slugParts[2] || "my");
   const [likedList, setLikedList] = useState<string[]>([]);
+  const [savedList, setSavedList] = useState<string[]>([]);
+  const [sharedArticleId, setSharedArticleId] = useState<string | null>(null);
+  const [commentOpenId, setCommentOpenId] = useState<string | null>(null);
+  const [commentInput, setCommentInput] = useState<string>("");
+  const [commentsMap, setCommentsMap] = useState<Record<string, { author: string; text: string; time: string }[]>>({
+    "sec-1": [
+      { author: "Rajesh Kumar", text: "Domestic SaaS growth is offsetting export slowdown nicely.", time: "8m ago" }
+    ],
+    "sec-2": [
+      { author: "Kavita Nair", text: "Drone sprayer grants will transform precision farming.", time: "1h ago" }
+    ],
+    "sec-all-1": [
+      { author: "Vivek Murthy", text: "High-density substrate packaging is a critical strategic moat for Indian OSATs.", time: "10m ago" }
+    ],
+    "sec-all-2": [
+      { author: "Devika Sharma", text: "Drone spraying grants are accelerating agricultural productivity across MP and Punjab.", time: "30m ago" }
+    ],
+    "sec-all-3": [
+      { author: "Arun Mehra", text: "€2.4B green hydrogen corridor with Germany will transform port exports by 2027.", time: "1h ago" }
+    ]
+  });
+  const [selectedSectorFilter, setSelectedSectorFilter] = useState<string>("all");
   const [followedItems, setFollowedItems] = useState<string[]>([]);
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
@@ -144,9 +247,29 @@ export default function NewsPOCCatchAllPage() {
   }
 
   const isFeedPage = slugParts[0] === "feed";
-  const isHeadlinesLanding = slugParts[0] === "headlines" && slugParts.length === 1;
   const categoryKey = slugParts[1] || "sector"; // "sector", "industry", "country", "leader", "reader"
   const categoryName = categoryKey.charAt(0).toUpperCase() + categoryKey.slice(1);
+
+  // If user navigates to /feed/[category]/intelligence, redirect/render corresponding Intelligence suite
+  if (isFeedPage && slugParts.length >= 3 && slugParts[2] === "intelligence") {
+    if (categoryKey === "sector") {
+      return <NewsPOCSectorNewsSubmenu submenu="intelligence" />;
+    }
+    if (categoryKey === "industry") {
+      return <NewsPOCSectorNewsSubmenu submenu="industry" />;
+    }
+    if (categoryKey === "country") {
+      return <NewsPOCCountryNewsSubmenu submenu="intelligence" />;
+    }
+    if (categoryKey === "leader") {
+      return <NewsPOCLeaderNewsSubmenu tier="intelligence" view="signals" />;
+    }
+    if (categoryKey === "reader") {
+      return <NewsPOCMyNewsSubmenu submenuSlug="intelligence" viewSlug="all" />;
+    }
+  }
+
+  const isHeadlinesLanding = slugParts[0] === "headlines" && slugParts.length === 1;
 
   const isTrendingLanding = slugParts[0] === "trending" && slugParts.length === 1;
 
@@ -211,13 +334,13 @@ export default function NewsPOCCatchAllPage() {
   }
 
   // Sector News sub-menu: /sector-news/[submenu]
-  // submenu: all | engagement | intelligence
+  // submenu: all | engagement | intelligence | industry
   if (slugParts[0] === "sector-news" && slugParts.length >= 2) {
-    const validSubmenus = ["all", "engagement", "intelligence"];
+    const validSubmenus = ["all", "engagement", "intelligence", "industry"];
     const subPart = validSubmenus.includes(slugParts[1]) ? slugParts[1] : "all";
     return (
       <NewsPOCSectorNewsSubmenu
-        submenu={subPart as "all" | "engagement" | "intelligence"}
+        submenu={subPart as "all" | "engagement" | "intelligence" | "industry"}
       />
     );
   }
@@ -283,10 +406,20 @@ export default function NewsPOCCatchAllPage() {
     return <NewsPOCArticleDetail articleId={articleId} />;
   }
 
-  // Leader News sub-menu: /leader-news/[tier]/[view]
-  // tier: registered | verified | top
-  // view: news | pages | sector | all
+  // Leader News sub-menu: /leader-news/[tier]/[view] or /leader-news/intelligence
+  // tier: registered | verified | top | intelligence
+  // view: news | pages | sector | all | signals | influence | briefs
   if (slugParts[0] === "leader-news" && slugParts.length >= 2) {
+    if (slugParts[1] === "intelligence") {
+      const validIntelViews = ["signals", "influence", "briefs", "all", "news"];
+      const intelView = validIntelViews.includes(slugParts[2]) ? slugParts[2] : "signals";
+      return (
+        <NewsPOCLeaderNewsSubmenu
+          tier="intelligence"
+          view={intelView as any}
+        />
+      );
+    }
     const validTiers = ["registered", "verified", "top"];
     const validViews = ["news", "pages", "sector", "all"];
     const leaderTier = validTiers.includes(slugParts[1]) ? slugParts[1] : "registered";
@@ -300,8 +433,74 @@ export default function NewsPOCCatchAllPage() {
   }
 
   if (isFeedPage) {
+    if (categoryKey === "sector" && activeSub === "all") {
+      return (
+        <NewsPOCFullDiscoveryView
+          initialCategory="All"
+          onBack={() => {
+            setActiveSub("my");
+            router.push("/en/news-poc/feed/sector");
+          }}
+        />
+      );
+    }
+
+    if (categoryKey === "industry" && activeSub === "all") {
+      return (
+        <NewsPOCAllIndustryView 
+          onBack={() => {
+            setActiveSub("my");
+            router.push("/en/news-poc/feed/industry");
+          }} 
+        />
+      );
+    }
+
+    if (categoryKey === "country" && activeSub === "all") {
+      return (
+        <NewsPOCAllCountryView 
+          onBack={() => {
+            setActiveSub("my");
+            router.push("/en/news-poc/feed/country");
+          }} 
+        />
+      );
+    }
+
+    if (categoryKey === "leader" && activeSub === "all") {
+      return (
+        <NewsPOCAllLeaderView 
+          onBack={() => {
+            setActiveSub("my");
+            router.push("/en/news-poc/feed/leader");
+          }} 
+        />
+      );
+    }
+
     const handleLike = (id: string) => {
       setLikedList(likedList.includes(id) ? likedList.filter(i => i !== id) : [...likedList, id]);
+    };
+
+    const handleSave = (id: string) => {
+      setSavedList(savedList.includes(id) ? savedList.filter(i => i !== id) : [...savedList, id]);
+    };
+
+    const handleShare = (id: string) => {
+      if (typeof window !== "undefined" && navigator.clipboard) {
+        navigator.clipboard.writeText(`${window.location.origin}/en/news-poc/article/${id}`);
+      }
+      setSharedArticleId(id);
+      setTimeout(() => setSharedArticleId(null), 2500);
+    };
+
+    const handleAddComment = (id: string) => {
+      if (!commentInput.trim()) return;
+      setCommentsMap(prev => ({
+        ...prev,
+        [id]: [...(prev[id] || []), { author: "You", text: commentInput.trim(), time: "Just now" }]
+      }));
+      setCommentInput("");
     };
 
     const handleFollow = (id: string) => {
@@ -311,11 +510,14 @@ export default function NewsPOCCatchAllPage() {
     const articles = MOCK_CATEGORY_ARTICLES[categoryKey] || MOCK_CATEGORY_ARTICLES.sector;
     const reports = MOCK_REPORTS[categoryKey] || MOCK_REPORTS.sector;
 
-    // Filter by search query
-    const filteredArticles = articles.filter(art => 
-      art.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      art.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    // Filter by search query & sector filter
+    const filteredArticles = articles.filter(art => {
+      const matchSearch = art.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        art.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (art.sector && art.sector.toLowerCase().includes(searchQuery.toLowerCase()));
+      const matchSector = selectedSectorFilter === "all" || (art.sector && art.sector.includes(selectedSectorFilter));
+      return matchSearch && matchSector;
+    });
 
     return (
       <div className="bg-gray-50 dark:bg-[#070b12] text-gray-900 dark:text-gray-100 min-h-screen pb-12 transition-colors duration-300">
@@ -327,6 +529,7 @@ export default function NewsPOCCatchAllPage() {
               <button
                 onClick={() => router.back()}
                 className="p-2 rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:text-blue-500 transition-colors"
+                aria-label="Go back"
               >
                 <ArrowLeft className="h-4 w-4" />
               </button>
@@ -349,7 +552,39 @@ export default function NewsPOCCatchAllPage() {
               ].map((sub) => (
                 <button
                   key={sub.key}
-                  onClick={() => setActiveSub(sub.key)}
+                  onClick={() => {
+                    if (sub.key === "intelligence") {
+                      if (categoryKey === "sector") {
+                        router.push("/en/news-poc/sector-news/intelligence");
+                        return;
+                      }
+                      if (categoryKey === "industry") {
+                        router.push("/en/news-poc/sector-news/industry");
+                        return;
+                      }
+                      if (categoryKey === "country") {
+                        router.push("/en/news-poc/country-news/intelligence");
+                        return;
+                      }
+                      if (categoryKey === "leader") {
+                        router.push("/en/news-poc/leader-news/intelligence");
+                        return;
+                      }
+                      if (categoryKey === "reader") {
+                        router.push("/en/news-poc/my-news/intelligence");
+                        return;
+                      }
+                    }
+                    if (sub.key === "all") {
+                      router.push(`/en/news-poc/feed/${categoryKey}/all`);
+                      return;
+                    }
+                    if (sub.key === "my") {
+                      router.push(`/en/news-poc/feed/${categoryKey}/my`);
+                      return;
+                    }
+                    setActiveSub(sub.key);
+                  }}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                     activeSub === sub.key
                       ? "bg-blue-600 text-white shadow-xs"
@@ -363,11 +598,11 @@ export default function NewsPOCCatchAllPage() {
           </div>
         </section>
 
-        {/* Dynamic Sub-Feed Page Elements (All 11 Core Screen Components) */}
+        {/* Dynamic Sub-Feed Page Elements */}
         <section className="mx-auto max-w-7xl px-4 pt-6 lg:px-6">
           <div className="grid grid-cols-12 gap-8">
             
-            {/* LEFT COLUMN: Hero Banner, Top Stories, Search & Latest Feed */}
+            {/* LEFT COLUMN: Hero Brief, Personalized Feed (FIRST), then Trending Stories in Sector (SECOND) */}
             <div className="col-span-12 lg:col-span-8 space-y-8">
               
               {/* Component 1: Hero Banner with Featured Story */}
@@ -380,9 +615,14 @@ export default function NewsPOCCatchAllPage() {
                   <div className="absolute inset-0 z-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
                   
                   <div className="relative z-10 space-y-3">
-                    <span className="bg-blue-600 text-white text-[9px] font-bold px-2 py-0.5 rounded">
-                      HERO BRIEF
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="bg-blue-600 text-white text-[9px] font-bold px-2 py-0.5 rounded">
+                        FEATURED BRIEF
+                      </span>
+                      <span className="bg-white/20 text-white text-[9px] font-bold px-2 py-0.5 rounded backdrop-blur-xs">
+                        {filteredArticles[0].sector}
+                      </span>
+                    </div>
                     <h2 className="font-display text-xl md:text-3xl font-bold leading-tight">
                       {filteredArticles[0].title}
                     </h2>
@@ -392,7 +632,7 @@ export default function NewsPOCCatchAllPage() {
                     <div className="pt-2 flex items-center gap-3">
                       <Link 
                         href={`/en/news-poc/article/${filteredArticles[0].id || "sec-1"}`}
-                        className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-5 py-2.5 rounded transition-colors"
+                        className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-colors shadow-xs"
                       >
                         READ FULL BRIEFING
                       </Link>
@@ -401,89 +641,773 @@ export default function NewsPOCCatchAllPage() {
                 </div>
               )}
 
-              {/* Component 2: Top Stories Row */}
-              <div className="space-y-4">
-                <h3 className="font-display text-base font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                  <TrendingUp className="h-4.5 w-4.5 text-blue-500" />
-                  Top stories in {categoryName}
-                </h3>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {articles.slice(1).map((art, idx) => (
-                    <Link key={idx} href={`/en/news-poc/article/${art.id || "sec-1"}`} className="bg-white dark:bg-[#0f172a] rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 p-4 flex flex-col justify-between shadow-xs hover:shadow-sm hover:border-blue-500 transition-all group block">
-                      <div className="space-y-2">
-                        <span className="inline-block px-2 py-0.5 rounded text-[8px] font-bold text-blue-600 bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/20">
-                          {art.sector}
-                        </span>
-                        <h4 className="text-xs font-bold text-gray-900 dark:text-white group-hover:text-blue-500 transition-colors leading-snug">
-                          {art.title}
-                        </h4>
+              {/* Component 2: FIRST -> PERSONALIZED FEED AREA */}
+              {activeSub === "my" && (
+                <div className="space-y-6">
+                  {/* Personalized Feed Header & Filters */}
+                  <div className="bg-white dark:bg-[#0f172a] p-5 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xs space-y-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 dark:border-gray-800 pb-4">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                          <h2 className="font-display text-base font-bold uppercase tracking-wider text-gray-900 dark:text-white">
+                            Personalized Feed
+                          </h2>
+                          <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/40 text-blue-600 border border-blue-200 dark:border-blue-800">
+                            Custom Stream
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1">
+                          Tailored live updates matching your tracked sectors, bilateral nodes, and trade interests.
+                        </p>
                       </div>
-                      <span className="text-[10px] text-gray-400 mt-3 block">{art.date} • {art.readTime}</span>
-                    </Link>
-                  ))}
-                </div>
-              </div>
 
-              {/* Component 3 & 4: Search & Filters + Latest News Feed */}
-              <div className="space-y-4 pt-2">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-200 dark:border-gray-855 pb-3">
-                  <h3 className="text-sm font-bold text-gray-450 uppercase tracking-wider">
-                    {activeSub === "my" ? "Personalized Feed" : activeSub === "all" ? "All Channels" : "Analytics & Trends"}
-                  </h3>
-                  
-                  {/* Local Feed Search */}
-                  <div className="relative w-full sm:w-60">
-                    <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-gray-400" />
-                    <input
-                      type="text"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Filter articles..."
-                      className="w-full pl-8 pr-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-xs outline-none focus:border-blue-505"
-                    />
+                      {/* Local Search */}
+                      <div className="relative w-full sm:w-64">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
+                        <input
+                          type="text"
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          placeholder="Filter feed stories..."
+                          className="w-full pl-9 pr-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-xs outline-none focus:border-blue-500"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Sector Quick Filter Pills */}
+                    <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+                      <span className="text-[10px] font-bold text-gray-400 uppercase shrink-0">Filter:</span>
+                      {[
+                        { label: "All Followed", value: "all" },
+                        { label: "Electronics (S16)", value: "S16" },
+                        { label: "Agriculture (S01)", value: "S01" },
+                        { label: "Energy (S17)", value: "S17" },
+                        { label: "Semiconductors (S46)", value: "S46" },
+                        { label: "Automotive (S45)", value: "S45" }
+                      ].map((pill) => (
+                        <button
+                          key={pill.value}
+                          onClick={() => setSelectedSectorFilter(pill.value)}
+                          className={`px-3 py-1 rounded-lg text-[10px] font-bold transition-all shrink-0 ${
+                            selectedSectorFilter === pill.value
+                              ? "bg-blue-600 text-white shadow-xs"
+                              : "bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:text-blue-600"
+                          }`}
+                        >
+                          {pill.label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
 
-                {/* Submenu dynamic views inside the news feed area */}
-                {activeSub === "my" && (
+                  {/* Personalized Feed Article Cards */}
                   <div className="space-y-4">
                     {filteredArticles.map((art) => {
                       const isLiked = likedList.includes(art.id);
+                      const isSaved = savedList.includes(art.id);
+                      const isShared = sharedArticleId === art.id;
+                      const isCommentOpen = commentOpenId === art.id;
+                      const articleComments = commentsMap[art.id] || [];
+
                       return (
-                        <div key={art.id} className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-xl p-5 shadow-xs hover:border-blue-400 transition-all">
-                          <Link href={`/en/news-poc/article/${art.id}`} className="block space-y-2 group">
-                            <span className="text-[9px] font-bold text-blue-600 bg-blue-50 dark:bg-blue-950/20 px-2 py-0.5 rounded border border-blue-100/30">
-                              {art.sector}
+                        <div 
+                          key={art.id} 
+                          className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl p-5 md:p-6 shadow-xs hover:border-blue-400 dark:hover:border-blue-500/50 transition-all space-y-4 group"
+                        >
+                          {/* Card Top Metadata Row */}
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="text-[9px] font-bold text-blue-600 bg-blue-50 dark:bg-blue-950/40 px-2.5 py-1 rounded-lg border border-blue-100 dark:border-blue-900/30">
+                                {art.sector}
+                              </span>
+                              <span className="text-[9px] font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-900 px-2 py-0.5 rounded">
+                                {art.country}
+                              </span>
+                              {art.impact && (
+                                <span className="text-[8px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded">
+                                  {art.impact}
+                                </span>
+                              )}
+                            </div>
+                            <span className="text-[10px] text-gray-400 font-medium">
+                              {art.date} · {art.readTime}
                             </span>
-                            <h4 className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors leading-snug">{art.title}</h4>
-                            <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">{art.excerpt}</p>
-                          </Link>
-                          <div className="pt-2 flex items-center justify-between text-[11px] text-gray-500 border-t border-gray-50 dark:border-gray-880 mt-2">
-                            <span>{art.date} • {art.readTime}</span>
-                            <div className="flex items-center gap-3">
+                          </div>
+
+                          {/* Article Title & Excerpt */}
+                          <div className="space-y-2">
+                            <Link href={`/en/news-poc/article/${art.id}`} className="block">
+                              <h3 className="text-base md:text-lg font-bold text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors leading-snug">
+                                {art.title}
+                              </h3>
+                            </Link>
+                            <p className="text-xs md:text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-normal">
+                              {art.excerpt}
+                            </p>
+                          </div>
+
+                          {/* Author & Source Tag */}
+                          <div className="flex items-center justify-between text-[11px] text-gray-400 pt-1">
+                            <span className="font-semibold text-gray-700 dark:text-gray-300">
+                              {art.author || "iGEN Trade Intelligence Desk"}
+                            </span>
+                            {art.ministry && (
+                              <span className="text-[10px] text-gray-400 hidden sm:inline">
+                                {art.ministry}
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Interactive Action Bar (Like, Comment, Save, Share, Read) */}
+                          <div className="pt-3 border-t border-gray-100 dark:border-gray-850 flex flex-wrap items-center justify-between gap-3 text-xs">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              
+                              {/* 1. LIKE BUTTON */}
                               <button 
                                 onClick={() => handleLike(art.id)}
-                                className={`flex items-center gap-1 hover:text-red-500 transition-colors ${isLiked ? "text-red-500 font-bold" : ""}`}
+                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-all ${
+                                  isLiked 
+                                    ? "border-red-200 dark:border-red-900/40 bg-red-50 dark:bg-red-950/30 text-red-600 font-bold" 
+                                    : "border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:text-red-500"
+                                }`}
                               >
-                                <ThumbsUp className="h-3.5 w-3.5" /> {art.likes + (isLiked ? 1 : 0)}
+                                <Heart className={`h-3.5 w-3.5 ${isLiked ? "fill-red-500 text-red-500" : ""}`} />
+                                <span>{art.likes + (isLiked ? 1 : 0)}</span>
                               </button>
-                              <button className="flex items-center gap-1 hover:text-blue-550 transition-colors">
-                                <MessageCircle className="h-3.5 w-3.5" /> {art.comments}
+
+                              {/* 2. COMMENT BUTTON */}
+                              <button 
+                                onClick={() => setCommentOpenId(isCommentOpen ? null : art.id)}
+                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-all ${
+                                  isCommentOpen
+                                    ? "border-blue-200 dark:border-blue-900/40 bg-blue-50 dark:bg-blue-950/30 text-blue-600 font-bold"
+                                    : "border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:text-blue-600"
+                                }`}
+                              >
+                                <MessageSquare className="h-3.5 w-3.5" />
+                                <span>{art.comments + articleComments.length}</span>
                               </button>
-                              <Link href={`/en/news-poc/article/${art.id}`} className="text-[10px] font-bold text-blue-600 hover:underline flex items-center gap-0.5">
-                                Read Full <ChevronRight className="h-3 w-3" />
-                              </Link>
+
+                              {/* 3. SAVE ARTICLE BUTTON */}
+                              <button 
+                                onClick={() => handleSave(art.id)}
+                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-all ${
+                                  isSaved 
+                                    ? "border-purple-200 dark:border-purple-900/40 bg-purple-50 dark:bg-purple-950/30 text-purple-600 font-bold" 
+                                    : "border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:text-purple-600"
+                                }`}
+                              >
+                                <Bookmark className={`h-3.5 w-3.5 ${isSaved ? "fill-purple-600 text-purple-600" : ""}`} />
+                                <span>{isSaved ? "Saved" : "Save Article"}</span>
+                              </button>
+
+                              {/* 4. SHARE BUTTON */}
+                              <button 
+                                onClick={() => handleShare(art.id)}
+                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-all relative ${
+                                  isShared
+                                    ? "border-emerald-200 dark:border-emerald-900/40 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 font-bold"
+                                    : "border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:text-emerald-600"
+                                }`}
+                              >
+                                <Share2 className="h-3.5 w-3.5" />
+                                <span>{isShared ? "Link Copied!" : "Share"}</span>
+                              </button>
+
                             </div>
+
+                            {/* READ FULL LINK */}
+                            <Link 
+                              href={`/en/news-poc/article/${art.id}`} 
+                              className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 ml-auto"
+                            >
+                              Read Full Briefing <ChevronRight className="h-3.5 w-3.5" />
+                            </Link>
                           </div>
+
+                          {/* Inline Comments Expansion Drawer */}
+                          {isCommentOpen && (
+                            <div className="pt-3 border-t border-gray-100 dark:border-gray-800 space-y-3 bg-gray-50/70 dark:bg-gray-900/40 -mx-5 -mb-5 p-5 rounded-b-2xl">
+                              <h4 className="text-xs font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
+                                <MessageSquare className="h-3.5 w-3.5 text-blue-500" />
+                                Reader Comments ({art.comments + articleComments.length})
+                              </h4>
+
+                              {/* Existing comments */}
+                              <div className="space-y-2 max-h-48 overflow-y-auto">
+                                {articleComments.length === 0 ? (
+                                  <p className="text-[11px] text-gray-400 italic">No community comments yet. Be the first to share your analysis!</p>
+                                ) : (
+                                  articleComments.map((c, cIdx) => (
+                                    <div key={cIdx} className="bg-white dark:bg-[#0f172a] p-2.5 rounded-xl border border-gray-100 dark:border-gray-800 text-xs">
+                                      <div className="flex items-center justify-between text-[10px] text-gray-400 mb-1">
+                                        <span className="font-bold text-gray-700 dark:text-gray-300">{c.author}</span>
+                                        <span>{c.time}</span>
+                                      </div>
+                                      <p className="text-gray-800 dark:text-gray-200">{c.text}</p>
+                                    </div>
+                                  ))
+                                )}
+                              </div>
+
+                              {/* Post comment input */}
+                              <div className="flex items-center gap-2 pt-1">
+                                <input
+                                  type="text"
+                                  value={commentInput}
+                                  onChange={(e) => setCommentInput(e.target.value)}
+                                  onKeyDown={(e) => {
+                                    if (e.key === "Enter") handleAddComment(art.id);
+                                  }}
+                                  placeholder="Write a comment or industry takeaway..."
+                                  className="flex-1 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#0f172a] px-3.5 py-2 text-xs outline-none focus:border-blue-500"
+                                />
+                                <button
+                                  onClick={() => handleAddComment(art.id)}
+                                  className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-xs"
+                                >
+                                  Post
+                                </button>
+                              </div>
+                            </div>
+                          )}
+
                         </div>
                       );
                     })}
                   </div>
-                )}
+                </div>
+              )}
 
-                {activeSub === "all" && (
-                  <div className="space-y-4">
+              {/* Component 3: SECOND -> TRENDING STORIES IN SECTOR (FOR 'MY' TAB) */}
+              {activeSub === "my" && (
+                <div className="space-y-4 pt-2">
+                  <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
+                    <h3 className="font-display text-base font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                      <TrendingUp className="h-4.5 w-4.5 text-blue-500" />
+                      Trending Stories in {categoryName}
+                    </h3>
+                    <span className="text-[10px] font-bold text-blue-600 bg-blue-50 dark:bg-blue-950 px-2 py-0.5 rounded">
+                      High Velocity
+                    </span>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {articles.slice(1).map((art, idx) => (
+                      <Link 
+                        key={idx} 
+                        href={`/en/news-poc/article/${art.id || "sec-1"}`} 
+                        className="bg-white dark:bg-[#0f172a] rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800 p-5 flex flex-col justify-between shadow-xs hover:shadow-sm hover:border-blue-500 transition-all group block space-y-3"
+                      >
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="inline-block px-2.5 py-0.5 rounded text-[8px] font-bold text-blue-600 bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/20">
+                              {art.sector}
+                            </span>
+                            <span className="text-[9px] font-bold text-emerald-500">
+                              #{idx + 1} Trending
+                            </span>
+                          </div>
+                          <h4 className="text-xs font-bold text-gray-900 dark:text-white group-hover:text-blue-500 transition-colors leading-snug">
+                            {art.title}
+                          </h4>
+                          <p className="text-[11px] text-gray-500 line-clamp-2 leading-relaxed">
+                            {art.excerpt}
+                          </p>
+                        </div>
+                        <div className="pt-2 border-t border-gray-100 dark:border-gray-850 flex items-center justify-between text-[10px] text-gray-400">
+                          <span>{art.date} • {art.readTime}</span>
+                          <span className="text-blue-600 font-bold group-hover:underline flex items-center gap-0.5">
+                            Read Brief →
+                          </span>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* View when activeSub === "all" -> ALL SECTORS TAB */}
+              {activeSub === "all" && (
+                <div className="space-y-10">
+                  
+                  {/* 1. LATEST SECTOR NEWS FEED FOR ALL SECTORS */}
+                  <div className="space-y-6">
+                    {/* Header & Category Filter Bar */}
+                    <div className="bg-white dark:bg-[#0f172a] p-6 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xs space-y-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 dark:border-gray-800 pb-4">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="h-2.5 w-2.5 rounded-full bg-blue-500 animate-ping" />
+                            <h2 className="font-display text-lg md:text-xl font-bold uppercase tracking-wide text-gray-900 dark:text-white">
+                              Latest Sector News Feed
+                            </h2>
+                            <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 border border-emerald-200 dark:border-emerald-800">
+                              All 20 Sectors
+                            </span>
+                          </div>
+                          <p className="text-xs text-gray-500 mt-1">
+                            Comprehensive real-time coverage across all major industrial corridors, policy updates, and bilateral commerce nodes.
+                          </p>
+                        </div>
+
+                        {/* Local Search */}
+                        <div className="relative w-full sm:w-64">
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
+                          <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Search all sector stories..."
+                            className="w-full pl-9 pr-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-xs outline-none focus:border-blue-500"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Sector Filter Chips */}
+                      <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+                        <span className="text-[10px] font-bold text-gray-400 uppercase shrink-0">Sectors:</span>
+                        {[
+                          { label: "All Sectors (20)", value: "all" },
+                          { label: "Electronics & IT (S16)", value: "S16" },
+                          { label: "Agriculture (S01)", value: "S01" },
+                          { label: "Energy & Renewables (S17)", value: "S17" },
+                          { label: "Automotive & EV (S45)", value: "S45" },
+                          { label: "Pharma & Healthcare (S08)", value: "S08" },
+                          { label: "Defence & Aerospace (S07)", value: "S07" },
+                          { label: "FinTech & Payments (S42)", value: "S42" }
+                        ].map((pill) => (
+                          <button
+                            key={pill.value}
+                            onClick={() => setSelectedSectorFilter(pill.value)}
+                            className={`px-3 py-1.5 rounded-xl text-[10px] font-bold transition-all shrink-0 ${
+                              selectedSectorFilter === pill.value
+                                ? "bg-blue-600 text-white shadow-xs"
+                                : "bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:text-blue-600 border border-transparent hover:border-gray-200 dark:hover:border-gray-700"
+                            }`}
+                          >
+                            {pill.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Rich Large Article Cards Grid */}
+                    <div className="space-y-6">
+                      {[
+                        {
+                          id: "sec-all-1",
+                          title: "Semiconductor OSAT Packaging & High-Density Substrate Manufacturing Accelerates",
+                          excerpt: "Advanced packaging facilities in Tamil Nadu and Gujarat achieve commercial test benchmarks, reducing dependence on East Asian test houses by 35% in Q1.",
+                          sector: "Electronics & IT (S16)",
+                          ministry: "India Semiconductor Mission",
+                          author: "Arun Kulkarni · Tech Hardware",
+                          country: "India-Taiwan Bilateral",
+                          readTime: "5 min read",
+                          date: "12m ago",
+                          likes: 284,
+                          comments: 18,
+                          impact: "+38.2% YoY Output",
+                          isPremium: false,
+                          image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&auto=format&fit=crop&q=80"
+                        },
+                        {
+                          id: "sec-all-2",
+                          title: "Kisan Drone Subsidies & Precision Agriculture Infrastructure Scaled to 2,500 FPOs",
+                          excerpt: "Ministry of Agriculture introduces direct capital grants to deploy indigenous unmanned flight hardware for rural farming societies, optimizing pesticide and water utilization.",
+                          sector: "Agriculture & AgriTech (S01)",
+                          ministry: "Ministry of Agriculture & Farmers Welfare",
+                          author: "Dr. Ramesh Nair · Agri Policy",
+                          country: "Domestic Trade",
+                          readTime: "6 min read",
+                          date: "45m ago",
+                          likes: 195,
+                          comments: 14,
+                          impact: "+21.4% Crop Yield",
+                          isPremium: true,
+                          image: "https://images.unsplash.com/photo-1508614589041-895b88991e3e?w=800&auto=format&fit=crop&q=80"
+                        },
+                        {
+                          id: "sec-all-3",
+                          title: "Green Hydrogen Grid: Cabinet Approves €2.4B Interconnectivity Pipeline with European Ports",
+                          excerpt: "Renewable energy sector welcomes mega offshore grid interconnectivity funding to secure remote solar and wind farms into national power corridors for direct maritime hydrogen exports.",
+                          sector: "Energy & Sustainability (S17)",
+                          ministry: "Ministry of New & Renewable Energy",
+                          author: "Vikram Sengupta · Energy Lead",
+                          country: "India-Germany Bilateral",
+                          readTime: "8 min read",
+                          date: "2 hrs ago",
+                          likes: 412,
+                          comments: 31,
+                          impact: "€2.4B Pipeline",
+                          isPremium: false,
+                          image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&auto=format&fit=crop&q=80"
+                        },
+                        {
+                          id: "sec-all-4",
+                          title: "Commercial EV Interoperability: Heavy Duty Battery-Swapping Standard Adopted for 80 Freight Corridors",
+                          excerpt: "Standardized high-voltage battery-swapping architecture across national logistics highways cuts heavy commercial fleet turnaround times by 45%.",
+                          sector: "Automotive & EV (S45)",
+                          ministry: "Ministry of Heavy Industries",
+                          author: "Sunita Rao · Auto Logistics",
+                          country: "Domestic & SEA",
+                          readTime: "4 min read",
+                          date: "4 hrs ago",
+                          likes: 230,
+                          comments: 16,
+                          impact: "+45% Turnaround",
+                          isPremium: false,
+                          image: "https://images.unsplash.com/photo-1558441719-8b89ec691456?w=800&auto=format&fit=crop&q=80"
+                        },
+                        {
+                          id: "sec-all-5",
+                          title: "API Sovereignty Milestone: India Synthesizes 68% of Essential Bulk Drugs Domestically",
+                          excerpt: "Production Linked Incentive schemes yield massive breakthroughs in fermentation plants, drastically reducing import exposure on key active pharmaceutical ingredients.",
+                          sector: "Healthcare & Pharmaceuticals (S08)",
+                          ministry: "Department of Pharmaceuticals",
+                          author: "Dr. Ananya Sen · Pharma Sourcing",
+                          country: "Global Corridors",
+                          readTime: "5 min read",
+                          date: "6 hrs ago",
+                          likes: 310,
+                          comments: 22,
+                          impact: "68% Domestic Share",
+                          isPremium: true,
+                          image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&auto=format&fit=crop&q=80"
+                        },
+                        {
+                          id: "sec-all-6",
+                          title: "Autonomous Border Defence & UAV Avionics Production Clears Rapid Export Guidelines",
+                          excerpt: "Indigenously engineered radar guidance units and UAV airframes receive tri-service operational clearance with overseas sales pipelines for friendly partner nations.",
+                          sector: "Aerospace & Defence (S07)",
+                          ministry: "Ministry of Defence",
+                          author: "Col. Rajesh Verma · Defence Analyst",
+                          country: "Domestic & Global",
+                          readTime: "7 min read",
+                          date: "8 hrs ago",
+                          likes: 350,
+                          comments: 29,
+                          impact: "+54.0% Exports",
+                          isPremium: false,
+                          image: "https://images.unsplash.com/photo-1517976487588-46c8209ebfa5?w=800&auto=format&fit=crop&q=80"
+                        }
+                      ].filter(art => {
+                        const matchSearch = art.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          art.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          art.sector.toLowerCase().includes(searchQuery.toLowerCase());
+                        const matchSector = selectedSectorFilter === "all" || art.sector.includes(selectedSectorFilter);
+                        return matchSearch && matchSector;
+                      }).map((art) => {
+                        const isLiked = likedList.includes(art.id);
+                        const isSaved = savedList.includes(art.id);
+                        const isShared = sharedArticleId === art.id;
+                        const isCommentOpen = commentOpenId === art.id;
+                        const articleComments = commentsMap[art.id] || [];
+
+                        return (
+                          <div 
+                            key={art.id} 
+                            className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden shadow-xs hover:border-blue-400 dark:hover:border-blue-500/50 transition-all flex flex-col md:flex-row group"
+                          >
+                            {/* Article Image (Left / Top) */}
+                            <div className="md:w-72 md:shrink-0 relative overflow-hidden bg-slate-900 min-h-[220px] md:min-h-full">
+                              <img 
+                                src={art.image} 
+                                alt={art.title}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent md:hidden" />
+                              <span className="absolute top-3 left-3 bg-black/70 backdrop-blur-xs text-white text-[9px] font-bold px-2 py-0.5 rounded">
+                                {art.sector.split("(")[0]}
+                              </span>
+                            </div>
+
+                            {/* Article Body Content (Right) */}
+                            <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                              <div className="space-y-2.5">
+                                {/* Top Tags */}
+                                <div className="flex flex-wrap items-center justify-between gap-2">
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <span className="text-[9px] font-bold text-blue-600 bg-blue-50 dark:bg-blue-950/40 px-2.5 py-1 rounded-lg border border-blue-100 dark:border-blue-900/30">
+                                      {art.sector}
+                                    </span>
+                                    <span className="text-[9px] font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-900 px-2 py-0.5 rounded">
+                                      {art.country}
+                                    </span>
+                                    {art.impact && (
+                                      <span className="text-[8px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded">
+                                        {art.impact}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <span className="text-[10px] text-gray-400 font-medium">
+                                    {art.date} · {art.readTime}
+                                  </span>
+                                </div>
+
+                                {/* Title */}
+                                <Link href={`/en/news-poc/article/${art.id}`} className="block">
+                                  <h3 className="text-base md:text-lg font-bold text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors leading-snug">
+                                    {art.title}
+                                  </h3>
+                                </Link>
+
+                                {/* Excerpt */}
+                                <p className="text-xs md:text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-normal">
+                                  {art.excerpt}
+                                </p>
+                              </div>
+
+                              {/* Author & Ministry */}
+                              <div className="flex items-center justify-between text-[11px] text-gray-400 pt-1">
+                                <span className="font-semibold text-gray-700 dark:text-gray-300">
+                                  {art.author}
+                                </span>
+                                <span className="text-[10px] text-gray-400 hidden sm:inline">
+                                  {art.ministry}
+                                </span>
+                              </div>
+
+                              {/* Interactive Action Bar (Like, Comment, Save, Share, Read Full) */}
+                              <div className="pt-3 border-t border-gray-100 dark:border-gray-850 flex flex-wrap items-center justify-between gap-3 text-xs">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  
+                                  {/* 1. LIKE BUTTON */}
+                                  <button 
+                                    onClick={() => handleLike(art.id)}
+                                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-all ${
+                                      isLiked 
+                                        ? "border-red-200 dark:border-red-900/40 bg-red-50 dark:bg-red-950/30 text-red-600 font-bold" 
+                                        : "border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:text-red-500"
+                                    }`}
+                                  >
+                                    <Heart className={`h-3.5 w-3.5 ${isLiked ? "fill-red-500 text-red-500" : ""}`} />
+                                    <span>{art.likes + (isLiked ? 1 : 0)}</span>
+                                  </button>
+
+                                  {/* 2. COMMENT BUTTON */}
+                                  <button 
+                                    onClick={() => setCommentOpenId(isCommentOpen ? null : art.id)}
+                                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-all ${
+                                      isCommentOpen
+                                        ? "border-blue-200 dark:border-blue-900/40 bg-blue-50 dark:bg-blue-950/30 text-blue-600 font-bold"
+                                        : "border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:text-blue-600"
+                                    }`}
+                                  >
+                                    <MessageSquare className="h-3.5 w-3.5" />
+                                    <span>{art.comments + articleComments.length}</span>
+                                  </button>
+
+                                  {/* 3. SAVE ARTICLE BUTTON */}
+                                  <button 
+                                    onClick={() => handleSave(art.id)}
+                                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-all ${
+                                      isSaved 
+                                        ? "border-purple-200 dark:border-purple-900/40 bg-purple-50 dark:bg-purple-950/30 text-purple-600 font-bold" 
+                                        : "border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:text-purple-600"
+                                    }`}
+                                  >
+                                    <Bookmark className={`h-3.5 w-3.5 ${isSaved ? "fill-purple-600 text-purple-600" : ""}`} />
+                                    <span>{isSaved ? "Saved" : "Save Article"}</span>
+                                  </button>
+
+                                  {/* 4. SHARE BUTTON */}
+                                  <button 
+                                    onClick={() => handleShare(art.id)}
+                                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-all relative ${
+                                      isShared
+                                        ? "border-emerald-200 dark:border-emerald-900/40 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 font-bold"
+                                        : "border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:text-emerald-600"
+                                    }`}
+                                  >
+                                    <Share2 className="h-3.5 w-3.5" />
+                                    <span>{isShared ? "Link Copied!" : "Share"}</span>
+                                  </button>
+
+                                </div>
+
+                                {/* 5. READ FULL ARTICLE */}
+                                <Link 
+                                  href={`/en/news-poc/article/${art.id}`} 
+                                  className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 ml-auto"
+                                >
+                                  Read Full Article <ChevronRight className="h-3.5 w-3.5" />
+                                </Link>
+                              </div>
+
+                              {/* Inline Comments Expansion Drawer */}
+                              {isCommentOpen && (
+                                <div className="pt-3 border-t border-gray-100 dark:border-gray-800 space-y-3 bg-gray-50/70 dark:bg-gray-900/40 -mx-6 -mb-6 p-6 rounded-b-2xl">
+                                  <h4 className="text-xs font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
+                                    <MessageSquare className="h-3.5 w-3.5 text-blue-500" />
+                                    Reader & Analyst Comments ({art.comments + articleComments.length})
+                                  </h4>
+
+                                  {/* Existing comments */}
+                                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                                    {articleComments.length === 0 ? (
+                                      <p className="text-[11px] text-gray-400 italic">No community comments yet. Be the first to share your analysis!</p>
+                                    ) : (
+                                      articleComments.map((c, cIdx) => (
+                                        <div key={cIdx} className="bg-white dark:bg-[#0f172a] p-2.5 rounded-xl border border-gray-100 dark:border-gray-800 text-xs">
+                                          <div className="flex items-center justify-between text-[10px] text-gray-400 mb-1">
+                                            <span className="font-bold text-gray-700 dark:text-gray-300">{c.author}</span>
+                                            <span>{c.time}</span>
+                                          </div>
+                                          <p className="text-gray-800 dark:text-gray-200">{c.text}</p>
+                                        </div>
+                                      ))
+                                    )}
+                                  </div>
+
+                                  {/* Post comment input */}
+                                  <div className="flex items-center gap-2 pt-1">
+                                    <input
+                                      type="text"
+                                      value={commentInput}
+                                      onChange={(e) => setCommentInput(e.target.value)}
+                                      onKeyDown={(e) => {
+                                        if (e.key === "Enter") handleAddComment(art.id);
+                                      }}
+                                      placeholder="Write an industry analysis or perspective..."
+                                      className="flex-1 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#0f172a] px-3.5 py-2 text-xs outline-none focus:border-blue-500"
+                                    />
+                                    <button
+                                      onClick={() => handleAddComment(art.id)}
+                                      className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-xs"
+                                    >
+                                      Post
+                                    </button>
+                                  </div>
+                                </div>
+                              )}
+
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* 2. TRENDING STORIES IN ALL SECTORS */}
+                  <div className="space-y-5 pt-4">
+                    <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-4">
+                      <div>
+                        <h3 className="font-display text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                          <TrendingUp className="h-5 w-5 text-blue-500" />
+                          Trending Stories in All Sectors
+                        </h3>
+                        <p className="text-xs text-gray-500 mt-0.5">
+                          High-momentum industrial intelligence with the highest cross-sector readership this week.
+                        </p>
+                      </div>
+                      <span className="text-[10px] font-bold text-blue-600 bg-blue-50 dark:bg-blue-950 px-2.5 py-1 rounded-lg border border-blue-200 dark:border-blue-900/40">
+                        ⚡ High Velocity Radar
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                      {[
+                        {
+                          id: "sec-all-trend-1",
+                          title: "Critical Mineral Exploration: 12 Rare Earth Blocks Auctioned for Cell Giga-Factories",
+                          excerpt: "Domestic lithium, cobalt, and nickel extraction reserves open to private investment consortiums to secure clean mobility supply lines.",
+                          sector: "Mining & Rare Minerals (S25)",
+                          date: "1 hr ago",
+                          readTime: "4 min read",
+                          views: "14.2k reads",
+                          velocity: "+48% spike",
+                          rank: "#1"
+                        },
+                        {
+                          id: "sec-all-trend-2",
+                          title: "Digital Public Infrastructure: Cross-Border UPI APIs Scaled to 14 Global Maritime Gateways",
+                          excerpt: "Automated port duty and customs settlement rails via UPI go live in Singapore, UAE, and European logistics clusters.",
+                          sector: "FinTech & Payments (S42)",
+                          date: "3 hrs ago",
+                          readTime: "5 min read",
+                          views: "11.8k reads",
+                          velocity: "+34% spike",
+                          rank: "#2"
+                        },
+                        {
+                          id: "sec-all-trend-3",
+                          title: "Cold Chain Freight Logistics: 40 Multi-Modal Refrigerated Terminals Operational",
+                          excerpt: "Dedicated perishable freight corridors slash transit spoilage rates for fresh horticulture and seafood exports to the Gulf.",
+                          sector: "Logistics & Supply Chain (S43)",
+                          date: "5 hrs ago",
+                          readTime: "6 min read",
+                          views: "9.5k reads",
+                          velocity: "+29% spike",
+                          rank: "#3"
+                        },
+                        {
+                          id: "sec-all-trend-4",
+                          title: "Textile Technical Fabrics: High-Performance Geo-Textile Production Surges 32%",
+                          excerpt: "Export orders for advanced industrial polymers and infrastructural fabrics expand across North American highway construction projects.",
+                          sector: "Textiles & Apparel (S04)",
+                          date: "7 hrs ago",
+                          readTime: "4 min read",
+                          views: "8.1k reads",
+                          velocity: "+22% spike",
+                          rank: "#4"
+                        }
+                      ].map((trendArt, tIdx) => (
+                        <Link
+                          key={tIdx}
+                          href={`/en/news-poc/article/${trendArt.id}`}
+                          className="bg-white dark:bg-[#0f172a] rounded-2xl border border-gray-200 dark:border-gray-800 p-6 flex flex-col justify-between shadow-xs hover:border-blue-500 hover:shadow-md transition-all group space-y-4"
+                        >
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                              <span className="inline-block px-2.5 py-0.5 rounded text-[8px] font-bold text-blue-600 bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/20">
+                                {trendArt.sector}
+                              </span>
+                              <div className="flex items-center gap-2">
+                                <span className="text-[9px] font-bold text-emerald-500 bg-emerald-50 dark:bg-emerald-950/30 px-2 py-0.5 rounded">
+                                  {trendArt.velocity}
+                                </span>
+                                <span className="text-[10px] font-bold text-amber-500">
+                                  {trendArt.rank} Trending
+                                </span>
+                              </div>
+                            </div>
+                            <h4 className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors leading-snug">
+                              {trendArt.title}
+                            </h4>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-2">
+                              {trendArt.excerpt}
+                            </p>
+                          </div>
+                          <div className="pt-3 border-t border-gray-100 dark:border-gray-850 flex items-center justify-between text-[11px] text-gray-400">
+                            <span>{trendArt.date} · {trendArt.readTime} · <strong className="text-gray-700 dark:text-gray-300">{trendArt.views}</strong></span>
+                            <span className="text-blue-600 font-bold group-hover:underline flex items-center gap-0.5 text-xs">
+                              Read Brief →
+                            </span>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 3. ALL SECTOR CHANNELS DIRECTORIES */}
+                  <div className="space-y-5 pt-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-gray-200 dark:border-gray-800 pb-4">
+                      <div>
+                        <h3 className="font-display text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                          <Globe className="h-5 w-5 text-blue-500" />
+                          All Sector Channels Directory
+                        </h3>
+                        <p className="text-xs text-gray-500 mt-0.5">
+                          Follow dedicated real-time feeds for each of the 20 strategic national sectors.
+                        </p>
+                      </div>
+                      <span className="text-xs font-semibold text-gray-400">
+                        Showing {SECTORS_LIST.length} Active Channels
+                      </span>
+                    </div>
+
                     {/* Follow Channels Directory Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {(() => {
@@ -511,19 +1435,29 @@ export default function NewsPOCCatchAllPage() {
                         ).map((item: any) => {
                           const isFollowed = followedItems.includes(item.code);
                           return (
-                            <div key={item.code} className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-4 rounded-xl flex items-center justify-between shadow-xs hover:border-blue-500/35 transition-all">
-                              <div>
-                                <span className="text-[9px] font-mono text-gray-400 font-bold block">{item.code}</span>
-                                <span className="text-xs font-bold text-gray-900 dark:text-white">{item.name}</span>
-                                <span className="block text-[9px] text-gray-400 truncate max-w-[155px]">{item[searchField3] || ""}</span>
-                                <span className="block text-[10px] text-gray-500 italic mt-1">⚡ {item.feed}</span>
+                            <div key={item.code} className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-4 rounded-2xl flex items-center justify-between shadow-xs hover:border-blue-500/40 transition-all">
+                              <div className="space-y-1">
+                                <div className="flex items-center gap-2">
+                                  <span className="text-[9px] font-mono text-blue-600 dark:text-blue-400 font-bold bg-blue-50 dark:bg-blue-950/40 px-1.5 py-0.5 rounded border border-blue-200 dark:border-blue-900/40">
+                                    {item.code}
+                                  </span>
+                                  <span className="text-xs font-bold text-gray-900 dark:text-white">
+                                    {item.name}
+                                  </span>
+                                </div>
+                                <span className="block text-[10px] text-gray-400 truncate max-w-[220px]">
+                                  {item[searchField3] || ""}
+                                </span>
+                                <span className="block text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
+                                  ⚡ {item.feed || "Active intelligence feed streaming."}
+                                </span>
                               </div>
                               <button
                                 onClick={() => handleFollow(item.code)}
-                                className={`text-[10px] font-bold px-3 py-1.5 rounded transition-all flex-shrink-0 ${
+                                className={`text-xs font-bold px-3.5 py-2 rounded-xl transition-all flex-shrink-0 shadow-xs ${
                                   isFollowed
-                                    ? "bg-emerald-50 border border-emerald-300 text-emerald-700 dark:bg-emerald-950/20 dark:border-emerald-900 dark:text-emerald-300"
-                                    : "bg-gray-900 text-white dark:bg-white dark:text-gray-950 hover:bg-gray-850"
+                                    ? "bg-emerald-50 border border-emerald-300 text-emerald-700 dark:bg-emerald-950/30 dark:border-emerald-800 dark:text-emerald-300"
+                                    : "bg-gray-900 text-white dark:bg-white dark:text-gray-950 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 dark:hover:text-white"
                                 }`}
                               >
                                 {isFollowed ? "✓ Following" : "Follow"}
@@ -534,7 +1468,9 @@ export default function NewsPOCCatchAllPage() {
                       })()}
                     </div>
                   </div>
-                )}
+
+                </div>
+              )}
 
                 {activeSub === "intelligence" && (
   categoryKey === "country" ? (
@@ -1503,9 +2439,6 @@ export default function NewsPOCCatchAllPage() {
     </div>
   )
 )}
-
-
-              </div>
 
               {/* Component 5: Locked AI Intelligence Preview */}
               <div className="relative overflow-hidden rounded-2xl border border-blue-200 dark:border-blue-900/40 bg-blue-50/30 dark:bg-blue-950/10 p-6 shadow-xs">

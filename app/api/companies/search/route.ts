@@ -46,9 +46,9 @@ export async function GET(request: NextRequest) {
         const count = list.filter(c => c.industryId === s.id).length;
         return { id: s.id, name: s.name, count };
       }).filter(f => f.count > 0),
-      countries: mockData.countries().map(c => {
-        const count = list.filter(c => c.countryCode === c.code).length;
-        return { code: c.code, name: c.name, count };
+      countries: mockData.countries().map(cnt => {
+        const count = list.filter(c => c.countryCode === cnt.code).length;
+        return { code: cnt.code, name: cnt.name, count };
       }).filter(f => f.count > 0),
       tiers: [
         { value: 'registered', count: list.filter(c => c.tier === 'registered').length },

@@ -4,6 +4,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { ComponentType, ReactNode } from "react";
 import { useState } from "react";
+import NewsPOCMyCountryView from "./NewsPOCMyCountryView";
+import NewsPOCAllCountryView from "./NewsPOCAllCountryView";
+import NewsPOCCountryIntelligenceView from "./NewsPOCCountryIntelligenceView";
 import {
   ArrowLeft,
   Award,
@@ -14,6 +17,7 @@ import {
   Calendar,
   CheckCircle,
   ChevronRight,
+  Clock,
   Crown,
   Download,
   Eye,
@@ -23,11 +27,14 @@ import {
   Lock,
   Mail,
   MapPin,
+  MessageCircle,
   MessageSquare,
   Mic,
   Plus,
   Search,
   Share2,
+  Shield,
+  ShieldAlert,
   Sparkles,
   Star,
   Target,
@@ -44,8 +51,7 @@ import {
   Layers,
   Building,
   Check,
-  Coins,
-  Shield
+  Coins
 } from "lucide-react";
 
 type Submenu = "my" | "all" | "intelligence";
@@ -114,6 +120,68 @@ const BILATERAL_CORRIDORS = [
   { countryA: "India 🇮🇳", countryB: "Singapore 🇸🇬", totalValue: "$35.6B", exportsA: "$12.1B", exportsB: "$23.5B", agreement: "CECA & PayNow-UPI", status: "Active" }
 ];
 
+const COUNTRY_INTELLIGENCE_KPIS = [
+  { label: "Top Strategic Corridor", val: "India ⇄ UAE", sub: "$87.2B Bilateral (CEPA Active)", color: "text-purple-600", icon: Globe },
+  { label: "Total Tracked Corridors", val: "195 Countries", sub: "1,200+ Bilateral Trade Pairs", color: "text-blue-600", icon: BarChart2 },
+  { label: "Global Trade Risk Average", val: "21.4 / 100", sub: "Low Risk Environment Index", color: "text-emerald-500", icon: Target },
+  { label: "Active Trade Alerts", val: "4 Key Lanes", sub: "Red Sea & CBAM Compliance", color: "text-amber-500", icon: ShieldAlert }
+];
+
+const PREDICTIVE_COUNTRY_SIGNALS = [
+  {
+    name: "India-UAE Logistics Expansion",
+    sig: "SIGNAL: HIGH CONFIDENCE (88%)",
+    desc: "Bilateral non-oil trade target of $100B by 2030 supported by direct container terminals and CEPA tariff phase-outs.",
+    w: "88%",
+    color: "bg-purple-600"
+  },
+  {
+    name: "US-India Semiconductor Reshoring",
+    sig: "SIGNAL: HIGH ACCELERATION (92%)",
+    desc: "iCET capital frameworks accelerate fab equipment imports and OSAT test-assembly volume shipments.",
+    w: "92%",
+    color: "bg-blue-600"
+  },
+  {
+    name: "European CBAM Carbon Boundary Compliance",
+    sig: "SIGNAL: MODERATE RISK (68%)",
+    desc: "New carbon declaration benchmarks for steel and aluminium exports to EU ports take effect Q4 2026.",
+    w: "68%",
+    color: "bg-amber-500"
+  }
+];
+
+const LEADERSHIP_SIGNALS_DATA = [
+  {
+    name: "Jonathan Hayes",
+    des: "Minister of Trade, UK",
+    text: "We are finalizing the framework for the digital trade corridor, expecting a 30% reduction in customs processing overhead by Q3.",
+    status: "Positive Growth",
+    col: "text-emerald-600 bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800"
+  },
+  {
+    name: "Sarah Lin",
+    des: "CEO, Pacific Logistics Group",
+    text: "Capacity constraints at major west coast ports remain a structural issue. We advise clients to diversify entry points through secondary hubs.",
+    status: "Neutral / Cautious",
+    col: "text-amber-600 bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-800"
+  },
+  {
+    name: "Carlos Mendoza",
+    des: "Head of Commodities, Banco Sur",
+    text: "Agricultural export tariffs introduced overnight will impact Q2 forecasts. Immediate margin recalculation is advised.",
+    status: "Risk Alert",
+    col: "text-red-600 bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800"
+  }
+];
+
+const MARKET_PERFORMANCE_DATA = [
+  { market: "India", vol: "$112.4B", growth: "+8.2%", risk: "LOW RISK", riskColor: "text-emerald-500" },
+  { market: "Vietnam", vol: "$94.8B", growth: "+11.5%", risk: "MODERATE", riskColor: "text-amber-500" },
+  { market: "UAE", vol: "$87.2B", growth: "+18.4%", risk: "LOW RISK", riskColor: "text-emerald-500" },
+  { market: "Mexico", vol: "$68.4B", growth: "+6.2%", risk: "MODERATE", riskColor: "text-amber-500" }
+];
+
 const AI_RISK_SCORES = [
   { country: "United Arab Emirates 🇦🇪", riskScore: 18, riskLevel: "LOW RISK", tariffTrend: "-12% Tariff Reductions", fdiOutlook: "Very Strong (+21%)" },
   { country: "United States 🇺🇸", riskScore: 22, riskLevel: "LOW RISK", tariffTrend: "Stable MFN Tariffs", fdiOutlook: "Robust (+14%)" },
@@ -126,6 +194,33 @@ const INTELLIGENCE_REPORTS = [
   { id: "rep-2", title: "India-UAE CEPA Tariff Phase-Out & Maritime Corridor Guide", code: "REP-BILA-UAE", price: "$249", category: "CEPA Accord", pages: "78 pages", downloads: 1890 },
   { id: "rep-3", title: "India-EU Broad-Based Trade Accord & Regulatory Matrix", code: "REP-BILA-EU", price: "$199", category: "EU Policy", pages: "65 pages", downloads: 1150 }
 ];
+
+const AI_COUNTRY_PREVIEWS: Record<string, { summary: string; developments: string; impact: string; opportunities: string; risks: string; outlook: string }> = {
+  India: {
+    summary: "India shows strong growth trends in electronics OSAT packaging and renewable infrastructure corridors.",
+    developments: "🔒 Key Developments: Accelerated PLI chip assemblies disbursements",
+    impact: "🔒 Business Impact: Reduced customs clearance latency for electronics OEMs",
+    opportunities: "🔒 Opportunities: Bilateral trade treaty tariff reductions with EU nodes",
+    risks: "🔒 Risks: Power grid transmission integration delays",
+    outlook: "🔒 12-Month Outlook: Capital flow expansion matching Southeast Asian supply chains"
+  },
+  "United States": {
+    summary: "US-India bilateral trade corridors commands double-digit software and critical aerospace design premiums.",
+    developments: "🔒 Key Developments: Joint tech accords signed in Washington",
+    impact: "🔒 Business Impact: Simplified FDI compliance structures for tech startups",
+    opportunities: "🔒 Opportunities: Advanced manufacturing co-development ventures",
+    risks: "🔒 Risks: Macroeconomic interest rates and FX index volatility",
+    outlook: "🔒 12-Month Outlook: Strong bilateral commerce volume expansion"
+  },
+  UAE: {
+    summary: "UAE-India CEPA corridors accelerate supply flow through single-window digital customs integrations.",
+    developments: "🔒 Key Developments: Digital customs API deployment across UAE ports",
+    impact: "🔒 Business Impact: Logistics transit times dropped by 38% under CEPA rules",
+    opportunities: "🔒 Opportunities: GCC-wide logistics distribution partnerships",
+    risks: "🔒 Risks: Shipping corridor container capacity shortages",
+    outlook: "🔒 12-Month Outlook: Non-oil trade flow target of $100B reached ahead of schedule"
+  }
+};
 
 function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
@@ -152,6 +247,7 @@ export default function NewsPOCCountryNewsSubmenu({ submenu }: Props) {
 
   const [selectedCountryA, setSelectedCountryA] = useState("India 🇮🇳");
   const [selectedCountryB, setSelectedCountryB] = useState("UAE 🇦🇪");
+  const [aiPreviewCountry, setAiPreviewCountry] = useState<string>("India");
 
   const SubMenuHeader = () => (
     <div className="mx-auto max-w-7xl px-4 lg:px-6">
@@ -192,292 +288,43 @@ export default function NewsPOCCountryNewsSubmenu({ submenu }: Props) {
     <section className={`bg-gradient-to-br ${cfg.gradFrom} ${cfg.gradTo} text-white relative overflow-hidden`}>
       <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] [background-size:28px_28px]" />
       <div className="relative z-10 mx-auto max-w-7xl px-4 py-8 lg:px-6">
-        <div className="flex flex-col lg:flex-row gap-6 lg:items-end justify-between">
-          <div className="max-w-3xl space-y-3">
-            <div className="flex items-center gap-2">
-              <div className="h-9 w-9 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center">
-                <IconComp className="h-4 w-4" />
-              </div>
-              <span className="text-[10px] font-bold uppercase tracking-widest text-white/70">{cfg.sublabel}</span>
-            </div>
-            <h1 className="font-display text-2xl md:text-4xl font-bold tracking-tight">{title}</h1>
-            <p className="text-sm text-white/85 leading-relaxed font-normal">{description}</p>
+        <div className="max-w-3xl space-y-2">
+          <div className="flex items-center gap-2">
+            <IconComp className="h-4 w-4 text-white/80" />
+            <span className="text-[10px] font-bold text-white/80 uppercase tracking-widest">{cfg.sublabel}</span>
           </div>
-          
-          <div className="flex gap-2">
-            <Link href="/eoi" className="bg-white text-gray-950 font-bold text-xs px-4 py-2.5 rounded-xl hover:bg-gray-100 transition-all">
-              Explore Countries
-            </Link>
-            <Link href="/eoi" className="bg-white/15 border border-white/20 text-white font-bold text-xs px-4 py-2.5 rounded-xl hover:bg-white/25 transition-all">
-              Download Reports
-            </Link>
-          </div>
+          <h1 className="font-display text-2xl md:text-3xl font-bold tracking-tight">{title}</h1>
+          <p className="text-white/80 text-xs md:text-sm font-normal leading-relaxed">{description}</p>
         </div>
       </div>
     </section>
   );
 
-  // VIEW 1: MY COUNTRY (Personalized Dashboard)
+  // VIEW 1: MY COUNTRY DASHBOARD
   if (submenu === "my") {
     return (
       <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
         <SubMenuHeader />
-        <HeroBanner
-          title="My Country Intelligence Dashboard (India 🇮🇳)"
-          description="Personalized country news, macro indicators, trade leads, and FDI project updates."
-        />
-
-        <section className="mx-auto max-w-7xl px-4 pt-8 lg:px-6 space-y-8">
-          
-          {/* Country Snapshot */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {[
-              { label: "GDP Nominal", val: "$3.75 Trillion", sub: "+6.8% Growth", icon: Globe, color: "text-blue-500" },
-              { label: "Population", val: "1.42 Billion", sub: "52% Under 30", icon: Users, color: "text-emerald-500" },
-              { label: "Total Trade Volume", val: "$1.11 Trillion", sub: "+12.4% YoY", icon: TrendingUp, color: "text-purple-500" },
-              { label: "Currency Stability", val: "INR (₹ 83.4 / $)", sub: "Stable Band", icon: Coins, color: "text-amber-500" }
-            ].map((snap, idx) => {
-              const SIcon = snap.icon;
-              return (
-                <Card key={idx} className="p-4 space-y-1.5">
-                  <SIcon className={`h-5 w-5 ${snap.color}`} />
-                  <span className="text-[9px] font-bold text-gray-400 uppercase block">{snap.label}</span>
-                  <div className="font-display text-lg font-bold text-gray-900 dark:text-white">{snap.val}</div>
-                  <span className="text-[9px] text-emerald-500 font-bold block">{snap.sub}</span>
-                </Card>
-              );
-            })}
-          </div>
-
-          {/* Today's Country News & Trade Opportunities */}
-          <div className="grid grid-cols-12 gap-8">
-            <div className="col-span-12 lg:col-span-8 space-y-4">
-              <SectionTitle title="Today's Country News & Briefings" />
-              {[
-                { title: "Union Budget Infrastructure Allocation Boosts Port Interconnectivity by $12 Billion", date: "45m ago", readTime: "5 min", sector: "Infrastructure", views: "2.1K" },
-                { title: "National Quantum & AI Hardware Mission Releases $600M Capital Subsidies", date: "2h ago", readTime: "4 min", sector: "AI & Electronics", views: "1.8K" },
-                { title: "Agritech Export Volumes Surge 16% to European Distribution Hubs", date: "4h ago", readTime: "6 min", sector: "Agriculture", views: "1.4K" }
-              ].map((news, idx) => (
-                <Card key={idx} className="p-4 space-y-1.5 hover:border-blue-500 transition-all">
-                  <div className="flex items-center justify-between text-[8px] font-bold text-gray-400">
-                    <span className="bg-blue-50 text-blue-600 px-2 py-0.5 rounded">{news.sector}</span>
-                    <span>{news.date} · {news.readTime}</span>
-                  </div>
-                  <h3 className="text-xs font-bold text-gray-900 dark:text-white leading-snug">{news.title}</h3>
-                  <div className="flex items-center justify-between text-[9px] text-gray-400 pt-1">
-                    <span>Source: iGEN Country Desk</span>
-                    <span className="flex items-center gap-0.5"><Eye className="h-3 w-3" />{news.views}</span>
-                  </div>
-                </Card>
-              ))}
-            </div>
-
-            <div className="col-span-12 lg:col-span-4 space-y-5">
-              <Card className="p-4 space-y-3">
-                <SectionTitle title="Trade Opportunities" action={<Target className="h-4 w-4 text-emerald-500" />} />
-                {[
-                  { title: "Phytochemical Extracts to EU Ports", buyer: "German Pharma Co.", val: "$4.2M" },
-                  { title: "Solar Cell Modules to UAE Grid", buyer: "Abu Dhabi Energy", val: "$12.8M" }
-                ].map((opp, idx) => (
-                  <div key={idx} className="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 space-y-1">
-                    <span className="text-[8px] font-bold text-emerald-600 uppercase block">ACTIVE BUY LEAD</span>
-                    <h5 className="text-[10px] font-bold text-gray-900 dark:text-white leading-snug">{opp.title}</h5>
-                    <div className="flex items-center justify-between text-[9px] pt-1">
-                      <span className="text-gray-400">{opp.buyer}</span>
-                      <span className="font-bold text-emerald-600">{opp.val}</span>
-                    </div>
-                  </div>
-                ))}
-              </Card>
-
-              <Card className="p-4 space-y-3">
-                <SectionTitle title="AI Country Risk Alerts" action={<Shield className="h-4 w-4 text-amber-500" />} />
-                <div className="p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-xl text-xs space-y-1">
-                  <span className="font-bold text-amber-700 dark:text-amber-400 block">LOW GEOPOLITICAL RISK</span>
-                  <p className="text-[10px] text-amber-800 dark:text-amber-300 font-normal">Macroeconomic stability index rating: 18/100 (Optimal rating for FDI commitments).</p>
-                </div>
-              </Card>
-            </div>
-          </div>
-
-        </section>
+        <NewsPOCMyCountryView />
       </div>
     );
   }
 
-  // VIEW 2: ALL COUNTRIES (195 Bilateral Directory & Comparison)
+  // VIEW 2: ALL COUNTRIES (195 Bilateral Explorer)
   if (submenu === "all") {
     return (
       <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
         <SubMenuHeader />
-        <HeroBanner
-          title="All 195 Countries Bilateral Directory & Comparison"
-          description="Explore 195 countries, inspect bilateral trade flows, and compare macro indicators side-by-side."
-        />
-
-        <section className="mx-auto max-w-7xl px-4 pt-8 lg:px-6 space-y-8">
-          
-          {/* Bilateral Trade Explorer (Interactive Country A ↔ Country B) */}
-          <Card className="p-6 space-y-4 border-blue-500/30">
-            <SectionTitle title="Interactive Bilateral Trade Explorer" action={<Compass className="h-4 w-4 text-blue-500" />} />
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-              <div>
-                <label className="text-[9px] font-bold text-gray-400 uppercase block mb-1">Country A (Origin)</label>
-                <select value={selectedCountryA} onChange={(e) => setSelectedCountryA(e.target.value)} className="w-full p-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 text-xs font-bold outline-none">
-                  <option>India 🇮🇳</option>
-                  <option>USA 🇺🇸</option>
-                  <option>UAE 🇦🇪</option>
-                  <option>Germany 🇩🇪</option>
-                  <option>Singapore 🇸🇬</option>
-                </select>
-              </div>
-
-              <div className="text-center font-display font-bold text-sm text-blue-600">
-                ⚡ BILATERAL CORRIDOR ⚡
-              </div>
-
-              <div>
-                <label className="text-[9px] font-bold text-gray-400 uppercase block mb-1">Country B (Destination)</label>
-                <select value={selectedCountryB} onChange={(e) => setSelectedCountryB(e.target.value)} className="w-full p-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 text-xs font-bold outline-none">
-                  <option>UAE 🇦🇪</option>
-                  <option>USA 🇺🇸</option>
-                  <option>Germany 🇩🇪</option>
-                  <option>Singapore 🇸🇬</option>
-                  <option>Japan 🇯🇵</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 flex flex-wrap items-center justify-between gap-4 text-xs">
-              <div>
-                <span className="text-[9px] text-gray-400 uppercase block">Selected Corridor</span>
-                <span className="font-bold text-gray-900 dark:text-white">{selectedCountryA} ↔ {selectedCountryB}</span>
-              </div>
-              <div>
-                <span className="text-[9px] text-gray-400 uppercase block">Bilateral Trade Output</span>
-                <span className="font-bold text-blue-600">$87.2 Billion</span>
-              </div>
-              <div>
-                <span className="text-[9px] text-gray-400 uppercase block">YoY Corridor Growth</span>
-                <span className="font-bold text-emerald-500">+18.4%</span>
-              </div>
-              <div>
-                <span className="text-[9px] text-gray-400 uppercase block">Trade Accord</span>
-                <span className="font-bold text-purple-600">CEPA Accord (Active)</span>
-              </div>
-              <Link href="/eoi" className="bg-blue-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg">
-                View Full Corridor Datapack
-              </Link>
-            </div>
-          </Card>
-
-          {/* 195 Country Directory Grid */}
-          <div className="space-y-4">
-            <SectionTitle title="195 Countries Directory" action={<span className="text-[10px] font-bold text-gray-400">Showing sample 8 / 195</span>} />
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-              {COUNTRIES_195_SAMPLE.map((c, idx) => (
-                <Card key={idx} className="p-4 hover:border-emerald-500 transition-all space-y-2 group">
-                  <div className="flex items-center justify-between">
-                    <span className="text-2xl">{c.flag}</span>
-                    <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600">{c.growth} YoY</span>
-                  </div>
-                  <h3 className="font-bold text-xs text-gray-900 dark:text-white group-hover:text-emerald-600 transition-colors leading-snug">{c.name}</h3>
-                  <p className="text-[10px] text-gray-500">Capital: {c.capital} · Region: {c.region}</p>
-                  <div className="pt-2 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-[9px]">
-                    <span className="text-gray-400">GDP: {c.gdp}</span>
-                    <span className="text-blue-600 font-bold">Trade: {c.trade}</span>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          </div>
-
-        </section>
+        <NewsPOCAllCountryView />
       </div>
     );
   }
 
-  // VIEW 3: INTELLIGENCE (Country Intelligence, Risk AI & Reports)
+  // VIEW 3: INTELLIGENCE (Comprehensive Country Intelligence & Bilateral Analytics)
   return (
     <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
       <SubMenuHeader />
-      <HeroBanner
-        title="Country Intelligence, AI Risk Scorecards & Market Research Store"
-        description="View AI country risk scores (0-100), tariff phase-out schedules, buy reports, and order custom consulting."
-      />
-
-      <section className="mx-auto max-w-7xl px-4 pt-8 lg:px-6 space-y-8">
-        
-        {/* AI Country Risk Scorecards */}
-        <div className="space-y-4">
-          <SectionTitle title="AI Country Risk Scorecards & Tariff Outlook" action={<Sparkles className="h-4 w-4 text-amber-500" />} />
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            {AI_RISK_SCORES.map((r, idx) => (
-              <Card key={idx} className="p-4 space-y-3">
-                <div className="flex items-center justify-between">
-                  <h4 className="font-bold text-xs text-gray-900 dark:text-white">{r.country}</h4>
-                  <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600">{r.riskLevel}</span>
-                </div>
-                <div className="space-y-1">
-                  <span className="text-[8px] text-gray-400 block uppercase">Risk Score (0-100)</span>
-                  <div className="font-display text-xl font-bold text-blue-600">{r.riskScore} / 100</div>
-                </div>
-                <div className="pt-2 border-t border-gray-100 dark:border-gray-800 space-y-1 text-[9px]">
-                  <span className="text-gray-500 block font-semibold">{r.tariffTrend}</span>
-                  <span className="text-emerald-600 block font-bold">{r.fdiOutlook}</span>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-
-        {/* Premium Country Reports Store */}
-        <div className="space-y-4">
-          <SectionTitle title="Country Research & Bilateral Intelligence Reports" action={<span className="text-[10px] font-bold text-purple-600">PDF Datapacks</span>} />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {INTELLIGENCE_REPORTS.map((rep) => (
-              <Card key={rep.id} className="p-5 space-y-3 flex flex-col justify-between hover:border-purple-500 transition-all group">
-                <div>
-                  <div className="flex items-center justify-between text-[8px] font-bold text-gray-400">
-                    <span>{rep.code}</span>
-                    <span className="text-purple-600 font-bold">{rep.category}</span>
-                  </div>
-                  <h3 className="text-xs font-bold text-gray-950 dark:text-white mt-2 leading-snug group-hover:text-purple-600 transition-colors">{rep.title}</h3>
-                  <span className="text-[9px] text-gray-400 block mt-1">{rep.pages} · {rep.downloads} downloads</span>
-                </div>
-
-                <div className="pt-2 border-t border-gray-100 dark:border-gray-850 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-display text-base font-bold text-gray-900 dark:text-white">{rep.price}</span>
-                    <Link href="/eoi" className="bg-emerald-500 hover:bg-emerald-600 text-white text-[9px] font-bold px-3 py-1.5 rounded-lg transition-colors">
-                      Buy Report
-                    </Link>
-                  </div>
-                  <Link href="/eoi" className="w-full text-center border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 text-[9px] font-bold py-1.5 rounded-lg block hover:bg-gray-100 dark:hover:bg-gray-900">
-                    Download Sample PDF
-                  </Link>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-
-        {/* Custom RFP / Enterprise Consulting Request Form */}
-        <Card className="p-6 bg-gradient-to-br from-slate-950 to-[#102747] text-white border border-blue-900/60 shadow-lg space-y-4">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-4">
-            <div>
-              <span className="text-[9px] font-bold text-blue-400 uppercase tracking-widest">Enterprise Advisory</span>
-              <h3 className="text-base font-bold text-white mt-1">Order Custom Country Intelligence & Bilateral Tariff Audits</h3>
-              <p className="text-xs text-slate-300 font-normal mt-0.5">Need customized country risk modeling, tariff impact audits, or trade mission advisory? Submit a custom research request.</p>
-            </div>
-            <Link href="/eoi" className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shrink-0">
-              Submit RFP / Inquiry
-            </Link>
-          </div>
-        </Card>
-
-      </section>
+      <NewsPOCCountryIntelligenceView />
     </div>
   );
 }

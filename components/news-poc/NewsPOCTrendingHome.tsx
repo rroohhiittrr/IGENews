@@ -8,8 +8,10 @@ import {
   ArrowLeft, ChevronRight, Search, Users, CheckCircle, MessageSquare, 
   Calendar, Flame, Sparkles
 } from "lucide-react";
+import NewsPOCFullDiscoveryView from "./NewsPOCFullDiscoveryView";
 
 export default function NewsPOCTrendingHome() {
+  const [isFullForecastOpen, setIsFullForecastOpen] = useState(false);
   const [sentimentVal, setSentimentVal] = useState(60);
   const [aiPlus, setAiPlus] = useState(true);
   const [activeRange, setActiveRange] = useState<"now" | "today" | "week" | "all">("now");
@@ -30,6 +32,21 @@ export default function NewsPOCTrendingHome() {
       [key]: prev[key] + 1
     }));
   };
+
+  if (isFullForecastOpen) {
+    return (
+      <NewsPOCFullDiscoveryView
+        contextTitle="Trending Market Forecasts & Strategic Discovery"
+        contextSubtitle="Explore multi-sector market forecasts, macroeconomic sentiment trends, policy projections, and strategic trade forecasts across 50 global industry sectors."
+        contextBadge="TRENDING FORECASTS • FULL DISCOVERY"
+        breadcrumbSource={[
+          { label: "Trending", href: "/en/news-poc/trending" },
+          { label: "Popular Now" }
+        ]}
+        onBack={() => setIsFullForecastOpen(false)}
+      />
+    );
+  }
 
   return (
     <div className="bg-gray-50 dark:bg-[#070b12] text-gray-900 dark:text-gray-100 min-h-screen pb-16 transition-colors duration-300">
@@ -322,8 +339,12 @@ export default function NewsPOCTrendingHome() {
               ))}
             </div>
 
-            <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-2.5 rounded-lg transition-colors uppercase">
-              View All Forecasts
+            <button 
+              onClick={() => setIsFullForecastOpen(true)}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-2.5 rounded-lg transition-colors uppercase shadow-xs flex items-center justify-center gap-1.5"
+            >
+              <span>View All Forecasts</span>
+              <ArrowUpRight className="h-3.5 w-3.5" />
             </button>
           </div>
 

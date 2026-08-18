@@ -19,12 +19,12 @@ export const CompanyCardSchema = z.object({
   id: z.string().uuid(),
   name: z.string().min(1).max(120),
   logoUrl: z.string().url().nullable(),
-  logoInitials: z.string().length(2).uppercase(), // fallback
+  logoInitials: z.string().length(2).toUpperCase(), // fallback
   tagline: z.string().max(200).nullable(),
   industry: z.string().min(1).max(80),
   industryId: z.string().min(1),
   location: z.string().min(1).max(100),
-  countryCode: z.string().length(2).uppercase(), // ISO 3166-1 alpha-2
+  countryCode: z.string().length(2).toUpperCase(), // ISO 3166-1 alpha-2
   tier: CompanyTierSchema,
   followerCount: z.number().int().nonnegative(),
   isFollowing: z.boolean(),
@@ -49,7 +49,7 @@ export const CompanyDetailSchema = CompanyCardSchema.extend({
   leadership: z.array(z.object({
     name: z.string(),
     role: z.string(),
-    initials: z.string().length(2).uppercase(),
+    initials: z.string().length(2).toUpperCase(),
   })).max(10).default([]),
   galleryImages: z.array(z.string().url()).max(10).default([]),
   analytics: z.object({
@@ -120,7 +120,7 @@ export const SectorSchema = z.object({
 export type Sector = z.infer<typeof SectorSchema>;
 
 export const CountrySchema = z.object({
-  code: z.string().length(2).uppercase(), // ISO 3166-1 alpha-2
+  code: z.string().length(2).toUpperCase(), // ISO 3166-1 alpha-2
   name: z.string().min(1).max(80),
   companyCount: z.number().int().nonnegative(),
   flagEmoji: z.string().max(4),
@@ -138,7 +138,7 @@ export const FilterMetaSchema = z.object({
     companyCount: z.number().int(),
   })),
   countries: z.array(z.object({
-    code: z.string().length(2).uppercase(),
+    code: z.string().length(2).toUpperCase(),
     name: z.string(),
     companyCount: z.number().int(),
   })),
@@ -170,7 +170,7 @@ export const SearchFacetsSchema = z.object({
     count: z.number().int(),
   })),
   countries: z.array(z.object({
-    code: z.string().length(2).uppercase(),
+    code: z.string().length(2).toUpperCase(),
     name: z.string(),
     count: z.number().int(),
   })),

@@ -3,6 +3,13 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import RegisteredCompanyPagesView from "./RegisteredCompanyPagesView";
+import RegisteredCompanyNewsView from "./RegisteredCompanyNewsView";
+import RegisteredCompanySectorView from "./RegisteredCompanySectorView";
+import RegisteredCompanyAllSectorsView from "./RegisteredCompanyAllSectorsView";
+import VerifiedCompanyPagesView from "./VerifiedCompanyPagesView";
+import VerifiedCompanyNewsView from "./VerifiedCompanyNewsView";
+import VerifiedCompanyBySectorView from "./VerifiedCompanyBySectorView";
 import {
   Building2, CheckCircle, Crown, Search, TrendingUp, ChevronRight,
   ArrowLeft, Star, Globe, Briefcase, MapPin, Users, BarChart2,
@@ -306,6 +313,23 @@ export default function NewsPOCCompanyNewsSubmenu({ tier, submenu }: Props) {
   // VIEW 1 ── COMPANY PAGES (Professional Digital Profile)
   // ══════════════════════════════════════════════════════════════════════════
   if (submenu === "pages") {
+    if (tier === "registered") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100">
+          <SubMenuTabs />
+          <RegisteredCompanyPagesView />
+        </div>
+      );
+    }
+    if ((tier as string) === "verified") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100">
+          <SubMenuTabs />
+          <VerifiedCompanyPagesView />
+        </div>
+      );
+    }
+
     return (
       <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
         <SubMenuTabs />
@@ -327,7 +351,7 @@ export default function NewsPOCCompanyNewsSubmenu({ tier, submenu }: Props) {
                       <CheckCircle className="h-2.5 w-2.5" /> {tc.label === "Enterprise" ? "Top Company" : "Verified"}
                     </span>
                   )}
-                  {tier === "registered" && (
+                  {(tier as string) === "registered" && (
                     <span className="bg-white/10 border border-white/20 text-white text-[8px] font-bold px-2 py-0.5 rounded-full">
                       Registered
                     </span>
@@ -397,7 +421,7 @@ export default function NewsPOCCompanyNewsSubmenu({ tier, submenu }: Props) {
               <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl p-6 space-y-4 shadow-xs">
                 <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-850 pb-3">
                   <h2 className="font-bold text-sm text-gray-900 dark:text-white uppercase tracking-wider">Products & Services</h2>
-                  {tier !== "registered" && (
+                  {(tier as string) !== "registered" && (
                     <button className="text-[9px] font-bold text-blue-500 border border-blue-200 dark:border-blue-900 px-2.5 py-1 rounded-lg hover:bg-blue-50 transition-colors flex items-center gap-1">
                       <Download className="h-2.5 w-2.5" /> Download Catalogue
                     </button>
@@ -413,7 +437,7 @@ export default function NewsPOCCompanyNewsSubmenu({ tier, submenu }: Props) {
                     </div>
                   ))}
                 </div>
-                {tier === "registered" && (
+                {(tier as string) === "registered" && (
                   <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 p-3 rounded-lg flex items-center gap-2">
                     <Lock className="h-4 w-4 text-blue-500 shrink-0" />
                     <span className="text-[10px] font-semibold text-blue-600">Gallery & Brochure downloads available for Verified and Enterprise companies.</span>
@@ -443,7 +467,7 @@ export default function NewsPOCCompanyNewsSubmenu({ tier, submenu }: Props) {
               {/* Company Gallery (locked for registered) */}
               <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl p-6 space-y-4 shadow-xs">
                 <h2 className="font-bold text-sm text-gray-900 dark:text-white uppercase tracking-wider border-b border-gray-100 dark:border-gray-850 pb-3">Company Gallery</h2>
-                {tier === "registered" ? (
+                {(tier as string) === "registered" ? (
                   <div className="relative">
                     <div className="grid grid-cols-3 gap-3 blur-xs pointer-events-none">
                       {[1, 2, 3].map((i) => (
@@ -534,9 +558,9 @@ export default function NewsPOCCompanyNewsSubmenu({ tier, submenu }: Props) {
               <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-4 rounded-2xl shadow-xs space-y-3">
                 <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-850 pb-2">
                   <h4 className="font-bold text-xs text-gray-900 dark:text-white uppercase tracking-wider">Analytics</h4>
-                  {tier === "registered" && <Lock className="h-3.5 w-3.5 text-gray-400" />}
+                  {(tier as string) === "registered" && <Lock className="h-3.5 w-3.5 text-gray-400" />}
                 </div>
-                {tier === "registered" ? (
+                {(tier as string) === "registered" ? (
                   <div className="text-center space-y-2 py-4">
                     <Lock className="h-8 w-8 text-gray-300 mx-auto" />
                     <p className="text-xs text-gray-400">Analytics unlocked for Verified tier</p>
@@ -575,6 +599,24 @@ export default function NewsPOCCompanyNewsSubmenu({ tier, submenu }: Props) {
   // VIEW 2 ── COMPANY NEWS (News Publishing Hub)
   // ══════════════════════════════════════════════════════════════════════════
   if (submenu === "news") {
+    if (tier === "registered") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100">
+          <SubMenuTabs />
+          <RegisteredCompanyNewsView />
+        </div>
+      );
+    }
+
+    if ((tier as string) === "verified") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100">
+          <SubMenuTabs />
+          <VerifiedCompanyNewsView />
+        </div>
+      );
+    }
+
     return (
       <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
         <SubMenuTabs />
@@ -588,7 +630,7 @@ export default function NewsPOCCompanyNewsSubmenu({ tier, submenu }: Props) {
               <p className="text-xs text-gray-500 mt-0.5">Publishing: <span className={`font-bold ${tc.textAccent}`}>{tc.publishLimit}</span></p>
             </div>
             <div className="flex gap-2">
-              {tier === "registered" ? (
+              {(tier as string) === "registered" ? (
                 <Link href="/eoi" className="border border-gray-200 dark:border-gray-700 text-gray-500 font-bold text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 opacity-60 cursor-not-allowed">
                   <Lock className="h-3.5 w-3.5" /> Publish Article (Upgrade)
                 </Link>
@@ -674,7 +716,7 @@ export default function NewsPOCCompanyNewsSubmenu({ tier, submenu }: Props) {
                 </div>
               </div>
 
-              {tier === "registered" && (
+              {(tier as string) === "registered" && (
                 <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 p-5 rounded-xl text-center space-y-2">
                   <Lock className="h-6 w-6 text-blue-400 mx-auto" />
                   <p className="text-xs font-bold text-blue-600">You can publish up to 5 articles per month.</p>
@@ -727,6 +769,24 @@ export default function NewsPOCCompanyNewsSubmenu({ tier, submenu }: Props) {
   // VIEW 3 ── BY SECTOR (Company Discovery by Industry)
   // ══════════════════════════════════════════════════════════════════════════
   if (submenu === "sector") {
+    if (tier === "registered") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100">
+          <SubMenuTabs />
+          <RegisteredCompanySectorView />
+        </div>
+      );
+    }
+
+    if ((tier as string) === "verified") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100">
+          <SubMenuTabs />
+          <VerifiedCompanyBySectorView />
+        </div>
+      );
+    }
+
     return (
       <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
         <SubMenuTabs />
@@ -850,6 +910,14 @@ export default function NewsPOCCompanyNewsSubmenu({ tier, submenu }: Props) {
   // VIEW 4 ── ALL SECTORS (Full Industry Directory)
   // ══════════════════════════════════════════════════════════════════════════
   if (submenu === "all") {
+    if ((tier as string) === "registered") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
+          <SubMenuTabs />
+          <RegisteredCompanyAllSectorsView />
+        </div>
+      );
+    }
     return (
       <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
         <SubMenuTabs />
@@ -887,7 +955,7 @@ export default function NewsPOCCompanyNewsSubmenu({ tier, submenu }: Props) {
           </div>
 
           {/* Featured Sectors banner */}
-          {tier !== "registered" && (
+          {(tier as string) !== "registered" && (
             <div className={`bg-gradient-to-r ${tc.gradFrom} ${tc.gradTo} text-white p-5 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-4`}>
               <div className="space-y-1">
                 <span className="text-[9px] font-bold text-white/70 uppercase tracking-widest">Featured Sector Placement</span>
@@ -912,12 +980,12 @@ export default function NewsPOCCompanyNewsSubmenu({ tier, submenu }: Props) {
             </div>
             <div className="divide-y divide-gray-50 dark:divide-gray-850">
               {SECTOR_DATA.map((sector, idx) => (
-                <div key={idx} className={`grid grid-cols-12 px-5 py-3.5 items-center hover:bg-gray-50 dark:hover:bg-gray-955 transition-colors ${sector.featured && tier !== "registered" ? "bg-amber-50/30 dark:bg-amber-950/5" : ""}`}>
+                <div key={idx} className={`grid grid-cols-12 px-5 py-3.5 items-center hover:bg-gray-50 dark:hover:bg-gray-955 transition-colors ${sector.featured && (tier as string) !== "registered" ? "bg-amber-50/30 dark:bg-amber-950/5" : ""}`}>
                   <div className="col-span-4 flex items-center gap-2.5">
                     <span className="text-lg">{sector.icon}</span>
                     <div>
                       <span className="font-bold text-xs text-gray-900 dark:text-white block">{sector.name}</span>
-                      {sector.featured && tier !== "registered" && (
+                      {sector.featured && (tier as string) !== "registered" && (
                         <span className={`text-[7px] font-bold ${tc.textAccent} uppercase`}>Featured</span>
                       )}
                     </div>

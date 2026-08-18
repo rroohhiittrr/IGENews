@@ -4,6 +4,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { ComponentType, ReactNode } from "react";
 import { useState } from "react";
+import SMEAllCommunityView from "./SMEAllCommunityView";
+import SMETopCommunityView from "./SMETopCommunityView";
+import LeaderAllCommunityView from "./LeaderAllCommunityView";
+import LeaderTopCommunityView from "./LeaderTopCommunityView";
+import ReaderAllCommunityView from "./ReaderAllCommunityView";
+import ReaderTopCommunityView from "./ReaderTopCommunityView";
 import {
   ArrowLeft,
   Award,
@@ -265,6 +271,24 @@ export default function NewsPOCCommunitiesSubmenu({ trackSlug, viewSlug }: Props
   // TRACK 1: SME & ASME COMMUNITY
   // ══════════════════════════════════════════════════════════════════
   if (activeTrack === "sme") {
+    if (currentView === "all") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
+          <SubMenuHeader />
+          <SMEAllCommunityView />
+        </div>
+      );
+    }
+
+    if (currentView === "top") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
+          <SubMenuHeader />
+          <SMETopCommunityView />
+        </div>
+      );
+    }
+
     return (
       <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
         <SubMenuHeader />
@@ -313,6 +337,24 @@ export default function NewsPOCCommunitiesSubmenu({ trackSlug, viewSlug }: Props
   // TRACK 2: READER COMMUNITY
   // ══════════════════════════════════════════════════════════════════
   if (activeTrack === "reader") {
+    if (currentView === "all") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
+          <SubMenuHeader />
+          <ReaderAllCommunityView />
+        </div>
+      );
+    }
+
+    if (currentView === "top") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
+          <SubMenuHeader />
+          <ReaderTopCommunityView />
+        </div>
+      );
+    }
+
     return (
       <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
         <SubMenuHeader />
@@ -349,6 +391,24 @@ export default function NewsPOCCommunitiesSubmenu({ trackSlug, viewSlug }: Props
   // TRACK 3: LEADER COMMUNITY
   // ══════════════════════════════════════════════════════════════════
   if (activeTrack === "leader") {
+    if (currentView === "all") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
+          <SubMenuHeader />
+          <LeaderAllCommunityView />
+        </div>
+      );
+    }
+
+    if (currentView === "top") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
+          <SubMenuHeader />
+          <LeaderTopCommunityView />
+        </div>
+      );
+    }
+
     return (
       <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
         <SubMenuHeader />

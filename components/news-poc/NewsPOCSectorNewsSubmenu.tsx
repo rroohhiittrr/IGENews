@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import NewsPOCSectorEngagementView from "./NewsPOCSectorEngagementView";
+import NewsPOCSectorIntelligenceView from "./NewsPOCSectorIntelligenceView";
 import type { ComponentType, ReactNode } from "react";
 import { useState } from "react";
 import {
@@ -44,7 +46,9 @@ import {
   TrendingDown
 } from "lucide-react";
 
-type Submenu = "all" | "engagement" | "intelligence";
+import NewsPOCAllIndustryView from "./NewsPOCAllIndustryView";
+
+type Submenu = "all" | "engagement" | "intelligence" | "industry";
 
 interface Props {
   submenu: Submenu;
@@ -89,6 +93,16 @@ const SUBMENU_CONFIG: Record<Submenu, {
     gradTo: "to-indigo-700",
     badgeBg: "bg-purple-600",
     button: "bg-purple-600 hover:bg-purple-700 text-white"
+  },
+  industry: {
+    label: "Industry Intelligence",
+    sublabel: "1,350+ Detailed Sub-Industries Directory",
+    purpose: "Explore granular sub-industry profiles, capacity audits, and supply chain telemetry.",
+    icon: BarChart2,
+    gradFrom: "from-amber-600",
+    gradTo: "to-orange-700",
+    badgeBg: "bg-amber-600",
+    button: "bg-amber-600 hover:bg-amber-700 text-white"
   }
 };
 
@@ -180,7 +194,7 @@ export default function NewsPOCSectorNewsSubmenu({ submenu }: Props) {
         </div>
 
         <div className="flex gap-1 flex-wrap">
-          {(["all", "engagement", "intelligence"] as Submenu[]).map((s) => (
+          {(["all", "engagement", "intelligence", "industry"] as Submenu[]).map((s) => (
             <button
               key={s}
               onClick={() => router.push(`${basePath}/${s}`)}
@@ -282,230 +296,43 @@ export default function NewsPOCSectorNewsSubmenu({ submenu }: Props) {
     return (
       <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
         <SubMenuHeader />
-        <HeroBanner
-          title="Sector Engagement Community & Polls"
-          description="Engage in industry discussions, cast votes in real-time polls, and ask verified Subject Matter Experts."
-        />
+        <div className="mx-auto max-w-7xl px-4 pt-8 lg:px-6">
+          <NewsPOCSectorEngagementView />
+        </div>
+      </div>
+    );
+  }
 
-        <section className="mx-auto max-w-7xl px-4 pt-8 lg:px-6 space-y-8">
-          <div className="grid grid-cols-12 gap-8">
-
-            {/* Left Column: Community Feed & Polls */}
-            <div className="col-span-12 lg:col-span-8 space-y-8">
-
-              {/* Create Post / Ask Expert Bar */}
-              <Card className="p-4 space-y-3">
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center">
-                    YOU
-                  </div>
-                  <input className="flex-1 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-4 py-2.5 text-xs outline-none focus:border-emerald-500" placeholder="Start a sector discussion or ask an expert..." />
-                  <button className={`${cfg.button} rounded-xl px-4 py-2.5 text-xs font-bold flex items-center gap-1.5`}>
-                    <Plus className="h-3.5 w-3.5" /> Post
-                  </button>
-                </div>
-              </Card>
-
-              {/* Community Discussions */}
-              <div className="space-y-4">
-                <SectionTitle title="Community Feed & Discussions" />
-                {COMMUNITY_POSTS.map((post) => (
-                  <Card key={post.id} className="p-5 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2.5">
-                        <div className="h-9 w-9 rounded-full bg-gradient-to-br from-emerald-600 to-teal-700 text-white font-bold text-xs flex items-center justify-center">
-                          {post.author.split(" ").map((w) => w[0]).slice(0, 2).join("")}
-                        </div>
-                        <div>
-                          <h4 className="text-xs font-bold text-gray-900 dark:text-white leading-snug">{post.author}</h4>
-                          <span className="text-[9px] text-gray-400">{post.role} · {post.company}</span>
-                        </div>
-                      </div>
-                      <span className="text-[8px] font-bold px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600">
-                        {post.sector}
-                      </span>
-                    </div>
-
-                    <h3 className="text-sm font-bold text-gray-950 dark:text-white leading-snug">{post.title}</h3>
-                    <p className="text-xs text-gray-600 dark:text-gray-400 font-normal leading-relaxed">{post.content}</p>
-
-                    <div className="pt-2 border-t border-gray-100 dark:border-gray-850 flex items-center justify-between text-[10px] text-gray-500">
-                      <span>{post.time}</span>
-                      <div className="flex items-center gap-4">
-                        <button className="flex items-center gap-1 hover:text-emerald-600"><ThumbsUp className="h-3.5 w-3.5" /> {post.likes}</button>
-                        <button className="flex items-center gap-1 hover:text-blue-600"><MessageSquare className="h-3.5 w-3.5" /> {post.comments} comments</button>
-                        <button className="hover:text-gray-700"><Share2 className="h-3.5 w-3.5" /></button>
-                      </div>
-                    </div>
-                  </Card>
-                ))}
-              </div>
-
-              {/* Interactive Polls */}
-              <div className="space-y-4">
-                <SectionTitle title="Active Industry Polls & Surveys" action={<BarChart2 className="h-4 w-4 text-emerald-500" />} />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {COMMUNITY_POLLS.map((poll) => {
-                    const votedIdx = votedPolls[poll.id];
-                    return (
-                      <Card key={poll.id} className="p-5 space-y-3">
-                        <span className="text-[8px] font-bold text-emerald-600 uppercase">LIVE POLL · {poll.totalVotes} VOTES</span>
-                        <h4 className="text-xs font-bold text-gray-900 dark:text-white leading-snug">{poll.question}</h4>
-                        
-                        <div className="space-y-2 pt-1">
-                          {poll.options.map((opt, idx) => {
-                            const isSelected = votedIdx === idx;
-                            return (
-                              <button
-                                key={idx}
-                                onClick={() => handleVote(poll.id, idx)}
-                                className={`w-full text-left p-2.5 rounded-xl border text-xs relative overflow-hidden transition-all ${
-                                  isSelected ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/30" : "border-gray-200 dark:border-gray-800 hover:border-emerald-300"
-                                }`}
-                              >
-                                <div
-                                  className="absolute left-0 top-0 bottom-0 bg-emerald-500/10 rounded-xl transition-all"
-                                  style={{ width: `${opt.pct}%` }}
-                                />
-                                <div className="relative z-10 flex justify-between font-semibold">
-                                  <span className="text-gray-900 dark:text-white flex items-center gap-1.5">
-                                    {isSelected && <Check className="h-3 w-3 text-emerald-600 shrink-0" />}
-                                    {opt.label}
-                                  </span>
-                                  <span className="text-emerald-600 font-bold">{opt.pct}%</span>
-                                </div>
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </Card>
-                    );
-                  })}
-                </div>
-              </div>
-
-            </div>
-
-            {/* Right Sidebar: Ask an Expert & Webinars */}
-            <div className="col-span-12 lg:col-span-4 space-y-6">
-              
-              {/* Ask an Expert Board */}
-              <Card className="p-4 space-y-3">
-                <SectionTitle title="Ask an Expert (SME Q&A)" action={<HelpCircle className="h-4 w-4 text-emerald-500" />} />
-                <div className="space-y-3">
-                  {EXPERT_QA.map((qa, idx) => (
-                    <div key={idx} className="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 space-y-1.5">
-                      <span className="text-[8px] font-bold text-emerald-600 block">Answered by {qa.expert}</span>
-                      <h5 className="text-[10px] font-bold text-gray-900 dark:text-white leading-snug">Q: {qa.q}</h5>
-                      <p className="text-[9px] text-gray-500 leading-relaxed font-normal">{qa.answer}</p>
-                      <div className="pt-1 flex items-center justify-between text-[8px] text-gray-400">
-                        <span className="flex items-center gap-0.5"><ThumbsUp className="h-2.5 w-2.5 text-emerald-500" /> {qa.upvotes} helpful</span>
-                        <Link href="/eoi" className="text-blue-600 font-bold hover:underline">Ask Question →</Link>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </Card>
-
-              {/* Upcoming Webinars */}
-              <Card className="p-4 space-y-3">
-                <SectionTitle title="Upcoming Industry Webinars" action={<Calendar className="h-4 w-4 text-blue-500" />} />
-                {[
-                  { title: "2026 Sovereign AI Datacenter Panel", time: "Tomorrow, 3 PM IST" },
-                  { title: "Green Hydrogen Off-Take Contracting", time: "July 24, 4 PM IST" }
-                ].map((web, idx) => (
-                  <div key={idx} className="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 space-y-1">
-                    <span className="text-[8px] font-bold text-blue-600 uppercase block">{web.time}</span>
-                    <h5 className="text-[10px] font-bold text-gray-900 dark:text-white leading-snug">{web.title}</h5>
-                    <Link href="/eoi" className="text-[9px] font-bold text-blue-600 hover:underline block pt-1">
-                      Register Now →
-                    </Link>
-                  </div>
-                ))}
-              </Card>
-
-            </div>
-
-          </div>
-        </section>
+  // VIEW 4: INDUSTRY (1,350+ Industries)
+  if (submenu === "industry") {
+    return (
+      <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
+        <SubMenuHeader />
+        <div className="mx-auto max-w-7xl px-4 pt-8 lg:px-6">
+          <NewsPOCAllIndustryView />
+        </div>
       </div>
     );
   }
 
   // VIEW 3: INTELLIGENCE (Sector Intelligence Reports & AI)
+  if (submenu === "intelligence") {
+    return (
+      <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
+        <SubMenuHeader />
+        <div className="mx-auto max-w-7xl px-4 pt-8 lg:px-6">
+          <NewsPOCSectorIntelligenceView />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
       <SubMenuHeader />
-      <HeroBanner
-        title="Sector Intelligence Reports & Market Research Store"
-        description="Purchase peer-reviewed market research, access AI-powered forecast scorecards, and request custom enterprise consulting."
-      />
-
-      <section className="mx-auto max-w-7xl px-4 pt-8 lg:px-6 space-y-8">
-        
-        {/* Research Store Grid */}
-        <div className="space-y-4">
-          <SectionTitle title="Market Research & Intelligence Reports" action={<span className="text-[10px] font-bold text-purple-600">Download Samples Available</span>} />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {INTELLIGENCE_REPORTS_STORE.map((rep) => (
-              <Card key={rep.id} className="p-5 space-y-3 flex flex-col justify-between hover:border-purple-500 transition-all group">
-                <div>
-                  <div className="flex items-center justify-between text-[8px] font-bold text-gray-400">
-                    <span>{rep.code}</span>
-                    <span className="text-amber-500">{rep.rating}</span>
-                  </div>
-                  <span className="inline-block mt-1 text-[8px] font-bold px-2 py-0.5 rounded bg-purple-50 dark:bg-purple-950/20 text-purple-600">
-                    {rep.category}
-                  </span>
-                  <h3 className="text-xs font-bold text-gray-950 dark:text-white mt-2 leading-snug group-hover:text-purple-600 transition-colors">{rep.title}</h3>
-                  <span className="text-[9px] text-gray-400 block mt-1">{rep.pages} · {rep.downloads} downloads</span>
-                </div>
-
-                <div className="pt-2 border-t border-gray-100 dark:border-gray-850 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-display text-base font-bold text-gray-900 dark:text-white">{rep.price}</span>
-                    <Link href="/eoi" className="bg-emerald-500 hover:bg-emerald-600 text-white text-[9px] font-bold px-3 py-1.5 rounded-lg transition-colors">
-                      Buy Report
-                    </Link>
-                  </div>
-                  <Link href="/eoi" className="w-full text-center border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 text-[9px] font-bold py-1.5 rounded-lg block hover:bg-gray-100 dark:hover:bg-gray-900">
-                    Download Sample PDF
-                  </Link>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-
-        {/* Enterprise Consulting Request Form */}
-        <Card className="p-6 bg-gradient-to-br from-slate-950 to-[#1e1238] text-white border border-purple-900/60 shadow-lg space-y-4">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-4">
-            <div>
-              <span className="text-[9px] font-bold text-purple-400 uppercase tracking-widest">Enterprise Advisory</span>
-              <h3 className="text-base font-bold text-white mt-1">Order Custom B2B Sector Intelligence & Market Audits</h3>
-              <p className="text-xs text-slate-300 font-normal mt-0.5">Need customized market sizing, tariff impact models, or FDI advisory? Submit a custom research request.</p>
-            </div>
-            <Link href="/eoi" className="bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shrink-0">
-              Submit RFP / Inquiry
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-            {[
-              { title: "Custom Sizing Reports", desc: "Granular tariff & volume breakdowns" },
-              { title: "Competitive Audits", desc: "Top 50 competitor benchmarking" },
-              { title: "Regulatory Due Diligence", desc: "GoI ministry policy briefings" },
-              { title: "Bilateral Trade Maps", desc: "Custom corridor trade visualizers" }
-            ].map((srv, idx) => (
-              <div key={idx} className="p-3 bg-white/5 border border-white/10 rounded-xl space-y-1">
-                <h4 className="text-xs font-bold text-white">{srv.title}</h4>
-                <p className="text-[9px] text-slate-400">{srv.desc}</p>
-              </div>
-            ))}
-          </div>
-        </Card>
-
-      </section>
+      <div className="mx-auto max-w-7xl px-4 pt-8 lg:px-6">
+        <NewsPOCSectorIntelligenceView />
+      </div>
     </div>
   );
 }
