@@ -10,6 +10,7 @@ import RegisteredCompanyAllSectorsView from "./RegisteredCompanyAllSectorsView";
 import VerifiedCompanyPagesView from "./VerifiedCompanyPagesView";
 import VerifiedCompanyNewsView from "./VerifiedCompanyNewsView";
 import VerifiedCompanyBySectorView from "./VerifiedCompanyBySectorView";
+import VerifiedCompanyAllSectorsView from "./VerifiedCompanyAllSectorsView";
 import {
   Building2, CheckCircle, Crown, Search, TrendingUp, ChevronRight,
   ArrowLeft, Star, Globe, Briefcase, MapPin, Users, BarChart2,
@@ -915,6 +916,14 @@ export default function NewsPOCCompanyNewsSubmenu({ tier, submenu }: Props) {
         <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
           <SubMenuTabs />
           <RegisteredCompanyAllSectorsView />
+        </div>
+      );
+    }
+    if ((tier as string) === "verified") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
+          <SubMenuTabs />
+          <VerifiedCompanyAllSectorsView />
         </div>
       );
     }
