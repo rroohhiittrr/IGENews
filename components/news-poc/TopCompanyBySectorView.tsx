@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useParams, useSearchParams } from "next/navigation";
 import {
   Building2, CheckCircle, Crown, Search, TrendingUp, ChevronRight, ArrowRight,
   Star, Globe, Briefcase, MapPin, Users, Mail, Phone, Calendar, FileText,
@@ -167,8 +168,10 @@ function CardSkeleton() {
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function TopCompanyBySectorView() {
-  const params = (typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null);
-  const initialSector = params?.get("sector");
+  const params = useParams();
+  const searchParams = useSearchParams();
+  const locale = (params?.locale as string) || 'en';
+  const initialSector = searchParams.get('sector');
   const SECTORS_SAFE = SECTORS;
   const startSector = (initialSector && SECTORS_SAFE.find((s) => s.id === initialSector)) ? initialSector : SECTORS_SAFE[0].id;
 
@@ -196,7 +199,6 @@ export default function TopCompanyBySectorView() {
 
   const sector = SECTORS.find((s) => s.id === selectedSector) ?? SECTORS[0];
   const sectorCompanies = COMPANIES.filter((c) => c.industryId === selectedSector);
-  const locale = "en";
   const profileHref = (c: SectorCompany) => `/${locale}/company-news/${c.tier}/pages/${c.id}`;
 
   const filteredCompanies = sectorCompanies.filter((c) => {
