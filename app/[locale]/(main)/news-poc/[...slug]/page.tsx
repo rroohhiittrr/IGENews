@@ -14,6 +14,9 @@ import NewsPOCHeadlinesHome from "@/components/news-poc/NewsPOCHeadlinesHome";
 import NewsPOCCompanyNewsHome from "@/components/news-poc/NewsPOCCompanyNewsHome";
 import NewsPOCCompanyNewsSubmenu from "@/components/news-poc/NewsPOCCompanyNewsSubmenu";
 import NewsPOCTrendingHome from "@/components/news-poc/NewsPOCTrendingHome";
+import NewsPOCTrendingMostLikedMySectors from "@/components/news-poc/NewsPOCTrendingMostLikedMySectors";
+import NewsPOCTrendingMostLikedAllSectors from "@/components/news-poc/NewsPOCTrendingMostLikedAllSectors";
+import NewsPOCTrendingMostSharedMySectors from "@/components/news-poc/NewsPOCTrendingMostSharedMySectors";
 import NewsPOCLeaderNewsHome from "@/components/news-poc/NewsPOCLeaderNewsHome";
 import NewsPOCLeaderNewsSubmenu from "@/components/news-poc/NewsPOCLeaderNewsSubmenu";
 import NewsPOCExpertNewsHome from "@/components/news-poc/NewsPOCExpertNewsHome";
@@ -3488,6 +3491,18 @@ export default function NewsPOCCatchAllPage() {
     const trendSlug = slugParts[1]; // "most-liked", "most-shared", "most-commented"
     const trendName = subMatch?.label || "Most Liked";
     const subTab = slugParts[2] || "my"; // "my" or "all"
+
+    if (trendSlug === "most-liked" && subTab === "my") {
+      return <NewsPOCTrendingMostLikedMySectors onBack={() => router.back()} />;
+    }
+
+    if (trendSlug === "most-liked" && subTab === "all") {
+      return <NewsPOCTrendingMostLikedAllSectors onBack={() => router.back()} />;
+    }
+
+    if (trendSlug === "most-shared" && subTab === "my") {
+      return <NewsPOCTrendingMostSharedMySectors onBack={() => router.back()} />;
+    }
 
     // Tailored article data per submenu
     const articlesMap: Record<string, any[]> = {
