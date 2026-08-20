@@ -17,6 +17,17 @@ import NewsPOCTrendingHome from "@/components/news-poc/NewsPOCTrendingHome";
 import NewsPOCTrendingMostLikedMySectors from "@/components/news-poc/NewsPOCTrendingMostLikedMySectors";
 import NewsPOCTrendingMostLikedAllSectors from "@/components/news-poc/NewsPOCTrendingMostLikedAllSectors";
 import NewsPOCTrendingMostSharedMySectors from "@/components/news-poc/NewsPOCTrendingMostSharedMySectors";
+import NewsPOCTrendingMostSharedAllSectors from "@/components/news-poc/NewsPOCTrendingMostSharedAllSectors";
+import NewsPOCTrendingMostCommentedMySectors from "@/components/news-poc/NewsPOCTrendingMostCommentedMySectors";
+import NewsPOCTrendingMostCommentedAllSectors from "@/components/news-poc/NewsPOCTrendingMostCommentedAllSectors";
+import NewsPOCHeadlinesAIEditorMySector from "@/components/news-poc/NewsPOCHeadlinesAIEditorMySector";
+import NewsPOCHeadlinesAIEditorAllSectors from "@/components/news-poc/NewsPOCHeadlinesAIEditorAllSectors";
+import NewsPOCHeadlinesIntelligenceEditorMySector from "@/components/news-poc/NewsPOCHeadlinesIntelligenceEditorMySector";
+import NewsPOCHeadlinesIntelligenceEditorAllSectors from "@/components/news-poc/NewsPOCHeadlinesIntelligenceEditorAllSectors";
+import NewsPOCHeadlinesSMEEditorMySector from "@/components/news-poc/NewsPOCHeadlinesSMEEditorMySector";
+import NewsPOCHeadlinesSMEEditorAllSectors from "@/components/news-poc/NewsPOCHeadlinesSMEEditorAllSectors";
+import NewsPOCHeadlinesViksitBharatPanelEditorMySector from "@/components/news-poc/NewsPOCHeadlinesViksitBharatPanelEditorMySector";
+import NewsPOCHeadlinesViksitBharatPanelEditorAllSectors from "@/components/news-poc/NewsPOCHeadlinesViksitBharatPanelEditorAllSectors";
 import NewsPOCLeaderNewsHome from "@/components/news-poc/NewsPOCLeaderNewsHome";
 import NewsPOCLeaderNewsSubmenu from "@/components/news-poc/NewsPOCLeaderNewsSubmenu";
 import NewsPOCExpertNewsHome from "@/components/news-poc/NewsPOCExpertNewsHome";
@@ -2650,6 +2661,14 @@ export default function NewsPOCCatchAllPage() {
     const editorSlug = slugParts[1]; // "ai-editor", "intelligence-editor", "sme-editor", "viksit-bharat-panel", "podcast"
     const editorName = subMatch?.label || "IGEN Editor";
     const subTab = slugParts[2] || "my"; // "my" or "all"
+
+    if (editorSlug === "ai-editor" && subTab === "my") {
+      return <NewsPOCHeadlinesAIEditorMySector onBack={() => router.back()} />;
+    }
+
+    if (editorSlug === "ai-editor" && subTab === "all") {
+      return <NewsPOCHeadlinesAIEditorAllSectors onBack={() => router.back()} />;
+    }
     
     // Sample articles for different editors
     const editorArticlesMap: Record<string, any[]> = {
@@ -2677,6 +2696,30 @@ export default function NewsPOCCatchAllPage() {
     };
 
     const articles = editorArticlesMap[editorSlug] || editorArticlesMap["ai-editor"];
+
+    if (editorSlug === "intelligence-editor" && subTab === "my") {
+      return <NewsPOCHeadlinesIntelligenceEditorMySector onBack={() => router.back()} />;
+    }
+
+    if (editorSlug === "intelligence-editor" && subTab === "all") {
+      return <NewsPOCHeadlinesIntelligenceEditorAllSectors onBack={() => router.back()} />;
+    }
+
+    if (editorSlug === "sme-editor" && subTab === "my") {
+      return <NewsPOCHeadlinesSMEEditorMySector onBack={() => router.back()} />;
+    }
+
+    if (editorSlug === "sme-editor" && subTab === "all") {
+      return <NewsPOCHeadlinesSMEEditorAllSectors onBack={() => router.back()} />;
+    }
+
+    if (editorSlug === "viksit-bharat-panel" && subTab === "my") {
+      return <NewsPOCHeadlinesViksitBharatPanelEditorMySector onBack={() => router.back()} />;
+    }
+
+    if (editorSlug === "viksit-bharat-panel" && subTab === "all") {
+      return <NewsPOCHeadlinesViksitBharatPanelEditorAllSectors onBack={() => router.back()} />;
+    }
 
     if (editorSlug === "intelligence-editor") {
       return (
@@ -3502,6 +3545,18 @@ export default function NewsPOCCatchAllPage() {
 
     if (trendSlug === "most-shared" && subTab === "my") {
       return <NewsPOCTrendingMostSharedMySectors onBack={() => router.back()} />;
+    }
+
+    if (trendSlug === "most-shared" && subTab === "all") {
+      return <NewsPOCTrendingMostSharedAllSectors onBack={() => router.back()} />;
+    }
+
+    if (trendSlug === "most-commented" && subTab === "my") {
+      return <NewsPOCTrendingMostCommentedMySectors onBack={() => router.back()} />;
+    }
+
+    if (trendSlug === "most-commented" && subTab === "all") {
+      return <NewsPOCTrendingMostCommentedAllSectors onBack={() => router.back()} />;
     }
 
     // Tailored article data per submenu
