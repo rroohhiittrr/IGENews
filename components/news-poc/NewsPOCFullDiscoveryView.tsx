@@ -9,7 +9,6 @@ import {
   ArrowRight,
   Award,
   BarChart2,
-  Bell,
   Bookmark,
   Briefcase,
   Building2,
@@ -70,6 +69,14 @@ export interface NewsPOCFullDiscoveryViewProps {
 }
 
 // ─── Datasets ────────────────────────────────────────────────────────────────
+
+const TRENDING_SECTORS = [
+  { name: "Electronics & IT", desc: "Tech & Sovereign Compute", code: "IT", status: "↑ Trending", color: "text-emerald-500", bg: "bg-emerald-500/10", flag: "💻" },
+  { name: "Renewable Energy", desc: "Green Hydrogen & Solar", code: "RE", status: "↑ High", color: "text-emerald-500", bg: "bg-emerald-500/10", flag: "⚡" },
+  { name: "FinTech & Payments", desc: "UPI & Cross-Border API", code: "FT", status: "↑ Rising", color: "text-blue-500", bg: "bg-blue-500/10", flag: "💳" },
+  { name: "Logistics & Maritime", desc: "Port Settling & Customs", code: "LM", status: "↑ Rising", color: "text-blue-500", bg: "bg-blue-500/10", flag: "🚢" },
+  { name: "Pharma & Biotech", desc: "Bulk API Sourcing", code: "PH", status: "→ Stable", color: "text-gray-400", bg: "bg-gray-400/10", flag: "🔬" }
+];
 
 const ALL_DISCOVERY_STORIES = [
   {
@@ -370,7 +377,6 @@ export default function NewsPOCFullDiscoveryView({
   const [articleComments, setArticleComments] = useState<Record<string, { author: string; text: string; time: string }[]>>({});
 
   // Alert & Newsletter states
-  const [alertActive, setAlertActive] = useState<boolean>(false);
   const [newsletterEmail, setNewsletterEmail] = useState<string>("");
   const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
 
@@ -887,6 +893,41 @@ export default function NewsPOCFullDiscoveryView({
           {/* RIGHT 4-COLUMN: TRENDING, MOST READ & ENGAGEMENT SIDEBAR */}
           <div className="col-span-12 lg:col-span-4 space-y-6">
 
+            {/* ── TRENDING SECTORS ── */}
+            <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-3xl p-5 shadow-xs space-y-4">
+              <div className="border-b border-gray-200/60 dark:border-gray-800 pb-3 flex items-center justify-between">
+                <span className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5 font-display">
+                  <TrendingUp className="h-3.5 w-3.5 text-blue-500" />
+                  Trending Sectors
+                </span>
+                <span className="text-[9px] font-bold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-300 px-2 py-0.5 rounded">
+                  High Traffic
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 gap-2.5">
+                {TRENDING_SECTORS.map((trend) => (
+                  <button
+                    key={trend.name}
+                    className="p-2.5 bg-gray-50 dark:bg-gray-900/60 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-blue-400 transition-all flex items-center justify-between group text-left w-full cursor-default"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-base">{trend.flag}</span>
+                      <div className="min-w-0">
+                        <span className="text-xs font-bold text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors block">
+                          {trend.name}
+                        </span>
+                        <span className="text-[9px] text-gray-400 block font-normal">{trend.desc}</span>
+                      </div>
+                    </div>
+                    <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${trend.bg} ${trend.color} shrink-0`}>
+                      {trend.status}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* Trending Now */}
             <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-3xl p-5 shadow-xs space-y-3">
               <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-2.5">
@@ -943,27 +984,6 @@ export default function NewsPOCFullDiscoveryView({
                   </Link>
                 ))}
               </div>
-            </div>
-
-            {/* Create News Alert */}
-            <div className="bg-gradient-to-br from-blue-50/50 to-purple-50/50 dark:from-blue-950/20 dark:to-purple-950/20 border border-blue-200 dark:border-blue-900/40 rounded-3xl p-5 shadow-xs space-y-3">
-              <h4 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
-                <Bell className="h-4 w-4 text-blue-600" />
-                Never Miss Important News
-              </h4>
-              <p className="text-[11px] text-gray-600 dark:text-gray-400 leading-relaxed">
-                Receive instant notifications when major policies, tariffs, or bilateral trade agreements are published.
-              </p>
-              <button
-                onClick={() => setAlertActive(!alertActive)}
-                className={`w-full py-2.5 rounded-xl font-bold text-xs transition-all shadow-xs ${
-                  alertActive
-                    ? "bg-emerald-600 text-white"
-                    : "bg-blue-600 hover:bg-blue-700 text-white"
-                }`}
-              >
-                {alertActive ? "News Alerts Active ✓" : "Create News Alert →"}
-              </button>
             </div>
 
             {/* Stay Ahead Newsletter */}

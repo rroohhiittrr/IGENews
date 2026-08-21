@@ -7,9 +7,9 @@ import {
   Sparkles, TrendingUp, Search, ArrowLeft, ChevronRight,
   Clock, Calendar, Flame, Lock, Mail, FileText, CheckCircle,
   ThumbsUp, Bookmark, Share2, MessageSquare, Globe, Cpu, Zap, Car,
-  Layers, Scale, Headphones, Users, BarChart3,
+  Layers, Scale, Users, BarChart3,
   ArrowUpRight, Heart, Newspaper,
-  Play, Tag, Award, Target, Bell
+  Tag, Award, Target, Bell
 } from "lucide-react";
 
 function SectionTitle({ title, action, subtitle }: { title: string; action?: React.ReactNode; subtitle?: string }) {
@@ -32,6 +32,14 @@ function Card({ children, className = "" }: { children: React.ReactNode; classNa
   );
 }
 
+
+const MOST_READ_INDUSTRY_NEWS = [
+  { id: "ind-feed-1", title: "Semiconductor OSAT Substrate Scaling Accelerates Across Southern Industrial Corridors", count: "12.8k views", flag: "🇮🇳 🇹🇼", country: "India-Taiwan" },
+  { id: "ind-feed-2", title: "Green Hydrogen Marine Corridors: €2.4B Interconnectivity Pipeline Approved with EU Ports", count: "9.6k views", flag: "🇮🇳 🇩🇪", country: "India-Germany" },
+  { id: "ind-feed-3", title: "Heavy Commercial EV Battery Interoperability Protocol Mandated Across 80 Transit Corridors", count: "8.4k views", flag: "🇮🇳", country: "Domestic" },
+  { id: "ind-feed-4", title: "API Sovereignty Milestone: India Synthesizes 68% of Essential Bulk Drugs Domestically", count: "6.9k views", flag: "🌐", country: "Global" },
+  { id: "ind-feed-6", title: "Cross-Border UPI Integration Deployed Across 14 Major European and Gulf Maritime Trade Ports", count: "5.3k views", flag: "🇮🇳 🇦🇪", country: "India-UAE" }
+];
 
 interface NewsPOCAllIndustryViewProps {
   onBack?: () => void;
@@ -1100,6 +1108,39 @@ export default function NewsPOCAllIndustryView({ onBack }: NewsPOCAllIndustryVie
 
             {/* RIGHT 4-COLUMN SIDEBAR PANEL */}
             <div className="col-span-12 lg:col-span-4 space-y-6">
+
+              {/* ── MOST READ INDUSTRY NEWS ── */}
+              <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-3xl p-5 shadow-xs space-y-4">
+                <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3">
+                  <span className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5 font-display">
+                    <Flame className="h-3.5 w-3.5 text-red-600" />
+                    Most Read Industry News
+                  </span>
+                </div>
+
+                <div className="space-y-3.5">
+                  {MOST_READ_INDUSTRY_NEWS.map((art, idx) => (
+                    <Link
+                      key={art.id}
+                      href={`/en/news-poc/article/${art.id}`}
+                      className="flex gap-3 items-start group"
+                    >
+                      <span className="font-mono font-bold text-lg text-gray-300 dark:text-slate-700 w-5 text-right shrink-0">
+                        {idx + 1}.
+                      </span>
+                      <div className="space-y-0.5 min-w-0">
+                        <div className="flex items-center gap-1.5 text-[9px] font-bold text-blue-600 font-mono">
+                          <span>{art.flag} {art.country}</span>
+                          <span className="text-gray-400 font-normal">· {art.count}</span>
+                        </div>
+                        <h4 className="text-xs font-bold text-gray-900 dark:text-white group-hover:text-blue-600 leading-snug line-clamp-2 transition-colors">
+                          {art.title}
+                        </h4>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
               
               {/* ── 08. MARKET & BUSINESS INDICATORS ── */}
               <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-3xl p-5 shadow-xs space-y-3">
@@ -2279,61 +2320,6 @@ export default function NewsPOCAllIndustryView({ onBack }: NewsPOCAllIndustryVie
               </div>
             </div>
 
-            {/* SECTION 8 — WHAT'S CHANGING IN INDUSTRIES? */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
-                <h3 className="font-display text-base font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                  <Layers className="h-4.5 w-4.5 text-blue-500" />
-                  What's Changing Across Industries?
-                </h3>
-                <span className="text-xs text-gray-400">Strategic Context</span>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {[
-                  {
-                    ind: "Technology & Semiconductors",
-                    headline: "High-density OSAT substrates reshaping compute packaging.",
-                    desc: "Domestic testing plants reduce lead-time bottlenecks by 35% as multi-die advanced packaging replaces monolithic silicon imports.",
-                    link: "/en/news-poc/sector-news/industry"
-                  },
-                  {
-                    ind: "Energy & Infrastructure",
-                    headline: "Bilateral grid linkages driving coastal green ammonia pipelines.",
-                    desc: "€2.4B in maritime interconnectivity treaties link Western Indian renewable ports directly with Rotterdam clean fuel hubs.",
-                    link: "/en/news-poc/sector-news/industry"
-                  },
-                  {
-                    ind: "Automotive & Logistics",
-                    headline: "Universal battery-swapping enclosure specs mandated.",
-                    desc: "800V fast-swapping standards across 80 transit corridors eliminate proprietary infrastructure fragmentation for freight operators.",
-                    link: "/en/news-poc/sector-news/industry"
-                  }
-                ].map((card, cIdx) => (
-                  <div key={cIdx} className="bg-white dark:bg-[#0f172a] rounded-2xl border border-gray-200 dark:border-gray-800 p-5 shadow-xs flex flex-col justify-between space-y-3">
-                    <div className="space-y-2">
-                      <span className="text-[9px] font-bold text-blue-600 uppercase tracking-wider block">
-                        {card.ind}
-                      </span>
-                      <h4 className="text-xs font-bold text-gray-900 dark:text-white leading-snug">
-                        {card.headline}
-                      </h4>
-                      <p className="text-[11px] text-gray-600 dark:text-gray-400 leading-relaxed font-normal">
-                        {card.desc}
-                      </p>
-                    </div>
-                    <Link
-                      href={card.link}
-                      className="text-[11px] font-bold text-blue-600 hover:underline flex items-center gap-1 pt-2 border-t border-gray-100 dark:border-gray-800"
-                    >
-                      <span>Read Related Insights</span>
-                      <ChevronRight className="h-3 w-3" />
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            </div>
-
             {/* SECTION 9 — PERSONALIZED RECOMMENDED FOR YOU */}
             <div className="bg-gradient-to-r from-blue-900/10 via-purple-900/10 to-transparent p-6 rounded-3xl border border-blue-200 dark:border-blue-900/30 space-y-4">
               <div className="flex items-center justify-between">
@@ -2426,65 +2412,6 @@ export default function NewsPOCAllIndustryView({ onBack }: NewsPOCAllIndustryVie
                 </div>
               </div>
             )}
-
-
-            {/* SECTION 17 — INDUSTRY VOICES / PODCASTS & VIDEOS */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
-                <h3 className="font-display text-base font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                  <Headphones className="h-4.5 w-4.5 text-purple-500" />
-                  Industry Voices & Multimedia Briefs
-                </h3>
-                <span className="text-xs text-blue-600 font-bold hover:underline cursor-pointer">
-                  All Podcasts →
-                </span>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {[
-                  {
-                    title: "Episode 48: The Geopolitics of Advanced Semiconductor Packaging",
-                    host: "Dr. K. S. Rao with Jensen Huang",
-                    type: "Podcast",
-                    duration: "28 mins",
-                    ind: "Semiconductors"
-                  },
-                  {
-                    title: "Executive Brief: Decarbonizing Heavy Maritime Freight Corridors",
-                    host: "Sarah Lin with Ports Advisory",
-                    type: "Video",
-                    duration: "18 mins",
-                    ind: "Logistics"
-                  }
-                ].map((media, mIdx) => (
-                  <div
-                    key={mIdx}
-                    className="p-5 rounded-2xl bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 shadow-xs space-y-3 flex flex-col justify-between"
-                  >
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between text-[9px]">
-                        <span className="font-bold text-purple-600 bg-purple-50 dark:bg-purple-950/40 px-2 py-0.5 rounded">
-                          {media.type}
-                        </span>
-                        <span className="text-gray-400">{media.duration}</span>
-                      </div>
-                      <h4 className="text-xs font-bold text-gray-900 dark:text-white leading-snug">
-                        {media.title}
-                      </h4>
-                      <p className="text-[10px] text-gray-500">{media.host}</p>
-                    </div>
-
-                    <button 
-                      onClick={() => alert(`Launching media player for: ${media.title}`)}
-                      className="w-full bg-purple-50 dark:bg-purple-950/30 text-purple-600 dark:text-purple-300 font-bold text-xs py-2 rounded-xl border border-purple-200 dark:border-purple-900/30 hover:bg-purple-100 transition-colors flex items-center justify-center gap-1.5"
-                    >
-                      <Play className="h-3.5 w-3.5 fill-current" />
-                      <span>{media.type === "Podcast" ? "Listen Episode" : "Watch Brief"}</span>
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
 
 
             {/* SECTION 15 & 17.5 — INDUSTRY FORECAST & AI PREVIEW */}

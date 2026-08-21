@@ -8,6 +8,7 @@ import {
   ArrowRight, Download, BarChart2, Eye, Mail, FileText, CheckCircle, Flame,
   ThumbsUp, Bookmark, Globe, MessageCircle
 } from "lucide-react";
+import GlobalTradePulseCard from "./GlobalTradePulseCard";
 
 interface TopStory {
   id: string;
@@ -168,30 +169,16 @@ export default function NewsPOCFeedHome() {
             </div>
           </div>
 
-          {/* Right Panel: Trade Volume Metrics Widget */}
-          <div className="col-span-12 lg:col-span-3 flex flex-col justify-between p-6 rounded-2xl bg-gradient-to-b from-[#2a1b15] to-[#1a0f0a] border border-[#402a1e] text-white">
-            <div>
-              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#F4A024]">
-                Global Trade Pulse
-              </span>
-              <h3 className="text-base font-bold font-display mt-1 text-[#FEC970]">
-                Trade Volume
-              </h3>
-            </div>
-
-            <div className="my-8">
-              <span className="text-5xl md:text-6xl font-bold font-display text-[#F4A024] tracking-tight">
-                $42.8B
-              </span>
-              <div className="mt-2 flex items-center gap-1.5 text-xs text-emerald-400 font-bold">
-                <TrendingUp className="h-4 w-4" />
-                <span>▲ 18.3% vs last quarter</span>
-              </div>
-            </div>
-
-            <p className="text-[11px] text-[#e0bba2] leading-snug">
-              Bilateral export clearance speeds across major corridors show a strong bullish outlook entering Q1 2026.
-            </p>
+          {/* Right Panel: Rotating Global Trade Pulse Metrics Widget */}
+          <div className="col-span-12 lg:col-span-3 flex flex-col">
+            <GlobalTradePulseCard
+              variant="hero"
+              defaultCorridor="india-eu"
+              allowCorridorSelection={true}
+              autoRotate={true}
+              rotationInterval={4500}
+              className="h-full"
+            />
           </div>
 
         </div>
@@ -723,8 +710,8 @@ export default function NewsPOCFeedHome() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           
-          {/* Panel 1: AI Powered Features (col-span-7) */}
-          <div className="lg:col-span-7 rounded-2xl bg-gradient-to-br from-[#0c1424] to-[#162136] border border-slate-800 text-white p-6 md:p-8 flex flex-col justify-between">
+          {/* Panel 1: AI Powered Features (full width) */}
+          <div className="lg:col-span-12 rounded-2xl bg-gradient-to-br from-[#0c1424] to-[#162136] border border-slate-800 text-white p-6 md:p-8 flex flex-col justify-between">
             <div className="space-y-6">
               <span className="text-[10px] font-bold uppercase tracking-wider text-blue-400">
                 AI-Powered Features
@@ -780,80 +767,6 @@ export default function NewsPOCFeedHome() {
               >
                 ACTIVATE AI PLUS
               </Link>
-            </div>
-          </div>
-
-          {/* Panel 2: Scenario Builder (col-span-5) */}
-          <div className="lg:col-span-5 rounded-2xl bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-6 flex flex-col justify-between shadow-xs">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                  TRADE LAB SCENARIO BUILDER
-                </span>
-                <span className="bg-blue-500/10 text-blue-600 dark:text-blue-400 text-[8px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">
-                  BETA FEATURE
-                </span>
-              </div>
-
-              {/* Scenario Analysis Input Block */}
-              <div className="p-4 bg-gray-50 dark:bg-gray-950 border border-gray-150 dark:border-gray-850 rounded-xl space-y-2">
-                <span className="text-[9px] font-bold text-gray-400 uppercase">Scenario Analysis</span>
-                <p className="text-xs font-bold text-gray-900 dark:text-white leading-relaxed">
-                  "What if EU carbon tariffs increase by 15% in Q2 2026?"
-                </p>
-                <div className="grid grid-cols-3 gap-2 text-center pt-2">
-                  <div className="p-1 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-850 rounded">
-                    <span className="block text-[8px] text-gray-400">Tariff</span>
-                    <span className="text-xs font-bold text-red-500">15%</span>
-                  </div>
-                  <div className="p-1 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-850 rounded">
-                    <span className="block text-[8px] text-gray-400">Timeline</span>
-                    <span className="text-xs font-bold text-blue-500">Q2 2026</span>
-                  </div>
-                  <div className="p-1 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-850 rounded">
-                    <span className="block text-[8px] text-gray-400">Impact</span>
-                    <span className="text-xs font-bold text-amber-500">High</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Impact Forecast Block */}
-              <div className="space-y-2">
-                <span className="block text-[9px] font-bold text-gray-400 uppercase">Impact Forecast</span>
-                <p className="text-[11px] text-gray-500 leading-snug">Predicted effect on India-Germany steel corridor:</p>
-                <div className="grid grid-cols-2 gap-3 text-center">
-                  <div className="p-2.5 rounded-lg border border-red-200 dark:border-red-950/40 bg-red-50/50 dark:bg-red-950/10 text-xs font-bold text-red-600 dark:text-red-400">
-                    -8% Volume Impact
-                  </div>
-                  <div className="p-2.5 rounded-lg border border-emerald-200 dark:border-emerald-950/40 bg-emerald-50/50 dark:bg-emerald-950/10 text-xs font-bold text-emerald-600 dark:text-emerald-400">
-                    +12% Premium Pricing
-                  </div>
-                </div>
-              </div>
-
-              {/* Opportunity Alert Block */}
-              <div className="space-y-2 pt-1">
-                <span className="block text-[9px] font-bold text-gray-400 uppercase">Opportunity Alert</span>
-                <p className="text-[11px] text-gray-500">Alternative markets identified with growth potential:</p>
-                <div className="flex gap-2">
-                  <div className="flex-1 p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/20 text-center text-xs font-bold text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/20">
-                    +23% Vietnam
-                  </div>
-                  <div className="flex-1 p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/20 text-center text-xs font-bold text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/20">
-                    +18% Thailand
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Scenario Builder Footer stats */}
-            <div className="mt-6 pt-4 border-t border-gray-100 dark:border-gray-850 flex items-center justify-between text-[9px] font-mono text-gray-400 uppercase">
-              <span className="flex items-center gap-1">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                Processing: Optimal
-              </span>
-              <span>2.4M pts/hr</span>
-              <span>156 Scenarios/day</span>
             </div>
           </div>
 

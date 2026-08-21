@@ -60,11 +60,71 @@ const COUNTRY_SPOTLIGHT = {
 };
 
 const LATEST_COUNTRY_NEWS = [
-  { id: "cn-1", title: "India-USA Critical Tech Trade Accord Secures Direct Defense Semiconductor Sourcing", country: "India-USA", flag: "🇮🇳 🇺🇸", author: "Global Policy Desk", date: "30m ago", views: "3.8K", readTime: "5 min", premium: false },
-  { id: "cn-2", title: "India-Germany €2 Billion Clean Hydrogen Shipping Corridor Accord Finalized", country: "India-Germany", flag: "🇮🇳 🇩🇪", author: "Clean Energy Desk", date: "1h ago", views: "2.4K", readTime: "4 min", premium: true },
-  { id: "cn-3", title: "India-Japan Bilateral Industrial Township Expansion Commences in Rajasthan", country: "India-Japan", flag: "🇮🇳 🇯🇵", author: "FDI Bureau", date: "2h ago", views: "1.9K", readTime: "6 min", premium: false },
-  { id: "cn-4", title: "India-Singapore PayNow-UPI Digital Payment Volume Crosses 15 Million Transactions", country: "India-Singapore", flag: "🇮🇳 🇸🇬", author: "FinTech Bureau", date: "4h ago", views: "3.1K", readTime: "4 min", premium: false },
-  { id: "cn-5", title: "India-UK Free Trade Agreement Negotiations Enter Final Regulatory Review Stage", country: "India-UK", flag: "🇮🇳 🇬🇧", author: "Bilateral Trade Desk", date: "5h ago", views: "2.8K", readTime: "5 min", premium: true }
+  { 
+    id: "cn-1", 
+    title: "India-USA Critical Tech Trade Accord Secures Direct Defense Semiconductor Sourcing", 
+    excerpt: "Strategic partnership under iCET initiates raw materials supply guarantees, eliminating semiconductor supply chain vulnerability for commercial and military manufacturing hubs.",
+    country: "India-USA", 
+    flag: "🇮🇳 🇺🇸", 
+    category: "TECHNOLOGY", 
+    date: "30m ago", 
+    views: "3.8K", 
+    readTime: "5 min read", 
+    premium: false,
+    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&auto=format&fit=crop&q=80" 
+  },
+  { 
+    id: "cn-2", 
+    title: "India-Germany €2 Billion Clean Hydrogen Shipping Corridor Accord Finalized", 
+    excerpt: "New green energy corridor maps direct liquefaction container lines from Kochi port to Hamburg, securing zero-emission logistics pipelines and customs tariff exemptions.",
+    country: "India-Germany", 
+    flag: "🇮🇳 🇩🇪", 
+    category: "ENERGY", 
+    date: "1h ago", 
+    views: "2.4K", 
+    readTime: "4 min read", 
+    premium: true,
+    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600&auto=format&fit=crop&q=80" 
+  },
+  { 
+    id: "cn-3", 
+    title: "India-Japan Bilateral Industrial Township Expansion Commences in Rajasthan", 
+    excerpt: "Automotive and heavy machinery production facilities lease direct development zones, increasing FDI injection indices and generating 15,000 localized industrial roles.",
+    country: "India-Japan", 
+    flag: "🇮🇳 🇯🇵", 
+    category: "MANUFACTURING", 
+    date: "2h ago", 
+    views: "1.9K", 
+    readTime: "6 min read", 
+    premium: false,
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&auto=format&fit=crop&q=80" 
+  },
+  { 
+    id: "cn-4", 
+    title: "India-Singapore PayNow-UPI Digital Payment Volume Crosses 15 Million Transactions", 
+    excerpt: "Bilateral micro-payment tunnel integration achieves rapid retail adoption benchmarks, reducing remittance processing fees by 60% for cross-border families.",
+    country: "India-Singapore", 
+    flag: "🇮🇳 🇸🇬", 
+    category: "FINTECH", 
+    date: "4h ago", 
+    views: "3.1K", 
+    readTime: "4 min read", 
+    premium: false,
+    image: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=600&auto=format&fit=crop&q=80" 
+  },
+  { 
+    id: "cn-5", 
+    title: "India-UK Free Trade Agreement Negotiations Enter Final Regulatory Review Stage", 
+    excerpt: "Final tariff tables and intellectual property compliance drafts enter final checks, opening up legal, financial, and educational services flow corridors.",
+    country: "India-UK", 
+    flag: "🇮🇳 🇬🇧", 
+    category: "TRADE ACCORDS", 
+    date: "5h ago", 
+    views: "2.8K", 
+    readTime: "5 min read", 
+    premium: true,
+    image: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=600&auto=format&fit=crop&q=80" 
+  }
 ];
 
 const BILATERAL_CORRIDORS_TABLE = [
@@ -225,20 +285,20 @@ export default function NewsPOCCountryNewsHome() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          2. FEATURED & LATEST COUNTRY NEWS GRID (2-Column)
+          2. FEATURED SPOTLIGHT CORRIDOR (Full-Width Hero)
       ══════════════════════════════════════════════════════════════════ */}
       <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
         <div className="grid grid-cols-12 gap-8">
-          {/* Featured Corridor Briefing (Left 8 cols) */}
-          <div className="col-span-12 lg:col-span-8">
-            <div className="relative rounded-2xl overflow-hidden bg-slate-950 text-white min-h-[380px] h-full flex flex-col justify-end p-8 border border-slate-900 shadow-sm group">
+          {/* Featured Corridor Briefing (Full 12 cols) */}
+          <div className="col-span-12">
+            <div className="relative rounded-2xl overflow-hidden bg-slate-950 text-white min-h-[380px] h-full flex flex-col justify-end p-8 md:p-10 border border-slate-900 shadow-sm group">
               <div 
                 className="absolute inset-0 z-0 bg-cover bg-center opacity-30 group-hover:scale-102 transition-transform duration-300"
                 style={{ backgroundImage: `url(${FEATURED_CORRIDOR_STORY.image})` }}
               />
               <div className="absolute inset-0 z-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
               
-              <div className="relative z-10 space-y-4 max-w-4xl">
+              <div className="relative z-10 space-y-4 max-w-5xl">
                 <div className="flex items-center gap-2">
                   <span className="bg-blue-600 text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase">
                     BILATERAL SPOTLIGHT CORRIDOR
@@ -248,11 +308,11 @@ export default function NewsPOCCountryNewsHome() {
                   </span>
                 </div>
 
-                <h2 className="font-display text-xl md:text-3xl font-bold leading-tight text-white group-hover:text-blue-300 transition-colors">
+                <h2 className="font-display text-2xl md:text-4xl font-bold leading-tight text-white group-hover:text-blue-300 transition-colors">
                   {FEATURED_CORRIDOR_STORY.headline}
                 </h2>
                 
-                <p className="text-slate-300 text-xs md:text-sm font-normal max-w-3xl leading-relaxed">
+                <p className="text-slate-300 text-xs md:text-sm font-normal max-w-4xl leading-relaxed">
                   {FEATURED_CORRIDOR_STORY.summary}
                 </p>
 
@@ -272,46 +332,137 @@ export default function NewsPOCCountryNewsHome() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Latest News Feed List (Right 4 cols) */}
-          <div className="col-span-12 lg:col-span-4">
-            <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow-xs h-full flex flex-col justify-between">
-              <div className="space-y-4 flex-1">
-                <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-850 pb-2">
-                  <h3 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">Latest News Feed</h3>
-                  <div className="flex items-center gap-0.5 bg-gray-100 dark:bg-gray-900 p-0.5 rounded-lg border border-gray-250 dark:border-gray-850">
-                    {["Latest", "Trade", "FDI"].slice(0, 3).map((tab) => (
-                      <button
-                        key={tab}
-                        onClick={() => setActiveNewsTab(tab)}
-                        className={`px-2 py-0.5 rounded text-[8.5px] font-bold transition-all ${activeNewsTab === tab ? "bg-white dark:bg-gray-800 text-blue-600 shadow-xs" : "text-gray-500 hover:text-gray-700"}`}
+      {/* ══════════════════════════════════════════════════════════════════
+          2B. LARGE LATEST NEWS FEED (Large layout with Latest / Trending filters)
+      ══════════════════════════════════════════════════════════════════ */}
+      <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
+        <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-3xl p-6 md:p-8 shadow-xs space-y-6">
+          {/* Header Controls */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-150 dark:border-gray-800 pb-4">
+            <div>
+              <h2 className="font-display text-lg font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-blue-600 animate-pulse" />
+                Latest Country News Feed
+              </h2>
+              <p className="text-xs text-gray-500 mt-1">
+                Stay updated with the latest bilateral agreements, policy directives, and regional trade flows.
+              </p>
+            </div>
+
+            {/* Filter Toggle: Only Latest or Trending */}
+            <div className="flex bg-gray-100 dark:bg-gray-900 p-1.5 rounded-xl border border-gray-200 dark:border-gray-800 shadow-xs shrink-0 self-start sm:self-auto">
+              {["Latest", "Trending"].map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveNewsTab(tab)}
+                  className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase transition-all ${
+                    activeNewsTab === tab
+                      ? "bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 shadow-sm"
+                      : "text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Large news items list (flexible list matching NewsPOCFeedHome) */}
+          <div className="space-y-6">
+            {(activeNewsTab === "Trending"
+              ? [...LATEST_COUNTRY_NEWS].sort((a, b) => parseFloat(b.views) - parseFloat(a.views))
+              : LATEST_COUNTRY_NEWS
+            ).map((item) => (
+              <div
+                key={item.id}
+                className="bg-gray-50 dark:bg-[#090d16] border border-gray-150 dark:border-gray-800/80 rounded-2xl p-5 md:p-6 flex flex-col md:flex-row gap-6 hover:border-blue-400 dark:hover:border-blue-500/50 transition-all duration-200 group"
+              >
+                {/* Left details pane */}
+                <div className="flex-1 flex flex-col justify-between space-y-4">
+                  <div className="space-y-2.5">
+                    <div className="flex flex-wrap items-center gap-2.5 text-[10px]">
+                      <span className="bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 px-2.5 py-1 rounded-lg border border-blue-100 dark:border-blue-900/30 font-bold">
+                        {item.flag} {item.country}
+                      </span>
+                      <span className="bg-gray-200/60 dark:bg-gray-900 text-gray-500 px-2.5 py-1 rounded-lg font-bold">
+                        {item.category}
+                      </span>
+                      {item.premium && (
+                        <span className="flex items-center gap-1 bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 px-2.5 py-1 rounded-lg border border-amber-250/20 font-bold">
+                          <Lock className="h-3 w-3 shrink-0 text-amber-500" />
+                          PREMIUM
+                        </span>
+                      )}
+                      <span className="text-gray-400 font-medium ml-auto">
+                        {item.date} · {item.readTime}
+                      </span>
+                    </div>
+
+                    <Link href={`/en/news-poc/article/${item.id}`} className="block">
+                      <h3 className="text-base md:text-lg font-bold text-gray-950 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-450 transition-colors leading-snug">
+                        {item.title}
+                      </h3>
+                    </Link>
+
+                    <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 leading-relaxed font-normal">
+                      {item.excerpt}
+                    </p>
+                  </div>
+
+                  {/* Action row */}
+                  <div className="pt-3 border-t border-gray-200 dark:border-gray-800/80 flex flex-wrap items-center justify-between gap-3 text-xs text-gray-500 font-semibold">
+                    <div className="flex items-center gap-3">
+                      <Link
+                        href={`/en/news-poc/article/${item.id}`}
+                        className="bg-[#1E3A5F] hover:bg-[#152e4f] text-white font-bold text-[10px] px-4 py-2 rounded-lg transition-colors shadow-xs"
                       >
-                        {tab}
+                        READ FULL BRIEFING
+                      </Link>
+                      <span className="text-[10px] font-medium text-gray-450">
+                        Views: <span className="font-bold text-gray-800 dark:text-gray-250">{item.views}</span>
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <button className="flex items-center gap-1 hover:text-red-500 transition-colors">
+                        <ThumbsUp className="h-3.5 w-3.5" /> <span>Like</span>
                       </button>
-                    ))}
+                      <button className="flex items-center gap-1 hover:text-blue-500 transition-colors">
+                        <MessageSquare className="h-3.5 w-3.5" /> <span>Comment</span>
+                      </button>
+                      <button className="flex items-center gap-1 hover:text-amber-500 transition-colors">
+                        <Bookmark className="h-3.5 w-3.5" /> <span>Save</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
 
-                <div className="space-y-3.5">
-                  {LATEST_COUNTRY_NEWS.slice(0, 3).map((item) => (
-                    <div key={item.id} className="space-y-1 group cursor-pointer border-b border-gray-50 dark:border-gray-900/50 pb-2.5 last:border-0 last:pb-0">
-                      <div className="flex items-center gap-1.5 flex-wrap text-[8px]">
-                        <span className="font-bold text-blue-500">{item.flag} {item.country}</span>
-                        <span className="text-gray-400">{item.date}</span>
-                        {item.premium && <Lock className="h-2.5 w-2.5 text-amber-500" />}
-                      </div>
-                      <h4 className="text-[11px] font-bold text-gray-900 dark:text-white leading-snug group-hover:text-blue-500 transition-colors line-clamp-2">
-                        {item.title}
-                      </h4>
-                    </div>
-                  ))}
-                </div>
+                {/* Right Image pane */}
+                <Link
+                  href={`/en/news-poc/article/${item.id}`}
+                  className="w-full md:w-64 h-44 md:h-auto min-h-[140px] rounded-xl overflow-hidden relative shrink-0 block"
+                >
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-200"
+                  />
+                </Link>
               </div>
-              
-              <Link href="/eoi" className="block text-center border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900 text-gray-700 dark:text-slate-300 font-bold text-[10px] py-2 rounded-lg transition-colors mt-4">
-                View All Country News →
-              </Link>
-            </div>
+            ))}
+          </div>
+
+          {/* Footer view all button */}
+          <div className="pt-4 border-t border-gray-150 dark:border-gray-800 flex justify-center">
+            <Link
+              href="/en/news-poc/country-news/all"
+              className="px-6 py-3 border border-gray-200 dark:border-gray-700 hover:bg-gray-55 dark:hover:bg-gray-900 text-gray-700 dark:text-slate-355 font-bold text-xs rounded-xl transition-all shadow-xs flex items-center gap-1.5"
+            >
+              <span>View All Country News</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
           </div>
         </div>
       </section>

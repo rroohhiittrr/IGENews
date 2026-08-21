@@ -43,6 +43,7 @@ import NewsPOCMyNewsSubmenu from "@/components/news-poc/NewsPOCMyNewsSubmenu";
 import NewsPOCArticleDetail from "@/components/news-poc/NewsPOCArticleDetail";
 import NewsPOCAllIndustryView from "@/components/news-poc/NewsPOCAllIndustryView";
 import NewsPOCAllCountryView from "@/components/news-poc/NewsPOCAllCountryView";
+import NewsPOCAllCountryFeedView from "@/components/news-poc/NewsPOCAllCountryFeedView";
 import NewsPOCAllLeaderView from "@/components/news-poc/NewsPOCAllLeaderView";
 import NewsPOCFullDiscoveryView from "@/components/news-poc/NewsPOCFullDiscoveryView";
 import { IGEN_50_SECTORS } from "@/components/news-poc/igenTaxonomyData";
@@ -210,6 +211,54 @@ const MOCK_REPORTS: Record<string, any[]> = {
     { title: "Professional Trade Analyst Salary & Tools Report", code: "REP-ANAL-15", price: "$99" }
   ]
 };
+
+const TRENDING_SECTORS_MOCK = [
+  { name: "Electronics & IT", desc: "Tech & Sovereign Compute", code: "IT", status: "↑ Trending", color: "text-emerald-500", bg: "bg-emerald-500/10", flag: "💻" },
+  { name: "Renewable Energy", desc: "Green Hydrogen & Solar", code: "RE", status: "↑ High", color: "text-emerald-500", bg: "bg-emerald-500/10", flag: "⚡" },
+  { name: "FinTech & Payments", desc: "UPI & Cross-Border API", code: "FT", status: "↑ Rising", color: "text-blue-500", bg: "bg-blue-500/10", flag: "💳" }
+];
+
+const MOST_READ_SECTOR_NEWS_MOCK = [
+  { id: "sec-1", title: "Indian Software-as-a-Service (SaaS) Sector Hits $12 Billion Export Run Rate", count: "11.2k views", flag: "🇮🇳", country: "India" },
+  { id: "sec-2", title: "Telecom Commission Approves €1.2B Allocation for Smart Fiber Node Expansion", count: "8.4k views", flag: "🇮🇳", country: "India" },
+  { id: "sec-all-3", title: "Germany Pivots to Smart Factory Export Subsidies for Edge-AI Sensors", count: "6.1k views", flag: "🇩🇪", country: "Germany" }
+];
+
+const TRENDING_INDUSTRIES_MOCK = [
+  { name: "Semiconductors", desc: "OSAT Testing & Assembly", code: "IND-01", status: "↑ Trending", color: "text-emerald-500", bg: "bg-emerald-500/10", flag: "⚙️" },
+  { name: "Renewable Energy", desc: "Green Hydrogen Pipelines", code: "IND-04", status: "↑ High", color: "text-emerald-500", bg: "bg-emerald-500/10", flag: "🔋" },
+  { name: "FinTech & Payments", desc: "Port Settling & Customs APIs", code: "IND-02", status: "↑ Rising", color: "text-blue-500", bg: "bg-blue-500/10", flag: "💰" }
+];
+
+const MOST_READ_INDUSTRY_NEWS_MOCK = [
+  { id: "ind-feed-1", title: "Semiconductor OSAT Substrate Scaling Accelerates Across Southern Industrial Corridors", count: "12.8k views", flag: "🇮🇳 🇹🇼", country: "India-Taiwan" },
+  { id: "ind-feed-2", title: "Green Hydrogen Marine Corridors: €2.4B Interconnectivity Pipeline Approved with EU Ports", count: "9.6k views", flag: "🇮🇳 🇩🇪", country: "India-Germany" },
+  { id: "ind-feed-3", title: "Heavy Commercial EV Battery Interoperability Protocol Mandated Across 80 Transit Corridors", count: "8.4k views", flag: "🇮🇳", country: "Domestic" }
+];
+
+const MOST_READ_COUNTRY_NEWS_MOCK = [
+  { id: "cn-1", title: "India-USA Critical Tech Trade Accord Secures Direct Defense Semiconductor Sourcing", count: "14.2k views", flag: "🇺🇸", country: "USA" },
+  { id: "cn-2", title: "India-Germany €2 Billion Clean Hydrogen Shipping Corridor Accord Finalized", count: "11.8k views", flag: "🇩🇪", country: "Germany" },
+  { id: "cn-6", title: "India-UAE CEPA Bilateral Cargo Shipments Cross $100 Billion Milestone", count: "9.5k views", flag: "🇦🇪", country: "UAE" }
+];
+
+const TRENDING_COUNTRIES_MOCK = [
+  { name: "United States", flag: "🇺🇸", code: "US", status: "↑ Trending", color: "text-emerald-500", bg: "bg-emerald-500/10" },
+  { name: "United Arab Emirates", flag: "🇦🇪", code: "AE", status: "↑ High", color: "text-emerald-500", bg: "bg-emerald-500/10" },
+  { name: "Germany", flag: "🇩🇪", code: "DE", status: "↑ Rising", color: "text-blue-500", bg: "bg-blue-500/10" }
+];
+
+const TRENDING_LEADERS_MOCK = [
+  { name: "Jensen Huang", designation: "CEO, NVIDIA", status: "↑ Trending", flag: "🇺🇸", color: "text-emerald-500", bg: "bg-emerald-500/10" },
+  { name: "Nandan Nilekani", designation: "Chairman, Infosys", status: "↑ High", flag: "🇮🇳", color: "text-emerald-500", bg: "bg-emerald-500/10" },
+  { name: "Shaktikanta Das", designation: "Governor, RBI", status: "↑ Rising", flag: "🇮🇳", color: "text-blue-500", bg: "bg-blue-500/10" }
+];
+
+const MOST_READ_LEADER_NEWS_MOCK = [
+  { id: "lead-feed-1", title: "NVIDIA CEO Jensen Huang Outlines Strategic Blueprint for Global AI Fab Networks", count: "12.4k views", flag: "🇺🇸", country: "USA" },
+  { id: "lead-feed-4", title: "Tata Group Chairman N. Chandrasekaran Announces Semiconductor Expansion Funding", count: "9.8k views", flag: "🇮🇳", country: "India" },
+  { id: "lead-feed-2", title: "Nandan Nilekani Proposes Digital Public Infrastructure for Sovereign AI Training", count: "8.2k views", flag: "🇮🇳", country: "India" }
+];
 
 export default function NewsPOCCatchAllPage() {
   const params = useParams();
@@ -472,7 +521,7 @@ export default function NewsPOCCatchAllPage() {
 
     if (categoryKey === "country" && activeSub === "all") {
       return (
-        <NewsPOCAllCountryView 
+        <NewsPOCAllCountryFeedView 
           onBack={() => {
             setActiveSub("my");
             router.push("/en/news-poc/feed/country");
@@ -2492,6 +2541,192 @@ export default function NewsPOCCatchAllPage() {
             {/* RIGHT COLUMN: Sidebar (Reports, Trending, Newsletter, Corporate upgrade) */}
             <div className="col-span-12 lg:col-span-4 space-y-6">
               
+              {/* ── DYNAMIC MOST READ & TRENDING WIDGETS FOR MY VIEWS ── */}
+              
+              {/* My Sector -> Most Read Sector News */}
+              {categoryKey === "sector" && activeSub === "my" && (
+                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-3xl p-5 shadow-xs space-y-4">
+                  <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3">
+                    <span className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5 font-display">
+                      <Flame className="h-3.5 w-3.5 text-red-655" />
+                      Most Read Sector News
+                    </span>
+                  </div>
+                  <div className="space-y-3.5">
+                    {MOST_READ_SECTOR_NEWS_MOCK.map((art, idx) => (
+                      <Link key={art.id} href={`/en/news-poc/article/${art.id}`} className="flex gap-3 items-start group">
+                        <span className="font-mono font-bold text-lg text-gray-300 dark:text-slate-700 w-5 text-right shrink-0">
+                          {idx + 1}.
+                        </span>
+                        <div className="space-y-0.5 min-w-0">
+                          <div className="flex items-center gap-1.5 text-[9px] font-bold text-blue-600 font-mono">
+                            <span>{art.flag} {art.country}</span>
+                            <span className="text-gray-400 font-normal">· {art.count}</span>
+                          </div>
+                          <h4 className="text-xs font-bold text-gray-900 dark:text-white group-hover:text-blue-605 leading-snug line-clamp-2 transition-colors">
+                            {art.title}
+                          </h4>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* My Industry -> Trending Industries & Most Read Industry News */}
+              {categoryKey === "industry" && activeSub === "my" && (
+                <>
+                  <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-3xl p-5 shadow-xs space-y-4">
+                    <div className="border-b border-gray-200/60 dark:border-gray-800 pb-3 flex items-center justify-between">
+                      <span className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5 font-display">
+                        <TrendingUp className="h-3.5 w-3.5 text-blue-505" />
+                        Trending Industries
+                      </span>
+                      <span className="text-[9px] font-bold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-300 px-2 py-0.5 rounded">
+                        High Traffic
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-1 gap-2.5">
+                      {TRENDING_INDUSTRIES_MOCK.map((trend) => (
+                        <div key={trend.name} className="p-2.5 bg-gray-50 dark:bg-gray-900/60 rounded-xl border border-gray-200 dark:border-gray-800 flex items-center justify-between group text-left w-full">
+                          <div className="flex items-center gap-2">
+                            <span className="text-base">{trend.flag}</span>
+                            <div className="min-w-0">
+                              <span className="text-xs font-bold text-gray-900 dark:text-white block">
+                                {trend.name}
+                              </span>
+                              <span className="text-[9px] text-gray-400 block font-normal">{trend.desc}</span>
+                            </div>
+                          </div>
+                          <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${trend.bg} ${trend.color} shrink-0`}>
+                            {trend.status}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-3xl p-5 shadow-xs space-y-4">
+                    <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3">
+                      <span className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5 font-display">
+                        <Flame className="h-3.5 w-3.5 text-red-655" />
+                        Most Read Industry News
+                      </span>
+                    </div>
+                    <div className="space-y-3.5">
+                      {MOST_READ_INDUSTRY_NEWS_MOCK.map((art, idx) => (
+                        <Link key={art.id} href={`/en/news-poc/article/${art.id}`} className="flex gap-3 items-start group">
+                          <span className="font-mono font-bold text-lg text-gray-300 dark:text-slate-700 w-5 text-right shrink-0">
+                            {idx + 1}.
+                          </span>
+                          <div className="space-y-0.5 min-w-0">
+                            <div className="flex items-center gap-1.5 text-[9px] font-bold text-blue-600 font-mono">
+                              <span>{art.flag} {art.country}</span>
+                              <span className="text-gray-400 font-normal">· {art.count}</span>
+                            </div>
+                            <h4 className="text-xs font-bold text-gray-900 dark:text-white group-hover:text-blue-605 leading-snug line-clamp-2 transition-colors">
+                              {art.title}
+                            </h4>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* My Country -> Most Read Country News */}
+              {categoryKey === "country" && activeSub === "my" && (
+                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-3xl p-5 shadow-xs space-y-4">
+                  <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3">
+                    <span className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5 font-display">
+                      <Flame className="h-3.5 w-3.5 text-red-655" />
+                      Most Read Country News
+                    </span>
+                  </div>
+                  <div className="space-y-3.5">
+                    {MOST_READ_COUNTRY_NEWS_MOCK.map((art, idx) => (
+                      <Link key={art.id} href={`/en/news-poc/article/${art.id}`} className="flex gap-3 items-start group">
+                        <span className="font-mono font-bold text-lg text-gray-300 dark:text-slate-700 w-5 text-right shrink-0">
+                          {idx + 1}.
+                        </span>
+                        <div className="space-y-0.5 min-w-0">
+                          <div className="flex items-center gap-1.5 text-[9px] font-bold text-blue-600 font-mono">
+                            <span>{art.flag} {art.country}</span>
+                            <span className="text-gray-400 font-normal">· {art.count}</span>
+                          </div>
+                          <h4 className="text-xs font-bold text-gray-900 dark:text-white group-hover:text-blue-605 leading-snug line-clamp-2 transition-colors">
+                            {art.title}
+                          </h4>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* My Leaders -> Trending Leaders & Most Read Leadership News */}
+              {categoryKey === "leader" && activeSub === "my" && (
+                <>
+                  <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-3xl p-5 shadow-xs space-y-4">
+                    <div className="border-b border-gray-200/60 dark:border-gray-800 pb-3 flex items-center justify-between">
+                      <span className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5 font-display">
+                        <TrendingUp className="h-3.5 w-3.5 text-blue-505" />
+                        Trending Leaders
+                      </span>
+                      <span className="text-[9px] font-bold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-300 px-2 py-0.5 rounded">
+                        High Traffic
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-1 gap-2.5">
+                      {TRENDING_LEADERS_MOCK.map((trend) => (
+                        <div key={trend.name} className="p-2.5 bg-gray-55 dark:bg-gray-900/60 rounded-xl border border-gray-200 dark:border-gray-800 flex items-center justify-between group text-left w-full">
+                          <div className="flex items-center gap-2">
+                            <span className="text-base">{trend.flag}</span>
+                            <div className="min-w-0">
+                              <span className="text-xs font-bold text-gray-900 dark:text-white block">
+                                {trend.name}
+                              </span>
+                              <span className="text-[9px] text-gray-400 block font-normal">{trend.designation}</span>
+                            </div>
+                          </div>
+                          <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-500 shrink-0`}>
+                            {trend.status}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-3xl p-5 shadow-xs space-y-4">
+                    <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3">
+                      <span className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5 font-display">
+                        <Flame className="h-3.5 w-3.5 text-red-655" />
+                        Most Read Leadership News
+                      </span>
+                    </div>
+                    <div className="space-y-3.5">
+                      {MOST_READ_LEADER_NEWS_MOCK.map((art, idx) => (
+                        <Link key={art.id} href={`/en/news-poc/article/${art.id}`} className="flex gap-3 items-start group">
+                          <span className="font-mono font-bold text-lg text-gray-300 dark:text-slate-700 w-5 text-right shrink-0">
+                            {idx + 1}.
+                          </span>
+                          <div className="space-y-0.5 min-w-0">
+                            <div className="flex items-center gap-1.5 text-[9px] font-bold text-blue-600 font-mono">
+                              <span>{art.flag} {art.country}</span>
+                              <span className="text-gray-400 font-normal">· {art.count}</span>
+                            </div>
+                            <h4 className="text-xs font-bold text-gray-900 dark:text-white group-hover:text-blue-605 leading-snug line-clamp-2 transition-colors">
+                              {art.title}
+                            </h4>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+
               {/* Component 6: Trending Topics */}
               <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow-xs space-y-3">
                 <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
@@ -2572,30 +2807,6 @@ export default function NewsPOCCatchAllPage() {
                 >
                   Configure Founding Offer
                 </Link>
-              </div>
-
-              {/* Component 9: Related Premium Pages (Cross-Sell) */}
-              <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow-xs space-y-3">
-                <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider">
-                  Related Premium Pages
-                </h4>
-                <div className="space-y-2 text-xs">
-                  {[
-                    { label: "Company Directory Listings", desc: "Corporate profiles and leads." },
-                    { label: "Executive Leader Registry", desc: "150 CEO monitoring pages." },
-                    { label: "SME Expert Network", desc: "Consultation & advisory panels." }
-                  ].map((item, idx) => (
-                    <div key={idx} className="p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-150/40 rounded flex items-center justify-between">
-                      <div>
-                        <span className="font-bold text-gray-900 dark:text-white block">{item.label}</span>
-                        <span className="text-[9px] text-gray-400 mt-0.5 block">{item.desc}</span>
-                      </div>
-                      <Link href="/eoi" className="text-blue-500 hover:text-blue-600 font-bold flex-shrink-0">
-                        <ChevronRight className="h-4 w-4" />
-                      </Link>
-                    </div>
-                  ))}
-                </div>
               </div>
 
               {/* Component 10: Sponsored Content */}

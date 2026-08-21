@@ -13,7 +13,7 @@ interface MenuDropdownProps {
 
 export default function MenuDropdown({ items, onClose }: MenuDropdownProps) {
   return (
-    <div className="mega-menu-dropdown absolute left-0 top-full min-w-[200px] rounded-b-lg border border-t-0 border-[var(--color-neutral-light)] bg-white py-1 shadow-lg">
+    <div className="mega-menu-dropdown absolute left-0 top-full min-w-[200px] rounded-b-lg border border-t-0 border-[var(--color-neutral-light)] bg-white py-1 shadow-lg z-50">
       {items.map((item) => (
         <Link
           key={item.label}

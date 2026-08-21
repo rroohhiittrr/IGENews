@@ -47,6 +47,7 @@ import {
   ArrowRight,
   Star
 } from "lucide-react";
+import GlobalTradePulseCard from "./GlobalTradePulseCard";
 
 // Mock Database of Country Indicators
 interface CountryIntelProfile {
@@ -235,20 +236,37 @@ export default function NewsPOCCountryIntelligenceView() {
           </div>
         </section>
 
-        {/* 03. GLOBAL INTELLIGENCE PULSE */}
+        {/* 03. GLOBAL & BILATERAL TRADE PULSE EXPLORER */}
         <section className="space-y-4">
-          <div className="border-b border-gray-200 dark:border-gray-800 pb-3 flex justify-between items-center">
-            <h2 className="font-display text-sm font-bold text-gray-950 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
-              <Activity className="h-4.5 w-4.5 text-purple-650" /> Global Intelligence Pulse
-            </h2>
-            <span className="text-[10px] text-gray-400 font-semibold">Active market indicators</span>
+          <div className="border-b border-gray-200 dark:border-gray-800 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h2 className="font-display text-sm font-bold text-gray-950 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
+                <Activity className="h-4.5 w-4.5 text-purple-650" /> Bilateral Trade Pulse & Corridor Intelligence
+              </h2>
+              <p className="text-[11px] text-gray-400 mt-0.5">
+                Filter and analyze live intelligence metrics across bilateral country pairs.
+              </p>
+            </div>
+            <span className="text-[10px] text-gray-400 font-semibold font-mono bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded-lg border border-gray-200 dark:border-gray-800">
+              ⚡ Live Macro Feed · Q1 2026
+            </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Interactive Bilateral Trade Pulse Card */}
+          <GlobalTradePulseCard
+            variant="interactive"
+            defaultCorridor="india-eu"
+            allowCorridorSelection={true}
+            autoRotate={true}
+            rotationInterval={4200}
+          />
+
+          {/* Active Signal Indicators */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
             {[
-              { category: "TRADE MOMENTUM", route: "Asia → Middle East", status: "Increasing logistics activity under CEPA accord", trend: "↑ High Activity", color: "text-emerald-500 bg-emerald-50 dark:bg-emerald-950/20" },
-              { category: "INVESTMENT ACTIVITY", route: "Renewable Energy Corridor", status: "Solar & green hydrogen investments rise 18%", trend: "Growing", color: "text-purple-600 bg-purple-50 dark:bg-purple-955/20" },
-              { category: "EMERGING SECTOR", route: "Industrial Semiconductor OSAT", status: "Raw material Material fab fabrication JV signed", trend: "Rapid Expansion", color: "text-blue-600 bg-blue-50 dark:bg-blue-955/20" }
+              { category: "TRADE MOMENTUM", route: "India ⇄ European Union", status: "Bilateral export clearance speeds show strong bullish outlook entering Q1 2026", trend: "↑ High Momentum", color: "text-emerald-500 bg-emerald-50 dark:bg-emerald-950/20" },
+              { category: "INVESTMENT ACTIVITY", route: "India ⇄ UAE (CEPA)", status: "Non-oil trade on track to cross $100B milestone with direct port integration", trend: "Accelerating", color: "text-purple-600 bg-purple-50 dark:bg-purple-955/20" },
+              { category: "CRITICAL TECH ACCORD", route: "India ⇄ USA (iCET)", status: "OSAT chip packaging and aerospace supply agreements expand shipment volumes", trend: "Rapid Expansion", color: "text-blue-600 bg-blue-50 dark:bg-blue-955/20" }
             ].map((pulse, idx) => (
               <div key={idx} className="bg-white dark:bg-[#0f172a] border border-gray-205 dark:border-gray-805 rounded-2xl p-5 shadow-3xs flex flex-col justify-between">
                 <div className="space-y-2">
