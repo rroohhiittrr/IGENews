@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import NewsPOCSectorEngagementView from "./NewsPOCSectorEngagementView";
 import NewsPOCSectorIntelligenceView from "./NewsPOCSectorIntelligenceView";
+import NewsPOCAllSectorView from "./NewsPOCAllSectorView";
 import type { ComponentType, ReactNode } from "react";
 import { useState } from "react";
 import {
@@ -241,52 +242,14 @@ export default function NewsPOCSectorNewsSubmenu({ submenu }: Props) {
     </section>
   );
 
-  // VIEW 1: ALL SECTOR (Master Directory)
+  // VIEW 1: ALL SECTOR (Master Directory & Discovery Platform)
   if (submenu === "all") {
     return (
       <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
         <SubMenuHeader />
-        <HeroBanner
-          title="All Sector Master Directory & Intelligence Feed"
-          description="Master repository of all 50 sectors, 1,350+ industries, and GoI ministry taxonomy."
-        />
-
-        <section className="mx-auto max-w-7xl px-4 pt-8 lg:px-6 space-y-8">
-          <Card className="p-4 flex flex-wrap items-center gap-3">
-            <div className="relative flex-1 min-w-56">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
-              <input className="w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 py-2.5 pl-9 pr-3 text-xs outline-none focus:border-blue-500" placeholder="Search 50 sectors, codes, or ministry alignment..." />
-            </div>
-            {["All Regions", "Domestic", "India-US Bilateral", "India-EU Corridors", "ASEAN"].map((r) => (
-              <button key={r} className="rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-100 dark:bg-gray-900 px-3 py-2 text-[10px] font-bold text-gray-600 dark:text-gray-400 hover:text-blue-600">
-                {r}
-              </button>
-            ))}
-            <button className={`${cfg.button} rounded-lg px-4 py-2 text-xs font-bold flex items-center gap-1.5`}>
-              <Filter className="h-3.5 w-3.5" /> Filter
-            </button>
-          </Card>
-
-          <div className="space-y-4">
-            <SectionTitle title="Master 50-Sector Directory" action={<span className="text-[10px] text-gray-400 font-bold">50 Sectors Tracked</span>} />
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-              {SECTORS_ALL_50.map((sec) => (
-                <Card key={sec.code} className="p-4 hover:border-blue-500 transition-all space-y-2 group">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[9px] font-mono text-gray-400 font-bold">{sec.code}</span>
-                    <span className="text-[9px] font-bold text-emerald-500">{sec.growth} YoY</span>
-                  </div>
-                  <h3 className="font-bold text-xs text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors leading-snug">{sec.name}</h3>
-                  <p className="text-[10px] text-gray-500">{sec.ministry}</p>
-                  <div className="pt-2 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-[9px]">
-                    <span className="text-gray-400">{sec.count}</span>
-                    <span className="text-blue-600 font-bold">{sec.news}</span>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
+        <div className="mx-auto max-w-7xl px-4 pt-8 lg:px-6">
+          <NewsPOCAllSectorView />
+        </div>
       </div>
     );
   }
