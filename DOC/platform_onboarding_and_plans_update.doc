@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>IGENews Onboarding and Subscription Plans Update Summary</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #1e293b;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+  }
+  h1 {
+    color: #1E3A5F;
+    border-bottom: 2px solid #1E3A5F;
+    padding-bottom: 10px;
+    font-size: 24px;
+  }
+  h2 {
+    color: #2F6FA3;
+    font-size: 18px;
+    margin-top: 30px;
+  }
+  h3 {
+    color: #475569;
+    font-size: 14px;
+    margin-top: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  ul {
+    padding-left: 20px;
+  }
+  li {
+    margin-bottom: 8px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+  th, td {
+    border: 1px solid #cbd5e1;
+    padding: 10px;
+    text-align: left;
+    font-size: 13px;
+  }
+  th {
+    bg-color: #f1f5f9;
+    background-color: #f1f5f9;
+    color: #1E3A5F;
+  }
+  .highlight {
+    background-color: #fef3c7;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+  .info-box {
+    background-color: #ecf2f7;
+    border-left: 4px solid #1E3A5F;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Platform Onboarding &amp; Subscription Plans Update Summary</h1>
+<p>This document details the recent functional updates completed on the onboarding flow, settings dashboard, navigation layout, and individual subscription plans to align with the product roadmap.</p>
+
+<div class="info-box">
+  <strong>Destination Folder:</strong> <code>/Users/mymovies/Documents/IGENews App</code><br>
+  <strong>File Name:</strong> <code>platform_onboarding_and_plans_update.doc</code>
+</div>
+
+<h2>1. Onboarding Wizard Simplification</h2>
+<ul>
+  <li><strong>Previous Flow:</strong> 4 steps (Sectors, Countries, Leaders, and Primary Account Type selection).</li>
+  <li><strong>Updated Flow:</strong> Reduced to <span class="highlight">3 steps</span> (Sectors, Countries, and Leaders).</li>
+  <li><strong>Default Plan:</strong> Step 4 (Primary Account Selection) has been completely removed. The onboarding outcome now automatically defaults the user's role/account type to the <span class="highlight">Free Reader Plan</span> upon completing Step 3.</li>
+  <li><strong>Platform Landing:</strong> Once the user completes Step 3, they directly land on the main news feed dashboard.</li>
+</ul>
+
+<h2>2. Dashboard Sidebar Navigation Cleanup</h2>
+<ul>
+  <li><strong>Retained Items:</strong> Profile, My News, Settings (these are the core sections).</li>
+  <li><strong>Removed Items:</strong> Authority, Events, and Messages sections have been deleted from the navigation items.</li>
+  <li><strong>New Category Added:</strong> A separate navigation block titled <span class="highlight">MEMBERSHIPS &amp; PLANS</span> has been added below the core items. It contains the following 5 upgrade segments:
+    <ol>
+      <li><strong>Upgrade</strong> (links to Reader Plans)</li>
+      <li><strong>Subject Matter Expert - SME</strong> (links to SME Plans)</li>
+      <li><strong>Associate SME</strong> (links to Associate SME Plans)</li>
+      <li><strong>Company</strong> (links to Company Page Plans)</li>
+      <li><strong>Leader</strong> (links to Leader Page Plans)</li>
+    </ol>
+  </li>
+  <li><strong>Responsive View:</strong> On mobile interfaces, only the core items (Profile, My News, Settings) are visible in the bottom navigation bar to keep the screen uncluttered.</li>
+</ul>
+
+<h2>3. Settings Page Update</h2>
+<ul>
+  <li><strong>Removed Component:</strong> The <span class="highlight">Account Type &amp; Role</span> tab and its role-combination cards have been removed from the Settings panel.</li>
+</ul>
+
+<h2>4. Interactive checkout &amp; Subscription Plans Matrix</h2>
+<p>Each of the five plan pages has been created with custom details and integrates a simulated secure checkout drawer (Card, UPI, NetBanking payment flow) which updates the user's profile state on success.</p>
+
+<h3>1. Upgrade (Reader Plans)</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Plan</th>
+      <th>Suggested Pricing</th>
+      <th>Key Benefits</th>
+      <th>Restrictions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Free Reader</strong> (Current default)</td>
+      <td>₹0</td>
+      <td>Access to sector headlines, follow sectors, save articles, basic profile, limited daily news.</td>
+      <td>No premium reports, no exclusive SME articles, no AI deep intelligence.</td>
+    </tr>
+    <tr>
+      <td><strong>Pro Reader</strong></td>
+      <td>₹299/mo or ₹2,999/yr</td>
+      <td>Unlimited reading, premium SME articles, monthly sector reports, watcher lists, personalized feed.</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td><strong>Pro Plus / Enterprise</strong></td>
+      <td>₹999/mo or custom</td>
+      <td>Deep sector intelligence reports, trade reports, enterprise dashboards, AI research assistant, multi-user.</td>
+      <td>None</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>2. Subject Matter Expert (SME) Plans</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Plan</th>
+      <th>Suggested Pricing</th>
+      <th>Eligibility &amp; Core Value</th>
+      <th>Key Benefits</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Founding Associate SME (Free)</strong></td>
+      <td>₹0</td>
+      <td>10+ years experience</td>
+      <td>Google indexed profile, founding badge, tagging, publish limited articles, basic verification badge.</td>
+    </tr>
+    <tr>
+      <td><strong>Associate SME Pro</strong></td>
+      <td>₹49,000/yr</td>
+      <td>Build Authority &amp; Visibility</td>
+      <td>Verified badge, unlimited articles, activate consulting monetization, visiblity boost, ranking eligibility.</td>
+    </tr>
+    <tr>
+      <td><strong>SME Elite</strong></td>
+      <td>₹1.5L - ₹3L/yr</td>
+      <td>20+ years experience</td>
+      <td>Blue Tick verification, top rankings, government visibility, speaking &amp; award jury opportunities, homepage feature.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>3. Associate SME Plans</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Plan</th>
+      <th>Suggested Pricing</th>
+      <th>Eligibility</th>
+      <th>Key Benefits</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Free Associate SME</strong></td>
+      <td>₹0</td>
+      <td>10+ years experience</td>
+      <td>Public profile, Google indexing, limited articles, founding badge, discoverability.</td>
+    </tr>
+    <tr>
+      <td><strong>Associate SME Plus</strong></td>
+      <td>₹25,000/yr</td>
+      <td>All experts</td>
+      <td>Verified badge, unlimited articles, consulting enablement, top listing boost, SEO optimization.</td>
+    </tr>
+    <tr>
+      <td><strong>Associate SME Premium</strong></td>
+      <td>₹75,000/yr</td>
+      <td>All experts</td>
+      <td>Premium positioning, priority rankings, podcast &amp; event invites, investor visibility.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>4. Company Page Plans</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Plan</th>
+      <th>Suggested Pricing</th>
+      <th>Best For</th>
+      <th>Key Benefits</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Free Company Page</strong></td>
+      <td>₹0</td>
+      <td>Startups &amp; early MSMEs</td>
+      <td>Basic page, sector tags, limited description, social links, public listing.</td>
+    </tr>
+    <tr>
+      <td><strong>Silver / Growth Company</strong></td>
+      <td>₹99,000/yr</td>
+      <td>Growth businesses</td>
+      <td>Blue Tick, employees &amp; brand tabs, 2 bundled leader profiles, PR publishing, analytics dashboard.</td>
+    </tr>
+    <tr>
+      <td><strong>Gold / Platinum Company</strong></td>
+      <td>₹3L - ₹10L/yr</td>
+      <td>Enterprise leaders</td>
+      <td>Homepage featured placement, trade intelligence lab reports, unlimited leader pages, video gallery.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>5. Leader Page Plans</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Plan</th>
+      <th>Suggested Pricing</th>
+      <th>Best For</th>
+      <th>Key Benefits</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Free Leader Profile</strong></td>
+      <td>₹0</td>
+      <td>Emerging founders &amp; executives</td>
+      <td>Public leader profile, sector tagging, basic indexing and discoverability.</td>
+    </tr>
+    <tr>
+      <td><strong>Verified Leader</strong></td>
+      <td>₹39,000/yr</td>
+      <td>Established leaders</td>
+      <td>Blue Tick, thought leadership articles, podcast opportunities, company linking.</td>
+    </tr>
+    <tr>
+      <td><strong>Leader Elite</strong></td>
+      <td>₹1L - ₹5L/yr</td>
+      <td>Industry pioneers</td>
+      <td>Premium verified positioning, video interviews, awards jury eligibility, executive branding suite.</td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+</html>

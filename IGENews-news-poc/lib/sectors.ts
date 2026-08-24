@@ -1,0 +1,61 @@
+export interface Sector {
+  id: string;
+  name: string;
+  icon: string; // lucide-react icon name
+  description: string;
+}
+
+export const SECTORS: Sector[] = [
+  { id: "agriculture", name: "Agriculture", icon: "Wheat", description: "Farming, agritech & rural markets" },
+  { id: "ai-cyber-security", name: "AI & Cyber Security", icon: "Shield", description: "AI systems, data security & cyber defence" },
+  { id: "animal-husbandry", name: "Animal Husbandry, Dairying & Fisheries", icon: "HeartPulse", description: "Livestock, dairy & aquaculture" },
+  { id: "atomic-energy", name: "Atomic Energy", icon: "Zap", description: "Nuclear power & atomic research" },
+  { id: "ayush", name: "Ayush, Ayurveda & Herbal Medicine", icon: "Leaf", description: "Traditional medicine & wellness" },
+  { id: "biotechnology", name: "Biotechnology", icon: "FlaskConical", description: "Biotech, genetics & life sciences" },
+  { id: "chemicals-fertilizers", name: "Chemicals, Fertilizers & Minerals", icon: "TestTube", description: "Industrial chemicals & agri inputs" },
+  { id: "petrochemicals", name: "Petrochemicals", icon: "Droplets", description: "Refining, polymers & derivatives" },
+  { id: "civil-aviation", name: "Civil Aviation", icon: "Plane", description: "Airports, airlines & air logistics" },
+  { id: "coal", name: "Coal", icon: "Mountain", description: "Coal mining & energy production" },
+  { id: "communications", name: "Communications", icon: "Radio", description: "Telecom, broadcasting & media" },
+  { id: "consumer-brands", name: "Consumer Brands", icon: "ShoppingBag", description: "FMCG, retail & consumer goods" },
+  { id: "defence-aerospace", name: "Defence & Aerospace", icon: "Radar", description: "Defence tech, aerospace & security" },
+  { id: "earth-sciences", name: "Earth Sciences", icon: "Globe", description: "Geology, meteorology & environment" },
+  { id: "education", name: "Education", icon: "GraduationCap", description: "EdTech, institutions & learning" },
+  { id: "electronics-it", name: "Electronics, IT & Components", icon: "CircuitBoard", description: "Semiconductors & digital tech" },
+  { id: "energy-sustainability", name: "Energy & Sustainability", icon: "SunMedium", description: "Renewables, green energy & ESG" },
+  { id: "environment-forest", name: "Environment, Forest & Climate Change", icon: "TreePine", description: "Ecology, forestry & climate policy" },
+  { id: "fertilizers", name: "Fertilizers", icon: "Sprout", description: "Nutrient production & agri supply" },
+  { id: "fisheries-animal", name: "Fisheries, Animal Husbandry & Dairying", icon: "Fish", description: "Marine & livestock industries" },
+  { id: "fmcg", name: "FMCG", icon: "ShoppingCart", description: "Fast-moving consumer goods" },
+  { id: "food-processing", name: "Food Processing Industries", icon: "UtensilsCrossed", description: "Processed food & value-added agri" },
+  { id: "health-family", name: "Health & Family Welfare", icon: "Activity", description: "Public health & welfare programs" },
+  { id: "heavy-industries", name: "Heavy Industries", icon: "Factory", description: "Steel, machinery & capital goods" },
+  { id: "information-broadcasting", name: "Information & Broadcasting", icon: "Tv", description: "Media, OTT & content industries" },
+  { id: "infrastructure-construction", name: "Infrastructure & Construction", icon: "Building2", description: "Roads, real estate & urban dev" },
+  { id: "labour-employment", name: "Labour & Employment", icon: "Users", description: "Workforce, HR & employment policy" },
+  { id: "manufacturing", name: "Manufacturing", icon: "Cog", description: "Industrial production & supply chains" },
+  { id: "mines", name: "Mines", icon: "Pickaxe", description: "Mining, extraction & minerals" },
+  { id: "new-renewable-energy", name: "New & Renewable Energy", icon: "Wind", description: "Solar, wind & clean energy" },
+  { id: "petroleum-natural-gas", name: "Petroleum & Natural Gas", icon: "Flame", description: "Oil & gas exploration & distribution" },
+  { id: "pharmaceutical", name: "Pharmaceutical", icon: "Pill", description: "Pharma, drugs & clinical research" },
+  { id: "ports-shipping", name: "Ports, Shipping & Waterways", icon: "Ship", description: "Maritime trade & port logistics" },
+  { id: "power", name: "Power", icon: "BatteryCharging", description: "Electricity generation & grid" },
+  { id: "services", name: "Services", icon: "Briefcase", description: "Consulting, finance & BPO" },
+  { id: "space", name: "Space", icon: "Rocket", description: "Space tech, ISRO & satellite" },
+  { id: "steel", name: "Steel", icon: "BarChart3", description: "Steel production & metal industry" },
+  { id: "technology", name: "Technology", icon: "Cpu", description: "Software, hardware & digital innovation" },
+  { id: "textiles", name: "Textiles", icon: "Layers", description: "Apparel, fabric & garment industry" },
+  { id: "tourism", name: "Tourism", icon: "MapPin", description: "Hospitality, travel & culture" },
+  { id: "banking-financial", name: "Banking & Financial Services", icon: "Landmark", description: "Banks, NBFCs & capital markets" },
+  { id: "fintech-digital", name: "FinTech & Digital Payments", icon: "CreditCard", description: "UPI, wallets & digital finance" },
+  { id: "logistics-supply", name: "Logistics & Supply Chain", icon: "Truck", description: "Freight, warehousing & last-mile" },
+  { id: "railways-metro", name: "Railways & Metro", icon: "Train", description: "Rail transport & urban mobility" },
+  { id: "automotive-ev", name: "Automotive & Electric Vehicles", icon: "Car", description: "Auto industry & EV ecosystem" },
+  { id: "semiconductors", name: "Semiconductors", icon: "Microchip", description: "Chip design, fabs & electronics" },
+  { id: "startups-innovation", name: "Startups & Innovation", icon: "Lightbulb", description: "Venture ecosystem & entrepreneurs" },
+  { id: "retail-ecommerce", name: "Retail & E-Commerce", icon: "Store", description: "Online & offline retail channels" },
+  { id: "water-resources", name: "Water Resources & Management", icon: "Droplet", description: "Water policy, irrigation & supply" },
+  { id: "waste-management", name: "Waste Management & Circular Economy", icon: "Recycle", description: "Recycling, waste-to-energy & ESG" },
+];
+
+export const FREE_SECTOR_LIMIT = 5;

@@ -1,0 +1,182 @@
+{
+  "product": "India Global News",
+  "code": "IGN",
+  "version": "1.0",
+  "lastUpdated": "2026-07-16",
+  "description": "India Global News (iGEN News) is the core content and intelligence platform within the IGEN World Ecosystem — a B2B trade & business news hub.",
+  "modules": [
+    {
+      "code": "IGN-M01",
+      "name": "Feed",
+      "slug": "feed",
+      "purpose": "Personalized news feed by sector, industry, country, leader, and reader categories",
+      "submenus": {
+        "Sector Feed": ["My Sector", "All Sector", "Sector Intelligence"],
+        "Industry Feed": ["My Industry", "All Industry", "Industry Intelligence"],
+        "Country Feed": ["My Country", "All Country", "Country Intelligence"],
+        "Leader Feed": ["My Leader", "All Leader", "Leader Intelligence"],
+        "Reader Feed": ["My Reader", "All Reader", "Reader Intelligence"]
+      },
+      "prd": "books/PRD/IGN-M01_Feed_PRD.md"
+    },
+    {
+      "code": "IGN-M02",
+      "name": "Headlines",
+      "slug": "headlines",
+      "purpose": "Curated editorial news by editor type — AI, Intelligence, SME, Viksit Bharat, Podcast",
+      "editorChannels": [
+        "IGEN AI Editor",
+        "IGEN Intelligence Editor",
+        "Subject Matter Expert Editor",
+        "Viksit Bharat Panel Editor",
+        "Podcast Editor (Launching Soon)"
+      ],
+      "commonSubmenus": ["My Sector", "All Sector"],
+      "prd": "books/PRD/IGN-M02_Headlines_PRD.md"
+    },
+    {
+      "code": "IGN-M03",
+      "name": "Sector News",
+      "slug": "sector-news",
+      "purpose": "Industry-specific news and intelligence hub across 50 sectors",
+      "submenus": ["All Sector", "Sector Engagement", "Sector Intelligence Reports"],
+      "coversSectors": 50,
+      "prd": "books/PRD/IGN-M03_Sector_News_PRD.md"
+    },
+    {
+      "code": "IGN-M04",
+      "name": "Company Pages",
+      "slug": "company-pages",
+      "purpose": "Company digital presence, news publishing, and B2B lead generation",
+      "submenus": ["Company Pages", "Company News", "By Sector", "All Sectors"],
+      "subscriptionTiers": ["Free/Registered", "Verified", "Enterprise"],
+      "prd": "books/PRD/IGN-M04_Company_Pages_PRD.md"
+    },
+    {
+      "code": "IGN-M05",
+      "name": "Country News",
+      "slug": "country-news",
+      "purpose": "Country-specific business intelligence, trade data, and investment opportunities",
+      "submenus": ["My Country", "All Countries (195 Bilateral)"],
+      "countriesCovered": 195,
+      "prd": "books/PRD/IGN-M05_Country_News_PRD.md"
+    },
+    {
+      "code": "IGN-M06",
+      "name": "Leader News",
+      "slug": "leader-news",
+      "purpose": "Leadership intelligence — executive news, rankings, interviews, and AI insights",
+      "submenus": ["Leader News", "Leader Pages", "By Sector", "All Sectors"],
+      "subscriptionTiers": ["Registered (Free)", "Verified (Pro)", "Enterprise"],
+      "premiumFeatures": ["SME & ASME Editorial Coverage", "AI Leadership Trends", "Executive Network", "Custom Dashboards"],
+      "prd": "books/PRD/IGN-M06_Leader_News_PRD.md"
+    },
+    {
+      "code": "IGN-M07",
+      "name": "Expert News",
+      "slug": "expert-news",
+      "purpose": "SME & ASME expert insights, consultation booking, and knowledge hub",
+      "submenus": [
+        "SME News", "SME Pages", "By Sector (SME)", "All Sector (SME)",
+        "ASME News", "ASME Pages", "ASME By Sector", "ASME All Sector"
+      ],
+      "expertTypes": ["SME (Subject Matter Expert)", "ASME (Associate Subject Matter Expert)"],
+      "prd": "books/PRD/IGN-M07_Expert_News_PRD.md"
+    },
+    {
+      "code": "IGN-M08",
+      "name": "Communities",
+      "slug": "communities",
+      "purpose": "Trade professional community network for SMEs, Readers, Leaders, and Expo members",
+      "communityTypes": [
+        {
+          "name": "SME & ASME Community",
+          "submenus": ["All SMEs & ASMEs", "Top SMEs & ASMEs"]
+        },
+        {
+          "name": "Reader Community",
+          "submenus": ["All Readers", "Top Readers"]
+        },
+        {
+          "name": "Leader Community",
+          "submenus": ["All Leaders", "Top Leaders"]
+        },
+        {
+          "name": "IGEN Expo Community",
+          "submenus": ["Importers (IFIC)", "Exporters (IFEC)", "Service Providers"]
+        }
+      ],
+      "prd": "books/PRD/IGN-M08_Communities_PRD.md"
+    },
+    {
+      "code": "IGN-M09",
+      "name": "Trending",
+      "slug": "trending",
+      "purpose": "Most-liked, most-shared, most-commented news discovery across sectors",
+      "submenus": [
+        "Most Liked → My Sectors",
+        "Most Liked → All Sectors",
+        "Most Shared → My Sectors",
+        "Most Shared → All Sectors",
+        "Most Commented → My Sectors",
+        "Most Commented → All Sectors"
+      ],
+      "engagementMetrics": ["likes", "shares", "comments", "views", "trendingScore"],
+      "prd": "books/PRD/IGN-M09_Trending_PRD.md"
+    },
+    {
+      "code": "IGN-M10",
+      "name": "My News",
+      "slug": "my-news",
+      "purpose": "Personal workspace for personalized feed, activity tracking, and content contribution",
+      "submenus": ["My News (My Sector Trade News)", "My Activities", "My Contribution"],
+      "proFeatures": ["AI News Summary", "Trade-News Analytics", "AI Content Suggestions"],
+      "prd": "books/PRD/IGN-M10_My_News_PRD.md"
+    }
+  ],
+  "revenueModel": {
+    "subscriptionTiers": ["Free/Registered", "Pro/Verified", "Enterprise"],
+    "revenueStreams": [
+      "Premium Subscriptions",
+      "Intelligence Report Sales",
+      "Sponsored Content",
+      "Featured Listings",
+      "Advertising",
+      "Consulting Services",
+      "Event Revenue",
+      "Newsletter Sponsorships",
+      "Lead Generation",
+      "Certification Programs"
+    ]
+  },
+  "targetAudience": [
+    "Business Owners / MSMEs",
+    "Enterprises / Corporates",
+    "Investors",
+    "Exporters / Importers",
+    "Industry Professionals",
+    "Government Officials",
+    "Researchers / Students",
+    "Media Professionals",
+    "SMEs & ASMEs",
+    "Industry Leaders"
+  ],
+  "sourceDocuments": [
+    "books/UX/pages/feed pages/IGEN_Feed_Mega_Menu_Submenu_Revenue_Focused_Document.docx",
+    "books/UX/pages/headlines/IGEN_Headlines_Submenu_Revenue_Focus_UIUX_Document.docx",
+    "books/UX/pages/sector news/IGEN_Sector_News_Mega_Menu_UIUX_PRD_Revenue_Focus.docx",
+    "books/UX/pages/sector news/IGEN_Sector_News_Sub_Menu_UIUX_PRD_Revenue_Focus.docx",
+    "books/UX/pages/company pages/IGEN_Company_Pages_Mega_Menu_PRD.docx",
+    "books/UX/pages/company pages/IGEN_Company_News_Submenu_PRD.docx",
+    "books/UX/pages/country  pages/Country_News_Mega_Menu_UI_UX_Document.docx",
+    "books/UX/pages/country  pages/Country_News_Submenu_UI_UX_Document.docx",
+    "books/UX/pages/leader page/iGEN_Leader_News_Mega_Menu_UI_UX_PRD.docx",
+    "books/UX/pages/leader page/iGEN_Leader_News_Submenus_UI_UX_PRD.docx",
+    "books/UX/pages/Expert  pages/iGEN_Expert_News_Mega_Menu_UI_UX_Documentation.docx",
+    "books/UX/pages/Expert  pages/iGEN_Expert_News_Submenu_UI_UX_Documentation.docx",
+    "books/UX/pages/Expert  pages/iGEN_Expert_News_Submenu_Pages_UI_UX_Documentation.docx",
+    "books/UX/pages/Communities/Communities_Submenu_Revenue_Focused_UI_UX_Document.docx",
+    "books/UX/pages/Trending/Trending_Submenu_Pages_Revenue_Focused_UI_UX_Document.docx",
+    "books/UX/pages/my news/IGEN_My_News_Submenu_UI_UX_Document.docx"
+  ]
+}
