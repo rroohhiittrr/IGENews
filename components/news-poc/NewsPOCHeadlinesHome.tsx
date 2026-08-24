@@ -165,58 +165,12 @@ export default function NewsPOCHeadlinesHome() {
         </div>
       </section>
 
-      {/* Third Fold: Breaking News ticker */}
-      <section className="mx-auto max-w-7xl px-4 pt-6 lg:px-6">
-        <div className="bg-[#E63946]/5 dark:bg-[#E63946]/10 border border-[#E63946]/20 rounded-xl flex items-center overflow-hidden h-10 shadow-3xs">
-          <div className="bg-[#E63946] text-white text-[10px] font-bold px-4 h-full flex items-center tracking-wider shrink-0 select-none uppercase">
-            BREAKING
-          </div>
-          <div className="relative flex-1 overflow-hidden h-full flex items-center">
-            <div 
-              className="absolute whitespace-nowrap text-xs font-semibold text-red-655 dark:text-red-400 flex gap-12"
-              style={{ transform: `translateX(${tickerOffset}px)` }}
-            >
-              <span>● India finalises new PLI scheme for advanced electronics...</span>
-              <span>● EU proposes new carbon border adjustment framework targeting metallurgy...</span>
-              <span>● RBI keeps repo rate unchanged with focus on inflation calibration...</span>
-              <span>● Brent crude futures dip below $85 as demand concerns persist...</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Fourth Fold: 4-Grid News Updates Strip */}
-      <section className="mx-auto max-w-7xl px-4 pt-6 lg:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[
-            { tag: "URGENT · 14:22 GMT", title: "IMF revises global growth outlook for 2025: India surges to 7.8%.", isRed: true },
-            { tag: "ALERT · 13:50 GMT", title: "Yen stabilizes against USD following suspected BoJ intervention.", isRed: false },
-            { tag: "UPDATE · 13:15 GMT", title: "Tech stocks trade sideways ahead of high stakes Q3 earnings.", isRed: false },
-            { tag: "UPDATE · 12:45 GMT", title: "Brent crude futures dip below $85 as demand worries persist.", isRed: false }
-          ].map((item, idx) => (
-            <div 
-              key={idx} 
-              className={`p-4 bg-white dark:bg-[#0f172a] border ${
-                item.isRed ? "border-red-200 dark:border-red-950/45 bg-red-50/20 dark:bg-red-950/5" : "border-gray-200 dark:border-gray-800"
-              } rounded-xl shadow-3xs flex flex-col justify-between`}
-            >
-              <span className={`text-[9px] font-bold block mb-2 ${item.isRed ? "text-red-550" : "text-gray-400"}`}>
-                {item.tag}
-              </span>
-              <p className="text-xs font-bold leading-relaxed text-gray-900 dark:text-white">
-                {item.title}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* Fifth Fold: Top Headlines & Live Updates layout */}
       <section className="mx-auto max-w-7xl px-4 pt-8 lg:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Left Columns: Numbered Top Headlines */}
-          <div className="lg:col-span-8 space-y-6">
+          <div className="lg:col-span-12 space-y-6">
             <div className="flex justify-between items-center border-b border-gray-150 dark:border-gray-855 pb-2">
               <h3 className="font-display text-base font-bold text-gray-900 dark:text-white uppercase tracking-tight">
                 Top Headlines
@@ -259,7 +213,7 @@ export default function NewsPOCHeadlinesHome() {
                       <h4 className="text-sm font-bold text-gray-955 dark:text-white group-hover:text-blue-600 transition-colors leading-snug">
                         {story.title}
                       </h4>
-                      <p className="text-xs text-gray-500 leading-relaxed font-normal">
+                      <p className="text-xs text-gray-550 leading-relaxed font-normal">
                         {story.desc}
                       </p>
                       <div className="flex items-center gap-3 text-[10px] text-gray-400 font-semibold pt-1">
@@ -270,27 +224,6 @@ export default function NewsPOCHeadlinesHome() {
                     </div>
                   </Link>
                 ))}
-            </div>
-          </div>
-
-          {/* Right Column: Live Updates & Policy Tracker widget */}
-          <div className="lg:col-span-4 space-y-6">
-
-            {/* Policy Tracker block */}
-            <div className="bg-slate-950 text-white border border-slate-900 p-5 rounded-2xl shadow-xs space-y-4">
-              <span className="bg-[#E63946]/10 text-[#E63946] text-[9px] font-bold px-2 py-0.5 rounded tracking-wider uppercase block w-max">
-                Policy Tracker
-              </span>
-              <div className="space-y-1">
-                <span className="text-amber-500 text-[10px] font-bold uppercase tracking-wider block">CRITICAL</span>
-                <h4 className="text-xs font-bold">EU Carbon Tax Revisions</h4>
-                <p className="text-[10px] text-slate-400 leading-relaxed font-normal">
-                  Effective Jan 1, 2025. Impacts high-emission manufacturing and export sectors.
-                </p>
-              </div>
-              <Link href="/eoi" className="text-xs text-blue-400 font-bold hover:underline flex items-center gap-1">
-                VIEW POLICY ANALYTICS <ChevronRight className="h-3.5 w-3.5" />
-              </Link>
             </div>
           </div>
         </div>
@@ -428,53 +361,6 @@ export default function NewsPOCHeadlinesHome() {
         </div>
       </section>
 
-      {/* Eighth Fold: Leader Mentions */}
-      <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
-        <div className="border-t border-gray-200 dark:border-gray-800 pt-8 space-y-6">
-          <div className="flex justify-between items-center pb-2">
-            <h3 className="font-display text-base font-bold text-gray-900 dark:text-white uppercase tracking-tight">
-              Leader Mentions
-            </h3>
-            <button className="text-[10px] font-bold text-blue-500 hover:underline uppercase tracking-wider">
-              View Influence Index
-            </button>
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-6">
-            {[
-              { name: "Elon Musk", role: "1.2K mentions" },
-              { name: "Elena Rostova", role: "980 mentions" },
-              { name: "Satya Nadella", role: "810 mentions" },
-              { name: "Sarah Dransfield", role: "760 mentions" },
-              { name: "Marcus Thorne", role: "650 mentions" }
-            ].map((lead, idx) => (
-              <div key={idx} className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-4 rounded-xl text-center shadow-3xs flex flex-col items-center gap-2.5">
-                <Link href="/en/news-poc/leader-news" className="h-12 w-12 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-600 text-white font-bold flex items-center justify-center text-sm uppercase hover:scale-105 transition-transform">
-                  {lead.name.charAt(0)}
-                </Link>
-                <div>
-                  <Link href="/en/news-poc/leader-news" className="font-bold text-gray-955 dark:text-white block text-xs hover:text-blue-550 transition-colors">
-                    {lead.name}
-                  </Link>
-                  <span className="text-[9px] text-gray-450 block font-mono mt-0.5">{lead.role}</span>
-                </div>
-                <button
-                  onClick={() => {
-                    setFollowedLeaders(prev => prev.includes(lead.name) ? prev.filter(l => l !== lead.name) : [...prev, lead.name]);
-                  }}
-                  className={`text-[8px] font-bold px-2.5 py-1 rounded transition-all ${
-                    followedLeaders.includes(lead.name)
-                      ? "bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400"
-                      : "bg-blue-50 dark:bg-blue-900/50 hover:bg-blue-100 text-blue-600 dark:text-blue-400"
-                  }`}
-                >
-                  {followedLeaders.includes(lead.name) ? "Following" : "+ Follow"}
-                </button>
-              </div>
-            ))}
-          </div>
-          </div>
-        </div>
-      </section>
-
       {/* Ninth Fold: Premium Intelligence Banner */}
       <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
         <div className="bg-slate-950 text-white border border-slate-900 p-8 rounded-3xl relative overflow-hidden shadow-lg space-y-6">
@@ -584,171 +470,6 @@ export default function NewsPOCHeadlinesHome() {
                 </div>
               </div>
             ))}
-          </div>
-
-          {/* AI Policy Impact Exposure Checker */}
-          <div className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 rounded-2xl p-6 shadow-sm space-y-5">
-            <div className="flex items-center gap-2 border-b border-gray-100 dark:border-gray-855 pb-3">
-              <Sparkles className="h-4.5 w-4.5 text-amber-500" />
-              <h4 className="font-display text-xs font-bold text-gray-955 dark:text-white uppercase tracking-wider">
-                AI Policy Impact &amp; HS Code Exposure Checker
-              </h4>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-              {/* Inputs */}
-              <div className="md:col-span-5 space-y-4">
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold text-gray-400 uppercase">Select Active Policy</label>
-                  <select 
-                    value={policyInput}
-                    onChange={(e) => setPolicyInput(e.target.value)}
-                    className="w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-3 py-2 text-xs outline-none focus:border-blue-500"
-                  >
-                    <option>EU Carbon Tax (CBAM)</option>
-                    <option>US Critical Tech Defense Accord</option>
-                    <option>India-UAE CEPA Tariff Schedules</option>
-                  </select>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold text-gray-400 uppercase">Enter 2-Digit HS Product Code</label>
-                  <input 
-                    type="text" 
-                    placeholder="e.g. 72 (Iron & Steel), 85 (Electrical Machinery)" 
-                    value={hsCodeInput}
-                    onChange={(e) => setHsCodeInput(e.target.value)}
-                    className="w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-3 py-2 text-xs outline-none focus:border-blue-500"
-                  />
-                </div>
-
-                <button 
-                  onClick={() => {
-                    const hs = parseInt(hsCodeInput);
-                    if (isNaN(hs) || hsCodeInput.trim() === "") {
-                      setExposureResult({
-                        risk: "LOW RISK",
-                        score: "15%",
-                        rate: "0.0%",
-                        text: "Product code not matching high-risk sectors under current policy revisions. Standard tariffs apply."
-                      });
-                      return;
-                    }
-                    if (policyInput.includes("EU Carbon")) {
-                      if (hs === 72 || hs === 73 || hs === 76) {
-                        setExposureResult({
-                          risk: "SEVERE EXPOSURE",
-                          score: "92%",
-                          rate: "28.5% Import Tax",
-                          text: "CBAM high-emission regulation applies. Immediate carbon emission reporting and audit sheets required to prevent supply penalties."
-                        });
-                      } else {
-                        setExposureResult({
-                          risk: "MODERATE EXPOSURE",
-                          score: "45%",
-                          rate: "4.2% Tariff Adjust",
-                          text: "Secondary packaging emission standard applies. Ensure supplier compliance logs are updated annually."
-                        });
-                      }
-                    } else if (policyInput.includes("US Critical")) {
-                      if (hs === 85 || hs === 84) {
-                        setExposureResult({
-                          risk: "SEVERE EXPOSURE",
-                          score: "88%",
-                          rate: "Tech Sourcing Restrictions",
-                          text: "iCET critical aerospace avionics and semiconductor rules apply. Require export control certification keys before cargo load."
-                        });
-                      } else {
-                        setExposureResult({
-                          risk: "LOW RISK",
-                          score: "10%",
-                          rate: "Standard Tariff",
-                          text: "Non-defense commodity category. No active export restriction flags detected."
-                        });
-                      }
-                    } else {
-                      if (hs === 71 || hs === 39) {
-                        setExposureResult({
-                          risk: "DUTY CONCESSION (SAVINGS)",
-                          score: "95%",
-                          rate: "0% Duty Rate (CEPA)",
-                          text: "CEPA Bilateral Accord applies. Net zero duty rate active for registered importers utilizing Form-A certificate."
-                        });
-                      } else {
-                        setExposureResult({
-                          risk: "LOW RISK",
-                          score: "20%",
-                          rate: "5.0% Standard Duty",
-                          text: "Outside preferential concession schedules. standard custom duties apply."
-                        });
-                      }
-                    }
-                  }}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-2 rounded-lg transition-colors uppercase tracking-wider"
-                >
-                  Assess Compliance Exposure
-                </button>
-              </div>
-
-              {/* Results */}
-              <div className="md:col-span-7 bg-gray-55 dark:bg-gray-900/50 rounded-xl p-5 border border-gray-100 dark:border-gray-800 flex flex-col justify-center space-y-4 min-h-[180px]">
-                {exposureResult ? (
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <span className={`text-[9px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider ${
-                        exposureResult.risk.includes("SEVERE") 
-                          ? "bg-red-100 dark:bg-red-950/40 text-red-650 dark:text-red-400"
-                          : exposureResult.risk.includes("MODERATE")
-                          ? "bg-amber-100 dark:bg-amber-955/40 text-amber-600 dark:text-amber-400"
-                          : "bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400"
-                      }`}>
-                        {exposureResult.risk}
-                      </span>
-                      <span className="text-[10px] text-gray-400 font-semibold">Risk Score: <strong className="text-gray-950 dark:text-white">{exposureResult.score}</strong></span>
-                    </div>
-
-                    <div className="space-y-1">
-                      <span className="text-[9px] text-gray-400 block uppercase">Policy Tariff Delta</span>
-                      <div className="text-sm font-bold text-gray-955 dark:text-white font-mono">{exposureResult.rate}</div>
-                    </div>
-
-                    <p className="text-[10px] text-gray-500 leading-relaxed font-normal">
-                      {exposureResult.text}
-                    </p>
-
-                    <div className="pt-2 border-t border-gray-150 dark:border-gray-855 flex items-center justify-between">
-                      <span className="text-[8px] text-slate-400 uppercase">Checked via IGE Policy AI Engine</span>
-                      {downloadingPacketId === "packet-dl" ? (
-                        <span className="text-[9px] text-emerald-500 font-bold flex items-center gap-1">
-                          <RefreshCw className="h-3 w-3 animate-spin" /> Downloading Packet...
-                        </span>
-                      ) : (
-                        <button 
-                          onClick={() => {
-                            setDownloadingPacketId("packet-dl");
-                            setTimeout(() => {
-                              setDownloadingPacketId(null);
-                              alert("Accord Compliance Packet compiled successfully. PDF download started.");
-                            }, 2000);
-                          }}
-                          className="text-[9px] font-bold text-blue-500 hover:underline"
-                        >
-                          Download Accord Compliance Packet →
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-center py-6 space-y-2">
-                    <ShieldAlert className="h-8 w-8 text-gray-300 mx-auto" />
-                    <h5 className="text-xs font-bold text-gray-450 uppercase">No Active Assessment</h5>
-                    <p className="text-[10px] text-gray-400 max-w-xs mx-auto leading-relaxed">
-                      Enter your product's 2-digit HS Code above to analyze legislative compliance risk and tariff deltas under active policies.
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
           </div>
         </div>
       </section>
