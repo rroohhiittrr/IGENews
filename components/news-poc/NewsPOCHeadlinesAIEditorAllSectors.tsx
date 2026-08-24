@@ -624,59 +624,7 @@ export default function NewsPOCHeadlinesAIEditorAllSectors({ onBack }: Props) {
             </section>
           )}
 
-          {/* ─── Breaking Global Headlines & What Matters Most strip ─── */}
-          <section className="mx-auto max-w-7xl px-4 pt-6 lg:px-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
-            {/* Breaking Headlines */}
-            <div className="lg:col-span-2 bg-[#E63946]/5 border border-red-500/10 p-5 rounded-2xl space-y-3">
-              <div className="flex items-center gap-2 text-red-600 dark:text-red-400 border-b border-red-500/10 pb-2">
-                <Flame className="h-4 w-4 animate-bounce" />
-                <h3 className="font-display text-xs font-bold uppercase tracking-widest font-bold">Breaking Headlines</h3>
-              </div>
-              <div className="space-y-3">
-                {filteredArticles.filter(art => art.breaking).map(art => (
-                  <div key={art.id} className="flex justify-between items-center gap-4 text-xs font-semibold">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2 text-[10px] text-gray-400">
-                        <span className="bg-red-500 text-white text-[7px] font-mono px-1 py-0.2 rounded uppercase">BREAKING</span>
-                        <span>{art.sectorName}</span>
-                      </div>
-                      <span className="text-gray-900 dark:text-white block leading-snug">{art.title}</span>
-                    </div>
-                    <Link 
-                      href={`/en/news-poc/article/${art.id}`}
-                      className="bg-red-600 hover:bg-red-700 text-white text-[9px] font-bold px-3 py-1.5 rounded-lg whitespace-nowrap uppercase"
-                    >
-                      Read Now
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            </div>
 
-            {/* What Matters Most Right Now */}
-            <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-3xs space-y-3">
-              <div className="border-b border-gray-100 dark:border-gray-800 pb-2 flex items-center gap-1.5">
-                <ShieldAlert className="h-4 w-4 text-gray-400" />
-                <h3 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">What Matters Most</h3>
-              </div>
-              <div className="space-y-3 text-xs font-semibold">
-                {filteredArticles.slice(0, 3).map((art, idx) => (
-                  <div key={idx} className="flex justify-between items-center border-b border-gray-50 dark:border-gray-800/40 pb-2 last:border-0 last:pb-0">
-                    <span className="text-gray-900 dark:text-white truncate max-w-[180px]">{art.title}</span>
-                    <span className={`text-[8px] font-extrabold uppercase font-mono px-2 py-0.5 rounded ${
-                      art.importance === "Critical" 
-                        ? "bg-red-500/10 text-red-500" 
-                        : "bg-blue-500/10 text-blue-500"
-                    }`}>
-                      {art.importance}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-          </section>
 
           {/* ─── Main Two-Column Layout ─── */}
           <section className="mx-auto max-w-7xl px-4 pt-8 lg:px-6">

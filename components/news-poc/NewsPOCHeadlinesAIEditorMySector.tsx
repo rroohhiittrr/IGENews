@@ -665,59 +665,7 @@ export default function NewsPOCHeadlinesAIEditorMySector({ onBack }: Props) {
             </section>
           )}
 
-          {/* ─── Breaking AI Headlines & What Matters Most strip ─── */}
-          <section className="mx-auto max-w-7xl px-4 pt-6 lg:px-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
-            {/* Breaking AI Headlines */}
-            <div className="lg:col-span-2 bg-[#E63946]/5 border border-red-500/10 p-5 rounded-2xl space-y-3">
-              <div className="flex items-center gap-2 text-red-600 dark:text-red-400 border-b border-red-500/10 pb-2">
-                <Flame className="h-4 w-4 animate-bounce" />
-                <h3 className="font-display text-xs font-bold uppercase tracking-widest">Breaking AI Headlines</h3>
-              </div>
-              <div className="space-y-3">
-                {filteredArticles.filter(art => art.breaking).map(art => (
-                  <div key={art.id} className="flex justify-between items-center gap-4 text-xs font-semibold">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <span className="bg-red-500 text-white text-[7px] font-mono px-1 py-0.2 rounded uppercase">BREAKING</span>
-                        <span className="text-[10px] text-gray-400">{art.sectorName}</span>
-                      </div>
-                      <span className="text-gray-900 dark:text-white block leading-snug">{art.title}</span>
-                    </div>
-                    <Link 
-                      href={`/en/news-poc/article/${art.id}`}
-                      className="bg-red-600 hover:bg-red-700 text-white text-[9px] font-bold px-3 py-1.5 rounded-lg whitespace-nowrap uppercase"
-                    >
-                      Read Now
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            </div>
 
-            {/* What Matters Most priorities */}
-            <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-3xs space-y-3">
-              <div className="border-b border-gray-100 dark:border-gray-800 pb-2 flex items-center gap-1.5">
-                <ShieldAlert className="h-4 w-4 text-gray-400" />
-                <h3 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">What Matters Most</h3>
-              </div>
-              <div className="space-y-3 text-xs font-semibold">
-                {filteredArticles.slice(0, 3).map((art, idx) => (
-                  <div key={idx} className="flex justify-between items-center border-b border-gray-50 dark:border-gray-800/40 pb-2 last:border-0 last:pb-0">
-                    <span className="text-gray-900 dark:text-white truncate max-w-[180px]">{art.title}</span>
-                    <span className={`text-[8px] font-extrabold uppercase font-mono px-2 py-0.5 rounded ${
-                      art.importance === "Critical" 
-                        ? "bg-red-500/10 text-red-500" 
-                        : "bg-blue-500/10 text-blue-500"
-                    }`}>
-                      {art.importance}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-          </section>
 
           {/* ─── Main Two-Column Layout ─── */}
           <section className="mx-auto max-w-7xl px-4 pt-8 lg:px-6">
@@ -1215,73 +1163,7 @@ export default function NewsPOCHeadlinesAIEditorMySector({ onBack }: Props) {
                   </div>
                 </div>
 
-                {/* ── Headline Alerts Configurator ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
-                  <h4 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider font-semibold">
-                    Never Miss an Important Headline
-                  </h4>
-                  
-                  {!alertConfigured ? (
-                    <div className="space-y-3 text-[10px] font-semibold">
-                      <p className="text-gray-555 leading-relaxed font-normal">
-                        Configure customized alert rules to receive push notifications when high-importance developments are published.
-                      </p>
-                      
-                      <div className="space-y-1.5">
-                        <span className="text-[8px] text-gray-400 uppercase font-bold">Importance Level Target</span>
-                        <select 
-                          value={alertThreshold}
-                          onChange={(e) => setAlertThreshold(e.target.value)}
-                          className="w-full p-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-lg text-xs outline-none"
-                        >
-                          <option value="Critical">Critical Importance only</option>
-                          <option value="High">High or Critical levels</option>
-                          <option value="Medium">Medium & above</option>
-                        </select>
-                      </div>
 
-                      <button 
-                        onClick={() => { setAlertConfigured(true); showToast(`Alert rule created for ${alertThreshold} priority headlines ✓`); }}
-                        className="w-full bg-[#1D1D46] hover:bg-[#152e4f] text-white font-bold py-2 rounded-lg transition-colors uppercase text-xs"
-                      >
-                        Create Alert
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="bg-emerald-50 dark:bg-emerald-955/20 border border-emerald-300 dark:border-emerald-900 text-emerald-800 dark:text-emerald-300 p-3 rounded-lg text-[10px] font-bold text-center">
-                      ✓ Headline Alert Activated Successfully!
-                    </div>
-                  )}
-                </div>
-
-                {/* ── Premium AI Intelligence Conversion widget ── */}
-                <div className="bg-gradient-to-br from-indigo-950 to-slate-900 text-white border border-indigo-900/60 p-5 rounded-2xl shadow-sm space-y-4">
-                  <h4 className="font-display text-sm font-bold flex items-center gap-1.5">
-                    <Sparkles className="h-4 w-4 text-amber-400 animate-pulse" /> Unlock Full AI Intelligence
-                  </h4>
-                  <p className="text-[10px] text-slate-300 leading-relaxed font-normal">
-                    Secure institutional clearance to access full multi-sector policy radar grids, daily reports, and macro-financial briefings.
-                  </p>
-                  
-                  <ul className="space-y-2 text-[10px] text-slate-350 font-semibold">
-                    <li className="flex items-center gap-1.5">
-                      <CheckCircle className="h-3.5 w-3.5 text-emerald-400 shrink-0" /> Full AI C-Suite Business impact audits
-                    </li>
-                    <li className="flex items-center gap-1.5">
-                      <CheckCircle className="h-3.5 w-3.5 text-emerald-400 shrink-0" /> Advanced multi-sector trend alerts
-                    </li>
-                    <li className="flex items-center gap-1.5">
-                      <CheckCircle className="h-3.5 w-3.5 text-emerald-400 shrink-0" /> Exportable compliance intelligence reports
-                    </li>
-                  </ul>
-
-                  <button 
-                    onClick={() => showToast("Opening premium checkout flow...")}
-                    className="w-full text-center bg-amber-500 hover:bg-amber-600 text-gray-955 font-bold text-xs py-2 rounded-xl transition-all uppercase tracking-wider"
-                  >
-                    Unlock AI Intelligence
-                  </button>
-                </div>
 
                 {/* ── Recommended Intelligence Reports ── */}
                 <div className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 p-4 rounded-2xl shadow-sm space-y-3">

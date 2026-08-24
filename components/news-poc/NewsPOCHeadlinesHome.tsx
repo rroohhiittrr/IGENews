@@ -27,6 +27,23 @@ export default function NewsPOCHeadlinesHome() {
     { id: "alt-2", message: "POLICY WATCH: UAE CEPA tariff reductions now active for selected chemical compounds.", type: "info" }
   ]);
 
+  // Global Headlines Filters and Data
+  const [globalCountryFilter, setGlobalCountryFilter] = useState("all");
+  const [globalSectorFilter, setGlobalSectorFilter] = useState("all");
+
+  const globalHeadlines = [
+    { country: "US", sector: "tech", countryName: "United States", sectorName: "Tech & AI", title: "US Regulators Launch Antitrust Probe into Core Cloud Conglomerates", desc: "Federal trade officials open inquiry targeting AI licensing structures and cloud computing infrastructure acquisitions.", date: "15 mins ago", readTime: "5 min read" },
+    { country: "IN", sector: "energy", countryName: "India", sectorName: "Energy", title: "India Green Hydrogen Corridor Attracts $15B in Foreign Commitments", desc: "Bilateral agreements signed to construct green hydrogen production hubs in Rajasthan and Gujarat with export corridors to Europe.", date: "1 hour ago", readTime: "8 min read" },
+    { country: "EU", sector: "finance", countryName: "Europe", sectorName: "Finance", title: "European Central Bank Signals Rate Adjustment Protocols", desc: "Policy makers align on calibration measures to stabilize sovereign debt yields amid shifting core inflation indicators.", date: "3 hours ago", readTime: "6 min read" },
+    { country: "JP", sector: "auto", countryName: "Japan", sectorName: "Auto & EV", title: "Japanese Auto Manufacturers Outline Unified Solid-State Battery Strategy", desc: "Joint venture commits to scaling manufacturing of solid-state EV batteries by 2027 to capture premium EV segment share.", date: "4 hours ago", readTime: "7 min read" }
+  ];
+
+  const filteredGlobalHeadlines = globalHeadlines.filter(news => {
+    const matchCountry = globalCountryFilter === "all" || news.country === globalCountryFilter;
+    const matchSector = globalSectorFilter === "all" || news.sector === globalSectorFilter;
+    return matchCountry && matchSector;
+  });
+
   // Auto scroll breaking news ticker
   useEffect(() => {
     const timer = setInterval(() => {
@@ -39,15 +56,24 @@ export default function NewsPOCHeadlinesHome() {
     all: [
       { num: "01", category: "TECH & SEMI", title: "Apple Accelerates Manufacturing Expansion Across India", desc: "The Cupertino giant is increasing supplier partnerships and production investments as India becomes a strategic export hub for global markets.", readTime: "8 min read", date: "12 mins ago" },
       { num: "02", category: "MARKETS", title: "Global Chipmakers Increase India Investments Following PLI Scheme", desc: "New incentives for semiconductor manufacturing draw multi-billion dollar commitments from leading foundry operators in Taiwan and Europe.", readTime: "6 min read", date: "45 mins ago" },
-      { num: "03", category: "RETAIL", title: "Luxury Retail Expansion Surges Across GCC Markets", desc: "High-net-worth consumption patterns drive a 15% increase in flagship boutique openings in Riyadh and Dubai this fiscal quarter.", readTime: "5 min read", date: "1 hour ago" }
+      { num: "03", category: "RETAIL", title: "Luxury Retail Expansion Surges Across GCC Markets", desc: "High-net-worth consumption patterns drive a 15% increase in flagship boutique openings in Riyadh and Dubai this fiscal quarter.", readTime: "5 min read", date: "1 hour ago" },
+      { num: "04", category: "ENERGY", title: "Bilateral Grid Integrity Accords Signed for North Sea Wind Projects", desc: "European consortium secures $18B backing to build interconnected deep-sea offshore power hubs serving central grid nodes.", readTime: "7 min read", date: "2 hours ago" },
+      { num: "05", category: "FINANCE", title: "Global Sovereign Debt Yields Rise Amid Stronger Dollar Projections", desc: "Central bank announcements signal prolonged interest rate calibration, impacting emerging market capital allocation.", readTime: "6 min read", date: "3 hours ago" },
+      { num: "06", category: "AUTOMOTIVE", title: "Toyota Accelerates Next-Gen Solid-State Battery Scaling Program", desc: "New pilot assembly line in Aichi commits to delivering pilot batteries by 2026, targeting double the energy density.", readTime: "8 min read", date: "4 hours ago" }
     ],
     markets: [
       { num: "01", category: "MARKETS", title: "Global Chipmakers Increase India Investments Following PLI Scheme", desc: "New incentives for semiconductor manufacturing draw commitments from foundry operators in Taiwan and Europe.", readTime: "6 min read", date: "45 mins ago" },
-      { num: "02", category: "COMMODITIES", title: "Lithium Price Index Stabilizes After High Supply Volatility", desc: "Bilateral resource corridors secure raw battery mineral flow, lowering EV supply chain risks.", readTime: "7 min read", date: "2 hrs ago" }
+      { num: "02", category: "COMMODITIES", title: "Lithium Price Index Stabilizes After High Supply Volatility", desc: "Bilateral resource corridors secure raw battery mineral flow, lowering EV supply chain risks.", readTime: "7 min read", date: "2 hrs ago" },
+      { num: "03", category: "FINANCE", title: "Global Sovereign Debt Yields Rise Amid Stronger Dollar Projections", desc: "Central bank announcements signal prolonged interest rate calibration, impacting emerging market capital allocation.", readTime: "6 min read", date: "3 hours ago" },
+      { num: "04", category: "RETAIL", title: "Luxury Retail Expansion Surges Across GCC Markets", desc: "High-net-worth consumption patterns drive a 15% increase in flagship boutique openings in Riyadh and Dubai this fiscal quarter.", readTime: "5 min read", date: "1 hour ago" },
+      { num: "05", category: "ENERGY", title: "Green Hydrogen Off-Take Accords Finalized in European Hubs", desc: "Multi-decade supply contracts signed with heavy industry consortiums to guarantee green fuel availability.", readTime: "9 min read", date: "5 hours ago" }
     ],
     tech: [
       { num: "01", category: "TECH & SEMI", title: "Apple Accelerates Manufacturing Expansion Across India", desc: "The Cupertino giant is increasing supplier partnerships as India becomes a strategic export hub.", readTime: "8 min read", date: "12 mins ago" },
-      { num: "02", category: "AI & CYBER", title: "Cybersecurity Framework Standards Upgraded for Global SaaS Nodes", desc: "New encryption rules implemented across banking interfaces to block cloud infrastructure vulnerabilities.", readTime: "9 min read", date: "3 hrs ago" }
+      { num: "02", category: "AI & CYBER", title: "Cybersecurity Framework Standards Upgraded for Global SaaS Nodes", desc: "New encryption rules implemented across banking interfaces to block cloud infrastructure vulnerabilities.", readTime: "9 min read", date: "3 hrs ago" },
+      { num: "03", category: "TECH & SEMI", title: "TSMC Outlines Plan for Next-Gen 2nm Foundry Site in Hsinchu", desc: "Cleanroom construction commences ahead of scheduled production run targets in mid-2025.", readTime: "10 min read", date: "4 hours ago" },
+      { num: "04", category: "AI & ROBOTICS", title: "Autonomous Sourcing Algorithms Deployed Across Supply Networks", desc: "Enterprise platform integrates predictive model loops to dynamically manage inventory and freight delays.", readTime: "7 min read", date: "5 hours ago" },
+      { num: "05", category: "TELECOM", title: "Global 6G Standardization Panel Reaches Spectrum Consensus", desc: "Bilateral agreements signed across regulatory panels to reserve high-frequency bands for advanced mobile hubs.", readTime: "8 min read", date: "6 hours ago" }
     ]
   };
 
@@ -170,7 +196,7 @@ export default function NewsPOCHeadlinesHome() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Left Columns: Numbered Top Headlines */}
-          <div className="lg:col-span-12 space-y-6">
+          <div className="lg:col-span-8 space-y-6">
             <div className="flex justify-between items-center border-b border-gray-150 dark:border-gray-855 pb-2">
               <h3 className="font-display text-base font-bold text-gray-900 dark:text-white uppercase tracking-tight">
                 Top Headlines
@@ -226,6 +252,91 @@ export default function NewsPOCHeadlinesHome() {
                 ))}
             </div>
           </div>
+
+          {/* Right Column: Sidebar */}
+          <div className="lg:col-span-4 space-y-8">
+            
+            {/* The Daily Briefing */}
+            <div className="bg-gradient-to-br from-[#0c1424] to-[#162136] border border-slate-800 text-white p-5 rounded-2xl shadow-xs space-y-4">
+              <div className="space-y-3">
+                <h4 className="text-xs font-bold text-white border-b border-slate-800 pb-2">
+                  The Daily Briefing
+                </h4>
+                <p className="text-[10px] text-slate-400 leading-relaxed">
+                  Our chief analysts condense the day's noise into 5 critical takeaways for the C-suite.
+                </p>
+              </div>
+              <div className="space-y-3 pt-3 text-[11px]">
+                <div className="flex gap-2.5 items-start">
+                  <span className="text-[#FEC970] font-bold">01</span>
+                  <p className="text-slate-300 font-normal">Sovereign debt risks in emerging markets are peaking as USD holds firm.</p>
+                </div>
+                <div className="flex gap-2.5 items-start">
+                  <span className="text-[#FEC970] font-bold">02</span>
+                  <p className="text-slate-300 font-normal">AI regulation in the UK takes a surprisingly pro-innovation stance.</p>
+                </div>
+                <div className="flex gap-2.5 items-start">
+                  <span className="text-[#FEC970] font-bold">03</span>
+                  <p className="text-slate-300 font-normal">Commercial real estate defaults hit a 5-year high in major hubs.</p>
+                </div>
+                <div className="flex gap-2.5 items-start">
+                  <span className="text-[#FEC970] font-bold">04</span>
+                  <p className="text-slate-300 font-normal">Bilateral carbon adjustment policies force supply chain realignment in APAC.</p>
+                </div>
+                <div className="flex gap-2.5 items-start">
+                  <span className="text-[#FEC970] font-bold">05</span>
+                  <p className="text-slate-300 font-normal">Global semiconductor equipment demand surges following new subsidy packages.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Rising Influence */}
+            <div className="space-y-4 bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 p-5 rounded-2xl shadow-xs">
+              <h4 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight pb-2 border-b border-gray-150 dark:border-gray-855">
+                Rising Influence
+              </h4>
+              <div className="space-y-3">
+                {[
+                  { num: "01", name: "Deepak Narang", val: "+12" },
+                  { num: "02", name: "Chloe Zhang", val: "-2" }
+                ].map((item, idx) => (
+                  <div key={idx} className="flex justify-between items-center bg-gray-50 dark:bg-gray-900/50 border border-gray-150 dark:border-gray-855 p-3 rounded-xl">
+                    <div className="flex gap-3 items-center">
+                      <span className="font-mono text-xs font-bold text-gray-400">{item.num}</span>
+                      <span className="text-xs font-bold text-gray-900 dark:text-white">{item.name}</span>
+                    </div>
+                    <span className={`text-xs font-bold font-mono ${item.val.startsWith("-") ? "text-red-500" : "text-emerald-500"}`}>
+                      {item.val}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Most Quoted Today */}
+            <div className="space-y-4 bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 p-5 rounded-2xl shadow-xs">
+              <h4 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight pb-2 border-b border-gray-150 dark:border-gray-855">
+                Most Quoted Today
+              </h4>
+              <div className="space-y-3">
+                {[
+                  { num: "01", name: "Julian Vance", val: "+412" },
+                  { num: "02", name: "Elena Rostova", val: "+298" }
+                ].map((item, idx) => (
+                  <div key={idx} className="flex justify-between items-center bg-gray-50 dark:bg-gray-900/50 border border-gray-150 dark:border-gray-855 p-3 rounded-xl">
+                    <div className="flex gap-3 items-center">
+                      <span className="font-mono text-xs font-bold text-gray-400">{item.num}</span>
+                      <span className="text-xs font-bold text-gray-900 dark:text-white">{item.name}</span>
+                    </div>
+                    <span className="text-xs font-bold text-emerald-500 font-mono">
+                      {item.val}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
         </div>
       </section>
 
@@ -235,13 +346,12 @@ export default function NewsPOCHeadlinesHome() {
           <h3 className="font-display text-base font-bold text-gray-900 dark:text-white uppercase tracking-tight">
             Editor's Desk
           </h3>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             
             {/* Column 1 */}
             <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between">
               <div className="space-y-3">
-                <h4 className="text-xs font-bold text-gray-950 dark:text-white leading-snug">
+                <h4 className="text-xs font-bold text-gray-955 dark:text-white leading-snug">
                   China's EV Supply Chain Shift Reshapes Global Markets
                 </h4>
                 <p className="text-xs text-gray-550 leading-relaxed font-normal">
@@ -266,7 +376,7 @@ export default function NewsPOCHeadlinesHome() {
                   With $20B in fresh commitments, the subcontinent is positioning itself as the premier alternative for semiconductor assembly.
                 </p>
               </div>
-              <div className="mt-4 p-3 bg-amber-500/5 dark:bg-amber-950/15 border-l-2 border-amber-500 rounded-r-lg">
+              <div className="mt-4 p-3 bg-amber-500/5 dark:bg-amber-955/15 border-l-2 border-amber-500 rounded-r-lg">
                 <span className="text-[8px] font-bold text-amber-600 block uppercase mb-1">Why it matters</span>
                 <p className="text-[10px] text-gray-600 dark:text-gray-400 italic">
                   "India's talent pool combined with aggressive subsidies is finally overcoming historical infrastructure bottlenecks, creating a new tech axis."
@@ -274,32 +384,81 @@ export default function NewsPOCHeadlinesHome() {
               </div>
             </div>
 
-            {/* Column 3: The Daily Briefing */}
-            <div className="bg-gradient-to-br from-[#0c1424] to-[#162136] border border-slate-800 text-white p-5 rounded-2xl shadow-xs flex flex-col justify-between">
-              <div className="space-y-3">
-                <h4 className="text-xs font-bold text-white border-b border-slate-800 pb-2">
-                  The Daily Briefing
-                </h4>
-                <p className="text-[10px] text-slate-400 leading-relaxed">
-                  Our chief analysts condense the day's noise into 3 critical takeaways for the C-suite.
-                </p>
-              </div>
-              <div className="space-y-3 pt-3 text-[11px]">
-                <div className="flex gap-2.5 items-start">
-                  <span className="text-[#FEC970] font-bold">01</span>
-                  <p className="text-slate-300 font-normal">Sovereign debt risks in emerging markets are peaking as USD holds firm.</p>
-                </div>
-                <div className="flex gap-2.5 items-start">
-                  <span className="text-[#FEC970] font-bold">02</span>
-                  <p className="text-slate-300 font-normal">AI regulation in the UK takes a surprisingly pro-innovation stance.</p>
-                </div>
-                <div className="flex gap-2.5 items-start">
-                  <span className="text-[#FEC970] font-bold">03</span>
-                  <p className="text-slate-300 font-normal">Commercial real estate defaults hit a 5-year high in major hubs.</p>
-                </div>
-              </div>
-            </div>
+          </div>
+        </div>
+      </section>
 
+      {/* Global Headlines Section with Filters */}
+      <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
+        <div className="border-t border-gray-200 dark:border-gray-800 pt-8 space-y-6">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-gray-150 dark:border-gray-855">
+            <div>
+              <span className="text-[9px] font-bold text-blue-500 uppercase tracking-wider block">Global Coverage</span>
+              <h3 className="font-display text-base font-bold text-gray-900 dark:text-white uppercase tracking-tight mt-0.5">
+                Global Headlines
+              </h3>
+            </div>
+            
+            {/* Filters */}
+            <div className="flex flex-wrap gap-2">
+              <span className="text-[9px] font-bold text-gray-405 uppercase self-center mr-1">Filter by:</span>
+              <select 
+                value={globalCountryFilter} 
+                onChange={(e) => setGlobalCountryFilter(e.target.value)}
+                className="rounded bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 px-2 py-1 text-[10px] font-bold uppercase outline-none text-gray-700 dark:text-gray-300"
+              >
+                <option value="all">All Countries</option>
+                <option value="US">United States</option>
+                <option value="IN">India</option>
+                <option value="EU">Europe</option>
+                <option value="JP">Japan</option>
+              </select>
+              
+              <select 
+                value={globalSectorFilter} 
+                onChange={(e) => setGlobalSectorFilter(e.target.value)}
+                className="rounded bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 px-2 py-1 text-[10px] font-bold uppercase outline-none text-gray-700 dark:text-gray-300"
+              >
+                <option value="all">All Sectors</option>
+                <option value="energy">Energy & Sustainability</option>
+                <option value="tech">Technology & AI</option>
+                <option value="finance">BFSI & Finance</option>
+                <option value="auto">Automotive & EV</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            {filteredGlobalHeadlines.map((news, idx) => (
+              <Link key={idx} href="/en/news-poc/article/sec-1" className="flex gap-6 items-start group pb-6 border-b border-gray-100 dark:border-gray-855 last:border-0 last:pb-0 block">
+                <span className="font-display text-3xl font-extrabold text-gray-200 dark:text-gray-800 group-hover:text-blue-550 transition-colors leading-none">
+                  {String(idx + 1).padStart(2, "0")}
+                </span>
+                <div className="flex-1 space-y-2">
+                  <div className="flex items-center gap-2 text-[9px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+                    <span>{news.sectorName}</span>
+                    <span>•</span>
+                    <span className="text-gray-400">{news.countryName}</span>
+                  </div>
+                  <h4 className="text-sm font-bold text-gray-955 dark:text-white group-hover:text-blue-600 transition-colors leading-snug">
+                    {news.title}
+                  </h4>
+                  <p className="text-xs text-gray-550 leading-relaxed font-normal">
+                    {news.desc}
+                  </p>
+                  <div className="flex items-center gap-3 text-[10px] text-gray-400 font-semibold pt-1">
+                    <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {news.date}</span>
+                    <span>•</span>
+                    <span>{news.readTime}</span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+            {filteredGlobalHeadlines.length === 0 && (
+              <div className="py-12 text-center text-xs text-gray-400 uppercase tracking-wider">
+                No global headlines matching the selected filters.
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -478,23 +637,64 @@ export default function NewsPOCHeadlinesHome() {
       <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           
-          {/* Left Column: Sustainable Assets */}
-          <div className="lg:col-span-7 relative rounded-3xl overflow-hidden bg-slate-950 text-white min-h-[300px] flex flex-col justify-end p-8 border border-slate-900 shadow-sm group">
+          {/* Left Column: FEATURED INSIGHT */}
+          <div className="lg:col-span-7 relative rounded-3xl overflow-hidden bg-slate-950 text-white min-h-[380px] flex flex-col justify-end p-8 border border-slate-900 shadow-sm group">
             <div 
               className="absolute inset-0 z-0 bg-cover bg-center opacity-30 group-hover:scale-102 transition-transform duration-300"
               style={{ backgroundImage: `url('https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&auto=format&fit=crop&q=80')` }}
             />
-            <div className="absolute inset-0 z-0 bg-gradient-to-t from-slate-955 via-slate-950/40 to-transparent" />
+            <div className="absolute inset-0 z-0 bg-gradient-to-t from-slate-955 via-slate-950/60 to-transparent" />
             <div className="relative z-10 space-y-4">
-              <span className="bg-emerald-600 text-white text-[9px] font-bold px-2 py-0.5 rounded tracking-wider uppercase w-max block">
-                Resilience Brief
-              </span>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="bg-blue-600 text-white text-[9px] font-bold px-2 py-0.5 rounded tracking-wider uppercase block">
+                  FEATURED INSIGHT
+                </span>
+                <span className="bg-white/10 text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider block">
+                  Special Report
+                </span>
+              </div>
+              
               <h3 className="font-display text-xl md:text-2xl font-bold leading-tight">
                 The Architecture of Resilience: Scaling Sustainable Assets in 2025
               </h3>
-              <div className="p-3 bg-white/5 border-l-2 border-emerald-500 rounded-r-lg text-xs italic font-normal text-slate-300">
+              
+              <div className="p-3 bg-white/5 border-l-2 border-blue-500 rounded-r-lg text-xs italic font-normal text-slate-300">
                 "Infrastructure is no longer a passive asset class; it is the frontline of competitive advantage in a decarbonizing world."
-                <span className="block text-[9px] text-slate-400 not-italic font-bold mt-1">— Julian Vance, CEO Nexus Dynamics</span>
+                <span className="block text-[9px] text-slate-450 not-italic font-bold mt-1">— Julian Vance, CEO Nexus Dynamics</span>
+              </div>
+
+              {/* Metadata */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-[10px] text-slate-350 border-t border-white/10 pt-3">
+                <div>
+                  <span className="text-slate-500 block text-[8px] font-bold uppercase">Sector</span>
+                  <span className="font-bold text-white">Energy &amp; Infrastructure</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block text-[8px] font-bold uppercase">Region</span>
+                  <span className="font-bold text-white">Global / Europe</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block text-[8px] font-bold uppercase">Topic</span>
+                  <span className="font-bold text-white">Decarbonization</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block text-[8px] font-bold uppercase">Published</span>
+                  <span className="font-bold text-white">2 hours ago</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block text-[8px] font-bold uppercase">Read Time</span>
+                  <span className="font-bold text-white">12 min read</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block text-[8px] font-bold uppercase">Source</span>
+                  <span className="font-bold text-emerald-400">✓ Verified Author</span>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <Link href="/en/news-poc/article/sec-1" className="inline-flex items-center gap-1.5 bg-white hover:bg-gray-150 text-slate-950 font-bold text-[10px] px-4 py-2.5 rounded-lg transition-colors uppercase">
+                  Read Full Analysis <ChevronRight className="h-3.5 w-3.5" />
+                </Link>
               </div>
             </div>
           </div>
@@ -587,58 +787,7 @@ export default function NewsPOCHeadlinesHome() {
         </div>
       </section>
 
-      {/* Fourteenth Fold: Rising Influence / Most Quoted Today */}
-      <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
-          
-          {/* Rising Influence */}
-          <div className="space-y-4">
-            <h4 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight pb-2 border-b border-gray-150 dark:border-gray-855">
-              Rising Influence
-            </h4>
-            <div className="space-y-3">
-              {[
-                { num: "01", name: "Deepak Narang", val: "+12" },
-                { num: "02", name: "Chloe Zhang", val: "-2" }
-              ].map((item, idx) => (
-                <div key={idx} className="flex justify-between items-center bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-3 rounded-xl shadow-3xs">
-                  <div className="flex gap-3 items-center">
-                    <span className="font-mono text-xs font-bold text-gray-400">{item.num}</span>
-                    <span className="text-xs font-bold text-gray-900 dark:text-white">{item.name}</span>
-                  </div>
-                  <span className={`text-xs font-bold font-mono ${item.val.startsWith("-") ? "text-red-500" : "text-emerald-500"}`}>
-                    {item.val}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
 
-          {/* Most Quoted Today */}
-          <div className="space-y-4">
-            <h4 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight pb-2 border-b border-gray-150 dark:border-gray-855">
-              Most Quoted Today
-            </h4>
-            <div className="space-y-3">
-              {[
-                { num: "01", name: "Julian Vance", val: "+412" },
-                { num: "02", name: "Elena Rostova", val: "+298" }
-              ].map((item, idx) => (
-                <div key={idx} className="flex justify-between items-center bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-3 rounded-xl shadow-3xs">
-                  <div className="flex gap-3 items-center">
-                    <span className="font-mono text-xs font-bold text-gray-400">{item.num}</span>
-                    <span className="text-xs font-bold text-gray-900 dark:text-white">{item.name}</span>
-                  </div>
-                  <span className="text-xs font-bold text-emerald-500 font-mono">
-                    {item.val}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-        </div>
-      </section>
 
     </div>
   );
