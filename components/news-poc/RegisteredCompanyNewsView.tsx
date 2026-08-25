@@ -206,6 +206,7 @@ const MASTER_NEWS: NewsItem[] = [
     commentCount: 220,
     isBookmarked: false,
     isSponsored: false,
+    isBreaking: true,
     category: "Investment",
   },
   {
@@ -333,7 +334,50 @@ const MASTER_NEWS: NewsItem[] = [
     commentCount: 310,
     isBookmarked: false,
     isSponsored: true,
+    isBreaking: true,
     category: "Investment",
+  },
+  {
+    id: "news-corp-1",
+    title: "Sunrise Agro Appoints New Managing Director to Head Global Trade Division",
+    summary: "Sunrise Agro Exports appoints a new MD to direct its expanding global agricultural trade corridors.",
+    companyName: "Sunrise Agro Exports",
+    companyId: "co-7",
+    companyTier: "registered",
+    industry: "Agriculture",
+    industryId: "agriculture",
+    country: "India",
+    countryCode: "IN",
+    publishedAt: "2 days ago",
+    readingTimeMinutes: 2,
+    viewCount: 1840,
+    shareCount: 42,
+    commentCount: 5,
+    isBookmarked: false,
+    isSponsored: false,
+    isBreaking: true,
+    category: "Leadership Change",
+  },
+  {
+    id: "news-corp-2",
+    title: "Adani Green Board Approves Greenfield Solar Investment Capacity Structure",
+    summary: "Adani Green Board clears greenfield solar allocation structures to speed up gigawatt scale installations.",
+    companyName: "Adani Green Energy",
+    companyId: "co-3",
+    companyTier: "top",
+    industry: "Renewable Energy",
+    industryId: "renewable-energy",
+    country: "India",
+    countryCode: "IN",
+    publishedAt: "1 week ago",
+    readingTimeMinutes: 3,
+    viewCount: 48200,
+    shareCount: 2300,
+    commentCount: 450,
+    isBookmarked: false,
+    isSponsored: true,
+    isBreaking: true,
+    category: "Corporate Restructure",
   },
 ];
 
@@ -1321,17 +1365,6 @@ export default function RegisteredCompanyNewsView() {
           </Link>
         </section>
 
-        {/* 21. Company Intelligence Cross-Sell */}
-        <section className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-8 rounded-3xl shadow-sm text-center space-y-4">
-          <Shield className="h-8 w-8 text-amber-500 mx-auto" />
-          <h3 className="font-display text-xl font-bold text-gray-900 dark:text-white">Go Beyond The News</h3>
-          <p className="text-gray-550 dark:text-slate-400 text-xs font-normal max-w-md mx-auto leading-relaxed">
-            Understand the actual competitive indicators and financial impact behind public corporate updates with deeper bilateral trade intelligence.
-          </p>
-          <Link href="/en/news-poc/company-news/top/news" className="bg-gradient-to-r from-amber-500 to-orange-600 text-gray-950 font-bold text-xs px-8 py-3.5 rounded-xl inline-block transition-transform hover:-translate-y-0.5">
-            Explore Company Intelligence →
-          </Link>
-        </section>
 
       </div>
 

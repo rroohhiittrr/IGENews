@@ -889,28 +889,7 @@ export default function VerifiedCompanyAllSectorsView() {
           </div>
         </div>
 
-        {/* ── 21. RECENTLY ADDED / UPDATED ─────────────────────────────────── */}
-        <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow-xs space-y-4">
-          <div className="border-b border-gray-200 dark:border-gray-800 pb-3">
-            <h2 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">Recently Added & Updated</h2>
-            <p className="text-[10px] text-gray-500">Latest structural category changes verified in the iGEN master taxonomy</p>
-          </div>
 
-          <div className="space-y-2">
-            {[
-              { category: "Semiconductors & OSAT", change: "Sub-industry classification maps updated with national design house lists.", date: "Aug 15, 2026" },
-              { category: "Waste Management & Circular Economy", change: "E-waste mandatory packaging standards classifications activated.", date: "Aug 10, 2026" }
-            ].map((upd, idx) => (
-              <div key={idx} className="flex justify-between items-center text-xs p-3 rounded-lg border border-gray-100 dark:border-gray-850">
-                <div>
-                  <div className="font-bold text-gray-950 dark:text-white">{upd.category}</div>
-                  <p className="text-gray-500 text-[10px] mt-0.5">{upd.change}</p>
-                </div>
-                <span className="text-[9px] text-gray-400 shrink-0 font-medium">{upd.date}</span>
-              </div>
-            ))}
-          </div>
-        </div>
 
         {/* ── 22. GLOBAL INDUSTRY EXPLORER ─────────────────────────────────── */}
         <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow-xs space-y-4">

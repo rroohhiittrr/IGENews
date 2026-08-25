@@ -33,7 +33,9 @@ import {
   Activity,
   ChevronRight,
   ShieldAlert,
-  Crown
+  Crown,
+  Flame,
+  Sparkles
 } from "lucide-react";
 import { mockData } from "@/lib/mock/factory";
 
@@ -270,9 +272,213 @@ const COUNTRY_PROFILES: Record<string, CountryData> = {
     ]
   }
 };
+// ─── Local UI Components for News Feed ───────────────────────────────────────
+function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  return (
+    <div className={`bg-white dark:bg-[#0f172a] border border-gray-205 dark:border-gray-805 rounded-2xl shadow-3xs ${className}`}>
+      {children}
+    </div>
+  );
+}
+
+function SectionTitle({ title, subtitle }: { title: string; subtitle?: string }) {
+  return (
+    <div className="border-b border-gray-250 dark:border-gray-800 pb-3 mb-4 space-y-1">
+      <h2 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">{title}</h2>
+      {subtitle && <p className="text-[10px] text-gray-500 font-normal">{subtitle}</p>}
+    </div>
+  );
+}
+
+function Badge({ children, color = "blue" }: { children: React.ReactNode; color?: string }) {
+  const map: Record<string, string> = {
+    blue: "bg-blue-50 dark:bg-blue-955/20 text-blue-600 border border-blue-200 dark:border-blue-900/40",
+    emerald: "bg-emerald-50 dark:bg-emerald-955/20 text-emerald-600 border border-emerald-200 dark:border-emerald-900/40",
+    amber: "bg-amber-50 dark:bg-amber-955/20 text-amber-600 border border-amber-200 dark:border-amber-900/40",
+    purple: "bg-purple-50 dark:bg-purple-955/20 text-purple-600 border border-purple-200 dark:border-purple-900/40",
+    rose: "bg-rose-50 dark:bg-rose-955/20 text-rose-600 border border-rose-200 dark:border-rose-900/40",
+    slate: "bg-slate-50 dark:bg-slate-900 text-slate-600 border border-slate-205 dark:border-slate-805",
+  };
+  return (
+    <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider border ${map[color] || map.blue}`}>
+      {children}
+    </span>
+  );
+}
+
+interface CountryNewsStory {
+  id: string;
+  country: string;
+  title: string;
+  summary: string;
+  category: string;
+  time: string;
+  readTime: string;
+  companyName: string;
+  companyInitials: string;
+  isFeatured?: boolean;
+  isBreaking?: boolean;
+  isTrending?: boolean;
+  isSponsored?: boolean;
+}
+
+const COUNTRY_NEWS_STORIES: CountryNewsStory[] = [
+  // India stories
+  {
+    id: "in-1",
+    country: "India",
+    title: "Adani Green commissions world's largest renewable energy park in Khavda.",
+    summary: "Adani Green commissions a 20 GW clean energy generation site in Gujarat, reinforcing India's bilateral climate roadmap pledges.",
+    category: "Renewable Energy",
+    time: "35 min ago",
+    readTime: "4 min read",
+    companyName: "Adani Green Energy Ltd.",
+    companyInitials: "AG",
+    isFeatured: true,
+    isBreaking: true,
+    isTrending: true,
+    isSponsored: true
+  },
+  {
+    id: "in-2",
+    country: "India",
+    title: "Tata Steel announces transition to clean electric arc furnace at UK plant.",
+    summary: "Tata Steel finalizes the procurement layout for low-emission electric arc furnaces, transitioning its primary UK operations to sustainable assets.",
+    category: "Steel & Metallurgy",
+    time: "1 hour ago",
+    readTime: "5 min read",
+    companyName: "Tata Steel Ltd.",
+    companyInitials: "TS",
+    isFeatured: true,
+    isBreaking: true,
+    isTrending: false
+  },
+  {
+    id: "in-3",
+    country: "India",
+    title: "Tesla proposes major EV assembly gigafactory layout for India trade corridor.",
+    summary: "Tesla submits initial plant schematics and local sourcing commitments to fast-track import duty exemptions under the new EV policy corridor.",
+    category: "Automotive & EV",
+    time: "2 hours ago",
+    readTime: "6 min read",
+    companyName: "Tesla Inc.",
+    companyInitials: "TE",
+    isFeatured: true,
+    isBreaking: true,
+    isTrending: true
+  },
+  {
+    id: "in-4",
+    country: "India",
+    title: "Cipla secures FDA approval for green inhaler respiratory drug.",
+    summary: "Cipla Pharmaceuticals secures final regulatory approvals for its generic respiratory formulations targeting EU and US market entries.",
+    category: "Pharma & Biotech",
+    time: "5 hours ago",
+    readTime: "3 min read",
+    companyName: "Cipla Pharmaceuticals Ltd.",
+    companyInitials: "CP",
+    isFeatured: false,
+    isBreaking: true,
+    isTrending: false
+  },
+  {
+    id: "in-5",
+    country: "India",
+    title: "Ministry of Finance rolls out secondary capital offsets for semiconductor tools.",
+    summary: "New fiscal offsets allow domestic manufacturers to claim up to 25% import refunds on component tooling packages.",
+    category: "Semiconductors",
+    time: "4 hours ago",
+    readTime: "5 min read",
+    companyName: "Tata Electronics Pvt Ltd",
+    companyInitials: "TE",
+    isFeatured: false,
+    isBreaking: false,
+    isTrending: true
+  },
+  {
+    id: "in-6",
+    country: "India",
+    title: "Sovereign datacenter grid launched in Mumbai-Pune digital corridor.",
+    summary: "A consortium of domestic tech providers plans 3 core hyper-scale clusters powered entirely by green energy sources.",
+    category: "Infrastructure",
+    time: "1 day ago",
+    readTime: "7 min read",
+    companyName: "Reliance Industries",
+    companyInitials: "RI",
+    isFeatured: false,
+    isBreaking: false,
+    isTrending: false
+  },
+  // UAE stories
+  {
+    id: "uae-1",
+    country: "United Arab Emirates",
+    title: "DP World Group partners on green hydrogen transport corridor to European ports.",
+    summary: "DP World finalizes green routing pathways and ammonia bunkering stations across primary trade corridors to Europe.",
+    category: "Logistics",
+    time: "1 hour ago",
+    readTime: "5 min read",
+    companyName: "DP World Group",
+    companyInitials: "DP",
+    isFeatured: true,
+    isBreaking: true,
+    isTrending: true,
+    isSponsored: true
+  },
+  {
+    id: "uae-2",
+    country: "United Arab Emirates",
+    title: "Federal capital funds allocate $2B to build private GPU clusters in Dubai.",
+    summary: "Aggressive federal allocations target sovereign compute capacity at Dubai Silicon Oasis, backing regional LLM research.",
+    category: "Technology",
+    time: "3 hours ago",
+    readTime: "6 min read",
+    companyName: "G42 Consortium",
+    companyInitials: "G4",
+    isFeatured: true,
+    isBreaking: true,
+    isTrending: true
+  },
+  {
+    id: "uae-3",
+    country: "United Arab Emirates",
+    title: "Abu Dhabi ports roll out API-driven digital customs clearance protocols.",
+    summary: "New paperless digital workflows decrease shipping container processing time from 12 hours down to 3 hours.",
+    category: "Trade & Ports",
+    time: "2 hours ago",
+    readTime: "4 min read",
+    companyName: "Abu Dhabi Ports Co.",
+    companyInitials: "AP",
+    isFeatured: true,
+    isBreaking: true,
+    isTrending: false
+  },
+  {
+    id: "uae-4",
+    country: "United Arab Emirates",
+    title: "UAE non-oil trade hits record heights under aggressive CEPA routing.",
+    summary: "Bilateral trade values with Asian and European partners hit historic volumes in Q2 2026, driven by tariff phase-outs.",
+    category: "Economy",
+    time: "5 hours ago",
+    readTime: "5 min read",
+    companyName: "Federal Customs Authority",
+    companyInitials: "FC",
+    isFeatured: false,
+    isBreaking: false,
+    isTrending: true
+  }
+];
+
 
 export default function NewsPOCMyCountryView() {
   const [selectedCountry, setSelectedCountry] = useState<string>("India");
+  const [feedFilter, setFeedFilter] = useState<"latest" | "trending">("latest");
+  const [selectedStory, setSelectedStory] = useState<CountryNewsStory | null>(null);
+  const [bookmarks, setBookmarks] = useState<string[]>([]);
+
+  const handleBookmarkToggle = (storyId: string) => {
+    setBookmarks(prev => prev.includes(storyId) ? prev.filter(id => id !== storyId) : [...prev, storyId]);
+  };
   const [aiPreviewLocked, setAiPreviewLocked] = useState(true);
   const [alertPreferences, setAlertPreferences] = useState({
     economy: true,
@@ -411,35 +617,181 @@ export default function NewsPOCMyCountryView() {
           </div>
         </section>
 
-        {/* 04. TODAY'S COUNTRY BRIEF */}
-        <section className="space-y-4">
-          <div className="border-b border-gray-205 dark:border-gray-850 pb-3">
-            <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
-              <FileText className="h-4.5 w-4.5 text-blue-600" /> Today's Country Brief
-            </h2>
-          </div>
+        {/* ── 04. COUNTRY STORIES, FEEDS & SIDEBAR ────────────────────────────── */}
+        <section className="space-y-6">
+          {/* Main Two-Column Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            {/* Left Column (Featured & Main Feeds) */}
+            <div className="col-span-12 lg:col-span-8 space-y-8">
+              
+              {/* Featured Country Stories */}
+              <div className="space-y-4">
+                <SectionTitle
+                  title="Featured Country Stories"
+                  subtitle="Top sovereign announcements and country-specific updates."
+                />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {currentCountry.briefs.map((brf, idx) => (
-              <div key={idx} className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-805 rounded-2xl p-5 shadow-3xs flex flex-col justify-between hover:border-blue-650 transition-all duration-300 group">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between text-[8px] font-bold text-gray-400">
-                    <span className="text-blue-600 uppercase tracking-widest">{brf.category}</span>
-                    <span>{brf.time} · {brf.readTime}</span>
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+                  {/* Primary Story Card */}
+                  <div className="col-span-12 md:col-span-7">
+                    {COUNTRY_NEWS_STORIES.filter(s => s.country === selectedCountry && s.isSponsored).slice(0, 1).map((story) => (
+                      <Card key={story.id} className="p-6 h-full flex flex-col justify-between space-y-4 border-l-4 border-amber-400">
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <Badge color="amber">
+                              <Sparkles className="h-2.5 w-2.5" />
+                              FEATURED BROADCAST
+                            </Badge>
+                            <span className="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Sponsored Placement</span>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <div className="h-6 w-6 rounded bg-slate-900 text-white flex items-center justify-center font-bold text-[10px]">
+                              {story.companyInitials}
+                            </div>
+                            <span className="text-xs font-bold text-gray-900 dark:text-white">{story.companyName}</span>
+                            <CheckCircle className="h-3 w-3 text-blue-500 shrink-0" />
+                          </div>
+
+                          <h3 className="font-display font-black text-base md:text-xl text-gray-950 dark:text-white leading-tight">
+                            {story.title}
+                          </h3>
+                          <p className="text-[11px] text-gray-600 dark:text-gray-400 leading-relaxed font-normal">
+                            {story.summary}
+                          </p>
+                        </div>
+
+                        <div className="flex items-center justify-between border-t border-gray-150 dark:border-gray-800 pt-3 text-[10px] font-semibold text-gray-450">
+                          <div className="flex items-center gap-3">
+                            <span>{story.time}</span>
+                            <span>·</span>
+                            <span>{story.readTime}</span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <button onClick={() => handleBookmarkToggle(story.id)} className="hover:text-blue-600">
+                              <Bookmark className={`h-4 w-4 ${bookmarks.includes(story.id) ? "fill-blue-600 text-blue-600" : ""}`} />
+                            </button>
+                            <button onClick={() => setSelectedStory(story)} className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-[9px] px-3.5 py-1.5 rounded-lg">
+                              Read Story →
+                            </button>
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
                   </div>
-                  <h3 className="text-xs font-bold text-gray-950 dark:text-white mt-1 group-hover:text-blue-650 transition-colors leading-snug">{brf.title}</h3>
-                  <p className="text-[11px] text-gray-600 dark:text-gray-350 leading-relaxed font-normal">{brf.summary}</p>
-                </div>
-                <div className="pt-3 mt-4 border-t border-gray-100 dark:border-gray-850 flex justify-end">
-                  <Link href="/en/headlines" className="text-[9.5px] font-extrabold text-blue-600 hover:underline">
-                    Read Story
-                  </Link>
+
+                  {/* Secondary Compact list */}
+                  <div className="col-span-12 md:col-span-5 space-y-3">
+                    {COUNTRY_NEWS_STORIES.filter(s => s.country === selectedCountry && s.isFeatured && !s.isSponsored).slice(0, 2).map((story) => (
+                      <Card key={story.id} className="p-4 hover:border-blue-400 transition-all flex flex-col justify-between">
+                        <div className="space-y-1">
+                          <div className="flex justify-between items-center text-[8px] font-bold uppercase">
+                            <span className="text-blue-600">{story.category}</span>
+                            <span className="text-gray-400">{story.time}</span>
+                          </div>
+                          <h4 className="font-bold text-xs text-gray-900 dark:text-white line-clamp-2 hover:text-blue-500 transition-colors cursor-pointer" onClick={() => setSelectedStory(story)}>
+                            {story.title}
+                          </h4>
+                        </div>
+                        <div className="flex items-center justify-between border-t border-gray-50 dark:border-gray-850 pt-2 mt-2 text-[9px]">
+                          <span className="text-gray-455">Entity: {story.companyName}</span>
+                          <button onClick={() => setSelectedStory(story)} className="text-blue-600 font-bold hover:underline">
+                            Read →
+                          </button>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
                 </div>
               </div>
-            ))}
+
+              {/* Latest & Trending Feeds */}
+              <div className="space-y-4">
+                <div className="flex gap-4 border-b border-gray-200 dark:border-gray-800 pb-2.5">
+                  <button
+                    onClick={() => setFeedFilter("latest")}
+                    className={`text-xs font-bold pb-2 border-b-2 px-1 transition-all ${
+                      feedFilter === "latest" ? "border-blue-600 text-blue-600" : "border-transparent text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                    }`}
+                  >
+                    LATEST FEED
+                  </button>
+                  <button
+                    onClick={() => setFeedFilter("trending")}
+                    className={`text-xs font-bold pb-2 border-b-2 px-1 transition-all ${
+                      feedFilter === "trending" ? "border-blue-600 text-blue-600" : "border-transparent text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                    }`}
+                  >
+                    TRENDING FEED
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  {(feedFilter === "latest" 
+                    ? COUNTRY_NEWS_STORIES.filter(s => s.country === selectedCountry && !s.isSponsored)
+                    : COUNTRY_NEWS_STORIES.filter(s => s.country === selectedCountry && s.isTrending)
+                  ).map((story) => (
+                    <Card key={story.id} className="p-4 flex flex-col justify-between hover:border-blue-600 transition-all duration-300">
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center text-[8px] font-bold uppercase">
+                          <span className="text-blue-600">{story.category}</span>
+                          <span className="text-gray-400">{story.time} · {story.readTime}</span>
+                        </div>
+                        <h4 className="font-bold text-xs text-gray-950 dark:text-white leading-snug cursor-pointer hover:text-blue-600" onClick={() => setSelectedStory(story)}>
+                          {story.title}
+                        </h4>
+                        <p className="text-[11px] text-gray-500 leading-normal font-normal">
+                          {story.summary}
+                        </p>
+                      </div>
+                      <div className="flex justify-between items-center border-t border-gray-55 dark:border-gray-855 pt-2.5 mt-3 text-[9.5px]">
+                        <span className="text-gray-450 font-medium">Source: {story.companyName}</span>
+                        <button onClick={() => setSelectedStory(story)} className="text-blue-600 font-bold hover:underline">
+                          Read Story
+                        </button>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+
+            {/* Right Column (Sidebar: Breaking & Major Updates) */}
+            <div className="col-span-12 lg:col-span-4 space-y-6">
+              
+              {/* Breaking & Major Updates */}
+              {COUNTRY_NEWS_STORIES.some(s => s.country === selectedCountry && s.isBreaking) && (
+                <section className="bg-rose-500/10 dark:bg-rose-955/20 border border-rose-200 dark:border-rose-900/60 p-4.5 rounded-2xl space-y-3">
+                  <div className="flex items-center gap-1.5 text-rose-600 dark:text-rose-450 font-extrabold text-[9px] uppercase tracking-wider">
+                    <Flame className="h-4 w-4 shrink-0" />
+                    Breaking & Major Updates
+                  </div>
+                  <div className="divide-y divide-rose-200/40 dark:divide-rose-900/40">
+                    {COUNTRY_NEWS_STORIES.filter(s => s.country === selectedCountry && s.isBreaking).map((story) => (
+                      <div key={story.id} className="py-2.5 first:pt-0 last:pb-0 space-y-1">
+                        <h4
+                          onClick={() => setSelectedStory(story)}
+                          className="font-bold text-xs text-gray-955 dark:text-white hover:text-rose-600 cursor-pointer leading-snug"
+                        >
+                          {story.title}
+                        </h4>
+                        <div className="flex justify-between items-center text-[9px] text-gray-400">
+                          <span>Entity: {story.companyName}</span>
+                          <button onClick={() => setSelectedStory(story)} className="text-rose-500 font-bold hover:underline">Read Story →</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              )}
+
+            </div>
+
           </div>
         </section>
-
+        
         {/* 05. ECONOMIC PULSE */}
         <section className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 rounded-2xl p-5 md:p-6 shadow-2xs space-y-4">
           <div className="border-b border-gray-150 dark:border-gray-855 pb-3">
@@ -1038,6 +1390,56 @@ export default function NewsPOCMyCountryView() {
         </section>
 
       </main>
+
+
+      {/* --- STORY READER MODAL --- */}
+      {selectedStory && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-[#0f172a] border border-gray-205 dark:border-gray-805 rounded-2xl max-w-lg w-full p-6 space-y-4 animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-3">
+              <span className="text-[9px] font-bold text-blue-600 uppercase tracking-wider">{selectedStory.category}</span>
+              <button
+                onClick={() => setSelectedStory(null)}
+                className="text-gray-400 hover:text-gray-650 text-xl font-bold cursor-pointer"
+              >
+                &times;
+              </button>
+            </div>
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <div className="h-6 w-6 rounded bg-slate-900 text-white flex items-center justify-center font-bold text-[10px]">
+                  {selectedStory.companyInitials}
+                </div>
+                <span className="text-xs font-bold text-gray-900 dark:text-white">{selectedStory.companyName}</span>
+                <span className="text-[9px] text-gray-400 ml-auto">{selectedStory.time} · {selectedStory.readTime}</span>
+              </div>
+              <h3 className="font-display font-black text-sm md:text-base text-gray-950 dark:text-white leading-snug">
+                {selectedStory.title}
+              </h3>
+              <p className="text-xs text-gray-605 dark:text-slate-350 leading-relaxed font-normal">
+                {selectedStory.summary}
+              </p>
+              <div className="p-3.5 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-150/50 dark:border-gray-800 text-[10.5px] leading-relaxed text-gray-500">
+                This is a mock briefing verified under the country intelligence framework. Accessing full official PDF drafts or multi-source regulatory updates requires a Pro activation.
+              </div>
+            </div>
+            <div className="flex justify-end gap-2 border-t border-gray-100 dark:border-gray-800 pt-3">
+              <button
+                onClick={() => setSelectedStory(null)}
+                className="bg-gray-100 dark:bg-gray-855 text-gray-600 dark:text-slate-355 font-bold text-xs px-4 py-2 rounded-xl cursor-pointer"
+              >
+                Close
+              </button>
+              <Link
+                href="/eoi"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-4 py-2 rounded-xl cursor-pointer"
+              >
+                Request Full Report
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* --- PRO UPGRADE MODAL --- */}
       {isProModalOpen && (

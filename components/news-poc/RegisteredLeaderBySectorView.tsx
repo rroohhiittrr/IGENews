@@ -607,107 +607,41 @@ export default function RegisteredLeaderBySectorView() {
           </section>
         </div>
 
-        {/* ── 12. ROLES, 13. EXPERTISE & 14. INDUSTRIES WITHIN SECTOR ─────────── */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* ── 14. INDUSTRIES WITHIN SECTOR ────────────────────────────────────── */}
+        <Card className="p-5 space-y-3">
+          <SectionTitle title="Industries in this Sector" action={<Layers className="h-4 w-4 text-purple-500" />} />
+          <p className="text-[10px] text-gray-500">Sub-industry divisions classified under {currentSector.name}.</p>
+          <div className="space-y-1.5 pt-1">
+            {currentSector.topIndustries.map((ind) => (
+              <div key={ind} className="p-2 bg-gray-50 dark:bg-gray-900 rounded-lg text-[10px] font-semibold text-gray-700 dark:text-gray-300 border border-gray-100 dark:border-gray-800 flex items-center justify-between">
+                <span>{ind}</span>
+                <Link href="/en/news-poc/all-industry" className="text-[8px] font-bold text-purple-600 hover:underline">Directory →</Link>
+              </div>
+            ))}
+          </div>
+        </Card>
 
-          {/* 12. Leadership Roles */}
-          <Card className="p-5 space-y-3">
-            <SectionTitle title="Leadership Roles in Sector" action={<User className="h-4 w-4 text-blue-500" />} />
-            <p className="text-[10px] text-gray-500">Filter by executive rank in {currentSector.name}.</p>
-            <div className="flex flex-wrap gap-1.5 pt-1">
-              {SECTOR_ROLES.map((r) => (
-                <button
-                  key={r}
-                  onClick={() => setSelectedRole(r)}
-                  className={`px-2.5 py-1 rounded-lg text-[9px] font-bold transition-all ${
-                    selectedRole === r
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:text-blue-600"
-                  }`}
-                >
-                  {r}
-                </button>
-              ))}
-            </div>
-          </Card>
-
-          {/* 13. Leadership Expertise */}
-          <Card className="p-5 space-y-3">
-            <SectionTitle title="Sector Core Expertise" action={<Target className="h-4 w-4 text-indigo-500" />} />
-            <p className="text-[10px] text-gray-500">Specialized technical competencies mapped in this sector.</p>
-            <div className="space-y-1.5 pt-1">
-              {expertiseList.map((exp) => (
-                <div key={exp} className="p-2 bg-indigo-50 dark:bg-indigo-950/20 rounded-lg text-[10px] font-semibold text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-900/40 flex items-center justify-between">
-                  <span>{exp}</span>
-                  <Link href="/en/news-poc/all-leaders" className="text-[8px] font-bold text-blue-600 hover:underline">Explore →</Link>
-                </div>
-              ))}
-            </div>
-          </Card>
-
-          {/* 14. Industries Within Sector */}
-          <Card className="p-5 space-y-3">
-            <SectionTitle title="Industries in this Sector" action={<Layers className="h-4 w-4 text-purple-500" />} />
-            <p className="text-[10px] text-gray-500">Sub-industry divisions classified under {currentSector.name}.</p>
-            <div className="space-y-1.5 pt-1">
-              {currentSector.topIndustries.map((ind) => (
-                <div key={ind} className="p-2 bg-gray-50 dark:bg-gray-900 rounded-lg text-[10px] font-semibold text-gray-700 dark:text-gray-300 border border-gray-100 dark:border-gray-800 flex items-center justify-between">
-                  <span>{ind}</span>
-                  <Link href="/en/news-poc/all-industry" className="text-[8px] font-bold text-purple-600 hover:underline">Directory →</Link>
-                </div>
-              ))}
-            </div>
-          </Card>
-        </div>
-
-        {/* ── 18. FOLLOW YOUR SECTOR & 17. RECOMMENDED LEADERS ─────────────────── */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-          {/* 18. Follow Your Sector */}
-          <Card className="p-6 bg-gradient-to-br from-indigo-900 to-blue-950 text-white border-none space-y-4 shadow-md flex flex-col justify-between">
-            <div className="space-y-2">
-              <span className="text-[9px] font-bold text-cyan-300 uppercase tracking-widest">Sector Intelligence Stream</span>
-              <h3 className="text-base font-bold">Stay Connected to {currentSector.name}</h3>
-              <p className="text-xs text-white/80 leading-relaxed font-normal">
-                Follow this sector to receive verified executive appointments, boardroom movements, and major investment signals in your daily brief.
-              </p>
-            </div>
-            <div className="flex gap-3 pt-2">
-              <button
-                onClick={() => toggleFollowSector(currentSector.id)}
-                className={`text-xs font-bold px-5 py-2.5 rounded-xl transition-all ${
-                  followedSectors[currentSector.id]
-                    ? "bg-emerald-500 text-white"
-                    : "bg-white text-blue-950 hover:bg-blue-50"
-                }`}
-              >
-                {followedSectors[currentSector.id] ? "Following Sector ✓" : `+ Follow ${currentSector.name}`}
-              </button>
-            </div>
-          </Card>
-
-          {/* 17. Recommended Leaders */}
-          <Card className="p-5 h-full space-y-3">
-            <SectionTitle title="Recommended Sector Leaders" action={<Badge color="indigo">Personalized</Badge>} />
-            <p className="text-[10px] text-gray-500">Leaders aligned with your followed sectors and reading activity.</p>
-            <div className="space-y-2.5">
-              {topLeadersList.slice(0, 2).map((l, idx) => (
-                <div key={idx} className="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <img src={l.photo} alt={l.name} className="h-10 w-10 rounded-lg object-cover" />
-                    <div>
-                      <h4 className="text-xs font-bold text-gray-900 dark:text-white">{l.name}</h4>
-                      <span className="text-[9px] text-gray-500">{l.role} at {l.company}</span>
-                    </div>
+        {/* ── 17. RECOMMENDED LEADERS ─────────────────────────────────────────── */}
+        <Card className="p-5 space-y-3">
+          <SectionTitle title="Recommended Sector Leaders" action={<Badge color="indigo">Personalized</Badge>} />
+          <p className="text-[10px] text-gray-500">Leaders aligned with your followed sectors and reading activity.</p>
+          <div className="space-y-2.5">
+            {topLeadersList.slice(0, 2).map((l, idx) => (
+              <div key={idx} className="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <img src={l.photo} alt={l.name} className="h-10 w-10 rounded-lg object-cover" />
+                  <div>
+                    <h4 className="text-xs font-bold text-gray-900 dark:text-white">{l.name}</h4>
+                    <span className="text-[9px] text-gray-500">{l.role} at {l.company}</span>
                   </div>
-                  <Link href="/eoi" className="bg-blue-600 hover:bg-blue-700 text-white text-[9px] font-bold px-3 py-1.5 rounded-lg transition-colors shrink-0">
-                    Connect →
-                  </Link>
                 </div>
-              ))}
-            </div>
-          </Card>
-        </div>
+                <Link href="/eoi" className="bg-blue-600 hover:bg-blue-700 text-white text-[9px] font-bold px-3 py-1.5 rounded-lg transition-colors shrink-0">
+                  Connect →
+                </Link>
+              </div>
+            ))}
+          </div>
+        </Card>
 
         {/* ── 19. PREMIUM SECTOR INTELLIGENCE ─────────────────────────────────── */}
         <section>

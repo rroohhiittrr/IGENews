@@ -1276,28 +1276,6 @@ export default function NewsPOCTrendingMostLikedAllSectors({ onBack }: Props) {
                   </div>
                 </div>
 
-                {/* ── Trending Products & Services ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block border-b border-gray-100 dark:border-gray-800 pb-2">
-                    Trending Products & Services
-                  </span>
-                  
-                  <div className="space-y-2 text-xs">
-                    {[
-                      { name: "OSAT Advanced Silicon Packaging", company: "NVIDIA", link: "/eoi" },
-                      { name: "Offshore Solar Power Inverters", company: "Nexus Dynamics", link: "/eoi" }
-                    ].map((item, idx) => (
-                      <div key={idx} className="flex justify-between items-center">
-                        <div>
-                          <span className="font-bold text-gray-900 dark:text-white block leading-tight">{item.name}</span>
-                          <span className="text-[9px] text-gray-400 block font-normal">By {item.company}</span>
-                        </div>
-                        <Link href={item.link} className="text-[9px] font-bold text-blue-500 hover:underline uppercase shrink-0">Explore Providers →</Link>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
                 {/* ── Global Trend Map ── */}
                 <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
                   <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block border-b border-gray-100 dark:border-gray-800 pb-2">

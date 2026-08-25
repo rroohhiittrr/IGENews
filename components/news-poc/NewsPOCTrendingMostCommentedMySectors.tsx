@@ -1016,38 +1016,7 @@ export default function NewsPOCTrendingMostCommentedMySectors({ onBack }: Props)
                       </div>
                     </div>
 
-                    {/* ── Discussion Sentiment Widget ── */}
-                    <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
-                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block border-b border-gray-100 dark:border-gray-800 pb-2">
-                        AI-Estimated Sentiment (My Sectors)
-                      </span>
-                      
-                      <div className="space-y-2.5 text-xs font-semibold">
-                        <div className="flex justify-between text-[10px]">
-                          <span>Positive Sentiment</span>
-                          <span className="text-emerald-500">42%</span>
-                        </div>
-                        <div className="h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-                          <div className="h-full bg-emerald-500 w-[42%]" />
-                        </div>
-                        
-                        <div className="flex justify-between text-[10px]">
-                          <span>Neutral Sentiment</span>
-                          <span className="text-blue-500">31%</span>
-                        </div>
-                        <div className="h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-                          <div className="h-full bg-blue-500 w-[31%]" />
-                        </div>
 
-                        <div className="flex justify-between text-[10px]">
-                          <span>Negative Sentiment</span>
-                          <span className="text-red-500">27%</span>
-                        </div>
-                        <div className="h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-                          <div className="h-full bg-red-500 w-[27%]" />
-                        </div>
-                      </div>
-                    </div>
 
                     {/* ── Topic debate clusters list ── */}
                     <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
