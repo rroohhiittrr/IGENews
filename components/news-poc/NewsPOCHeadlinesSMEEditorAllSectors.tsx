@@ -410,52 +410,83 @@ export default function NewsPOCHeadlinesSMEEditorAllSectors({ onBack }: Props) {
               </div>
             </div>
           </section>
-
-          {/* ─── Featured Experts ─── */}
+          {/* ─── SME Editor's Top Picks ─── */}
           {filteredExperts.length > 0 && (
             <section className="mx-auto max-w-7xl px-4 pt-6 lg:px-6 space-y-4">
-              <div className="border-b border-gray-200 dark:border-gray-800 pb-2 mb-4">
+              <div className="border-b border-gray-200 dark:border-gray-800 pb-2 flex items-center gap-2">
+                <Star className="h-4.5 w-4.5 text-amber-500 fill-amber-500" />
                 <h3 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-widest">
-                  Featured Experts
+                  SME Editor's Top Picks
                 </h3>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {filteredExperts.slice(0, 2).map(exp => (
-                  <div key={exp.id} className="bg-white dark:bg-[#0f172a] border border-gray-205 dark:border-gray-800 p-5 rounded-2xl shadow-sm flex gap-4 items-start font-sans hover:border-blue-500/25 transition-all">
-                    <div className="h-14 w-14 rounded-full overflow-hidden bg-gray-150 shrink-0 relative">
-                      <img src={exp.avatar} alt={exp.name} className="h-full w-full object-cover" />
-                    </div>
-                    <div className="flex-1 space-y-2">
-                      <div className="space-y-0.5">
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="font-extrabold text-gray-900 dark:text-white text-xs">{exp.name}</span>
-                          {exp.verified && <span className="text-blue-500 text-[10px]">✓</span>}
-                          <span className="bg-blue-50 text-blue-600 dark:bg-blue-900/20 text-[7px] font-extrabold px-1.5 py-0.2 rounded font-mono uppercase tracking-wider">FEATURED</span>
-                        </div>
-                        <span className="text-[9px] text-gray-400 block font-normal">
-                          {exp.designation} at {exp.organization} • {exp.country}
-                        </span>
-                      </div>
-                      <p className="text-[10px] text-gray-500 dark:text-gray-400 font-normal leading-normal line-clamp-2">"{exp.introduction}"</p>
+                {filteredExperts.slice(0, 2).map((exp, idx) => {
+                  const bgImage = idx === 0 
+                    ? "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&auto=format&fit=crop&q=80"
+                    : "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&auto=format&fit=crop&q=80";
+
+                  return (
+                    <div key={exp.id} className="relative rounded-3xl overflow-hidden bg-slate-900 text-white min-h-[280px] flex flex-col justify-end p-6 border border-slate-900 shadow-sm group">
+                      <div 
+                        className="absolute inset-0 z-0 bg-cover bg-center group-hover:scale-102 transition-transform duration-350"
+                        style={{ backgroundImage: `url(${bgImage})` }}
+                      />
+                      <div className="absolute inset-0 z-0 bg-gradient-to-t from-slate-900 via-slate-900/70 to-transparent" />
                       
-                      <div className="flex items-center gap-2 pt-1">
-                        <Link 
-                          href={`/en/news-poc/expert/${exp.id}`}
-                          className="bg-blue-605 text-white hover:bg-blue-700 text-[9px] font-bold px-3 py-1.5 rounded-lg uppercase tracking-wider"
-                        >
-                          View Insights
-                        </Link>
-                        <button 
-                          onClick={() => handleFollowExpert(exp.id)}
-                          className="text-[9.5px] font-bold text-gray-500 border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900 px-2 py-1.5 rounded-lg"
-                        >
-                          {followedExperts.includes(exp.id) ? "Following ✓" : "Follow"}
-                        </button>
+                      <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
+                        {exp.label && (
+                          <span className="text-white text-[9px] font-bold px-2 py-0.5 rounded-full bg-blue-600/90 backdrop-blur-xs">
+                            {exp.label}
+                          </span>
+                        )}
+                        {exp.verified && (
+                          <span className="text-white text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-600/90 backdrop-blur-xs">
+                            Verified SME
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="relative z-10 space-y-2 max-w-xl font-sans">
+                        <div className="flex items-center gap-3">
+                          <img src={exp.avatar} alt={exp.name} className="h-8 w-8 rounded-full border border-white/20 object-cover" />
+                          <div className="text-[10px]">
+                            <span className="font-extrabold text-white block">{exp.name}</span>
+                            <span className="text-slate-350">{exp.designation} at {exp.organization}</span>
+                          </div>
+                        </div>
+                        
+                        <h4 className="font-display text-base md:text-lg font-bold leading-tight text-[#FEC970] group-hover:text-blue-400 transition-colors pt-1">
+                          {exp.latestOpinionTitle}
+                        </h4>
+                        
+                        <div className="bg-slate-950/70 p-2.5 rounded-lg border border-white/10 text-[10px] space-y-1 font-normal leading-relaxed text-slate-300">
+                          <span className="text-emerald-400 font-bold block text-[8px] uppercase tracking-wider">Expert Opinion Excerpt</span>
+                          <p>"{exp.latestOpinionExcerpt}"</p>
+                        </div>
+
+                        <div className="flex items-center gap-3 pt-2">
+                          <Link 
+                            href={`/en/news-poc/expert/${exp.id}`}
+                            className="bg-blue-605 text-white hover:bg-blue-700 text-[9px] font-bold px-3 py-1.5 rounded-lg uppercase tracking-wider"
+                          >
+                            View Expert Insights →
+                          </Link>
+                          <button 
+                            onClick={() => handleFollowExpert(exp.id)}
+                            className={`h-8 px-3 flex items-center justify-center rounded-xl border text-[9.5px] font-bold uppercase transition-colors ${
+                              followedExperts.includes(exp.id)
+                                ? "bg-emerald-50 border-emerald-50 text-slate-950"
+                                : "border-white/30 text-white hover:bg-white/10"
+                            }`}
+                          >
+                            {followedExperts.includes(exp.id) ? "Following ✓" : "Follow"}
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </section>
           )}
@@ -559,56 +590,7 @@ export default function NewsPOCHeadlinesSMEEditorAllSectors({ onBack }: Props) {
                   </div>
                 </div>
 
-                {/* Ask an Expert */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-205 dark:border-gray-850 p-6 rounded-2xl shadow-sm space-y-4">
-                  <div className="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-2">
-                    <h3 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">
-                      Ask an Expert
-                    </h3>
-                    <span className="bg-amber-500 text-slate-950 text-[7px] font-extrabold px-1 rounded font-mono">PRO</span>
-                  </div>
 
-                  <div className="space-y-3 text-xs font-semibold">
-                    <p className="text-gray-500 font-normal leading-relaxed">
-                      Submit questions directly to verified subject matter experts across all sectors globally. Receive matching analytics reports.
-                    </p>
-
-                    <div className="flex gap-1.5 flex-wrap">
-                      {["What will bilateral solar PV grids funding do for rural markets?", "Explain legacys packaging fab equipment export rules."].map((q, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => handleAskAi(q)}
-                          className="text-[9.5px] font-bold border border-gray-200 dark:border-gray-850 hover:bg-gray-50 dark:hover:bg-gray-900 px-2 py-1 rounded-lg text-left"
-                        >
-                          {q}
-                        </button>
-                      ))}
-                    </div>
-
-                    <div className="flex gap-1.5 pt-1">
-                      <input 
-                        type="text" 
-                        placeholder="Ask about active trade clearings..."
-                        value={aiChatQuery}
-                        onChange={(e) => setAiChatQuery(e.target.value)}
-                        className="flex-1 px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-[10px] outline-none"
-                      />
-                      <button 
-                        onClick={() => handleAskAi(aiChatQuery)}
-                        disabled={isAiAnswering}
-                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-[9px] px-3 rounded-lg"
-                      >
-                        Ask
-                      </button>
-                    </div>
-
-                    {aiChatResponse && (
-                      <div className="bg-blue-50/50 dark:bg-blue-955/15 p-3 rounded-lg border border-blue-100 dark:border-blue-900/50 text-[10.5px] leading-relaxed text-gray-655 dark:text-gray-300 font-normal">
-                        <strong>AI Recommended Match Response:</strong> {aiChatResponse}
-                      </div>
-                    )}
-                  </div>
-                </div>
 
                 {/* Expert Video Insights */}
                 <div className="space-y-4">
@@ -853,57 +835,7 @@ export default function NewsPOCHeadlinesSMEEditorAllSectors({ onBack }: Props) {
                   </div>
                 </div>
 
-                {/* Find the Right Expert Guided Match Tool */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-850 p-5 rounded-2xl shadow-sm space-y-4">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block border-b border-gray-100 dark:border-gray-800 pb-2">
-                    Find the Right Expert
-                  </span>
-                  
-                  <div className="space-y-3 text-xs font-semibold">
-                    <p className="text-gray-550 font-normal leading-normal">
-                      Use our wizard tool to match with verified subject matter experts globally for your specific requirements.
-                    </p>
 
-                    <div className="space-y-2">
-                      <div className="space-y-1">
-                        <span className="text-[8px] text-gray-400 uppercase font-bold">Requirement Target</span>
-                        <select 
-                          value={wizardRequirement}
-                          onChange={(e) => setWizardRequirement(e.target.value)}
-                          className="w-full p-2 bg-gray-50 dark:bg-gray-900 border border-gray-250 dark:border-gray-800 rounded-lg text-xs outline-none"
-                        >
-                          <option value="Compliance Auditing">Compliance Auditing</option>
-                          <option value="Sourcing Logistics">Sourcing Logistics</option>
-                          <option value="Model Relocations">Model Relocations</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <button 
-                      onClick={handleSearchExpertsWizard}
-                      className="w-full bg-[#1D1D46] hover:bg-[#152e4f] text-white font-bold py-2 rounded-lg transition-colors uppercase text-xs"
-                    >
-                      Find Expert Matches
-                    </button>
-
-                    {matchedExperts.length > 0 && (
-                      <div className="space-y-2 pt-2 border-t border-gray-100 dark:border-gray-800">
-                        <span className="text-[8.5px] text-gray-400 block uppercase">Matched Experts:</span>
-                        {matchedExperts.map(exp => (
-                          <div key={exp.id} className="flex justify-between items-center text-[10px] font-bold">
-                            <span>{exp.name} ({exp.organization})</span>
-                            <button 
-                              onClick={() => setConsultingExpert(exp.name)}
-                              className="text-blue-500 hover:underline text-[9.5px] uppercase"
-                            >
-                              Connect →
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
 
                 {/* Premium Expert Intelligence upsell */}
                 <div className="bg-gradient-to-br from-indigo-950 to-slate-900 text-white border border-indigo-900/60 p-5 rounded-2xl shadow-sm space-y-4">
@@ -972,37 +904,7 @@ export default function NewsPOCHeadlinesSMEEditorAllSectors({ onBack }: Props) {
                   </button>
                 </div>
 
-                {/* Expert Newsletter brief */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
-                  <h4 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">
-                    Expert Intelligence Brief
-                  </h4>
-                  <p className="text-[10px] text-gray-555 dark:text-gray-400 leading-relaxed font-normal">
-                    Receive the most relevant expert opinions, insights and knowledge from the sectors you follow.
-                  </p>
-                  
-                  {!subscribedNewsletter ? (
-                    <div className="space-y-2">
-                      <input 
-                        type="email" 
-                        placeholder="work@corporation.com"
-                        value={emailInput}
-                        onChange={(e) => setEmailInput(e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 text-xs outline-none focus:border-blue-500"
-                      />
-                      <button 
-                        onClick={() => { if (emailInput.trim()) { setSubscribedNewsletter(true); showToast("Subscribed successfully!"); } }}
-                        className="w-full bg-[#1D1D46] hover:bg-[#152e4f] text-white font-bold py-2 rounded-lg transition-colors uppercase text-xs"
-                      >
-                        Subscribe
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="bg-emerald-50 dark:bg-emerald-955/20 border border-emerald-300 dark:border-emerald-900 text-emerald-800 dark:text-emerald-300 p-3 rounded-lg text-[10px] font-bold text-center">
-                      ✓ Subscribed to Expert Briefing!
-                    </div>
-                  )}
-                </div>
+
 
               </div>
 
