@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
 import { 
-  Star, Copy, Edit, 
+  Star, Copy, Edit, Clock, Bookmark, ExternalLink,
   ShieldAlert, Sparkles, 
   Check,
   Upload, X, MapPin, Briefcase, Building
@@ -33,8 +33,7 @@ export default function ReaderDashboard() {
   const router = useRouter();
   const locale = (params?.locale as string) || "en";
 
-  const profile = user?.onboardingForm || {};
-]]\]]  const currentPlan = user?.readerPlan || "free";
+  const profile = user?.onboardingForm || {}; const currentPlan = user?.readerPlan || "free";
 
   const [viewMode, setViewMode] = useState<"private" | "public">("private");
   const [profileVisibility, setProfileVisibility] = useState<"private" | "platform" | "public">("private");

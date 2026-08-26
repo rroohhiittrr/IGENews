@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
 import { 
-  Star, Copy, Edit, 
+  Star, Copy, Edit, Clock, Bookmark, ExternalLink,
   ShieldAlert, Sparkles, 
   Check,
   Upload, X, MapPin, Briefcase, Building
