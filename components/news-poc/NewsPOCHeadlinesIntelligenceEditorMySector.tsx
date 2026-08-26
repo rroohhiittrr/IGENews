@@ -686,45 +686,7 @@ export default function NewsPOCHeadlinesIntelligenceEditorMySector({ onBack }: P
                   </div>
                 )}
 
-                {/* ── My Sector Snapshot ── */}
-                <div className="space-y-4 pt-4">
-                  <div className="border-b border-gray-200 dark:border-gray-800 pb-2">
-                    <h3 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">
-                      My Sector Snapshot
-                    </h3>
-                  </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-semibold">
-                    {MOCK_SNAPSHOTS.map((sec, idx) => (
-                      <div key={idx} className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-4 rounded-xl shadow-xs space-y-2">
-                        <div className="flex items-center gap-1.5 text-sm">
-                          <span>{sec.icon}</span>
-                          <span className="font-bold text-gray-900 dark:text-white text-xs">{sec.sectorName.split(" & ")[0]}</span>
-                        </div>
-                        <div className="grid grid-cols-2 gap-2 text-[10px] text-gray-500 pt-2 border-t border-gray-50 dark:border-gray-800">
-                          <div>
-                            <span className="font-extrabold text-blue-500">{sec.updatesCount}</span> updates
-                          </div>
-                          <div>
-                            <span className="font-extrabold text-amber-500">{sec.developmentsCount}</span> major devs
-                          </div>
-                          <div>
-                            <span className="font-extrabold text-purple-500">{sec.trendsCount}</span> trends
-                          </div>
-                          <div>
-                            <span className="font-extrabold text-red-500">{sec.highImpactCount}</span> high-impact
-                          </div>
-                        </div>
-                        <Link 
-                          href={`/en/news-poc/sector/${sec.code}`}
-                          className="text-[9px] font-bold text-blue-500 hover:underline uppercase block pt-1 border-t border-gray-55 dark:border-gray-800/40"
-                        >
-                          Explore Sector Curation →
-                        </Link>
-                      </div>
-                    ))}
-                  </div>
-                </div>
 
 
 

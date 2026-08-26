@@ -611,38 +611,6 @@ export default function NewsPOCCountryNewsHome() {
               </div>
             </div>
 
-            {/* E. AI Risk & Growth Forecasts */}
-            <div className="bg-gradient-to-br from-[#0b192e] to-[#142d52] text-white p-6 rounded-2xl border border-slate-800 shadow-lg space-y-5">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-amber-400" />
-                  <h2 className="font-display text-sm font-bold uppercase tracking-wider">AI Country Risk & Growth Intelligence</h2>
-                </div>
-                <span className="bg-amber-400 text-gray-950 text-[8px] font-bold px-2 py-0.5 rounded-full">PRO FEATURE</span>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {[
-                  { title: "UAE CEPA Tariff Phase-Out Schedule", desc: "Tariff reductions on 80% non-oil product codes entering force Q3 2026." },
-                  { title: "US Critical Tech Regulatory Forecast", desc: "Export licensing updates for semiconductor equipment approved." },
-                  { title: "EU Green Hydrogen Transport Subsidy", desc: "LCOH shipping subsidies lower landed European cost to €3.20/kg." }
-                ].map((f, idx) => (
-                  <div key={idx} className="bg-white/5 border border-white/10 p-4 rounded-xl space-y-1.5">
-                    <h4 className="text-xs font-bold text-white">{f.title}</h4>
-                    <p className="text-[10px] text-slate-300 font-normal leading-relaxed">{f.desc}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex gap-3">
-                <Link href="/eoi" className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl transition-all shadow-xs">
-                  Unlock AI Country Forecasts
-                </Link>
-                <Link href="/eoi" className="border border-white/20 hover:bg-white/10 text-white font-bold text-xs px-5 py-2.5 rounded-xl transition-all">
-                  Download Risk Matrix
-                </Link>
-              </div>
-            </div>
 
             {/* F. Bilateral Country Spotlight Curation */}
             <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-xs space-y-4">

@@ -912,35 +912,8 @@ export default function ASMEBySectorView() {
           </div>
         </section>
 
-        {/* ── 16. LEARNING RESOURCES & 17. BUSINESS OPPORTUNITIES ────────────── */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-          {/* Learning Resources */}
-          <section id="sector-sec-learning">
-            <Card className="p-4 h-full space-y-3">
-              <SectionTitle
-                title="Sector Learning Resources & Whitepapers"
-                action={<Download className="h-4 w-4 text-blue-500" />}
-              />
-              <div className="space-y-2.5">
-                {SECTOR_LEARNING_RESOURCES.map((res, idx) => (
-                  <div key={idx} className="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 flex items-center justify-between gap-2">
-                    <div>
-                      <h4 className="text-xs font-bold text-gray-900 dark:text-white leading-snug">{res.title}</h4>
-                      <p className="text-[9px] text-gray-400 mt-0.5">{res.type} · {res.format} · {res.downloads} downloads</p>
-                    </div>
-                    <Link
-                      href="/eoi"
-                      className="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/30 text-blue-600 hover:bg-blue-100 shrink-0"
-                      aria-label={`Download ${res.title}`}
-                    >
-                      <Download className="h-3.5 w-3.5" />
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          </section>
+        {/* ── 17. BUSINESS OPPORTUNITIES ────────────── */}
+        <div className="grid grid-cols-1 gap-6">
 
           {/* Business Opportunities */}
           <section id="sector-sec-opportunities">

@@ -9,8 +9,12 @@ import RegisteredLeaderBySectorView from "./RegisteredLeaderBySectorView";
 import RegisteredLeaderAllSectorsView from "./RegisteredLeaderAllSectorsView";
 import VerifiedLeaderNewsView from "./VerifiedLeaderNewsView";
 import VerifiedLeaderPagesView from "./VerifiedLeaderPagesView";
+import VerifiedLeaderBySectorView from "./VerifiedLeaderBySectorView";
+import VerifiedLeaderAllSectorsView from "./VerifiedLeaderAllSectorsView";
 import TopLeaderNewsView from "./TopLeaderNewsView";
 import TopLeaderPagesView from "./TopLeaderPagesView";
+import TopLeaderBySectorView from "./TopLeaderBySectorView";
+import TopLeaderAllSectorsView from "./TopLeaderAllSectorsView";
 import NewsPOCLeaderIntelligenceView from "./NewsPOCLeaderIntelligenceView";
 import type { ComponentType, ReactNode } from "react";
 import {
@@ -637,6 +641,15 @@ export default function NewsPOCLeaderNewsSubmenu({ tier, view }: Props) {
       );
     }
 
+    if (tier === "verified") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100">
+          <SubMenuTabs />
+          <VerifiedLeaderPagesView />
+        </div>
+      );
+    }
+
     if (tier === "top") {
       return (
         <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
@@ -713,6 +726,24 @@ export default function NewsPOCLeaderNewsSubmenu({ tier, view }: Props) {
         </div>
       );
     }
+
+    if (tier === "verified") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100">
+          <SubMenuTabs />
+          <VerifiedLeaderBySectorView />
+        </div>
+      );
+    }
+
+    if (tier === "top") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100">
+          <SubMenuTabs />
+          <TopLeaderBySectorView />
+        </div>
+      );
+    }
   }
 
   // VIEW 4: ALL SECTORS
@@ -722,6 +753,24 @@ export default function NewsPOCLeaderNewsSubmenu({ tier, view }: Props) {
         <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100">
           <SubMenuTabs />
           <RegisteredLeaderAllSectorsView />
+        </div>
+      );
+    }
+
+    if (tier === "verified") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100">
+          <SubMenuTabs />
+          <VerifiedLeaderAllSectorsView />
+        </div>
+      );
+    }
+
+    if (tier === "top") {
+      return (
+        <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100">
+          <SubMenuTabs />
+          <TopLeaderAllSectorsView />
         </div>
       );
     }

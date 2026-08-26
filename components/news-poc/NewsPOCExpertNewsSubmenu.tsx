@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import ASMEPagesView from "./ASMEPagesView";
+import SMEPagesView from "./SMEPagesView";
 import ASMEBySectorView from "./ASMEBySectorView";
+import SMEBySectorView from "./SMEBySectorView";
 import ASMEAllSectorView from "./ASMEAllSectorView";
+import SMEAllSectorView from "./SMEAllSectorView";
 import { useRouter } from "next/navigation";
 import type { ComponentType, ReactNode } from "react";
 import { useState } from "react";
@@ -1494,95 +1497,7 @@ export default function NewsPOCExpertNewsSubmenu({ expertType, view }: Props) {
   }
 
   if (view === "pages" && expertType === "sme") {
-    return (
-      <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
-        <SubMenuHeader />
-        <section className={`bg-gradient-to-br ${cfg.gradFrom} ${cfg.gradTo} text-white`}>
-          <div className="mx-auto max-w-7xl px-4 py-10 lg:px-6">
-            <div className="flex flex-col md:flex-row gap-6 md:items-end">
-              <img src={expertProfile.photo} alt={expertProfile.name} className="h-28 w-28 rounded-2xl object-cover border-4 border-white/25 shadow-lg" />
-              <div className="flex-1 space-y-2">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h1 className="font-display text-3xl font-bold">{expertProfile.name}</h1>
-                  <span className="rounded-full bg-white/20 border border-white/25 px-2 py-1 text-[9px] font-bold flex items-center gap-1">
-                    <CheckCircle className="h-3 w-3" /> {cfg.badgeLabel}
-                  </span>
-                </div>
-                <p className="text-sm text-white/85">{expertProfile.role}, {expertProfile.company}</p>
-                <div className="flex flex-wrap gap-3 text-[10px] font-semibold text-white/70">
-                  <span className="flex items-center gap-1"><Briefcase className="h-3 w-3" />{expertProfile.sector}</span>
-                  <span className="flex items-center gap-1"><Globe className="h-3 w-3" />{expertProfile.country}</span>
-                  <span className="flex items-center gap-1"><Star className="h-3 w-3 fill-amber-300 text-amber-300" />{expertProfile.rating} ({expertProfile.reviews} reviews)</span>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-2 min-w-52">
-                <div className="rounded-xl bg-white/10 border border-white/20 p-3 text-center">
-                  <div className="font-display text-xl font-bold text-amber-300">{expertProfile.rating} ★</div>
-                  <div className="text-[8px] font-bold uppercase text-white/60">Client Rating</div>
-                </div>
-                <div className="rounded-xl bg-white/10 border border-white/20 p-3 text-center">
-                  <div className="font-display text-xl font-bold text-emerald-300">{expertProfile.rate}</div>
-                  <div className="text-[8px] font-bold uppercase text-white/60">Advisory Fee</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="mx-auto max-w-7xl px-4 pt-8 lg:px-6">
-          <div className="grid grid-cols-12 gap-8">
-            <div className="col-span-12 lg:col-span-8 space-y-6">
-              <Card className="p-6 space-y-4">
-                <SectionTitle title="Expert Directory" />
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {EXPERT_DIRECTORY.map((exp, idx) => (
-                    <div key={idx} className="p-4 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 space-y-2.5">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2.5">
-                          <div className={`h-9 w-9 rounded-full bg-gradient-to-br ${exp.color} text-white font-bold text-xs flex items-center justify-center`}>
-                            {exp.initial}
-                          </div>
-                          <div>
-                            <h4 className="text-xs font-bold text-gray-900 dark:text-white leading-snug">{exp.name}</h4>
-                            <span className="text-[9px] text-gray-400">{exp.role}</span>
-                          </div>
-                        </div>
-                        <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-blue-50 text-blue-600">{exp.type}</span>
-                      </div>
-                      <div className="flex items-center justify-between text-[9px] text-gray-500 border-t border-gray-100 dark:border-gray-800 pt-2">
-                        <span className="text-amber-500 font-bold flex items-center gap-0.5"><Star className="h-2.5 w-2.5 fill-amber-500" /> {exp.rating} ({exp.reviews})</span>
-                        <span className="font-bold text-emerald-600">{exp.rate}</span>
-                        <Link href="/eoi" className="bg-blue-600 text-white font-bold text-[8px] px-2 py-1 rounded">
-                          Book Consultation
-                        </Link>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            </div>
-
-            <div className="col-span-12 lg:col-span-4 space-y-5">
-              <Card className="p-5 space-y-3">
-                <SectionTitle title="Book 1:1 Consultation" />
-                <div className="space-y-2">
-                  <input className="w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-3 py-2 text-xs outline-none" placeholder="Your name" />
-                  <input className="w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-3 py-2 text-xs outline-none" placeholder="Work email" />
-                  <select className="w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-3 py-2 text-xs outline-none">
-                    <option>Technical Advisory (1 hr)</option>
-                    <option>Policy Compliance Audit</option>
-                    <option>Market Entry Strategy</option>
-                  </select>
-                  <button className={`${cfg.button} w-full rounded-lg py-2.5 text-xs font-bold`}>
-                    Request Consultation
-                  </button>
-                </div>
-              </Card>
-            </div>
-          </div>
-        </section>
-      </div>
-    );
+    return <SMEPagesView />;
   }
 
   // VIEW 3: SECTOR — ASME Sector Discovery Hub (ASME) or SME Sector Directory (SME)
@@ -1591,30 +1506,7 @@ export default function NewsPOCExpertNewsSubmenu({ expertType, view }: Props) {
   }
 
   if (view === "sector" && expertType === "sme") {
-    return (
-      <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
-        <SubMenuHeader />
-        <HeroBanner
-          title={`${expertType.toUpperCase()} Directory by Industry Sector`}
-          description="Browse experts organized across 50 GoI ministry-aligned sectors and 1,350+ industries."
-        />
-        <section className="mx-auto max-w-7xl px-4 pt-8 lg:px-6 space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            {SECTORS_LIST.map((sec, idx) => (
-              <Card key={idx} className="p-4 space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-xs text-gray-900 dark:text-white">{sec.name}</span>
-                  <span className="text-[9px] font-bold text-emerald-500">{sec.growth}</span>
-                </div>
-                <p className="text-[10px] text-gray-500">{sec.count}</p>
-                <p className="text-[9px] text-blue-600 font-bold">Top: {sec.top}</p>
-                <p className="text-[9px] text-gray-400 italic">⚡ {sec.signal}</p>
-              </Card>
-            ))}
-          </div>
-        </section>
-      </div>
-    );
+    return <SMEBySectorView />;
   }
 
   // VIEW 4: ALL SECTOR — ASME Master Industry & Sector Hub (ASME) or SME Master Directory (SME)
@@ -1622,31 +1514,9 @@ export default function NewsPOCExpertNewsSubmenu({ expertType, view }: Props) {
     return <ASMEAllSectorView />;
   }
 
-  return (
-    <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
-      <SubMenuHeader />
-      <HeroBanner
-        title={`All Sector ${expertType.toUpperCase()} Master Directory`}
-        description="Master index of all 50 sectors and 1,350+ industries for comprehensive B2B expert discovery."
-      />
-      <section className="mx-auto max-w-7xl px-4 pt-8 lg:px-6 space-y-8">
-        <Card className="p-6 space-y-4">
-          <SectionTitle title="Master Sector Directory" />
-          <div className="divide-y divide-gray-100 dark:border-gray-800">
-            {SECTORS_LIST.map((sec, idx) => (
-              <div key={idx} className="py-3 flex items-center justify-between">
-                <div>
-                  <h4 className="text-xs font-bold text-gray-900 dark:text-white">{sec.name}</h4>
-                  <span className="text-[9px] text-gray-400">{sec.count} · Top Expert: {sec.top}</span>
-                </div>
-                <Link href="/eoi" className="bg-blue-600 text-white font-bold text-[9px] px-3 py-1.5 rounded-lg">
-                  Explore Sector →
-                </Link>
-              </div>
-            ))}
-          </div>
-        </Card>
-      </section>
-    </div>
-  );
+  if (expertType === "sme") {
+    return <SMEAllSectorView />;
+  }
+
+  return null;
 }

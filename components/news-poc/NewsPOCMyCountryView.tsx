@@ -786,44 +786,32 @@ export default function NewsPOCMyCountryView() {
                   </div>
                 </section>
               )}
-
-            </div>
-
-          </div>
-        </section>
-        
-        {/* 05. ECONOMIC PULSE */}
-        <section className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 rounded-2xl p-5 md:p-6 shadow-2xs space-y-4">
-          <div className="border-b border-gray-150 dark:border-gray-855 pb-3">
-            <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
-              <Activity className="h-4.5 w-4.5 text-blue-650" /> Economic Pulse Projections
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-            <div className="md:col-span-8 space-y-3">
-              <p className="text-xs text-gray-550 dark:text-slate-350 leading-relaxed font-normal">
-                Projections powered by federal treasury reviews indicate a stable economic expansion pattern for {currentCountry.name} through FY2026.
-              </p>
-              
-              <div className="grid grid-cols-3 gap-4 border-t border-gray-100 dark:border-gray-850 pt-3">
-                {currentCountry.economicHistory.map((hist, hIdx) => (
-                  <div key={hIdx} className="p-3 bg-gray-55 dark:bg-gray-900/60 rounded-xl border border-gray-150/40 dark:border-gray-805 text-center">
-                    <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{hist.year}</span>
-                    <div className="font-display text-sm font-bold text-blue-650 mt-1">{hist.growth}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="md:col-span-4 p-4 rounded-xl border border-blue-200/40 dark:border-blue-900/40 bg-blue-50/50 dark:bg-blue-955/15 space-y-3 text-center">
-              <h4 className="text-[10px] font-bold text-blue-600 uppercase tracking-widest leading-none">Intelligence Summary</h4>
-              <p className="text-[11px] text-gray-655 dark:text-slate-300 italic font-medium leading-relaxed">
-                "Nominal GDP forecasts are backed by infrastructural PLI layouts and secondary tariff exemptions."
-              </p>
-              <Link href="/en/news-poc/country-news/intelligence" className="block text-[10px] font-bold text-blue-600 hover:underline">
-                Explore Economic Intelligence →
-              </Link>
+              {/* Trending Topics */}
+              <section className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-4.5 rounded-2xl space-y-3 shadow-3xs">
+                <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-450 font-extrabold text-[9px] uppercase tracking-wider">
+                  <Flame className="h-4 w-4 shrink-0 text-orange-500 fill-orange-500 animate-pulse" />
+                  Trending Topics
+                </div>
+                <div className="space-y-2">
+                  {[
+                    { tag: "#ViksitBharat2047", count: "1.2k reads" },
+                    { tag: "#SemiconductorIncentives", count: "984 reads" },
+                    { tag: "#BilateralCorridors", count: "512 reads" }
+                  ].map((topic, index) => (
+                    <div 
+                      key={index}
+                      className="flex justify-between items-center bg-gray-50/50 dark:bg-gray-900/40 p-2.5 rounded-xl border border-gray-100 dark:border-gray-805 hover:border-blue-400 transition-all cursor-pointer group"
+                    >
+                      <span className="text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:underline">
+                        {topic.tag}
+                      </span>
+                      <span className="text-[10px] font-semibold text-gray-400">
+                        {topic.count}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </section>
             </div>
           </div>
         </section>
@@ -971,33 +959,7 @@ export default function NewsPOCMyCountryView() {
           </div>
         </section>
 
-        {/* 09. MARKET & BUSINESS WATCH */}
-        <section className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 rounded-2xl p-5 md:p-6 shadow-2xs space-y-4">
-          <div className="border-b border-gray-150 dark:border-gray-855 pb-3">
-            <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
-              <Activity className="h-4.5 w-4.5 text-blue-650" /> Market & Business Watch
-            </h2>
-          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs font-semibold">
-            <div className="p-3.5 bg-gray-55 dark:bg-gray-900/60 rounded-xl border border-gray-150/40 dark:border-gray-805 space-y-1">
-              <span className="text-[9px] text-gray-400 font-bold uppercase block">Technology</span>
-              <p className="text-gray-950 dark:text-white">Active software corridors (+14% YoY)</p>
-            </div>
-            <div className="p-3.5 bg-gray-55 dark:bg-gray-900/60 rounded-xl border border-gray-150/40 dark:border-gray-805 space-y-1">
-              <span className="text-[9px] text-gray-400 font-bold uppercase block">Manufacturing</span>
-              <p className="text-gray-950 dark:text-white">Gujarat plant expansion commitments</p>
-            </div>
-            <div className="p-3.5 bg-gray-55 dark:bg-gray-900/60 rounded-xl border border-gray-150/40 dark:border-gray-805 space-y-1">
-              <span className="text-[9px] text-gray-400 font-bold uppercase block">Logistics</span>
-              <p className="text-gray-950 dark:text-white">DP World terminal consolidations</p>
-            </div>
-            <div className="p-3.5 bg-gray-55 dark:bg-gray-900/60 rounded-xl border border-gray-150/40 dark:border-gray-805 space-y-1">
-              <span className="text-[9px] text-gray-400 font-bold uppercase block">Biotech</span>
-              <p className="text-gray-950 dark:text-white">Botanical testing standards active</p>
-            </div>
-          </div>
-        </section>
 
         {/* 10 & 11. COMPANIES & LEADERS IN FOCUS */}
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -1083,79 +1045,6 @@ export default function NewsPOCMyCountryView() {
           </div>
         </section>
 
-        {/* 13. AI COUNTRY INTELLIGENCE */}
-        <section className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 rounded-2xl p-5 md:p-6 shadow-2xs space-y-4">
-          <div className="flex items-center justify-between border-b border-gray-150 dark:border-gray-855 pb-3">
-            <h3 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
-              <Zap className="h-4.5 w-4.5 text-blue-600 fill-blue-500 animate-pulse" /> AI Country Intelligence
-            </h3>
-            <span className="text-[9px] font-bold bg-blue-50 dark:bg-blue-955/20 text-blue-650 px-2 py-0.5 rounded border border-blue-200/20">
-              Risk: {currentCountry.aiOutlook.riskRating}
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-            
-            <div className="lg:col-span-8 space-y-4">
-              <div className="p-4 bg-blue-50/50 dark:bg-blue-955/10 border border-blue-105/50 rounded-2xl space-y-1">
-                <span className="text-[9px] font-bold text-blue-650 uppercase tracking-widest">AI Trend Outlook</span>
-                <p className="text-xs text-gray-700 dark:text-slate-300 italic font-semibold leading-relaxed">
-                  "{currentCountry.aiOutlook.summary}"
-                </p>
-              </div>
-
-              {/* Free users locked preview parameters */}
-              <div className="space-y-2 text-xs relative">
-                
-                {aiPreviewLocked ? (
-                  <>
-                    <div className="p-3 bg-gray-50/50 dark:bg-gray-900/40 rounded-xl border border-gray-200 dark:border-gray-805 flex justify-between items-center opacity-60">
-                      <span>1. {currentCountry.aiOutlook.developments[0]}</span>
-                      <span className="text-[8.5px] font-bold text-gray-400 flex items-center gap-0.5"><Lock className="h-3 w-3" /> Locked</span>
-                    </div>
-                    <div className="p-3 bg-gray-50/50 dark:bg-gray-900/40 rounded-xl border border-gray-200 dark:border-gray-805 flex justify-between items-center opacity-60">
-                      <span>2. {currentCountry.aiOutlook.impacts[0]}</span>
-                      <span className="text-[8.5px] font-bold text-gray-400 flex items-center gap-0.5"><Lock className="h-3 w-3" /> Locked</span>
-                    </div>
-
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white dark:to-[#0f172a] flex items-center justify-center pt-8">
-                      <button
-                        onClick={() => setIsProModalOpen(true)}
-                        className="bg-blue-650 hover:bg-blue-750 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-md cursor-pointer flex items-center gap-1.5"
-                      >
-                        Unlock AI Country Intelligence <Lock className="h-3.5 w-3.5" />
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <div className="space-y-2">
-                    <h5 className="font-bold text-gray-900 dark:text-white uppercase tracking-wider text-[10px]">Key Pro Insights</h5>
-                    <ul className="list-disc pl-5 space-y-1 font-semibold text-[11px] text-gray-655 dark:text-slate-350">
-                      <li><strong>Developments:</strong> {currentCountry.aiOutlook.developments.join(" · ")}</li>
-                      <li><strong>Business Impacts:</strong> {currentCountry.aiOutlook.impacts.join(" · ")}</li>
-                    </ul>
-                  </div>
-                )}
-
-              </div>
-            </div>
-
-            <div className="lg:col-span-4 p-5 bg-gradient-to-br from-slate-900 to-indigo-950 text-white rounded-2xl space-y-3 border border-slate-805">
-              <span className="text-[8px] font-bold text-amber-400 uppercase tracking-widest block">Pro Account Benefit</span>
-              <h4 className="text-xs font-bold text-white">Full Bilateral Risk Assessments</h4>
-              <p className="text-[10px] text-slate-300 leading-normal font-normal">
-                Unlock daily tariff updates, phase-out schedules, transport routes delays, and local executive risk scores.
-              </p>
-              <button
-                onClick={() => setIsProModalOpen(true)}
-                className="w-full text-center bg-white text-gray-950 hover:bg-gray-100 font-bold text-xs py-2 rounded-xl"
-              >
-                Upgrade Account Pro
-              </button>
-            </div>
-
-          </div>
-        </section>
 
         {/* 14. COUNTRY RISK & OPPORTUNITY OUTLOOK */}
         <section className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 rounded-2xl p-5 md:p-6 shadow-2xs space-y-4">
