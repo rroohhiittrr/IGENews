@@ -12,6 +12,30 @@ import {
   User, Shield, ShieldX, HelpCircle, ChevronRight, Info
 } from "lucide-react";
 import { SECTORS } from "@/lib/sectors";
+import AssociateSMEFreeDashboard from "@/components/profile/associate-sme/free/AssociateSMEFreeDashboard";
+import AssociateSMEProDashboard from "@/components/profile/sme/pro/AssociateSMEProDashboard";
+import SMEEliteDashboard from "@/components/profile/sme/elite/SMEEliteDashboard";
+import SMESovereignDashboard from "@/components/profile/sme/sovereign/SMESovereignDashboard";
+
+// ─── Tier Router ───────────────────────────────────────────
+// Wraps the legacy free dashboard and routes to the correct
+// tier dashboard based on the user's smePlan field.
+function SMETierRouter() {
+  const { user } = useAuth();
+  const smePlan = (user as any)?.smePlan || "free";
+
+  if (smePlan === "sovereign") return <SMESovereignDashboard />;
+  if (smePlan === "elite")     return <SMEEliteDashboard />;
+  if (smePlan === "pro")       return <AssociateSMEProDashboard />;
+  // "free" or any unrecognised plan → new minimal free dashboard
+  if (smePlan === "free")      return <AssociateSMEFreeDashboard />;
+
+  // Fallback: render the legacy full dashboard (original behaviour)
+  return <SmeDashboardLegacy />;
+}
+// Re-export the router as the default so existing imports work unchanged
+export default SMETierRouter;
+// ────────────────────────────────────────────────────────────
 
 interface Article {
   id: string;
@@ -23,7 +47,7 @@ interface Article {
   reads: number;
 }
 
-export default function SmeDashboard() {
+export function SmeDashboardLegacy() {
   const { user, updateOnboarding } = useAuth();
   
   // View mode switcher: "private" (Admin) or "public" (Visitor View)
