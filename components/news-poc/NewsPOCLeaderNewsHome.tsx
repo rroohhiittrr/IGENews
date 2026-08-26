@@ -874,29 +874,6 @@ export default function NewsPOCLeaderNewsHome() {
               )}
             </div>
 
-            {/* Tier quick-nav */}
-            <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-4 rounded-xl shadow-xs space-y-3">
-              <h4 className="font-bold text-xs text-gray-900 dark:text-white uppercase border-b border-gray-100 dark:border-gray-850 pb-2">Quick Navigation</h4>
-              {([
-                { tier: "registered", label: "Registered Leaders (Free)", Icon: User, sub: ["Leader News", "Leader Pages", "By Sector", "All Sectors"] },
-                { tier: "verified", label: "Verified Leaders (Pro)", Icon: CheckCircle, sub: ["Leader News", "Leader Pages", "By Sector", "All Sectors"] },
-                { tier: "top", label: "Top Leaders (Enterprise)", Icon: Crown, sub: ["Leader News", "Leader Pages", "By Sector", "All Sectors"] }
-              ] as const).map(({ tier, label, Icon, sub }) => (
-                <div key={tier} className="space-y-1.5">
-                  <div className="flex items-center gap-1.5 text-[10px] font-bold text-gray-700 dark:text-gray-300">
-                    <Icon className="h-3 w-3" /> {label}
-                  </div>
-                  <div className="pl-4 space-y-0.5">
-                    {sub.map((s) => (
-                      <Link key={s} href={`${tierPath}/${tier}/${s.toLowerCase().replace(/ /g, "-").replace("all-sectors", "all").replace("by-sector", "sector").replace("leader-news", "news").replace("leader-pages", "pages")}`} className="text-[9px] text-gray-450 hover:text-purple-500 hover:underline block transition-colors">
-                        · {s}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-
             {/* Simplified upgrade teaser (Moved to bottom) */}
             <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-4 rounded-xl shadow-xs space-y-3">
               <div className="flex items-center gap-2">

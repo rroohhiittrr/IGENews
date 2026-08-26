@@ -770,35 +770,7 @@ export default function RegisteredCompanySectorView() {
               </div>
             </section>
 
-            {/* 10. Industry Activity Snapshot */}
-            <section className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs space-y-4">
-              <SectionTitle
-                title="Industry Activity Snapshot"
-                subtitle="Current cumulative counts based on active directory profiles."
-              />
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-                <div className="bg-slate-50 dark:bg-gray-955 p-3.5 rounded-xl border border-gray-150">
-                  <span className="text-xl block">🏢</span>
-                  <span className="text-base font-extrabold text-gray-900 dark:text-white block mt-1">1,624</span>
-                  <span className="text-[8px] font-bold text-gray-400 uppercase tracking-wider block">Total Companies</span>
-                </div>
-                <div className="bg-slate-50 dark:bg-gray-955 p-3.5 rounded-xl border border-gray-150">
-                  <span className="text-xl block">📄</span>
-                  <span className="text-base font-extrabold text-gray-900 dark:text-white block mt-1">12,680</span>
-                  <span className="text-[8px] font-bold text-gray-400 uppercase tracking-wider block">News Stories</span>
-                </div>
-                <div className="bg-slate-50 dark:bg-gray-955 p-3.5 rounded-xl border border-gray-150">
-                  <span className="text-xl block">🚀</span>
-                  <span className="text-base font-extrabold text-gray-900 dark:text-white block mt-1">420</span>
-                  <span className="text-[8px] font-bold text-gray-400 uppercase tracking-wider block">Product Launches</span>
-                </div>
-                <div className="bg-slate-50 dark:bg-gray-955 p-3.5 rounded-xl border border-gray-150">
-                  <span className="text-xl block">🤝</span>
-                  <span className="text-base font-extrabold text-gray-900 dark:text-white block mt-1">186</span>
-                  <span className="text-[8px] font-bold text-gray-400 uppercase tracking-wider block">Partnerships</span>
-                </div>
-              </div>
-            </section>
+
 
           </div>
 
@@ -825,55 +797,11 @@ export default function RegisteredCompanySectorView() {
               </div>
             </section>
 
-            {/* 12. Business Ecosystem segmentations */}
-            <section className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs space-y-3">
-              <h4 className="font-bold text-xs uppercase tracking-wider text-gray-900 dark:text-white border-b border-gray-100 dark:border-gray-800 pb-2">
-                Industry Ecosystem
-              </h4>
-              <div className="grid grid-cols-2 gap-2 text-[9px] font-bold text-center">
-                <button className="p-2 border border-gray-150 hover:border-blue-400 rounded-lg">Manufacturers</button>
-                <button className="p-2 border border-gray-150 hover:border-blue-400 rounded-lg">Suppliers</button>
-                <button className="p-2 border border-gray-150 hover:border-blue-400 rounded-lg">Exporters</button>
-                <button className="p-2 border border-gray-150 hover:border-blue-400 rounded-lg">Distributors</button>
-              </div>
-            </section>
 
-            {/* 13. Industry Leaders segment (top enterprise list) */}
-            <section className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs space-y-3">
-              <h4 className="font-bold text-xs uppercase tracking-wider text-gray-900 dark:text-white border-b border-gray-100 dark:border-gray-800 pb-2">
-                Industry Leaders
-              </h4>
-              <div className="space-y-2">
-                {SECTOR_COMPANIES.filter((c) => c.isVerified).map((c) => (
-                  <div key={c.id} className="flex justify-between items-center text-xs">
-                    <span className="font-bold text-gray-700 dark:text-gray-300">{c.name}</span>
-                    <Badge color="amber">✓ Leader</Badge>
-                  </div>
-                ))}
-              </div>
-            </section>
 
-            {/* 14. Watchlist quick toggle */}
-            <section className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs space-y-3">
-              <h4 className="font-bold text-xs uppercase tracking-wider text-gray-900 dark:text-white border-b border-gray-100 dark:border-gray-800 pb-2">
-                My Followed Companies
-              </h4>
-              <div className="space-y-2">
-                {SECTOR_COMPANIES.map((c) => (
-                  <div key={c.id} className="flex justify-between items-center text-[10px]">
-                    <span className="font-semibold text-gray-655 dark:text-gray-300">{c.name}</span>
-                    <button
-                      onClick={() => toggleFollowCompany(c.id)}
-                      className={`text-[8px] font-bold px-2 py-0.5 rounded ${
-                        followedCompanies.includes(c.id) ? "bg-emerald-50 text-emerald-650" : "bg-gray-100 text-gray-400"
-                      }`}
-                    >
-                      {followedCompanies.includes(c.id) ? "Following" : "Follow"}
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </section>
+
+
+
 
           </div>
         </div>
@@ -968,17 +896,7 @@ export default function RegisteredCompanySectorView() {
           )}
         </section>
 
-        {/* 17. Industry Intelligence Cross-Sell */}
-        <section className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-8 rounded-3xl shadow-sm text-center space-y-4">
-          <Shield className="h-8 w-8 text-indigo-500 mx-auto" />
-          <h3 className="font-display text-xl font-bold text-gray-900 dark:text-white">Want Deeper Industry Intelligence?</h3>
-          <p className="text-gray-550 dark:text-slate-400 text-xs font-normal max-w-md mx-auto leading-relaxed">
-            Explore market research reports, sector forecasts, supply chain risk indicators, and premium intelligence for this industry.
-          </p>
-          <Link href="/en/news-poc/company-news/top/sector" className="bg-gradient-to-r from-blue-650 to-indigo-650 text-white font-bold text-xs px-8 py-3.5 rounded-xl inline-block transition-transform hover:-translate-y-0.5">
-            Explore Industry Intelligence →
-          </Link>
-        </section>
+
 
         {/* 18. Featured & Sponsored Companies (paid placement showcase) */}
         <section className="space-y-4">

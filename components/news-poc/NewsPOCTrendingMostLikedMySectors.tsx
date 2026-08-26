@@ -926,30 +926,6 @@ export default function NewsPOCTrendingMostLikedMySectors({ onBack }: Props) {
                   </div>
                 </div>
 
-                {/* ── Related Stories & Recommendations ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-3xs space-y-3">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block border-b border-gray-100 dark:border-gray-800 pb-2 font-bold font-semibold">
-                    Because You Follow These Sectors
-                  </span>
-                  
-                  <div className="space-y-3">
-                    {[
-                      { title: "Bilateral Silicon Chip export agreements signed: US-India Corridors", sec: "Electronics & IT" },
-                      { title: "Hydrogen cargo corridors open in Western port hubs", sec: "Energy & Sustainability" }
-                    ].map((item, idx) => (
-                      <div key={idx} className="space-y-1">
-                        <span className="text-[8px] font-bold text-blue-600 dark:text-blue-400 uppercase">{item.sec}</span>
-                        <Link 
-                          href="/en/news-poc/article/sec-1"
-                          className="text-xs font-bold text-gray-900 dark:text-white block hover:underline leading-tight"
-                        >
-                          {item.title}
-                        </Link>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
                 {/* ── Premium Intelligence Upgrade CTA ── */}
                 <div className="bg-gradient-to-br from-blue-900 to-indigo-950 text-white border border-blue-950 p-5 rounded-2xl shadow-3xs space-y-4">
                   <h4 className="font-display text-sm font-bold flex items-center gap-1.5">

@@ -868,7 +868,7 @@ export default function VerifiedCompanyPagesView() {
         {/* ── S17: New Products & Services ──────────────────────────────────── */}
         <Card className="p-5">
           <SectionTitle
-            title="What's New from Verified Companies"
+            title="New Launches from Verified Companies"
             subtitle="Latest product launches, service updates, and technology releases"
             action={<Badge color="purple"><Rocket className="h-2.5 w-2.5" /> LAUNCHES</Badge>}
           />

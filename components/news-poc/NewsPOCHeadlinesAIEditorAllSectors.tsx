@@ -768,38 +768,7 @@ export default function NewsPOCHeadlinesAIEditorAllSectors({ onBack }: Props) {
                   })()}
                 </div>
 
-                {/* ── Why This Matters C-Suite Impact ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-sm space-y-4">
-                  <div className="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-2">
-                    <h3 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
-                      <Activity className="h-4 w-4 text-emerald-500" /> Why This Matters — C-Suite Impact
-                    </h3>
-                  </div>
 
-                  {(() => {
-                    const activeStory = MOCK_GLOBAL_AI_ARTICLES.find(a => a.id === expandedSummaryId) || MOCK_GLOBAL_AI_ARTICLES[0];
-                    return (
-                      <div className="space-y-3.5 text-xs font-semibold leading-relaxed">
-                        <div className="border-l-2 border-emerald-500 pl-3 space-y-0.5">
-                          <span className="text-[8px] text-emerald-600 dark:text-emerald-400 uppercase font-extrabold tracking-wider">Business Impact</span>
-                          <p className="text-gray-700 dark:text-gray-400 font-normal">{activeStory.businessImpact}</p>
-                        </div>
-                        <div className="border-l-2 border-blue-500 pl-3 space-y-0.5">
-                          <span className="text-[8px] text-blue-600 dark:text-blue-400 uppercase font-extrabold tracking-wider">Industry Impact</span>
-                          <p className="text-gray-700 dark:text-gray-400 font-normal">{activeStory.industryImpact}</p>
-                        </div>
-                        <div className="border-l-2 border-purple-500 pl-3 space-y-0.5">
-                          <span className="text-[8px] text-purple-600 dark:text-purple-400 uppercase font-extrabold tracking-wider">Country Impact</span>
-                          <p className="text-gray-700 dark:text-gray-400 font-normal">{activeStory.countryImpact}</p>
-                        </div>
-                        <div className="border-l-2 border-amber-500 pl-3 space-y-0.5">
-                          <span className="text-[8px] text-amber-600 dark:text-amber-400 uppercase font-extrabold tracking-wider">Next Developments</span>
-                          <p className="text-gray-700 dark:text-gray-400 font-normal">{activeStory.nextDevelopments}</p>
-                        </div>
-                      </div>
-                    );
-                  })()}
-                </div>
 
                 {/* ── Global Sector Highlights ── */}
                 <div className="space-y-4 pt-4">
@@ -939,51 +908,7 @@ export default function NewsPOCHeadlinesAIEditorAllSectors({ onBack }: Props) {
                   </div>
                 </div>
 
-                {/* ── Global News Activity Heatmap Alternative ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 p-5 rounded-2xl shadow-3xs space-y-3">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block border-b border-gray-100 dark:border-gray-800 pb-2">
-                    Global News Activity Heatmap
-                  </span>
-                  
-                  <div className="space-y-3">
-                    <div className="grid grid-cols-2 gap-2">
-                      {MOCK_HEATMAP_REGIONS.map(reg => (
-                        <button
-                          key={reg.region}
-                          onClick={() => setSelectedHeatmapRegion(reg.region)}
-                          className={`px-2 py-1.5 rounded-lg border text-[9px] font-bold transition-all truncate text-center ${
-                            selectedHeatmapRegion === reg.region 
-                              ? "bg-blue-600 border-blue-600 text-white shadow-3xs"
-                              : "bg-gray-50 border-gray-200 dark:bg-gray-900 dark:border-gray-800 text-gray-600 hover:bg-gray-100"
-                          }`}
-                        >
-                          {reg.region}
-                        </button>
-                      ))}
-                    </div>
 
-                    {selectedHeatmapRegion && (
-                      <div className="bg-gray-50 dark:bg-gray-900/50 border border-gray-150 dark:border-gray-800 p-3 rounded-xl space-y-2 text-[10px] font-semibold">
-                        <div className="flex justify-between border-b border-gray-100 dark:border-gray-800 pb-1.5">
-                          <span className="text-[9px] text-gray-400 block uppercase">Region</span>
-                          <span className="text-blue-500 font-bold">{selectedHeatmapRegion}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-400 block font-normal">Headline Volume</span>
-                          <span>{MOCK_HEATMAP_REGIONS.find(r => r.region === selectedHeatmapRegion)?.volume}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-400 block font-normal">Top Active Sector</span>
-                          <span>{MOCK_HEATMAP_REGIONS.find(r => r.region === selectedHeatmapRegion)?.topSector}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-400 block font-normal">Active Stories</span>
-                          <span>{MOCK_HEATMAP_REGIONS.find(r => r.region === selectedHeatmapRegion)?.activeStories} active stories</span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
 
                 {/* ── AI Topic Clusters ── */}
                 <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
@@ -1017,82 +942,9 @@ export default function NewsPOCHeadlinesAIEditorAllSectors({ onBack }: Props) {
                   </div>
                 </div>
 
-                {/* ── Today's Global AI Brief ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
-                  <div className="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-2">
-                    <h4 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">Today's Global AI Brief</h4>
-                    <span className="bg-amber-500 text-slate-950 text-[7px] font-extrabold px-1 rounded font-mono">PRO</span>
-                  </div>
 
-                  {!generatedBriefText ? (
-                    <div className="space-y-3 text-[10px] font-semibold text-gray-500">
-                      <p className="leading-relaxed font-normal">Generate a 7-point curated global brief from today's headlines across all platform sectors.</p>
-                      <button 
-                        onClick={handleGenerateBrief}
-                        disabled={isBriefGenerating}
-                        className="w-full bg-[#1D1D46] hover:bg-[#152e4f] text-white font-bold py-2 rounded-lg transition-colors uppercase text-xs disabled:opacity-50"
-                      >
-                        {isBriefGenerating ? "Generating Brief..." : "Read Full AI Brief"}
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="space-y-3 text-[10px] font-semibold leading-relaxed">
-                      <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-lg border border-gray-150 dark:border-gray-800 text-gray-650 dark:text-gray-300 font-normal whitespace-pre-line">
-                        {generatedBriefText}
-                      </div>
-                      <button 
-                        onClick={() => setGeneratedBriefText(null)}
-                        className="text-[9px] font-bold text-blue-500 hover:underline uppercase"
-                      >
-                        Reset Brief
-                      </button>
-                    </div>
-                  )}
-                </div>
 
-                {/* ── Ask AI Chat Assistant Widget ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block border-b border-gray-100 dark:border-gray-800 pb-2">
-                    Ask AI About Global Headlines
-                  </span>
-                  
-                  <div className="space-y-3 text-xs font-semibold">
-                    <div className="flex gap-1.5 flex-wrap">
-                      {["What are the biggest technology developments today?", "Summarize global trade developments."].map((pq, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => handleAskAi(pq)}
-                          className="text-[9.5px] font-bold border border-gray-205 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900 px-2 py-1 rounded-lg text-left"
-                        >
-                          {pq}
-                        </button>
-                      ))}
-                    </div>
 
-                    <div className="flex gap-1.5 pt-1">
-                      <input 
-                        type="text" 
-                        placeholder="Ask about trade policy..."
-                        value={aiChatQuery}
-                        onChange={(e) => setAiChatQuery(e.target.value)}
-                        className="flex-1 px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-250 dark:border-gray-800 text-[10px] outline-none"
-                      />
-                      <button 
-                        onClick={() => handleAskAi(aiChatQuery)}
-                        disabled={isAiAnswering}
-                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-[9px] px-3 rounded-lg"
-                      >
-                        Ask
-                      </button>
-                    </div>
-
-                    {aiChatResponse && (
-                      <div className="bg-blue-50/50 dark:bg-blue-950/15 p-3 rounded-lg border border-blue-100 dark:border-blue-900/50 text-[10.5px] leading-relaxed text-gray-650 dark:text-gray-300 font-normal">
-                        <strong>AI Response:</strong> {aiChatResponse}
-                      </div>
-                    )}
-                  </div>
-                </div>
 
                 {/* ── Companies Making Headlines ── */}
                 <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
@@ -1161,23 +1013,7 @@ export default function NewsPOCHeadlinesAIEditorAllSectors({ onBack }: Props) {
                   </div>
                 </div>
 
-                {/* ── Expert vs Industry Opinion comparison ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-205 dark:border-gray-800 p-5 rounded-2xl shadow-3xs space-y-3">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block border-b border-gray-100 dark:border-gray-800 pb-2">
-                    Expert vs Industry Opinion
-                  </span>
-                  
-                  <div className="space-y-2 text-xs font-semibold leading-relaxed">
-                    <div className="space-y-0.5">
-                      <span className="text-gray-900 dark:text-white block text-[11px]">Global AI Regulation Curation</span>
-                      <div className="flex gap-2 text-[10px] text-gray-400">
-                        <span>Experts: 58% Positive</span>
-                        <span>•</span>
-                        <span>Industry: 71% Positive</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+
 
                 {/* ── Global Industry Reaction Sentiment breakdown ── */}
                 <div className="bg-white dark:bg-[#0f172a] border border-gray-205 dark:border-gray-800 p-5 rounded-2xl shadow-3xs space-y-3">
@@ -1325,42 +1161,10 @@ export default function NewsPOCHeadlinesAIEditorAllSectors({ onBack }: Props) {
                 </div>
 
                 {/* ── Advertisement banner slot ── */}
-                <div className="bg-gray-100 dark:bg-gray-955/60 border border-gray-200 dark:border-gray-850 border-dashed p-4 rounded-2xl text-center space-y-1">
+                <div className="bg-gray-100 dark:bg-gray-955/60 border border-gray-205 dark:border-gray-850 border-dashed p-4 rounded-2xl text-center space-y-1">
                   <span className="text-[8px] font-bold text-gray-400 block uppercase tracking-widest">Advertisement</span>
                   <p className="text-xs font-bold text-gray-600 dark:text-gray-400">iGEN Ad Network · 300 × 250 Banner Slot</p>
                   <Link href="/eoi" className="text-[9px] font-bold text-blue-500 hover:underline block uppercase mt-1">Request Placement</Link>
-                </div>
-
-                {/* ── Newsletter signup brief ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
-                  <h4 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">
-                    Global AI News Brief
-                  </h4>
-                  <p className="text-[10px] text-gray-500 dark:text-gray-400 leading-relaxed font-normal">
-                    Get the most important AI-curated business headlines and global developments delivered to your inbox.
-                  </p>
-                  
-                  {!subscribedNewsletter ? (
-                    <div className="space-y-2">
-                      <input 
-                        type="email" 
-                        placeholder="work@corporation.com"
-                        value={emailInput}
-                        onChange={(e) => setEmailInput(e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 text-xs outline-none focus:border-blue-500"
-                      />
-                      <button 
-                        onClick={() => { if (emailInput.trim()) { setSubscribedNewsletter(true); showToast("Subscribed successfully!"); } }}
-                        className="w-full bg-[#1D1D46] hover:bg-[#152e4f] text-white font-bold py-2 rounded-lg transition-colors uppercase text-xs"
-                      >
-                        Subscribe
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="bg-emerald-50 dark:bg-emerald-955/20 border border-emerald-300 dark:border-emerald-900 text-emerald-800 dark:text-emerald-300 p-3 rounded-lg text-[10px] font-bold text-center">
-                      ✓ Subscribed to Global AI News Brief!
-                    </div>
-                  )}
                 </div>
 
               </div>
