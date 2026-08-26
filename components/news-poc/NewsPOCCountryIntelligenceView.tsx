@@ -133,6 +133,18 @@ const COUNTRY_INTEL_DB: Record<string, CountryIntelProfile> = {
   }
 };
 
+// Country list for Compare & Bilateral tools
+const COMPARE_COUNTRIES = [
+  { code: "IN", name: "India", flag: "🇮🇳", capital: "New Delhi", gdp: "$3.75T", growth: "+7.3%", currency: "INR (₹)", inflation: "4.8%", tradeBalance: "-$240B", fdi: "$71.4B", exports: "$450B", imports: "$690B" },
+  { code: "AE", name: "United Arab Emirates", flag: "🇦🇪", capital: "Abu Dhabi", gdp: "$507B", growth: "+3.8%", currency: "AED (د.إ)", inflation: "2.4%", tradeBalance: "+$85B", fdi: "$22.4B", exports: "$360B", imports: "$275B" },
+  { code: "US", name: "United States", flag: "🇺🇸", capital: "Washington D.C.", gdp: "$27.9T", growth: "+2.5%", currency: "USD ($)", inflation: "3.2%", tradeBalance: "-$1.07T", fdi: "$285B", exports: "$2.05T", imports: "$3.12T" },
+  { code: "DE", name: "Germany", flag: "🇩🇪", capital: "Berlin", gdp: "$4.46T", growth: "+1.2%", currency: "EUR (€)", inflation: "2.1%", tradeBalance: "+$220B", fdi: "$48.6B", exports: "$1.62T", imports: "$1.40T" },
+  { code: "SG", name: "Singapore", flag: "🇸🇬", capital: "Singapore City", gdp: "$501B", growth: "+3.1%", currency: "SGD ($)", inflation: "2.8%", tradeBalance: "+$63B", fdi: "$141B", exports: "$475B", imports: "$412B" },
+  { code: "JP", name: "Japan", flag: "🇯🇵", capital: "Tokyo", gdp: "$4.21T", growth: "+1.4%", currency: "JPY (¥)", inflation: "2.5%", tradeBalance: "-$95B", fdi: "$32.1B", exports: "$715B", imports: "$810B" },
+  { code: "GB", name: "United Kingdom", flag: "🇬🇧", capital: "London", gdp: "$3.34T", growth: "+1.1%", currency: "GBP (£)", inflation: "2.3%", tradeBalance: "-$370B", fdi: "$62.4B", exports: "$520B", imports: "$890B" },
+  { code: "VN", name: "Vietnam", flag: "🇻🇳", capital: "Hanoi", gdp: "$430B", growth: "+6.2%", currency: "VND (₫)", inflation: "3.7%", tradeBalance: "+$14B", fdi: "$36.6B", exports: "$372B", imports: "$358B" }
+];
+
 export default function NewsPOCCountryIntelligenceView() {
   const [selectedCountry, setSelectedCountry] = useState<string>("India");
   const [aiIntelligenceUnlocked, setAiIntelligenceUnlocked] = useState<boolean>(false);
@@ -141,7 +153,27 @@ export default function NewsPOCCountryIntelligenceView() {
   const [newsletterEmail, setNewsletterEmail] = useState<string>("");
   const [newsletterSubscribed, setNewsletterSubscribed] = useState<boolean>(false);
 
+  // Compare Countries states
+  const [compareA, setCompareA] = useState("India");
+  const [compareB, setCompareB] = useState("United Arab Emirates");
+  const [compareC, setCompareC] = useState("Germany");
+  const [comparisonVisible, setComparisonVisible] = useState(false);
+
+  // Bilateral Explorer states
+  const [bilateralA, setBilateralA] = useState("India");
+  const [bilateralB, setBilateralB] = useState("United Arab Emirates");
+  const [bilateralVisible, setBilateralVisible] = useState(false);
+
   const currentIntel = COUNTRY_INTEL_DB[selectedCountry];
+
+  const currentCompareA = COMPARE_COUNTRIES.find(c => c.name === compareA) || COMPARE_COUNTRIES[0];
+  const currentCompareB = COMPARE_COUNTRIES.find(c => c.name === compareB) || COMPARE_COUNTRIES[1];
+  const currentCompareC = COMPARE_COUNTRIES.find(c => c.name === compareC) || COMPARE_COUNTRIES[3];
+
+  const getCountryFlag = (name: string): string => {
+    const match = COMPARE_COUNTRIES.find(c => c.name === name);
+    return match ? match.flag : "🌐";
+  };
 
   return (
     <div className="bg-gray-50 dark:bg-[#070b12] text-gray-900 dark:text-gray-150 min-h-screen pb-16">
@@ -456,29 +488,6 @@ export default function NewsPOCCountryIntelligenceView() {
           </div>
         </section>
 
-        {/* 09. SECTOR INTELLIGENCE */}
-        <section className="space-y-4">
-          <div className="border-b border-gray-200 dark:border-gray-805 pb-3">
-            <h2 className="font-display text-sm font-bold text-gray-955 dark:text-white uppercase tracking-wider">Sector Intelligence</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {currentIntel.growingProducts.map((sector, idx) => (
-              <div key={idx} className="bg-white dark:bg-[#0f172a] border border-gray-205 dark:border-gray-805 rounded-2xl p-5 space-y-2">
-                <span className="text-[8px] font-bold text-blue-650 bg-blue-50 dark:bg-blue-955/20 px-2 py-0.5 rounded uppercase">SECTOR PROFILE</span>
-                <h3 className="text-xs font-bold text-gray-955 dark:text-white leading-tight">{sector}</h3>
-                <p className="text-[10.5px] text-gray-500 font-semibold leading-relaxed">
-                  Accelerated supply chains activity and raw material assembly JVs driving growth.
-                </p>
-                <div className="pt-2 border-t border-gray-100 dark:border-gray-855 flex justify-end">
-                  <Link href="/en/news-poc/feed/sector" className="text-[9px] font-extrabold text-blue-650 hover:underline">
-                    View Sector Hub →
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
 
         {/* 10. POLICY & REGULATORY WATCH */}
         <section className="space-y-4">
@@ -589,26 +598,218 @@ export default function NewsPOCCountryIntelligenceView() {
           </div>
         </section>
 
-        {/* 14. COUNTRY OUTLOOK */}
-        <section className="space-y-4">
-          <div className="border-b border-gray-200 dark:border-gray-805 pb-3">
-            <h2 className="font-display text-sm font-bold text-gray-955 dark:text-white uppercase tracking-wider">Country 6-12 Month Outlook</h2>
+        {/* COMPARE COUNTRIES */}
+        <section id="comparison-section" className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 rounded-2xl p-5 md:p-6 shadow-2xs space-y-6">
+          <div className="border-b border-gray-150 dark:border-gray-855 pb-3">
+            <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
+              <Scale className="h-4.5 w-4.5 text-purple-605" /> Compare Countries
+            </h2>
+            <p className="text-xs text-gray-400 mt-1 leading-normal font-normal">
+              Compare up to three countries side-by-side across economic, trade and business indicators.
+            </p>
           </div>
 
-          <div className="bg-white dark:bg-[#0f172a] border border-gray-205 dark:border-gray-805 p-6 rounded-2xl space-y-3 leading-relaxed text-xs">
-            <h4 className="font-bold text-gray-955 dark:text-white uppercase text-[10px]">Macro Outlook Projection</h4>
-            <p className="text-gray-500 dark:text-slate-350 font-normal">
-              "{currentIntel.outlook}"
-            </p>
-            <div className="pt-3 border-t border-gray-100 dark:border-gray-855 flex justify-end">
-              <button
-                onClick={() => setIsProModalOpen(true)}
-                className="text-purple-650 hover:underline font-bold text-[10px] flex items-center gap-1 cursor-pointer"
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="p-3 bg-gray-55 dark:bg-gray-900 rounded-xl space-y-1 border border-gray-200/50 dark:border-gray-805">
+              <label className="text-[9px] font-bold text-gray-400 uppercase">Select Country A</label>
+              <select
+                value={compareA}
+                onChange={(e) => setCompareA(e.target.value)}
+                className="w-full bg-white dark:bg-gray-955 border border-gray-200 dark:border-gray-800 rounded-lg p-2 text-xs font-bold"
               >
-                Unlock Comprehensive Outlook Datapack <ChevronRight className="h-4 w-4" />
-              </button>
+                {COMPARE_COUNTRIES.map(c => (
+                  <option key={c.code} value={c.name}>{c.flag} {c.name}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="p-3 bg-gray-55 dark:bg-gray-900 rounded-xl space-y-1 border border-gray-200/50 dark:border-gray-805">
+              <label className="text-[9px] font-bold text-gray-400 uppercase">Select Country B</label>
+              <select
+                value={compareB}
+                onChange={(e) => setCompareB(e.target.value)}
+                className="w-full bg-white dark:bg-gray-955 border border-gray-200 dark:border-gray-800 rounded-lg p-2 text-xs font-bold"
+              >
+                {COMPARE_COUNTRIES.map(c => (
+                  <option key={c.code} value={c.name}>{c.flag} {c.name}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="p-3 bg-gray-55 dark:bg-gray-900 rounded-xl space-y-1 border border-gray-200/50 dark:border-gray-805">
+              <label className="text-[9px] font-bold text-gray-400 uppercase">Select Country C</label>
+              <select
+                value={compareC}
+                onChange={(e) => setCompareC(e.target.value)}
+                className="w-full bg-white dark:bg-gray-955 border border-gray-200 dark:border-gray-800 rounded-lg p-2 text-xs font-bold"
+              >
+                {COMPARE_COUNTRIES.map(c => (
+                  <option key={c.code} value={c.name}>{c.flag} {c.name}</option>
+                ))}
+              </select>
             </div>
           </div>
+
+          <div className="flex justify-center pt-2">
+            <button
+              onClick={() => setComparisonVisible(true)}
+              className="bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs px-6 py-3 rounded-xl shadow-xs transition-colors cursor-pointer"
+            >
+              Compare Now
+            </button>
+          </div>
+
+          {comparisonVisible && (
+            <div className="overflow-x-auto border-t border-gray-150 dark:border-gray-855 pt-6">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="bg-gray-50 dark:bg-gray-900 text-gray-455 font-bold border-b border-gray-200 dark:border-gray-800">
+                    <th className="p-3">INDICATOR</th>
+                    <th className="p-3">{currentCompareA.flag} {currentCompareA.name}</th>
+                    <th className="p-3">{currentCompareB.flag} {currentCompareB.name}</th>
+                    <th className="p-3">{currentCompareC.flag} {currentCompareC.name}</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-105 dark:divide-gray-855 font-semibold text-gray-700 dark:text-slate-200">
+                  <tr>
+                    <td className="p-3 font-bold text-gray-905 dark:text-white uppercase tracking-wider text-[10px]">Capital</td>
+                    <td className="p-3">{currentCompareA.capital}</td>
+                    <td className="p-3">{currentCompareB.capital}</td>
+                    <td className="p-3">{currentCompareC.capital}</td>
+                  </tr>
+                  <tr>
+                    <td className="p-3 font-bold text-gray-905 dark:text-white uppercase tracking-wider text-[10px]">Nominal GDP</td>
+                    <td className="p-3 font-mono text-purple-600">{currentCompareA.gdp}</td>
+                    <td className="p-3 font-mono text-purple-600">{currentCompareB.gdp}</td>
+                    <td className="p-3 font-mono text-purple-600">{currentCompareC.gdp}</td>
+                  </tr>
+                  <tr>
+                    <td className="p-3 font-bold text-gray-905 dark:text-white uppercase tracking-wider text-[10px]">GDP Growth</td>
+                    <td className="p-3 text-emerald-500">{currentCompareA.growth}</td>
+                    <td className="p-3 text-emerald-500">{currentCompareB.growth}</td>
+                    <td className="p-3 text-emerald-500">{currentCompareC.growth}</td>
+                  </tr>
+                  <tr>
+                    <td className="p-3 font-bold text-gray-905 dark:text-white uppercase tracking-wider text-[10px]">Currency</td>
+                    <td className="p-3">{currentCompareA.currency}</td>
+                    <td className="p-3">{currentCompareB.currency}</td>
+                    <td className="p-3">{currentCompareC.currency}</td>
+                  </tr>
+                  <tr>
+                    <td className="p-3 font-bold text-gray-905 dark:text-white uppercase tracking-wider text-[10px]">Inflation CPI</td>
+                    <td className="p-3 text-red-500">{currentCompareA.inflation}</td>
+                    <td className="p-3 text-red-500">{currentCompareB.inflation}</td>
+                    <td className="p-3 text-red-500">{currentCompareC.inflation}</td>
+                  </tr>
+                  <tr>
+                    <td className="p-3 font-bold text-gray-905 dark:text-white uppercase tracking-wider text-[10px]">Trade Balance</td>
+                    <td className="p-3 font-mono">{currentCompareA.tradeBalance}</td>
+                    <td className="p-3 font-mono">{currentCompareB.tradeBalance}</td>
+                    <td className="p-3 font-mono">{currentCompareC.tradeBalance}</td>
+                  </tr>
+                  <tr>
+                    <td className="p-3 font-bold text-gray-905 dark:text-white uppercase tracking-wider text-[10px]">FDI Inflows</td>
+                    <td className="p-3 font-mono text-emerald-650">{currentCompareA.fdi}</td>
+                    <td className="p-3 font-mono text-emerald-650">{currentCompareB.fdi}</td>
+                    <td className="p-3 font-mono text-emerald-650">{currentCompareC.fdi}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+
+        {/* BILATERAL TRADE EXPLORER */}
+        <section id="bilateral-section" className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 rounded-2xl p-5 md:p-6 shadow-2xs space-y-6">
+          <div className="border-b border-gray-150 dark:border-gray-855 pb-3">
+            <h2 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
+              <Globe className="h-4.5 w-4.5 text-purple-605" /> Bilateral Trade Explorer
+            </h2>
+            <p className="text-xs text-gray-400 mt-1 leading-normal font-normal">
+              Understand the trade relationship between two countries.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-3 bg-gray-55 dark:bg-gray-900 rounded-xl space-y-1 border border-gray-200/50 dark:border-gray-805">
+              <label className="text-[9px] font-bold text-gray-400 uppercase">Country A (Origin)</label>
+              <select
+                value={bilateralA}
+                onChange={(e) => setBilateralA(e.target.value)}
+                className="w-full bg-white dark:bg-gray-955 border border-gray-200 dark:border-gray-800 rounded-lg p-2 text-xs font-bold"
+              >
+                {COMPARE_COUNTRIES.map(c => (
+                  <option key={c.code} value={c.name}>{c.flag} {c.name}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="p-3 bg-gray-55 dark:bg-gray-900 rounded-xl space-y-1 border border-gray-200/50 dark:border-gray-805">
+              <label className="text-[9px] font-bold text-gray-400 uppercase">Country B (Destination)</label>
+              <select
+                value={bilateralB}
+                onChange={(e) => setBilateralB(e.target.value)}
+                className="w-full bg-white dark:bg-gray-955 border border-gray-200 dark:border-gray-800 rounded-lg p-2 text-xs font-bold"
+              >
+                {COMPARE_COUNTRIES.map(c => (
+                  <option key={c.code} value={c.name}>{c.flag} {c.name}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className="flex justify-center pt-2">
+            <button
+              onClick={() => setBilateralVisible(true)}
+              className="bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs px-6 py-3 rounded-xl shadow-xs transition-colors cursor-pointer"
+            >
+              Analyze Bilateral Corridor
+            </button>
+          </div>
+
+          {bilateralVisible && (
+            <div className="border-t border-gray-150 dark:border-gray-855 pt-6 space-y-6">
+              <div className="p-4 rounded-2xl bg-purple-50/50 dark:bg-purple-955/10 border border-purple-200/40 dark:border-purple-900/40 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div>
+                  <span className="block text-[8.5px] font-bold text-gray-400 uppercase">Bilateral Corridor</span>
+                  <span className="block font-bold text-xs text-gray-900 dark:text-white mt-1">
+                    {getCountryFlag(bilateralA)} {bilateralA} ↔ {getCountryFlag(bilateralB)} {bilateralB}
+                  </span>
+                </div>
+                <div>
+                  <span className="block text-[8.5px] font-bold text-gray-400 uppercase">Total Bilateral Trade</span>
+                  <span className="block font-bold text-xs text-purple-600 mt-1">$87.2 Billion</span>
+                </div>
+                <div>
+                  <span className="block text-[8.5px] font-bold text-gray-400 uppercase">Exports A → B</span>
+                  <span className="block font-bold text-xs text-emerald-500 mt-1">$31.6 Billion</span>
+                </div>
+                <div>
+                  <span className="block text-[8.5px] font-bold text-gray-400 uppercase">Accord Status</span>
+                  <span className="block font-bold text-xs text-purple-600 mt-1">CEPA Active</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+                <div className="p-4 border border-gray-200 dark:border-gray-855 rounded-xl space-y-2">
+                  <h4 className="font-bold text-gray-955 dark:text-white uppercase text-[10px]">Top Traded Products (A → B)</h4>
+                  <ul className="list-disc pl-4 space-y-1 font-semibold text-gray-700 dark:text-slate-350">
+                    <li>Precious metals & jewels ($12.4B)</li>
+                    <li>Refined petrochemical sub-compounds ($8.2B)</li>
+                    <li>Woven apparel and textiles ($4.1B)</li>
+                  </ul>
+                </div>
+                <div className="p-4 border border-gray-200 dark:border-gray-855 rounded-xl space-y-2">
+                  <h4 className="font-bold text-gray-955 dark:text-white uppercase text-[10px]">Top Traded Products (B → A)</h4>
+                  <ul className="list-disc pl-4 space-y-1 font-semibold text-gray-700 dark:text-slate-355">
+                    <li>Heavy machinery & engine spares ($14.6B)</li>
+                    <li>Organic chemical base-compounds ($9.1B)</li>
+                    <li>Precision electronics modules ($6.2B)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )}
         </section>
 
         {/* 15. AI COUNTRY INTELLIGENCE */}
