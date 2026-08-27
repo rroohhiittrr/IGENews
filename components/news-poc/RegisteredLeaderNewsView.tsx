@@ -891,38 +891,6 @@ export default function RegisteredLeaderNewsView() {
           </Card>
         </section>
 
-        {/* ── 18. LEADERSHIP NEWSLETTER ──────────────────────────────────────── */}
-        <section>
-          <Card className="p-6 bg-gradient-to-br from-blue-700 to-indigo-800 text-white border-none space-y-4 shadow-md">
-            <div className="flex items-center gap-3">
-              <Mail className="h-6 w-6 text-white/70" aria-hidden="true" />
-              <div>
-                <h2 className="text-sm font-bold">Leadership News Brief</h2>
-                <p className="text-[10px] text-white/70 mt-0.5">
-                  Get executive appointments, leadership moves, and major business leadership stories delivered to your inbox every morning.
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-3 flex-wrap">
-              <input
-                value={newsletterEmail}
-                onChange={(e) => setNewsletterEmail(e.target.value)}
-                className="flex-1 min-w-52 rounded-xl bg-white/15 border border-white/20 px-4 py-2.5 text-sm text-white placeholder:text-white/50 outline-none focus:bg-white/20"
-                placeholder="Enter your work email..."
-                aria-label="Newsletter email address"
-                type="email"
-              />
-              <button
-                className="bg-white text-blue-900 font-bold text-sm px-6 py-2.5 rounded-xl hover:bg-blue-50 transition-colors shrink-0 shadow-xs"
-                aria-label="Subscribe to Leadership News Brief"
-              >
-                Subscribe →
-              </button>
-            </div>
-            <p className="text-[9px] text-white/50 text-center">Trusted by 28,000+ C-Suite leaders, board directors, and executives · Unsubscribe anytime</p>
-          </Card>
-        </section>
-
         {/* ── 19. FINAL UPGRADE CTA ───────────────────────────────────────────── */}
         <section>
           <div className="p-8 rounded-2xl bg-gradient-to-br from-slate-950 via-indigo-950 to-purple-950 text-white text-center space-y-4 border border-purple-900/50 shadow-xl">

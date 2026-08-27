@@ -54,7 +54,7 @@ export default function ProfileHeader({ user }: ProfileHeaderProps) {
     }
     
     // Default to reader
-    const isReaderPaid = user.readerPlan === "pro" || user.readerPlan === "enterprise";
+    const isReaderPaid = user.readerPlan === "pro" || user.readerPlan === "premium" || user.readerPlan === "enterprise";
     if (isReaderPaid) {
       return { isFree: false, label: "Verified Reader", badgeType: "blue-tick" };
     }

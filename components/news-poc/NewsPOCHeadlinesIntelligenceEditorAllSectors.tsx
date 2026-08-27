@@ -1292,38 +1292,6 @@ export default function NewsPOCHeadlinesIntelligenceEditorAllSectors({ onBack }:
                   <Link href="/eoi" className="text-[9px] font-bold text-blue-500 hover:underline block uppercase mt-1">Request Placement</Link>
                 </div>
 
-                {/* ── Newsletter signup brief ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
-                  <h4 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">
-                    Global Intelligence Brief
-                  </h4>
-                  <p className="text-[10px] text-gray-500 dark:text-gray-400 leading-relaxed font-normal">
-                    Receive the most important business intelligence, market developments and emerging opportunities.
-                  </p>
-                  
-                  {!subscribedNewsletter ? (
-                    <div className="space-y-2">
-                      <input 
-                        type="email" 
-                        placeholder="work@corporation.com"
-                        value={emailInput}
-                        onChange={(e) => setEmailInput(e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 text-xs outline-none focus:border-blue-500"
-                      />
-                      <button 
-                        onClick={() => { if (emailInput.trim()) { setSubscribedNewsletter(true); showToast("Subscribed successfully!"); } }}
-                        className="w-full bg-[#1D1D46] hover:bg-[#152e4f] text-white font-bold py-2 rounded-lg transition-colors uppercase text-xs"
-                      >
-                        Subscribe
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="bg-emerald-50 dark:bg-emerald-955/20 border border-emerald-300 dark:border-emerald-900 text-emerald-800 dark:text-emerald-300 p-3 rounded-lg text-[10px] font-bold text-center">
-                      ✓ Subscribed to Global Intelligence Brief!
-                    </div>
-                  )}
-                </div>
-
               </div>
 
             </div>

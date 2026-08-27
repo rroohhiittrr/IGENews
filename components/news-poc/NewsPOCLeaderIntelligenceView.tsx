@@ -184,7 +184,11 @@ const AI_LEADERSHIP_PREVIEWS: Record<string, { summary: string; focus: string; p
   }
 };
 
-export default function NewsPOCLeaderIntelligenceView() {
+interface NewsPOCLeaderIntelligenceViewProps {
+  view?: string;
+}
+
+export default function NewsPOCLeaderIntelligenceView({ view }: NewsPOCLeaderIntelligenceViewProps = {}) {
   const [searchQuery, setSearchQuery] = useState("");
   const [aiPreviewLeader, setAiPreviewLeader] = useState("Jensen Huang");
   const [aiPromptInput, setAiPromptInput] = useState("");
@@ -516,53 +520,6 @@ export default function NewsPOCLeaderIntelligenceView() {
               </div>
             </Card>
 
-            {/* AI Leadership Intelligence Preview (Preserved) */}
-            <Card className="p-5 space-y-4">
-              <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3">
-                <span className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5 font-display">
-                  <Sparkles className="h-3.5 w-3.5 text-purple-600" />
-                  AI Leadership Intelligence
-                </span>
-                <select
-                  value={aiPreviewLeader}
-                  onChange={(e) => setAiPreviewLeader(e.target.value)}
-                  className="text-[10px] font-bold border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-2 py-0.5 rounded outline-none font-mono"
-                >
-                  {["Jensen Huang", "Nandan Nilekani", "Shaktikanta Das"].map(lName => (
-                    <option key={lName} value={lName}>{lName}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="space-y-3">
-                <div className="p-3.5 bg-purple-50/50 dark:bg-purple-950/10 border border-purple-200/40 dark:border-purple-900/40 rounded-2xl space-y-2">
-                  <span className="text-[9px] font-bold text-purple-600 dark:text-purple-400 uppercase tracking-widest block font-mono">AI Summary</span>
-                  <p className="text-[11px] text-gray-700 dark:text-gray-300 italic leading-relaxed">
-                    "{AI_LEADERSHIP_PREVIEWS[aiPreviewLeader]?.summary}"
-                  </p>
-                </div>
-
-                <div className="space-y-1.5 pt-1 text-[10px] text-gray-500">
-                  <div className="p-2 bg-gray-50 dark:bg-gray-900/60 rounded-lg border border-gray-200/60/40 dark:border-gray-800 font-medium">
-                    🔒 Leadership Focus: {AI_LEADERSHIP_PREVIEWS[aiPreviewLeader]?.focus}
-                  </div>
-                  <div className="p-2 bg-gray-50 dark:bg-gray-900/60 rounded-lg border border-gray-200/60/40 dark:border-gray-800/80 font-medium">
-                    🔒 Strategic Priorities: {AI_LEADERSHIP_PREVIEWS[aiPreviewLeader]?.priorities}
-                  </div>
-                  <div className="p-2 bg-gray-50 dark:bg-gray-900/60 rounded-lg border border-gray-200/60/40 dark:border-gray-800/80 font-medium">
-                    🔒 Recent Developments: {AI_LEADERSHIP_PREVIEWS[aiPreviewLeader]?.developments}
-                  </div>
-                </div>
-
-                <Link
-                  href="/eoi"
-                  className="block text-center w-full bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs py-2.5 rounded-xl shadow-sm transition-colors"
-                >
-                  Unlock AI Intelligence →
-                </Link>
-              </div>
-            </Card>
-
             {/* Strategic Board Alert (Preserved) */}
             <div className="border border-purple-200 dark:border-purple-950/40 bg-purple-50/50 dark:bg-purple-950/10 p-5 rounded-2xl space-y-2">
               <h4 className="font-bold text-xs text-purple-600 flex items-center gap-1.5 uppercase">
@@ -637,148 +594,7 @@ export default function NewsPOCLeaderIntelligenceView() {
           </Card>
         </section>
 
-        {/* ── 15. AI LEADERSHIP INTELLIGENCE (ASK AI ENGINE) ──────────────────── */}
-        <section id="ask-ai-intelligence-section" className="space-y-4">
-          <Card className="p-6 bg-gradient-to-br from-[#1b0d2a] via-slate-950 to-indigo-950 text-white border-purple-900/60 shadow-xl space-y-5">
-            <div className="flex items-center justify-between gap-3 flex-wrap">
-              <div className="space-y-1">
-                <span className="text-[9px] font-bold text-purple-300 uppercase tracking-widest block font-mono">Interactive AI Intelligence</span>
-                <h3 className="text-lg font-bold text-white">Ask AI About Leadership & Executive Movements</h3>
-              </div>
-              <Badge color="purple">PRO DECISION SUPPORT AI</Badge>
-            </div>
 
-            <div className="flex flex-wrap gap-2">
-              {[
-                "What leadership trends are emerging in technology?",
-                "Which sectors are seeing the most CEO changes?",
-                "Summarize executive movements this month.",
-                "Compare leadership activity in India and the US."
-              ].map((prompt) => (
-                <button
-                  key={prompt}
-                  onClick={() => handleAskExecutiveAi(prompt)}
-                  className="text-xs bg-white/10 hover:bg-white/20 border border-white/10 px-3 py-1.5 rounded-lg text-purple-200 transition-colors"
-                >
-                  "{prompt}"
-                </button>
-              ))}
-            </div>
-
-            {aiAnalysisResult && (
-              <div className="p-4 bg-purple-950/50 rounded-xl border border-purple-800/60 space-y-2 text-xs text-purple-100 leading-relaxed">
-                <div className="flex items-center gap-1.5 text-purple-300 font-bold text-[10px] uppercase font-mono">
-                  <Sparkles className="h-3.5 w-3.5 text-purple-400" />
-                  <span>AI Synthesis ({aiPromptInput})</span>
-                </div>
-                <p>{aiAnalysisResult}</p>
-                <div className="text-[9px] text-gray-400 pt-1 border-t border-purple-800/40">
-                  AI-generated analysis based on available platform corporate disclosures and executive movements.
-                </div>
-              </div>
-            )}
-          </Card>
-        </section>
-
-        {/* ── PREDICTIVE LEADER SIGNALS (PRESERVED) ────────────────────────────── */}
-        <section className="space-y-4">
-          <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
-            <div>
-              <h3 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Predictive C-Suite Movement Signals</h3>
-              <p className="text-xs text-gray-500">AI-modeled forward projections across global leadership nodes.</p>
-            </div>
-            <span className="bg-purple-100 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 text-[9px] font-bold px-2.5 py-0.5 rounded-full font-mono">
-              Model V4 Active
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {PREDICTIVE_LEADER_SIGNALS.map((item, idx) => (
-              <div key={idx} className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl flex flex-col justify-between shadow-xs space-y-4">
-                <div className="space-y-1.5">
-                  <span className="text-[8px] font-bold text-purple-600 block uppercase font-mono">{item.sig}</span>
-                  <h4 className="text-xs font-bold text-gray-900 dark:text-white">{item.name}</h4>
-                  <p className="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed font-normal">{item.desc}</p>
-                </div>
-                <div className="space-y-1">
-                  <div className="flex justify-between text-[9px] text-gray-400 font-bold font-mono">
-                    <span>Confidence</span>
-                    <span>{item.w}</span>
-                  </div>
-                  <div className="h-2 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-                    <div className={`h-full ${item.color} rounded-full`} style={{ width: item.w }} />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ── 18. MY INTELLIGENCE WATCHLIST & 19. INTELLIGENCE ALERTS ─────────── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-
-          {/* 18. My Intelligence Watchlist */}
-          <div className="lg:col-span-6 space-y-4">
-            <Card className="p-5 h-full space-y-4">
-              <SectionTitle
-                title="My Intelligence Watchlist"
-                subtitle="Monitored leadership signals, corporate topics, and active tracking status."
-                action={<Bookmark className="h-4 w-4 text-purple-600" />}
-              />
-              <div className="space-y-2.5">
-                {watchlist.map((item, idx) => (
-                  <div key={idx} className="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 flex items-center justify-between text-xs">
-                    <div className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-purple-600" />
-                      <span className="font-bold text-gray-900 dark:text-white">{item}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Link href="/eoi" className="text-[10px] font-bold text-purple-600 hover:underline">
-                        Dossier →
-                      </Link>
-                      <button onClick={() => toggleWatchlist(item)} className="text-[10px] text-gray-400 hover:text-rose-500">
-                        ✕
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          </div>
-
-          {/* 19. Intelligence Alerts */}
-          <div className="lg:col-span-6 space-y-4">
-            <Card className="p-5 h-full space-y-4">
-              <SectionTitle
-                title="Leadership Intelligence Alerts"
-                subtitle="Receive alerts on executive departures, new CEO announcements, or board governance moves."
-                action={<Bell className="h-4 w-4 text-purple-600" />}
-              />
-              <div className="space-y-2">
-                {[
-                  "CEO Appointment in Technology",
-                  "Cross-Border Board Restructuring",
-                  "Semiconductor C-Suite Hire",
-                  "Green Hydrogen Mandate Creation"
-                ].map((alertType) => (
-                  <div key={alertType} className="p-2.5 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 flex items-center justify-between text-xs">
-                    <span className="font-semibold text-gray-900 dark:text-white">{alertType}</span>
-                    <button
-                      onClick={() => toggleAlert(alertType)}
-                      className={`text-[10px] px-3 py-1 rounded-lg font-bold transition-all ${
-                        alertActive[alertType]
-                          ? "bg-purple-600 text-white"
-                          : "bg-gray-200 dark:bg-gray-800 text-gray-500"
-                      }`}
-                    >
-                      {alertActive[alertType] ? "Active Alert ✓" : "Enable"}
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          </div>
-        </div>
 
         {/* ── 22. PEER-REVIEWED RESEARCH BRIEFS (PRESERVED) ───────────────────── */}
         <section className="space-y-4">
@@ -809,36 +625,6 @@ export default function NewsPOCLeaderIntelligenceView() {
               </Card>
             ))}
           </div>
-        </section>
-
-        {/* ── 25. BOARDROOM ADVISORY & 26. UPGRADE CTA (PRESERVED) ─────────────── */}
-        <section>
-          <Card className="p-6 bg-gradient-to-br from-slate-950 to-[#26124d] text-white border border-purple-900/60 shadow-lg space-y-4">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-4">
-              <div>
-                <span className="text-[9px] font-bold text-purple-400 uppercase tracking-widest font-mono">Boardroom Advisory</span>
-                <h3 className="text-base font-bold text-white mt-1">Commission Custom C-Suite Leadership Benchmarks & Board Dossiers</h3>
-                <p className="text-xs text-slate-300 font-normal mt-0.5">Need bespoke executive reputation intelligence, competitor CEO decision tracking, or keynote representation? Submit a board RFP.</p>
-              </div>
-              <Link href="/eoi" className="bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shrink-0 shadow-sm">
-                Submit Board Inquiry
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-              {[
-                { title: "C-Suite Reputation Dossiers", desc: "Global perception & media footprint" },
-                { title: "Competitor Strategy Audits", desc: "Board-level decision tracking" },
-                { title: "Keynote & Summit Placement", desc: "Verified stage representations" },
-                { title: "Bilateral Alliance Advisory", desc: "Cross-border CEO matchmaking" }
-              ].map((srv, idx) => (
-                <div key={idx} className="p-3 bg-white/5 border border-white/10 rounded-xl space-y-1">
-                  <h4 className="text-xs font-bold text-white">{srv.title}</h4>
-                  <p className="text-[9px] text-slate-400">{srv.desc}</p>
-                </div>
-              ))}
-            </div>
-          </Card>
         </section>
 
       </div>

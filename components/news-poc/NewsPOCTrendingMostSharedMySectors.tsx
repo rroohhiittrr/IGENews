@@ -770,7 +770,7 @@ export default function NewsPOCTrendingMostSharedMySectors({ onBack }: Props) {
                 </div>
 
                 {/* ── Most Discussed After Sharing ── */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+                <div className="pt-4">
                   
                   {/* Highly discussed */}
                   <div className="space-y-3">
@@ -798,26 +798,7 @@ export default function NewsPOCTrendingMostSharedMySectors({ onBack }: Props) {
                     </div>
                   </div>
 
-                  {/* Share Impact Matrix */}
-                  <div className="space-y-3">
-                    <h4 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider border-b border-gray-200 dark:border-gray-800 pb-2">
-                      Sharing Attribution Impact
-                    </h4>
-                    <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-4 rounded-xl shadow-3xs space-y-3 text-[10px]">
-                      <div className="flex items-center justify-between border-b border-gray-50 dark:border-gray-850 pb-1.5">
-                        <span className="text-gray-400 font-semibold">Total Shares</span>
-                        <span className="font-bold">18.4K</span>
-                      </div>
-                      <div className="flex items-center justify-between border-b border-gray-50 dark:border-gray-850 pb-1.5">
-                        <span className="text-gray-400 font-semibold">Derived Views</span>
-                        <span className="font-bold text-emerald-500">4.7M Views</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-gray-400 font-semibold">Attributed Engagement</span>
-                        <span className="font-bold">12.2K Comments</span>
-                      </div>
-                    </div>
-                  </div>
+
 
                 </div>
 
@@ -1077,29 +1058,7 @@ export default function NewsPOCTrendingMostSharedMySectors({ onBack }: Props) {
                   </button>
                 </div>
 
-                {/* ── Save / Bookmark ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-3xs space-y-3">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block border-b border-gray-50 dark:border-gray-850 pb-2 font-bold font-semibold">
-                    Because You Follow These Sectors
-                  </span>
-                  
-                  <div className="space-y-3">
-                    {[
-                      { title: "Bilateral Silicon Chip export agreements signed: US-India Corridors", sec: "Electronics & IT" },
-                      { title: "Hydrogen cargo corridors open in Western port hubs", sec: "Energy & Sustainability" }
-                    ].map((item, idx) => (
-                      <div key={idx} className="space-y-1">
-                        <span className="text-[8px] font-bold text-blue-600 dark:text-blue-400 uppercase">{item.sec}</span>
-                        <Link 
-                          href="/en/news-poc/article/sec-1"
-                          className="text-xs font-bold text-gray-900 dark:text-white block hover:underline leading-tight"
-                        >
-                          {item.title}
-                        </Link>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+
 
                 {/* ── Sharing Alerts (ALERT) ── */}
                 <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-3xs space-y-3">

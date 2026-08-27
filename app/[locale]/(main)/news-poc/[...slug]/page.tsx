@@ -2575,28 +2575,30 @@ export default function NewsPOCCatchAllPage() {
               </div>
 
               {/* Component 9: Related Premium Pages (Cross-Sell) */}
-              <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow-xs space-y-3">
-                <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider">
-                  Related Premium Pages
-                </h4>
-                <div className="space-y-2 text-xs">
-                  {[
-                    { label: "Company Directory Listings", desc: "Corporate profiles and leads." },
-                    { label: "Executive Leader Registry", desc: "150 CEO monitoring pages." },
-                    { label: "SME Expert Network", desc: "Consultation & advisory panels." }
-                  ].map((item, idx) => (
-                    <div key={idx} className="p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-150/40 rounded flex items-center justify-between">
-                      <div>
-                        <span className="font-bold text-gray-900 dark:text-white block">{item.label}</span>
-                        <span className="text-[9px] text-gray-400 mt-0.5 block">{item.desc}</span>
+              {!isFeedPage && (
+                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow-xs space-y-3">
+                  <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+                    Related Premium Pages
+                  </h4>
+                  <div className="space-y-2 text-xs">
+                    {[
+                      { label: "Company Directory Listings", desc: "Corporate profiles and leads." },
+                      { label: "Executive Leader Registry", desc: "150 CEO monitoring pages." },
+                      { label: "SME Expert Network", desc: "Consultation & advisory panels." }
+                    ].map((item, idx) => (
+                      <div key={idx} className="p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-150/40 rounded flex items-center justify-between">
+                        <div>
+                          <span className="font-bold text-gray-900 dark:text-white block">{item.label}</span>
+                          <span className="text-[9px] text-gray-400 mt-0.5 block">{item.desc}</span>
+                        </div>
+                        <Link href="/eoi" className="text-blue-500 hover:text-blue-600 font-bold flex-shrink-0">
+                          <ChevronRight className="h-4 w-4" />
+                        </Link>
                       </div>
-                      <Link href="/eoi" className="text-blue-500 hover:text-blue-600 font-bold flex-shrink-0">
-                        <ChevronRight className="h-4 w-4" />
-                      </Link>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Component 10: Sponsored Content */}
               <div className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-850 rounded-2xl p-5 shadow-xs space-y-2">

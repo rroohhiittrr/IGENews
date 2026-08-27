@@ -1,14 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Sparkles } from "lucide-react";
 import { NEWS_POC_MENU_ITEMS, MegaMenuItem } from "./newsPOCData";
 
 export default function NewsPOCMegaMenu() {
   const pathname = usePathname();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [aiPlusActive, setAiPlusActive] = useState<boolean>(false);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("ign_ai_plus");
+    setAiPlusActive(stored === "true");
+
+    const handleGlobalChange = () => {
+      setAiPlusActive(localStorage.getItem("ign_ai_plus") === "true");
+    };
+
+    window.addEventListener("ign_ai_plus_changed", handleGlobalChange);
+    return () => {
+      window.removeEventListener("ign_ai_plus_changed", handleGlobalChange);
+    };
+  }, []);
 
   const isActive = (slug: string) => {
     // Handle locale prefixes in pathname
@@ -30,6 +45,31 @@ export default function NewsPOCMegaMenu() {
         
         {/* Main 10-item flex container (no wrapping, fits on single line on desktop) */}
         <div className="flex items-center w-full justify-between overflow-visible">
+          {/* AI Plus Toggle Button */}
+          <div className="flex items-center gap-1.5 px-2 py-3.5 mr-2 select-none border-r border-gray-250 dark:border-gray-800 pr-4 shrink-0">
+            <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-1">
+              <Sparkles className="h-3.5 w-3.5 text-indigo-500 animate-pulse" /> AI Plus
+            </span>
+            <button
+              onClick={() => {
+                const newVal = !aiPlusActive;
+                setAiPlusActive(newVal);
+                localStorage.setItem("ign_ai_plus", String(newVal));
+                window.dispatchEvent(new Event("ign_ai_plus_changed"));
+              }}
+              className={`w-8 h-4 rounded-full transition-all relative shrink-0 ${
+                aiPlusActive ? "bg-indigo-600 shadow-[0_0_8px_rgba(79,70,229,0.5)]" : "bg-gray-300 dark:bg-gray-700"
+              }`}
+              aria-label="Toggle AI Plus Mode"
+            >
+              <span
+                className={`w-3 h-3 rounded-full bg-white absolute top-0.5 transition-all ${
+                  aiPlusActive ? "right-0.5" : "left-0.5"
+                }`}
+              />
+            </button>
+          </div>
+
           {NEWS_POC_MENU_ITEMS.map((item, index) => {
             const isSelected = isActive(item.slug);
             const isOpen = openIndex === index;

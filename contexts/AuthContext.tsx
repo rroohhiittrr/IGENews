@@ -10,7 +10,7 @@ export interface UserProfile {
   email: string;
   mobile?: string;
   plan: "free" | "starter" | "pro" | "enterprise";
-  readerPlan?: "free" | "pro" | "enterprise";
+  readerPlan?: "free" | "pro" | "premium" | "enterprise";
   smePlan?: "none" | "free" | "pro" | "elite";
   associateSmePlan?: "none" | "free" | "plus" | "premium";
   companyPlan?: "none" | "free" | "silver" | "gold";

@@ -45,7 +45,7 @@ export default function CheckoutModal({
 
         if (category === "reader") {
           updatePayload.readerPlan = planId;
-          updatePayload.plan = planId === "free" ? "free" : planId === "pro" ? "pro" : "enterprise";
+          updatePayload.plan = planId === "free" ? "free" : (planId === "pro" || planId === "premium") ? "pro" : "enterprise";
         } else {
           if (isFreePlan) {
             // Initiate onboarding flow

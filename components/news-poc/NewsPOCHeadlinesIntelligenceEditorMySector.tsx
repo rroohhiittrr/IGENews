@@ -686,68 +686,9 @@ export default function NewsPOCHeadlinesIntelligenceEditorMySector({ onBack }: P
                   </div>
                 )}
 
-                {/* ── My Sector Snapshot ── */}
-                <div className="space-y-4 pt-4">
-                  <div className="border-b border-gray-200 dark:border-gray-800 pb-2">
-                    <h3 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">
-                      My Sector Snapshot
-                    </h3>
-                  </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-semibold">
-                    {MOCK_SNAPSHOTS.map((sec, idx) => (
-                      <div key={idx} className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-4 rounded-xl shadow-xs space-y-2">
-                        <div className="flex items-center gap-1.5 text-sm">
-                          <span>{sec.icon}</span>
-                          <span className="font-bold text-gray-900 dark:text-white text-xs">{sec.sectorName.split(" & ")[0]}</span>
-                        </div>
-                        <div className="grid grid-cols-2 gap-2 text-[10px] text-gray-500 pt-2 border-t border-gray-50 dark:border-gray-800">
-                          <div>
-                            <span className="font-extrabold text-blue-500">{sec.updatesCount}</span> updates
-                          </div>
-                          <div>
-                            <span className="font-extrabold text-amber-500">{sec.developmentsCount}</span> major devs
-                          </div>
-                          <div>
-                            <span className="font-extrabold text-purple-500">{sec.trendsCount}</span> trends
-                          </div>
-                          <div>
-                            <span className="font-extrabold text-red-500">{sec.highImpactCount}</span> high-impact
-                          </div>
-                        </div>
-                        <Link 
-                          href={`/en/news-poc/sector/${sec.code}`}
-                          className="text-[9px] font-bold text-blue-500 hover:underline uppercase block pt-1 border-t border-gray-55 dark:border-gray-800/40"
-                        >
-                          Explore Sector Curation →
-                        </Link>
-                      </div>
-                    ))}
-                  </div>
-                </div>
 
-                {/* ── Market Snapshot ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 p-5 rounded-2xl shadow-3xs space-y-4">
-                  <div className="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-2">
-                    <h3 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
-                      <BarChart2 className="h-4 w-4 text-blue-500" /> Market Snapshot
-                    </h3>
-                  </div>
 
-                  <div className="grid grid-cols-3 gap-4 text-center">
-                    {[
-                      { title: "Bilateral CAPEX index", metric: "+14.2% CapEx", desc: "Grid connectivity investments", up: true },
-                      { title: "Generic customs clearing", metric: "12 Hours", desc: "Digital rails acceleration", up: false },
-                      { title: "Sodium spot materials", metric: "+18% Sourcing cost", desc: "Feedstock volatilities", up: true }
-                    ].map((row, idx) => (
-                      <div key={idx} className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-xl border border-gray-150 dark:border-gray-850">
-                        <span className="text-[8px] font-bold text-gray-400 block uppercase tracking-wider">{row.title}</span>
-                        <span className="text-xs font-extrabold text-gray-905 dark:text-white block mt-1.5">{row.metric}</span>
-                        <p className="text-[8px] text-gray-400 mt-1 font-normal leading-tight">{row.desc}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
 
                 {/* ── What's Changing in followed sectors ── */}
                 <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
@@ -776,57 +717,7 @@ export default function NewsPOCHeadlinesIntelligenceEditorMySector({ onBack }: P
                   </div>
                 </div>
 
-                {/* ── Emerging Opportunities ── */}
-                <div className="space-y-4 pt-4">
-                  <div className="border-b border-gray-200 dark:border-gray-800 pb-2">
-                    <h3 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">
-                      Emerging Opportunities
-                    </h3>
-                  </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-semibold">
-                    {MOCK_OPPORTUNITIES.map((opp, idx) => (
-                      <div key={idx} className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-4 rounded-xl shadow-xs flex flex-col justify-between min-h-[140px]">
-                        <div className="space-y-1">
-                          <div className="flex justify-between items-center">
-                            <span className="bg-emerald-50 text-emerald-600 dark:bg-emerald-950/20 text-[8px] font-bold px-2 py-0.5 rounded font-mono uppercase">
-                              {opp.category}
-                            </span>
-                            {opp.premiumRequired && <span className="bg-amber-500 text-gray-950 text-[7px] font-extrabold px-1 rounded font-mono">PRO</span>}
-                          </div>
-                          <h4 className="text-xs font-bold text-gray-900 dark:text-white leading-tight mt-2">{opp.title}</h4>
-                          <p className="text-[9px] text-gray-400 font-normal leading-normal">{opp.whyItMatters}</p>
-                        </div>
-                        <div className="pt-2 border-t border-gray-50 dark:border-gray-800 mt-2 text-[10px] flex justify-between items-center">
-                          <span className="text-gray-400 font-semibold">{opp.sector}</span>
-                          <Link href="/eoi" className="text-blue-500 hover:underline uppercase text-[9px] font-bold">Explore →</Link>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* ── Sector Watchlist ── */}
-                <div className="bg-[#E63946]/5 border border-red-500/10 p-5 rounded-2xl space-y-3">
-                  <div className="flex items-center gap-2 text-red-600 dark:text-red-400 border-b border-red-500/10 pb-2">
-                    <ShieldAlert className="h-4 w-4 animate-pulse" />
-                    <h3 className="font-display text-xs font-bold uppercase tracking-widest">Sector Watchlist</h3>
-                  </div>
-                  <div className="space-y-3">
-                    {MOCK_WATCHLIST.map((item, idx) => (
-                      <div key={idx} className="flex justify-between items-start gap-4 text-xs font-semibold">
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <span className="bg-red-500 text-white text-[7px] font-mono px-1 py-0.2 rounded uppercase">{item.riskLevel}</span>
-                            <span className="text-[10px] text-gray-400">{item.sector}</span>
-                          </div>
-                          <span className="text-gray-900 dark:text-white block leading-snug">{item.why}</span>
-                        </div>
-                        <button onClick={() => showToast("Loading risk audit details...")} className="text-red-500 hover:underline uppercase text-[9.5px] font-bold shrink-0">View →</button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
 
               </div>
 
@@ -990,100 +881,11 @@ export default function NewsPOCHeadlinesIntelligenceEditorMySector({ onBack }: P
                   </div>
                 </div>
 
-                {/* ── My Daily Intelligence Brief ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
-                  <div className="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-2">
-                    <h4 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">My Daily Intelligence Brief</h4>
-                    <span className="bg-amber-500 text-slate-950 text-[7px] font-extrabold px-1 rounded font-mono">PRO</span>
-                  </div>
 
-                  {!generatedBriefText ? (
-                    <div className="space-y-3 text-[10px] font-semibold text-gray-500">
-                      <p className="leading-relaxed font-normal">Generate a 6-point curated B2B intelligence brief from today's active reporting lists.</p>
-                      <button 
-                        onClick={handleGenerateBrief}
-                        disabled={isBriefGenerating}
-                        className="w-full bg-[#1D1D46] hover:bg-[#152e4f] text-white font-bold py-2 rounded-lg transition-colors uppercase text-xs disabled:opacity-50"
-                      >
-                        {isBriefGenerating ? "Generating Brief..." : "Read Full Brief"}
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="space-y-3 text-[10px] font-semibold leading-relaxed">
-                      <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-lg border border-gray-150 dark:border-gray-800 text-gray-600 dark:text-gray-300 font-normal whitespace-pre-line">
-                        {generatedBriefText}
-                      </div>
-                      <button 
-                        onClick={() => setGeneratedBriefText(null)}
-                        className="text-[9px] font-bold text-blue-500 hover:underline uppercase"
-                      >
-                        Reset Brief
-                      </button>
-                    </div>
-                  )}
-                </div>
 
-                {/* ── Ask Intelligence AI chat Widget ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block border-b border-gray-100 dark:border-gray-800 pb-2">
-                    Ask Intelligence AI
-                  </span>
-                  
-                  <div className="space-y-3 text-xs font-semibold">
-                    <div className="flex gap-1.5 flex-wrap">
-                      {["What are the biggest risks in my sectors?", "Which sector has the strongest growth signals?"].map((pq, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => handleAskAi(pq)}
-                          className="text-[9.5px] font-bold border border-gray-205 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900 px-2 py-1 rounded-lg text-left"
-                        >
-                          {pq}
-                        </button>
-                      ))}
-                    </div>
 
-                    <div className="flex gap-1.5 pt-1">
-                      <input 
-                        type="text" 
-                        placeholder="Ask about active opportunities..."
-                        value={aiChatQuery}
-                        onChange={(e) => setAiChatQuery(e.target.value)}
-                        className="flex-1 px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-250 dark:border-gray-800 text-[10px] outline-none"
-                      />
-                      <button 
-                        onClick={() => handleAskAi(aiChatQuery)}
-                        disabled={isAiAnswering}
-                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-[9px] px-3 rounded-lg"
-                      >
-                        Ask
-                      </button>
-                    </div>
 
-                    {aiChatResponse && (
-                      <div className="bg-blue-50/50 dark:bg-blue-955/15 p-3 rounded-lg border border-blue-100 dark:border-blue-900/50 text-[10.5px] leading-relaxed text-gray-655 dark:text-gray-300 font-normal">
-                        <strong>AI Response:</strong> {aiChatResponse}
-                      </div>
-                    )}
-                  </div>
-                </div>
 
-                {/* ── Timeline Widget ── */}
-                {filteredArticles.length > 0 && filteredArticles[0].timeline.length > 0 && (
-                  <div className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 p-5 rounded-2xl shadow-3xs space-y-3">
-                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block border-b border-gray-100 dark:border-gray-800 pb-2">
-                      Intelligence Timeline
-                    </span>
-                    
-                    <div className="space-y-3.5 text-xs">
-                      {filteredArticles[0].timeline.map((step, idx) => (
-                        <div key={idx} className="flex gap-2.5 items-start">
-                          <span className="bg-blue-50 dark:bg-blue-955/20 text-blue-500 text-[8.5px] font-bold px-1.5 py-0.5 rounded font-mono uppercase shrink-0">{step.dateStr}</span>
-                          <span className="text-gray-600 dark:text-gray-400 leading-snug font-semibold">{step.event}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
 
                 {/* ── Recommended Intelligence Reports ── */}
                 <div className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 p-4 rounded-2xl shadow-sm space-y-3">
@@ -1207,37 +1009,7 @@ export default function NewsPOCHeadlinesIntelligenceEditorMySector({ onBack }: P
                   <Link href="/eoi" className="text-[9px] font-bold text-blue-500 hover:underline block uppercase mt-1">Request Placement</Link>
                 </div>
 
-                {/* ── Newsletter signup brief ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
-                  <h4 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">
-                    My Sector Intelligence Brief
-                  </h4>
-                  <p className="text-[10px] text-gray-500 dark:text-gray-400 leading-relaxed font-normal">
-                    Receive the most important intelligence from the sectors you follow.
-                  </p>
-                  
-                  {!subscribedNewsletter ? (
-                    <div className="space-y-2">
-                      <input 
-                        type="email" 
-                        placeholder="work@corporation.com"
-                        value={emailInput}
-                        onChange={(e) => setEmailInput(e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 text-xs outline-none focus:border-blue-500"
-                      />
-                      <button 
-                        onClick={() => { if (emailInput.trim()) { setSubscribedNewsletter(true); showToast("Subscribed successfully!"); } }}
-                        className="w-full bg-[#1D1D46] hover:bg-[#152e4f] text-white font-bold py-2 rounded-lg transition-colors uppercase text-xs"
-                      >
-                        Subscribe
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="bg-emerald-50 dark:bg-emerald-955/20 border border-emerald-300 dark:border-emerald-900 text-emerald-800 dark:text-emerald-300 p-3 rounded-lg text-[10px] font-bold text-center">
-                      ✓ Subscribed to Sector Intelligence Brief!
-                    </div>
-                  )}
-                </div>
+
 
               </div>
 

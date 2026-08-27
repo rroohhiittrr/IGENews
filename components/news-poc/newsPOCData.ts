@@ -246,7 +246,9 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
         label: "Leader Intelligence",
         slug: "intelligence",
         description: "C-suite strategic moves, executive quotes, leadership trends, and predictive signals.",
-        subSubItems: []
+        subSubItems: [
+          { label: "Compare Leaders", slug: "compare", description: "Compare corporate leaders side-by-side across influence, focus, and metrics." }
+        ]
       }
     ]
   },
@@ -312,7 +314,9 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
         label: "Sector Intelligence",
         slug: "intelligence",
         description: "Merged sector reports, KPIs, and predictive charts.",
-        subSubItems: []
+        subSubItems: [
+          { label: "Compare Sector", slug: "compare", description: "Compare industrial sectors side-by-side." }
+        ]
       },
       {
         label: "Industry Intelligence",
