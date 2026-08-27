@@ -407,7 +407,7 @@ export default function ReaderDashboard() {
                   <h2 className="text-2xl font-bold text-[#1D1D46] dark:text-white leading-tight flex items-center gap-1.5">
                     {editName}
                     {currentPlan === "enterprise" && (
-                      <Check className="w-5 h-5 text-blue-500 fill-blue-500/20 stroke-[3px]" title="Verified B2B Member" />
+                      <Check className="w-5 h-5 text-blue-500 fill-blue-500/20 stroke-[3px]" />
                     )}
                   </h2>
                   {currentPlan === "enterprise" && (

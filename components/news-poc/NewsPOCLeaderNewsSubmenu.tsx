@@ -503,7 +503,7 @@ export default function NewsPOCLeaderNewsSubmenu({ tier, view }: Props) {
     return (
       <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100">
         <SubMenuTabs />
-        <NewsPOCLeaderIntelligenceView />
+        <NewsPOCLeaderIntelligenceView view={view} />
       </div>
     );
   }

@@ -32,7 +32,7 @@ export default function SMESovereignDashboard() {
   const displayCity = profile.city || "New Delhi";
   const displayCountry = profile.country || "India";
   const profileUrl = typeof window !== "undefined"
-    ? `${window.location.origin}/${locale}/sme/${user?.uid || "profile"}`
+    ? `${window.location.origin}/${locale}/sme/${user?.id || "profile"}`
     : "";
 
   // Mock sovereign-tier stats

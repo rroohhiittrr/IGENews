@@ -53,6 +53,7 @@ type Submenu = "all" | "engagement" | "intelligence" | "industry";
 
 interface Props {
   submenu: Submenu;
+  view?: string;
 }
 
 const SUBMENU_CONFIG: Record<Submenu, {
@@ -166,7 +167,7 @@ function SectionTitle({ title, action }: { title: string; action?: ReactNode }) 
   );
 }
 
-export default function NewsPOCSectorNewsSubmenu({ submenu }: Props) {
+export default function NewsPOCSectorNewsSubmenu({ submenu, view }: Props) {
   const router = useRouter();
   const cfg = SUBMENU_CONFIG[submenu];
   const IconComp = cfg.icon;
@@ -361,7 +362,7 @@ export default function NewsPOCSectorNewsSubmenu({ submenu }: Props) {
       <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
         <SubMenuHeader />
         <div className="mx-auto max-w-7xl px-4 pt-8 lg:px-6">
-          <NewsPOCSectorIntelligenceView />
+          <NewsPOCSectorIntelligenceView view={view} />
         </div>
       </div>
     );
@@ -371,7 +372,7 @@ export default function NewsPOCSectorNewsSubmenu({ submenu }: Props) {
     <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
       <SubMenuHeader />
       <div className="mx-auto max-w-7xl px-4 pt-8 lg:px-6">
-        <NewsPOCSectorIntelligenceView />
+        <NewsPOCSectorIntelligenceView view={view} />
       </div>
     </div>
   );

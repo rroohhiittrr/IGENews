@@ -27,7 +27,7 @@ export default function AssociateSMEFreeDashboard() {
   const [showPublishForm, setShowPublishForm] = useState(false);
 
   const profileUrl = typeof window !== "undefined"
-    ? `${window.location.origin}/${locale}/sme/${user?.uid || "profile"}`
+    ? `${window.location.origin}/${locale}/sme/${user?.id || "profile"}`
     : "";
 
   const handleCopy = () => {

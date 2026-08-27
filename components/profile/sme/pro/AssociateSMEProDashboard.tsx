@@ -38,7 +38,7 @@ export default function AssociateSMEProDashboard() {
   const displayCity = profile.city || "Mumbai";
   const displayCountry = profile.country || "India";
   const profileUrl = typeof window !== "undefined"
-    ? `${window.location.origin}/${locale}/sme/${user?.uid || "profile"}`
+    ? `${window.location.origin}/${locale}/sme/${user?.id || "profile"}`
     : "";
 
   const handleCopy = () => {

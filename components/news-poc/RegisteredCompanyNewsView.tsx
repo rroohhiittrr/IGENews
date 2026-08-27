@@ -52,7 +52,7 @@ interface NewsItem {
   content?: string;
   companyId: string;
   companyName: string;
-  companyInitials: string;
+  companyInitials?: string;
   companyTier: "registered" | "verified" | "top";
   industry: string;
   industryId: string;
@@ -77,6 +77,7 @@ interface NewsItem {
     | "Announcement"
     | "Expansion"
     | "M&A"
+    | "Corporate Restructure"
     | "Leadership Change";
 }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import {
   Search,
@@ -9,6 +9,7 @@ import {
   TrendingUp,
   FileText,
   Lock,
+  Scale,
   Mail,
   ShieldCheck,
   CheckCircle,
@@ -124,12 +125,90 @@ const REPORTS_DATABASE = [
   }
 ];
 
-export default function NewsPOCSectorIntelligenceView() {
+const COMPARE_SECTORS_DATABASE: Record<string, {
+  name: string;
+  initials: string;
+  growth: string;
+  industries: string;
+  ministry: string;
+  corridors: string;
+  fdiOutlook: string;
+  riskIndex: string;
+}> = {
+  "Semiconductors": {
+    name: "Semiconductors",
+    initials: "SEM",
+    growth: "+38.2% YoY",
+    industries: "26 Industries",
+    ministry: "Min of Electronics & IT",
+    corridors: "India-Taiwan, India-US, India-Japan",
+    fdiOutlook: "Very High ($15B CapEx Pipeline)",
+    riskIndex: "Medium (Supply Chain Constraints)"
+  },
+  "AI & Cyber Security": {
+    name: "AI & Cyber Security",
+    initials: "AIC",
+    growth: "+34.1% YoY",
+    industries: "30 Industries",
+    ministry: "Min of Electronics & IT",
+    corridors: "Global Corridors, India-US",
+    fdiOutlook: "High ($8B Infrastructure Projects)",
+    riskIndex: "Low (High Tech Adoption Rate)"
+  },
+  "Energy & Sustainability": {
+    name: "Energy & Sustainability",
+    initials: "ENG",
+    growth: "+31.0% YoY",
+    industries: "28 Industries",
+    ministry: "Min of New & Renewable Energy",
+    corridors: "India-EU, India-Gulf Corridors",
+    fdiOutlook: "Very High ($22B Green Bonds)",
+    riskIndex: "Low-Medium (Policy Subsidies)"
+  },
+  "Automotive & Electric Vehicles": {
+    name: "Automotive & Electric Vehicles",
+    initials: "EV",
+    growth: "+24.3% YoY",
+    industries: "26 Industries",
+    ministry: "Min of Heavy Industries",
+    corridors: "India-Germany, India-South Korea",
+    fdiOutlook: "High ($12B Localization)",
+    riskIndex: "Medium (Raw Material Sourcing)"
+  },
+  "Agriculture & Farmers Welfare": {
+    name: "Agriculture & Farmers Welfare",
+    initials: "AGR",
+    growth: "+14.2% YoY",
+    industries: "28 Industries",
+    ministry: "Min of Agriculture & Welfare",
+    corridors: "India-ASEAN, India-Middle East",
+    fdiOutlook: "Medium ($4.5B Agritech Inflow)",
+    riskIndex: "Medium-High (Climate Interventions)"
+  }
+};
+
+export default function NewsPOCSectorIntelligenceView({ view }: { view?: string }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSector, setSelectedSector] = useState("All");
   const [selectedType, setSelectedType] = useState("All");
   const [selectedGeography, setSelectedGeography] = useState("All");
   
+  // Compare Sectors State
+  const [compareSectorA, setCompareSectorA] = useState("Semiconductors");
+  const [compareSectorB, setCompareSectorB] = useState("AI & Cyber Security");
+  const [compareSectorC, setCompareSectorC] = useState("Energy & Sustainability");
+  const [showSectorComparison, setShowSectorComparison] = useState(false);
+
+  useEffect(() => {
+    if (view === "compare") {
+      setShowSectorComparison(true);
+      setTimeout(() => {
+        const el = document.getElementById("compare-sectors-section");
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }, 300);
+    }
+  }, [view]);
+
   // Report comparison state
   const [compareList, setCompareList] = useState<string[]>([]);
   
@@ -230,9 +309,6 @@ export default function NewsPOCSectorIntelligenceView() {
             <div className="flex flex-wrap gap-3 pt-2">
               <a href="#catalog" className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-5 py-3 rounded-xl transition-all cursor-pointer">
                 Explore Catalog →
-              </a>
-              <a href="#custom-rfp" className="bg-white/10 hover:bg-white/15 border border-white/10 text-white font-bold text-xs px-5 py-3 rounded-xl transition-all cursor-pointer">
-                Request Custom Research
               </a>
             </div>
           </div>
@@ -567,173 +643,128 @@ export default function NewsPOCSectorIntelligenceView() {
         </section>
       )}
 
-      {/* 10. SECTOR RESEARCH BUNDLES */}
-      <section className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-805 rounded-2xl p-5 space-y-4">
-        <div className="border-b border-gray-100 dark:border-gray-850 pb-2">
-          <h3 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
-            <Layers className="h-4.5 w-4.5 text-blue-600" /> Sector Research Bundles (Cross-Sell)
+      {/* ── COMPARE SECTORS INTERACTIVE SECTION ─────────────────────────────── */}
+      <section id="compare-sectors-section" className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-805 rounded-2xl p-5 space-y-6">
+        <div className="border-b border-gray-150 dark:border-gray-800 pb-3">
+          <h3 className="font-display text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
+            <Scale className="h-4.5 w-4.5 text-[#a855f7]" /> COMPARE SECTOR
           </h3>
+          <p className="text-[10px] text-gray-500 mt-1">
+            Compare up to three industrial sectors side-by-side across growth metrics, regulatory ministry control, and FDI pipelines.
+          </p>
         </div>
 
-        <div className="p-4 bg-gradient-to-br from-blue-500/5 to-purple-500/5 border border-blue-500/10 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-2">
-            <span className="text-[8.5px] font-bold text-purple-650 bg-purple-50 dark:bg-purple-955/20 px-2 py-0.5 rounded uppercase block w-max">Bundle Offer</span>
-            <h4 className="text-xs font-bold text-gray-955 dark:text-white leading-snug">Global Advanced Technologies Sourcing & Capex Package 2026</h4>
-            <p className="text-[11px] text-gray-500 leading-normal font-semibold">Includes Semiconductor OSAT Substrate Analysis (REP-SEM-46) + Sovereign AI Infrastructure (REP-AI-02) reports.</p>
-          </div>
-
-          <div className="shrink-0 space-y-2 text-right">
-            <div className="text-xs font-bold">
-              <span className="text-gray-400 line-through mr-2">$548 Value</span>
-              <span className="text-emerald-600 font-extrabold text-sm">$399 Package Price</span>
-            </div>
-            <Link href="/en/eoi" className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-4 py-2 rounded-xl text-center block shadow-xs">
-              Get Bundle & Save 27%
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* 11. AI INTELLIGENCE PREVIEW (LOCKED) */}
-      <section className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-805 rounded-2xl p-5 space-y-4">
-        <div className="border-b border-gray-100 dark:border-gray-850 pb-2">
-          <h3 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
-            <Sparkles className="h-4.5 w-4.5 text-blue-605" /> AI-Powered Sector Intelligence (Predictive Signals)
-          </h3>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-          <div className="space-y-3 font-semibold text-xs leading-relaxed text-gray-655 dark:text-slate-355">
-            <p>Go beyond traditional market sizing reports with AI model projections on plant capacity shifts, regulatory watch parameters, and corridor risk telemetry.</p>
-            <div className="p-3.5 bg-gray-50 dark:bg-gray-900 rounded-xl space-y-2 border border-gray-150 dark:border-gray-855 relative">
-              <div className="absolute right-3 top-3 text-[8.5px] font-bold text-emerald-600 uppercase flex items-center gap-0.5"><Activity className="h-3 w-3" /> Live Signal</div>
-              <h5 className="font-bold text-gray-950 dark:text-white text-[11.5px]">Sovereign Edge Node Capex reallocations</h5>
-              <p className="text-[10px] text-gray-500 font-semibold leading-relaxed">India-US sub-50ms regional datacenter node growth projections project positive FDI momentum (+18%) over Q4.</p>
-            </div>
-          </div>
-
-          {/* Locked Box */}
-          <div className="bg-[#0f172a] border border-gray-800 p-5 rounded-2xl text-center relative overflow-hidden flex flex-col items-center justify-center min-h-40 space-y-3">
-            <div className="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] [background-size:20px_20px]" />
-            <div className="h-10 w-10 rounded-full bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-500">
-              <Lock className="h-4 w-4" />
-            </div>
-            <h5 className="text-xs font-bold text-white uppercase tracking-wider">Unlock Predictive Model Projections</h5>
-            <p className="text-[9.5px] text-slate-400 px-8 font-semibold leading-normal">
-              Access real-time dynamic forecasts, semiconductor packaging yield margins updates, and GoI regulatory sandbox policy watch variables.
-            </p>
-            <button
-              onClick={() => setProModalOpen(true)}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-[10px] px-4 py-2 rounded-lg cursor-pointer transition-all shadow-md"
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="space-y-1.5">
+            <label className="text-[9.5px] font-bold text-gray-400 uppercase">Select Sector A</label>
+            <select
+              value={compareSectorA}
+              onChange={(e) => {
+                setCompareSectorA(e.target.value);
+                setShowSectorComparison(false);
+              }}
+              className="w-full text-xs font-semibold rounded-full border border-gray-300 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-2.5 outline-none text-gray-900 dark:text-white"
             >
-              Activate Pro Intelligence Trial
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* 12. CUSTOM / ENTERPRISE RESEARCH */}
-      <section id="custom-rfp" className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-805 rounded-2xl p-5 md:p-6 shadow-xs space-y-6">
-        <div className="border-b border-gray-150 dark:border-gray-855 pb-3">
-          <h3 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
-            <Briefcase className="h-4.5 w-4.5 text-blue-600" /> Need Custom Research Built for Your Business?
-          </h3>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <div className="lg:col-span-5 space-y-3 font-semibold text-xs leading-relaxed text-gray-655 dark:text-slate-355">
-            <p>Commission customized plant capacity audits, tier-2 supply chain bottlenecks mapping, or regional PLI subsidy clearance briefings matching your target corridors.</p>
-            <div className="space-y-2 pt-2">
-              {[
-                { title: "Plant Sizing & Capacity Audits", desc: "Granular plant-level yield validations" },
-                { title: "Bilateral Tariff Modeling", desc: "Corridor-specific tariff arbitrage analysis" },
-                { title: "Ministry Subsidy Due Diligence", desc: "DPIIT & MeitY compliance filings verification" }
-              ].map((srv, idx) => (
-                <div key={idx} className="flex gap-2 items-start text-[10.5px]">
-                  <div className="h-5 w-5 rounded-full bg-blue-100 dark:bg-blue-955/20 text-blue-600 flex items-center justify-center font-bold text-[8.5px] shrink-0 mt-0.5">✓</div>
-                  <div>
-                    <h5 className="font-bold text-gray-950 dark:text-white">{srv.title}</h5>
-                    <span className="text-[9.5px] text-gray-400 font-medium leading-relaxed block">{srv.desc}</span>
-                  </div>
-                </div>
+              {Object.keys(COMPARE_SECTORS_DATABASE).map(name => (
+                <option key={name} value={name}>{COMPARE_SECTORS_DATABASE[name].initials} {name}</option>
               ))}
-            </div>
+            </select>
           </div>
 
-          <div className="lg:col-span-7 bg-gray-50 dark:bg-gray-900/30 p-5 rounded-2xl border border-gray-205 dark:border-gray-850">
-            {rfpSubmitted ? (
-              <div className="text-center py-10 space-y-3">
-                <div className="h-12 w-12 rounded-full bg-emerald-100 dark:bg-emerald-955/20 text-emerald-600 flex items-center justify-center mx-auto text-xl font-bold">✓</div>
-                <h4 className="text-xs font-bold dark:text-white">Research Inquiry Submitted!</h4>
-                <p className="text-[10px] text-gray-550 px-8 leading-normal font-normal">
-                  Thank you. Your RFP has been logged. Our custom research advisory team will contact you within 24 hours.
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={handleRfpSubmit} className="space-y-4 text-xs font-medium text-gray-655 dark:text-slate-355">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="text-[9.5px] font-bold text-gray-400 uppercase">Contact Name</label>
-                    <input
-                      type="text"
-                      required
-                      value={rfpData.name}
-                      onChange={(e) => setRfpData(prev => ({ ...prev, name: e.target.value }))}
-                      placeholder="e.g. Vikram Sen"
-                      className="w-full text-xs font-semibold rounded-xl border border-gray-205 dark:border-gray-800 bg-white dark:bg-gray-900 px-3.5 py-2.5 outline-none text-gray-900 dark:text-white"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[9.5px] font-bold text-gray-400 uppercase">Business Email</label>
-                    <input
-                      type="email"
-                      required
-                      value={rfpData.email}
-                      onChange={(e) => setRfpData(prev => ({ ...prev, email: e.target.value }))}
-                      placeholder="e.g. vsen@semicon.in"
-                      className="w-full text-xs font-semibold rounded-xl border border-gray-205 dark:border-gray-800 bg-white dark:bg-gray-900 px-3.5 py-2.5 outline-none text-gray-900 dark:text-white"
-                    />
-                  </div>
-                </div>
+          <div className="space-y-1.5">
+            <label className="text-[9.5px] font-bold text-gray-400 uppercase">Select Sector B</label>
+            <select
+              value={compareSectorB}
+              onChange={(e) => {
+                setCompareSectorB(e.target.value);
+                setShowSectorComparison(false);
+              }}
+              className="w-full text-xs font-semibold rounded-full border border-gray-300 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-2.5 outline-none text-gray-900 dark:text-white"
+            >
+              {Object.keys(COMPARE_SECTORS_DATABASE).map(name => (
+                <option key={name} value={name}>{COMPARE_SECTORS_DATABASE[name].initials} {name}</option>
+              ))}
+            </select>
+          </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-[9.5px] font-bold text-gray-400 uppercase">Research Objectives & Requirements</label>
-                  <textarea
-                    rows={3}
-                    required
-                    value={rfpData.requirement}
-                    onChange={(e) => setRfpData(prev => ({ ...prev, requirement: e.target.value }))}
-                    placeholder="Specify the target plants, capacity thresholds or tariff regulatory sandbox parameters..."
-                    className="w-full text-xs font-semibold rounded-xl border border-gray-250 dark:border-gray-800 bg-white dark:bg-gray-900 p-3.5 outline-none text-gray-900 dark:text-white"
-                  />
-                </div>
-
-                <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[9.5px] font-bold text-gray-400 uppercase">Estimated Budget</span>
-                    <select
-                      value={rfpData.budget}
-                      onChange={(e) => setRfpData(prev => ({ ...prev, budget: e.target.value }))}
-                      className="text-xs font-bold rounded-lg border border-gray-200 dark:border-gray-805 bg-white dark:bg-gray-950 px-2.5 py-1.5 outline-none text-gray-900 dark:text-white"
-                    >
-                      <option>&lt; $10,000</option>
-                      <option>$10,000 - $25,000</option>
-                      <option>$25,000 - $50,000</option>
-                      <option>Enterprise Custom RFP</option>
-                    </select>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-5 py-3 rounded-xl cursor-pointer transition-all shadow-xs"
-                  >
-                    Submit Custom RFP
-                  </button>
-                </div>
-              </form>
-            )}
+          <div className="space-y-1.5">
+            <label className="text-[9.5px] font-bold text-gray-400 uppercase">Select Sector C</label>
+            <select
+              value={compareSectorC}
+              onChange={(e) => {
+                setCompareSectorC(e.target.value);
+                setShowSectorComparison(false);
+              }}
+              className="w-full text-xs font-semibold rounded-full border border-gray-300 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-2.5 outline-none text-gray-900 dark:text-white"
+            >
+              {Object.keys(COMPARE_SECTORS_DATABASE).map(name => (
+                <option key={name} value={name}>{COMPARE_SECTORS_DATABASE[name].initials} {name}</option>
+              ))}
+            </select>
           </div>
         </div>
+
+        <div className="flex justify-center pt-2">
+          <button
+            onClick={() => setShowSectorComparison(true)}
+            className="bg-[#a855f7] hover:bg-[#9333ea] text-white font-bold text-xs px-6 py-2.5 rounded-full cursor-pointer transition-colors shadow-sm"
+          >
+            Compare Now
+          </button>
+        </div>
+
+        {showSectorComparison && (
+          <div className="border-t border-gray-150 dark:border-gray-800 pt-6 overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="border-b border-gray-150 dark:border-gray-800 text-[10px] uppercase text-gray-455 tracking-wider">
+                  <th className="py-2.5 pr-4 font-bold">Indicator / Attribute</th>
+                  <th className="py-2.5 px-4 font-bold text-[#a855f7]">{compareSectorA}</th>
+                  <th className="py-2.5 px-4 font-bold text-purple-650">{compareSectorB}</th>
+                  <th className="py-2.5 px-4 font-bold text-purple-750">{compareSectorC}</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-800 font-semibold text-gray-900 dark:text-white">
+                <tr>
+                  <td className="py-2.5 pr-4 font-bold text-gray-400">Growth Rate (YoY)</td>
+                  <td className="py-2.5 px-4 text-emerald-600 font-mono">{COMPARE_SECTORS_DATABASE[compareSectorA]?.growth}</td>
+                  <td className="py-2.5 px-4 text-emerald-600 font-mono">{COMPARE_SECTORS_DATABASE[compareSectorB]?.growth}</td>
+                  <td className="py-2.5 px-4 text-emerald-600 font-mono">{COMPARE_SECTORS_DATABASE[compareSectorC]?.growth}</td>
+                </tr>
+                <tr>
+                  <td className="py-2.5 pr-4 font-bold text-gray-400">Sub-Industries Mapped</td>
+                  <td className="py-2.5 px-4 font-mono">{COMPARE_SECTORS_DATABASE[compareSectorA]?.industries}</td>
+                  <td className="py-2.5 px-4 font-mono">{COMPARE_SECTORS_DATABASE[compareSectorB]?.industries}</td>
+                  <td className="py-2.5 px-4 font-mono">{COMPARE_SECTORS_DATABASE[compareSectorC]?.industries}</td>
+                </tr>
+                <tr>
+                  <td className="py-2.5 pr-4 font-bold text-gray-400">Regulatory Ministry</td>
+                  <td className="py-2.5 px-4">{COMPARE_SECTORS_DATABASE[compareSectorA]?.ministry}</td>
+                  <td className="py-2.5 px-4">{COMPARE_SECTORS_DATABASE[compareSectorB]?.ministry}</td>
+                  <td className="py-2.5 px-4">{COMPARE_SECTORS_DATABASE[compareSectorC]?.ministry}</td>
+                </tr>
+                <tr>
+                  <td className="py-2.5 pr-4 font-bold text-gray-400">Active Trade Corridors</td>
+                  <td className="py-2.5 px-4 text-gray-600 dark:text-gray-300 font-normal leading-normal">{COMPARE_SECTORS_DATABASE[compareSectorA]?.corridors}</td>
+                  <td className="py-2.5 px-4 text-gray-600 dark:text-gray-300 font-normal leading-normal">{COMPARE_SECTORS_DATABASE[compareSectorB]?.corridors}</td>
+                  <td className="py-2.5 px-4 text-gray-600 dark:text-gray-300 font-normal leading-normal">{COMPARE_SECTORS_DATABASE[compareSectorC]?.corridors}</td>
+                </tr>
+                <tr>
+                  <td className="py-2.5 pr-4 font-bold text-gray-400">FDI / Capex Pipeline</td>
+                  <td className="py-2.5 px-4 text-blue-600 font-mono text-[11px] leading-relaxed">{COMPARE_SECTORS_DATABASE[compareSectorA]?.fdiOutlook}</td>
+                  <td className="py-2.5 px-4 text-blue-600 font-mono text-[11px] leading-relaxed">{COMPARE_SECTORS_DATABASE[compareSectorB]?.fdiOutlook}</td>
+                  <td className="py-2.5 px-4 text-blue-600 font-mono text-[11px] leading-relaxed">{COMPARE_SECTORS_DATABASE[compareSectorC]?.fdiOutlook}</td>
+                </tr>
+                <tr>
+                  <td className="py-2.5 pr-4 font-bold text-gray-400">Risk Profile Index</td>
+                  <td className="py-2.5 px-4 text-amber-600">{COMPARE_SECTORS_DATABASE[compareSectorA]?.riskIndex}</td>
+                  <td className="py-2.5 px-4 text-amber-600">{COMPARE_SECTORS_DATABASE[compareSectorB]?.riskIndex}</td>
+                  <td className="py-2.5 px-4 text-amber-600">{COMPARE_SECTORS_DATABASE[compareSectorC]?.riskIndex}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        )}
       </section>
 
       {/* 13 & 14. RELATED RESEARCH & ALERTS */}
