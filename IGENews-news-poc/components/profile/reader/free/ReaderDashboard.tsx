@@ -50,6 +50,7 @@ export default function ReaderDashboard() {
   // Stats / Quota Trackers
   const [copiedUrl, setCopiedUrl] = useState(false);
   const [articlesRead, setArticlesRead] = useState(14);
+  const [viewMode, setViewMode] = useState<"private" | "public">("private");
   const [activeTab, setActiveTab] = useState<string>("all"); // "all", "for-you", or sectorId
 
   // Simulation of Saved Articles & Followed Sectors in state
