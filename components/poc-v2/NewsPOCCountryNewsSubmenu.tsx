@@ -8,6 +8,7 @@ import NewsPOCMyCountryView from "./NewsPOCMyCountryView";
 import NewsPOCAllCountryView from "./NewsPOCAllCountryView";
 import NewsPOCCountryIntelligenceView from "./NewsPOCCountryIntelligenceView";
 import NewsPOCAllCountryFeedView from "./NewsPOCAllCountryFeedView";
+import NewsPOCFeedAllCountryView from "./NewsPOCFeedAllCountryView";
 import {
   ArrowLeft,
   Award,
@@ -320,6 +321,10 @@ export default function NewsPOCCountryNewsSubmenu({ submenu }: Props) {
     return (
       <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
         <SubMenuHeader />
+        {/* Complete content & structure from Feed -> Country Feed -> All Country subview */}
+        <NewsPOCFeedAllCountryView />
+        <div className="my-8 border-t border-gray-200 dark:border-gray-800" />
+        {/* Existing complete content & structure from Country News -> All Country */}
         <NewsPOCAllCountryView />
       </div>
     );

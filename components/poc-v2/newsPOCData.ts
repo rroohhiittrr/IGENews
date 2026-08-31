@@ -40,24 +40,8 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
           { label: "All Sector", slug: "all", description: "Read sample news from all 50 sectors." }
         ]
       },
-      {
-        label: "Industry Feed",
-        slug: "industry",
-        description: "News feed filtered by industry tags.",
-        subSubItems: [
-          { label: "My Industry", slug: "my", description: "Personalized feed for your selected industry segments." },
-          { label: "All Industry", slug: "all", description: "Read sample news from 1,300+ industries." }
-        ]
-      },
-      {
-        label: "Country Feed",
-        slug: "country",
-        description: "Bilateral country news stream.",
-        subSubItems: [
-          { label: "My Country", slug: "my", description: "News affecting your selected countries." },
-          { label: "All Country", slug: "all", description: "Bilateral news for 195 countries." }
-        ]
-      },
+
+
       {
         label: "Leader Feed",
         slug: "leader",
@@ -317,6 +301,15 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
         slug: "industry",
         description: "1,350+ industry growth trends, production metrics, and AI recommendations.",
         subSubItems: []
+      },
+      {
+        label: "Industry Feed",
+        slug: "industry-feed",
+        description: "News feed filtered by industry tags.",
+        subSubItems: [
+          { label: "My Industry", slug: "my", description: "Personalized feed for your selected industry segments." },
+          { label: "All Industry", slug: "all", description: "Read sample news from 1,300+ industries." }
+        ]
       }
     ]
   },

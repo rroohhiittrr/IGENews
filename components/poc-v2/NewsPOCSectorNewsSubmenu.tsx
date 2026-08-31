@@ -42,6 +42,7 @@ import {
   ThumbsUp,
   HelpCircle,
   Layers,
+  Newspaper,
   Check,
   TrendingDown
 } from "lucide-react";
@@ -49,7 +50,7 @@ import {
 import NewsPOCAllIndustryView from "./NewsPOCAllIndustryView";
 import NewsPOCFullDiscoveryView from "./NewsPOCFullDiscoveryView";
 
-type Submenu = "all" | "engagement" | "intelligence" | "industry";
+type Submenu = "all" | "engagement" | "intelligence" | "industry" | "industry-feed";
 
 interface Props {
   submenu: Submenu;
@@ -95,6 +96,16 @@ const SUBMENU_CONFIG: Record<Submenu, {
     gradTo: "to-indigo-700",
     badgeBg: "bg-purple-600",
     button: "bg-purple-600 hover:bg-purple-700 text-white"
+  },
+  "industry-feed": {
+    label: "Industry Feed",
+    sublabel: "Personalized & Live 1,350+ Industry Feed",
+    purpose: "Live news feed filtered by industry tags, personal subscriptions, and breaking sector stories.",
+    icon: Newspaper,
+    gradFrom: "from-blue-600",
+    gradTo: "to-cyan-700",
+    badgeBg: "bg-blue-600",
+    button: "bg-blue-600 hover:bg-blue-700 text-white"
   },
   industry: {
     label: "Industry Intelligence",
@@ -344,8 +355,8 @@ export default function NewsPOCSectorNewsSubmenu({ submenu, view }: Props) {
     );
   }
 
-  // VIEW 4: INDUSTRY (1,350+ Industries)
-  if (submenu === "industry") {
+  // VIEW 4: INDUSTRY & INDUSTRY FEED (1,350+ Industries)
+  if (submenu === "industry" || submenu === "industry-feed") {
     return (
       <div className="bg-gray-50 dark:bg-[#070b12] min-h-screen text-gray-900 dark:text-gray-100 pb-16">
         <SubMenuHeader />

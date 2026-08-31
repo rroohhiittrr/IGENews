@@ -44,6 +44,7 @@ import NewsPOCArticleDetail from "@/components/poc-v2/NewsPOCArticleDetail";
 import NewsPOCAllIndustryView from "@/components/poc-v2/NewsPOCAllIndustryView";
 import NewsPOCAllCountryView from "@/components/poc-v2/NewsPOCAllCountryView";
 import NewsPOCAllCountryFeedView from "@/components/poc-v2/NewsPOCAllCountryFeedView";
+import NewsPOCFeedAllCountryView from "@/components/poc-v2/NewsPOCFeedAllCountryView";
 import NewsPOCAllLeaderView from "@/components/poc-v2/NewsPOCAllLeaderView";
 import NewsPOCFullDiscoveryView from "@/components/poc-v2/NewsPOCFullDiscoveryView";
 import { IGEN_50_SECTORS } from "@/components/poc-v2/igenTaxonomyData";
@@ -349,13 +350,15 @@ export default function NewsPOCCatchAllPage() {
   }
 
   // Sector News sub-menu: /sector-news/[submenu]
-  // submenu: all | engagement | intelligence | industry
+  // submenu: all | engagement | intelligence | industry | industry-feed
   if (slugParts[0] === "sector-news" && slugParts.length >= 2) {
-    const validSubmenus = ["all", "engagement", "intelligence", "industry"];
+    const validSubmenus = ["all", "engagement", "intelligence", "industry", "industry-feed", "industry-intelligence"];
     const subPart = validSubmenus.includes(slugParts[1]) ? slugParts[1] : "all";
+    const mappedSubmenu = subPart === "industry-intelligence" ? "industry" : subPart;
     return (
       <NewsPOCSectorNewsSubmenu
-        submenu={subPart as "all" | "engagement" | "intelligence" | "industry"}
+        submenu={mappedSubmenu as "all" | "engagement" | "intelligence" | "industry" | "industry-feed"}
+        view={slugParts[2]}
       />
     );
   }
@@ -473,7 +476,7 @@ export default function NewsPOCCatchAllPage() {
 
     if (categoryKey === "country" && activeSub === "all") {
       return (
-        <NewsPOCAllCountryView 
+        <NewsPOCFeedAllCountryView 
           onBack={() => {
             setActiveSub("my");
             router.push("/en/poc-v2/feed/country");
