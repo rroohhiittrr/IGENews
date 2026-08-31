@@ -7,11 +7,16 @@ import { ChevronDown } from "lucide-react";
 import MenuDropdown from "./MenuDropdown";
 import { useTranslations } from "next-intl";
 import NewsPOCMegaMenu from "@/components/news-poc/NewsPOCMegaMenu";
+import POCV2MegaMenu from "@/components/poc-v2/NewsPOCMegaMenu";
 
 export default function MegaMenu() {
   const pathname = usePathname();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const t = useTranslations("nav");
+
+  if (pathname.includes("/poc-v2")) {
+    return <POCV2MegaMenu />;
+  }
 
   if (pathname.includes("/news-poc")) {
     return <NewsPOCMegaMenu />;
