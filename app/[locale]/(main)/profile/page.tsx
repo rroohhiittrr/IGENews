@@ -11,6 +11,10 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import ReaderOnboarding from "@/components/profile/reader/free/ReaderOnboarding";
 import ReaderDashboard from "@/components/profile/reader/free/ReaderDashboard";
+import SmeDashboard from "@/components/profile/sme/free/SmeDashboard";
+import AssociateSmeDashboard from "@/components/profile/associate-sme/free/AssociateSmeDashboard";
+import CompanyDashboard from "@/components/profile/company/free/CompanyDashboard";
+import LeaderDashboard from "@/components/profile/leader/free/LeaderDashboard";
 
 export default function ProfileHome() {
   const { user } = useAuth();
@@ -19,8 +23,33 @@ export default function ProfileHome() {
 
   if (!user) return null;
 
+  // Render expert dashboard if approved or if on a paid tier
+  const isSmeUser = user.onboardingRole === "sme" || user.accountType === "sme";
+  const isAssociateSmeUser = user.onboardingRole === "associate-sme" || user.accountType === "associate-sme";
+  const isCompanyUser = user.onboardingRole === "company" || user.accountType === "company";
+  const isLeaderUser = user.onboardingRole === "leader" || user.accountType === "leader";
+
+  const hasSmePaidPlan = user.smePlan && user.smePlan !== "none" && user.smePlan !== "free";
+  const hasAssociateSmePaidPlan = user.associateSmePlan && user.associateSmePlan !== "none" && user.associateSmePlan !== "free";
+  const hasCompanyPaidPlan = user.companyPlan && user.companyPlan !== "none" && user.companyPlan !== "free";
+  const hasLeaderPaidPlan = user.leaderPlan && user.leaderPlan !== "none" && user.leaderPlan !== "free";
+
+  if (isSmeUser && (user.onboardingStatus === "Approved" || hasSmePaidPlan)) {
+    return <SmeDashboard />;
+  }
+  if (isAssociateSmeUser && (user.onboardingStatus === "Approved" || hasAssociateSmePaidPlan)) {
+    return <AssociateSmeDashboard />;
+  }
+  if (isCompanyUser && (user.onboardingStatus === "Approved" || hasCompanyPaidPlan)) {
+    return <CompanyDashboard />;
+  }
+  if (isLeaderUser && (user.onboardingStatus === "Approved" || hasLeaderPaidPlan)) {
+    return <LeaderDashboard />;
+  }
+
   // Determine if the user is a Reader
-  const isReader = !user.onboardingRole || user.onboardingRole === "none" || (user.onboardingRole as string) === "reader";
+  const isReader = (!user.onboardingRole || user.onboardingRole === "none" || (user.onboardingRole as string) === "reader") &&
+                   (!user.accountType || user.accountType === "reader");
 
   if (isReader) {
     const isCompleted = user.onboardingForm?.readerOnboardingComplete === true;

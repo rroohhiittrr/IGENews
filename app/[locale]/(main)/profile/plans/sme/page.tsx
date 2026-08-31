@@ -5,12 +5,11 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useParams, useRouter } from "next/navigation";
 import { Check, X, ShieldAlert, Sparkles, Star, ArrowRight, Mail } from "lucide-react";
 import CheckoutModal from "@/components/profile/CheckoutModal";
-import SmeOnboarding from "@/components/profile/sme/free/SmeOnboarding";
-import SmeDashboard from "@/components/profile/sme/free/SmeDashboard";
 
 export default function SmePlansPage() {
   const { user, updateOnboarding } = useAuth();
   const params = useParams();
+  const router = useRouter();
   const locale = (params?.locale as string) || "en";
 
   const [checkoutOpen, setCheckoutOpen] = useState(false);
@@ -19,20 +18,12 @@ export default function SmePlansPage() {
 
   if (!user) return null;
 
-  // Redirect to onboarding/dashboard if already an SME
-  if (user.onboardingRole === "sme" && user.onboardingStatus !== "Approved" && user.onboardingStatus !== "none") {
-    return <SmeOnboarding />;
-  }
-  if (user.onboardingRole === "sme" && user.onboardingStatus === "Approved") {
-    return <SmeDashboard />;
-  }
-
-  const currentPlan = user.smePlan || "none";
+  const currentPlan = user.smePlan || (user.onboardingRole === "sme" && user.onboardingStatus === "Approved" ? "free" : "none");
 
   const plans = [
     {
       id: "free",
-      name: "FOUNDING ASSOCIATE SME",
+      name: "FREE SME",
       tagline: "Eligibility: 10+ Years Experience",
       price: "₹0",
       annualPrice: "₹0",
@@ -44,15 +35,15 @@ export default function SmePlansPage() {
       checkColor: "text-gray-400",
       benefits: [
         "SME profile page (Google-indexed)",
-        "Basic 'Associate SME' verification badge",
-        "Publish up to 3 articles/month",
+        "Basic 'SME' verification badge",
+        "0 articles/month (Write access locked)",
         "Up to 2 sector expertise tags",
         "Follow up to 10 Reader connections",
         "Basic public profile URL",
-        "Founding member badge",
         "Community access (read-only)",
       ],
       restrictions: [
+        "No article publishing allowed",
         "No consulting revenue activation",
         "No premium badge or priority ranking",
         "No custom banner or profile styling",
@@ -62,7 +53,7 @@ export default function SmePlansPage() {
     },
     {
       id: "pro",
-      name: "ASSOCIATE SME PRO",
+      name: "SME PRO",
       tagline: "Core Value: Build Authority + Visibility",
       price: "₹3,499",
       annualPrice: "₹34,990",
@@ -73,9 +64,9 @@ export default function SmePlansPage() {
       accentColor: "text-blue-600 dark:text-blue-400",
       checkColor: "text-blue-500",
       benefits: [
-        "Everything in Free",
-        "Verified blue 'Associate SME Pro' badge",
-        "Unlimited article publishing",
+        "Everything in Free SME",
+        "Verified blue 'SME Pro' badge",
+        "Publish up to 4 articles/month (Max 1/week)",
         "Up to 10 sector expertise tags",
         "Profile listed in Expert Directory",
         "Consulting inquiry form on your profile",
@@ -90,34 +81,34 @@ export default function SmePlansPage() {
         "No article revenue share",
         "No custom banner or premium styling",
       ],
-      cta: "Upgrade to Associate Pro",
+      cta: "Upgrade to SME Pro",
       isSovereign: false,
     },
     {
       id: "elite",
       name: "SME ELITE",
       tagline: "Core Value: Revenue + Authority Amplification",
-      price: "₹7,999",
-      annualPrice: "₹79,990",
-      annualSaving: "Save ₹15,998",
+      price: "₹6,999",
+      annualPrice: "₹69,990",
+      annualSaving: "Save ₹13,998",
       period: "month",
       badge: "RECOMMENDED",
       color: "border-emerald-500/40 bg-gradient-to-b from-white to-emerald-50/30 dark:from-[#122238] dark:to-[#0c3125]/20 relative overflow-hidden shadow-2xl",
       accentColor: "text-emerald-600 dark:text-emerald-400",
       checkColor: "text-emerald-500",
       benefits: [
-        "Everything in Associate Pro",
+        "Everything in SME Pro",
         "Gold 'SME Elite' verification badge",
+        "Publish up to 6 articles/month",
         "Priority #1 ranking in sector searches",
         "Full consulting booking system (1:1 sessions)",
-        "Revenue share on article reads",
+        "Revenue share on article reads (70/30 split)",
         "Downloadable PDF trade report publishing",
         "Custom profile banner + branding",
         "Eligible for IGE roundtables & webinars",
         "Featured in IGE Newsletter (20K+ subscribers)",
         "'Open to Consulting' badge in Reader feeds",
         "Fully Public profile (Google SEO indexed)",
-        "Industry judge & awards jury eligibility",
         "Speaking opportunities",
       ],
       restrictions: [],
@@ -128,10 +119,10 @@ export default function SmePlansPage() {
       id: "sovereign",
       name: "SME SOVEREIGN",
       tagline: "Eligibility: 20+ Years — Invite / Apply Only",
-      price: "₹1.5L–₹3L",
-      annualPrice: "₹1.5L–₹3L",
-      annualSaving: null,
-      period: "year",
+      price: "₹14,999",
+      annualPrice: "₹149,990",
+      annualSaving: "Save ₹29,998",
+      period: "month",
       badge: "ELITE",
       color: "border-purple-500/30 bg-gradient-to-b from-white via-white to-purple-50/20 dark:from-[#122238] dark:to-[#1a113b]/30 relative overflow-hidden",
       accentColor: "text-purple-600 dark:text-purple-400",
@@ -139,6 +130,7 @@ export default function SmePlansPage() {
       benefits: [
         "Everything in SME Elite",
         "Sovereign Gold badge (highest designation)",
+        "Publish up to 8 articles/month (Max 2/week)",
         "Dedicated IGE Account Manager",
         "IGE-managed PR & co-bylined editorials",
         "80/20 revenue share on consulting bookings",
@@ -151,14 +143,13 @@ export default function SmePlansPage() {
         "Government & investor visibility pipeline",
       ],
       restrictions: [],
-      cta: "Apply for SME Sovereign",
-      isSovereign: true,
+      cta: "Upgrade to SME Sovereign",
+      isSovereign: false,
     },
   ];
 
   const getDisplayPrice = (plan: typeof plans[0]) => {
     if (plan.id === "free") return { price: "₹0", sub: "/forever" };
-    if (plan.id === "sovereign") return { price: "₹1.5L–₹3L", sub: "/year · custom" };
     if (billingCycle === "annual") {
       return {
         price: plan.annualPrice,
@@ -178,8 +169,6 @@ export default function SmePlansPage() {
         onboardingFeedback: "",
         smePlan: "free",
       });
-    } else if (planId === "sovereign") {
-      window.location.href = `mailto:sovereign@indiaglobalnews.com?subject=SME Sovereign Application&body=Name: ${user.name}%0AEmail: ${user.email}%0AYears of Experience: %0AIndustry Sector: %0ALinkedIn: `;
     } else {
       setSelectedPlan({ id: planId, name, price: priceStr });
       setCheckoutOpen(true);
@@ -192,6 +181,32 @@ export default function SmePlansPage() {
 
   return (
     <div className="p-5 md:p-8 lg:p-10 max-w-7xl mx-auto pb-24">
+
+      {/* Active SME Profile Quick Navigation Banner */}
+      {user.onboardingRole === "sme" && user.onboardingStatus === "Approved" && (
+        <div className="mb-8 p-4 bg-gradient-to-r from-blue-50/70 to-indigo-50/50 dark:from-blue-950/20 dark:to-indigo-950/20 border border-blue-200 dark:border-blue-900/30 rounded-2xl flex items-center justify-between flex-wrap gap-4 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-sm shadow-md">
+              ✓
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <p className="text-xs font-bold text-[#1D1D46] dark:text-white">Active SME Profile: {user.name || "Specialist"}</p>
+                <span className="text-[10px] font-black uppercase bg-blue-600 text-white px-2 py-0.5 rounded-full">
+                  {currentPlan === "none" ? "Free" : currentPlan} Plan
+                </span>
+              </div>
+              <p className="text-[11px] text-gray-500 mt-0.5">To view and manage your public articles, consulting, and bio, visit your Profile section.</p>
+            </div>
+          </div>
+          <button
+            onClick={() => router.push(`/${locale}/profile`)}
+            className="px-4 py-2 bg-[#1D1D46] hover:bg-[#0642BA] text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 shadow-sm"
+          >
+            Go to My Profile <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
 
       {/* Page Header */}
       <div className="text-center mb-10">
@@ -314,7 +329,7 @@ export default function SmePlansPage() {
                   ))}
                 </ul>
 
-                {plan.restrictions.length > 0 && (
+                {plan.restrictions && plan.restrictions.length > 0 && (
                   <div className="pt-3 space-y-2 border-t border-dashed border-gray-100 dark:border-white/5 mt-3">
                     <div className="text-[10px] font-bold text-red-400 uppercase tracking-wider flex items-center gap-1.5">
                       <ShieldAlert className="w-3 h-3" /> Not Included:

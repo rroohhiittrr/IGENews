@@ -12,6 +12,29 @@ import {
   Shield, ShieldX, HelpCircle, ChevronRight, ChevronDown, Info, BarChart3
 } from "lucide-react";
 import { SECTORS } from "@/lib/sectors";
+import AssociateSMEFreeDashboard from "./AssociateSMEFreeDashboard";
+import AssociateSMEProDashboard from "../pro/AssociateSMEProDashboard";
+import AssociateSMEEliteDashboard from "../elite/AssociateSMEEliteDashboard";
+import AssociateSMESovereignDashboard from "../sovereign/AssociateSMESovereignDashboard";
+
+// ─── ASME Tier Router ─────────────────────────────────────────
+// Wraps the legacy Associate SME dashboard and routes to the correct
+// tier dashboard based on the user's associateSmePlan field.
+function ASMETierRouter() {
+  const { user } = useAuth();
+  const associatePlan = (user as any)?.associateSmePlan || "free";
+
+  if (associatePlan === "sovereign") return <AssociateSMESovereignDashboard />;
+  if (associatePlan === "elite")     return <AssociateSMEEliteDashboard />;
+  if (associatePlan === "pro")       return <AssociateSMEProDashboard />;
+  if (associatePlan === "free")      return <AssociateSMEFreeDashboard />;
+
+  // Fallback: render legacy full dashboard (original behavior)
+  return <AssociateSmeDashboardLegacy />;
+}
+// Export the router as the default export
+export default ASMETierRouter;
+// ──────────────────────────────────────────────────────────────
 
 interface Article {
   id: string;
@@ -37,7 +60,7 @@ const AFFILIATE_PRODUCTS = [
   { name: "iGEN Global Trade Report (PDF)", price: "₹14,999", rate: "25%", commission: "₹3,750" }
 ];
 
-export default function AssociateSmeDashboard() {
+export function AssociateSmeDashboardLegacy() {
   const { user, updateOnboarding } = useAuth();
   
   // View switcher: "private" (Admin) or "public" (Visitor View)

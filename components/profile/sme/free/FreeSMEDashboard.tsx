@@ -8,7 +8,7 @@ import {
   FileText, Eye, EyeOff, ArrowRight, Lock, BarChart3, Globe, Users
 } from "lucide-react";
 
-export default function AssociateSMEFreeDashboard() {
+export default function FreeSMEDashboard() {
   const { user } = useAuth();
   const params = useParams();
   const router = useRouter();
@@ -20,9 +20,10 @@ export default function AssociateSMEFreeDashboard() {
   const [avatarBase64, setAvatarBase64] = useState(profile.profilePic || "");
   const avatarInputRef = useRef<HTMLInputElement>(null);
 
-  const profileUrl = typeof window !== "undefined"
-    ? `${window.location.origin}/${locale}/associate-sme/${user?.id || user?.uid || "profile"}`
-    : "";
+  const profileUrl =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/${locale}/sme/${user?.uid || "profile"}`
+      : "";
 
   const handleCopy = () => {
     navigator.clipboard.writeText(profileUrl);
@@ -38,17 +39,17 @@ export default function AssociateSMEFreeDashboard() {
     reader.readAsDataURL(file);
   };
 
-  const sampleName = "Ananya Krishnan";
+  const sampleName = "Dr. Rajesh Sharma";
   const rawName = profile.fullName || user?.name;
   const isGeneric = !rawName || rawName === "SME Pro User" || rawName === "Your Name" || rawName.toLowerCase().includes("user");
   const displayName = isGeneric ? sampleName : rawName;
-  const displayDesignation = profile.currentDesignation || "Associate Trade Specialist";
-  const displayOrg = profile.organisation || "Logistics & Sourcing Consultant";
+  const displayDesignation = profile.currentDesignation || "Senior Trade Consultant";
+  const displayOrg = profile.organisation || "Independent Specialist";
   const displayCity = profile.city || "Mumbai";
   const displayCountry = profile.country || "India";
 
   const LOCKED_FEATURES = [
-    { icon: FileText, label: "Article Publishing", desc: "Share trade insights — available from ASME Pro (max 4/month)" },
+    { icon: FileText, label: "Article Publishing", desc: "Share trade intelligence — available from SME Pro (max 4/month)" },
     { icon: Eye, label: "Consulting Inquiry Form", desc: "Let Readers request sessions from your profile" },
     { icon: BarChart3, label: "Revenue Dashboard", desc: "Track article reads and consulting booking revenue" },
     { icon: Users, label: "Expert Directory Listing", desc: "Be discoverable by 50,000+ IGE Readers" },
@@ -86,7 +87,7 @@ export default function AssociateSMEFreeDashboard() {
                 <div className="flex items-center gap-2 flex-wrap">
                   <h1 className="text-xl font-bold text-[#1D1D46] dark:text-white">{displayName}</h1>
                   <span className="text-[9px] font-black uppercase bg-gray-200 dark:bg-white/10 text-gray-500 px-2 py-0.5 rounded-full tracking-widest">
-                    Associate SME
+                    SME
                   </span>
                 </div>
                 <p className="text-xs text-gray-500 mt-0.5">{displayDesignation} · {displayOrg}</p>
@@ -108,7 +109,7 @@ export default function AssociateSMEFreeDashboard() {
             {/* Affiliate Promotion Coupon Card */}
             {(() => {
               const firstPart = displayName.split(" ")[0].toUpperCase();
-              const couponCode = `ASME-${firstPart}-10`;
+              const couponCode = `SME-${firstPart}-10`;
               return (
                 <div className="mb-5 p-4 bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 rounded-2xl flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2.5">
@@ -132,8 +133,8 @@ export default function AssociateSMEFreeDashboard() {
             <div className="p-4 bg-gray-50 dark:bg-white/5 rounded-2xl border border-dashed border-gray-200 dark:border-white/10 text-center text-xs text-gray-400">
               <Lock className="w-4 h-4 mx-auto mb-1 opacity-50" />
               Consulting not available on free tier.{" "}
-              <button onClick={() => router.push(`/${locale}/profile/plans/associate-sme`)} className="text-[#F0652E] font-bold hover:underline">
-                Upgrade to ASME Pro
+              <button onClick={() => router.push(`/${locale}/profile/plans/sme`)} className="text-[#F0652E] font-bold hover:underline">
+                Upgrade to SME Pro
               </button>
             </div>
           </div>
@@ -141,7 +142,7 @@ export default function AssociateSMEFreeDashboard() {
 
         <div className="text-center text-xs text-gray-400 bg-white dark:bg-[#122238] rounded-2xl p-5 border border-gray-100 dark:border-white/5">
           <Globe className="w-5 h-5 mx-auto mb-2 opacity-30" />
-          This profile is <strong>private</strong>. Upgrade to ASME Pro to be listed in the Expert Directory and become discoverable by Readers.
+          This profile is <strong>private</strong>. Upgrade to SME Pro to be listed in the Expert Directory and become discoverable by Readers.
         </div>
       </div>
     );
@@ -149,7 +150,7 @@ export default function AssociateSMEFreeDashboard() {
 
   // ── PRIVATE / DASHBOARD VIEW ─────────────────────────────────────────────
   const firstPart = displayName.split(" ")[0].toUpperCase();
-  const couponCode = `ASME-${firstPart}-10`;
+  const couponCode = `SME-${firstPart}-10`;
 
   return (
     <div className="p-5 md:p-8 lg:p-10 max-w-5xl mx-auto pb-24">
@@ -157,7 +158,7 @@ export default function AssociateSMEFreeDashboard() {
       {/* View toggle bar */}
       <div className="flex items-center justify-between mb-5">
         <div className="text-xs text-gray-400">
-          <span className="font-bold text-gray-600 dark:text-gray-300">ASME Free Dashboard</span> — private view
+          <span className="font-bold text-gray-600 dark:text-gray-300">SME Free Dashboard</span> — private view
         </div>
         <button
           onClick={() => setViewMode("public")}
@@ -172,7 +173,7 @@ export default function AssociateSMEFreeDashboard() {
         <div className="h-20 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-white/5 dark:to-white/3 relative">
           <div className="absolute top-3 right-4">
             <span className="text-[9px] font-black uppercase tracking-widest text-gray-400 bg-gray-200 dark:bg-white/10 px-2.5 py-1 rounded-full">
-              ASME · Free
+              SME · Free
             </span>
           </div>
         </div>
@@ -197,7 +198,7 @@ export default function AssociateSMEFreeDashboard() {
               <div className="flex items-center gap-2 flex-wrap">
                 <h1 className="text-xl font-bold text-[#1D1D46] dark:text-white">{displayName}</h1>
                 <span className="text-[9px] font-black uppercase bg-gray-200 dark:bg-white/10 text-gray-500 dark:text-gray-400 px-2 py-0.5 rounded-full tracking-widest">
-                  ASME
+                  SME
                 </span>
               </div>
               <p className="text-xs text-gray-500 mt-0.5">{displayDesignation} · {displayOrg}</p>
@@ -213,8 +214,8 @@ export default function AssociateSMEFreeDashboard() {
             </button>
           </div>
 
-          <button onClick={() => router.push(`/${locale}/profile/plans/associate-sme`)} className="w-full py-2.5 flex items-center justify-center gap-2 bg-[#1D1D46] hover:bg-[#F0652E] text-white text-xs font-bold rounded-xl transition-all">
-            <ArrowRight className="w-3.5 h-3.5" /> Upgrade to ASME Pro — Unlock Articles & Consulting
+          <button onClick={() => router.push(`/${locale}/profile/plans/sme`)} className="w-full py-2.5 flex items-center justify-center gap-2 bg-[#1D1D46] hover:bg-[#F0652E] text-white text-xs font-bold rounded-xl transition-all">
+            <ArrowRight className="w-3.5 h-3.5" /> Upgrade to SME Pro — Unlock Articles & Consulting
           </button>
         </div>
       </div>
@@ -232,7 +233,7 @@ export default function AssociateSMEFreeDashboard() {
                 { label: "Organisation", value: displayOrg },
                 { label: "Location", value: `${displayCity}, ${displayCountry}` },
                 { label: "Primary Sector", value: profile.sector || "Manufacturing" },
-                { label: "Experience", value: `${profile.experienceYears || 5}+ years` },
+                { label: "Experience", value: `${profile.experienceYears || 10}+ years` },
               ].map((row, i) => (
                 <div key={i} className="flex gap-2">
                   <span className="font-bold text-gray-400 w-28 shrink-0">{row.label}</span>
@@ -285,7 +286,7 @@ export default function AssociateSMEFreeDashboard() {
                     <p className="text-xs font-bold text-gray-500">{item.label}</p>
                     <p className="text-[10px] text-gray-400 mt-0.5">{item.desc}</p>
                   </div>
-                  <button onClick={() => router.push(`/${locale}/profile/plans/associate-sme`)} className="text-[10px] font-bold text-[#F0652E] hover:underline whitespace-nowrap">
+                  <button onClick={() => router.push(`/${locale}/profile/plans/sme`)} className="text-[10px] font-bold text-[#F0652E] hover:underline whitespace-nowrap">
                     Upgrade →
                   </button>
                 </div>
@@ -299,7 +300,7 @@ export default function AssociateSMEFreeDashboard() {
             <h3 className="font-bold text-[#1D1D46] dark:text-white text-sm">Your Plan</h3>
             <div className="text-xs text-gray-500 space-y-2">
               {[
-                { label: "Tier", value: "ASME (Free)" },
+                { label: "Tier", value: "SME (Free)" },
                 { label: "Articles", value: "Locked", bad: true },
                 { label: "Consulting", value: "Locked", bad: true },
                 { label: "Directory listing", value: "Locked", bad: true },
@@ -310,13 +311,13 @@ export default function AssociateSMEFreeDashboard() {
                 </div>
               ))}
             </div>
-            <button onClick={() => router.push(`/${locale}/profile/plans/associate-sme`)} className="w-full py-2.5 mt-1 bg-[#1D1D46] text-white text-xs font-bold rounded-xl hover:bg-[#F0652E] transition-all">
+            <button onClick={() => router.push(`/${locale}/profile/plans/sme`)} className="w-full py-2.5 mt-1 bg-[#1D1D46] text-white text-xs font-bold rounded-xl hover:bg-[#F0652E] transition-all">
               View Upgrade Plans
             </button>
           </div>
           <div className="bg-gray-50 dark:bg-white/5 rounded-2xl p-4 border border-gray-100 dark:border-white/5 text-xs text-gray-400 space-y-1">
             <p className="font-bold text-gray-500 dark:text-gray-300">Profile Visibility</p>
-            <p className="leading-relaxed">Your profile is <strong className="text-gray-600 dark:text-gray-200">private</strong>. Upgrade to ASME Pro to be listed in the Expert Directory.</p>
+            <p className="leading-relaxed">Your profile is <strong className="text-gray-600 dark:text-gray-200">private</strong>. Upgrade to SME Pro to be listed in the Expert Directory.</p>
           </div>
         </div>
       </div>

@@ -12,7 +12,7 @@ import {
   User, Shield, ShieldX, HelpCircle, ChevronRight, Info
 } from "lucide-react";
 import { SECTORS } from "@/lib/sectors";
-import AssociateSMEFreeDashboard from "@/components/profile/associate-sme/free/AssociateSMEFreeDashboard";
+import FreeSMEDashboard from "./FreeSMEDashboard";
 import AssociateSMEProDashboard from "@/components/profile/sme/pro/AssociateSMEProDashboard";
 import SMEEliteDashboard from "@/components/profile/sme/elite/SMEEliteDashboard";
 import SMESovereignDashboard from "@/components/profile/sme/sovereign/SMESovereignDashboard";
@@ -28,7 +28,7 @@ function SMETierRouter() {
   if (smePlan === "elite")     return <SMEEliteDashboard />;
   if (smePlan === "pro")       return <AssociateSMEProDashboard />;
   // "free" or any unrecognised plan → new minimal free dashboard
-  if (smePlan === "free")      return <AssociateSMEFreeDashboard />;
+  if (smePlan === "free")      return <FreeSMEDashboard />;
 
   // Fallback: render the legacy full dashboard (original behaviour)
   return <SmeDashboardLegacy />;

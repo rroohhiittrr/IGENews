@@ -11,10 +11,10 @@ export interface UserProfile {
   mobile?: string;
   plan: "free" | "starter" | "pro" | "enterprise";
   readerPlan?: "free" | "pro" | "premium" | "enterprise";
-  smePlan?: "none" | "free" | "pro" | "elite";
-  associateSmePlan?: "none" | "free" | "plus" | "premium";
-  companyPlan?: "none" | "free" | "silver" | "gold";
-  leaderPlan?: "none" | "free" | "verified" | "elite";
+  smePlan?: "none" | "free" | "pro" | "elite" | "sovereign";
+  associateSmePlan?: "none" | "free" | "pro" | "elite" | "sovereign" | "plus" | "premium";
+  companyPlan?: "none" | "free" | "startup" | "company" | "corporate" | "silver" | "gold";
+  leaderPlan?: "none" | "free" | "pioneer" | "luminary" | "sovereign" | "verified" | "elite";
   sectors: string[];
   industries: Record<string, string[]>; // { sectorId: [industryId, ...] }
   countries: string[];

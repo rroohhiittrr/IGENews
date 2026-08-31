@@ -18,7 +18,7 @@ export default function ProfileHeader({ user }: ProfileHeaderProps) {
     const role = user.onboardingRole || "reader";
     
     if (role === "sme") {
-      const isPaid = user.smePlan === "pro" || user.smePlan === "elite";
+      const isPaid = user.smePlan === "pro" || user.smePlan === "elite" || user.smePlan === "sovereign";
       const status = user.onboardingStatus || "Draft";
       if (status === "Approved" && isPaid) {
         return { isFree: false, label: "Verified SME", badgeType: "blue-tick" };
@@ -27,7 +27,7 @@ export default function ProfileHeader({ user }: ProfileHeaderProps) {
     }
     
     if (role === "associate-sme") {
-      const isPaid = user.associateSmePlan === "plus" || user.associateSmePlan === "premium";
+      const isPaid = user.associateSmePlan === "pro" || user.associateSmePlan === "elite" || user.associateSmePlan === "sovereign" || user.associateSmePlan === "plus" || user.associateSmePlan === "premium";
       const status = user.onboardingStatus || "Draft";
       if (status === "Approved" && isPaid) {
         return { isFree: false, label: "Verified Associate SME", badgeType: "blue-tick" };
@@ -45,10 +45,11 @@ export default function ProfileHeader({ user }: ProfileHeaderProps) {
     }
     
     if (role === "leader") {
-      const isPaid = user.leaderPlan === "verified" || user.leaderPlan === "elite";
+      const isPaid = user.leaderPlan === "pioneer" || user.leaderPlan === "luminary" || user.leaderPlan === "sovereign" || user.leaderPlan === "verified" || user.leaderPlan === "elite";
       const status = user.onboardingStatus || "Draft";
       if (status === "Approved" && isPaid) {
-        return { isFree: false, label: "Verified Leader", badgeType: "blue-tick" };
+        const tierName = user.leaderPlan === "sovereign" ? "Sovereign Leader" : user.leaderPlan === "luminary" ? "Luminary Leader" : "Pioneer Leader";
+        return { isFree: false, label: `Verified ${tierName}`, badgeType: "blue-tick" };
       }
       return { isFree: true, label: "Free & Unverified — Self-Declared", badgeType: "orange-star" };
     }

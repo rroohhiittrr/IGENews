@@ -10,8 +10,8 @@ import {
   Send, ArrowRight, DollarSign
 } from "lucide-react";
 
-// ─── Public Profile Card ─────────────────────────────────
-function SMEElitePublicProfile({ profile, displayName, displayDesignation, displayOrg, displayCity, displayCountry, avatarBase64, bannerBase64, openToConsulting, consultingRate, articles, onBack }: any) {
+// ─── Public Profile Card (ASME Elite Emerald) ──────────────
+function ASMEElitePublicProfile({ profile, displayName, displayDesignation, displayOrg, displayCity, displayCountry, avatarBase64, bannerBase64, openToConsulting, consultingRate, articles, onBack }: any) {
   return (
     <div className="p-5 md:p-8 lg:p-10 max-w-3xl mx-auto pb-24">
       <div className="flex justify-end mb-5">
@@ -21,8 +21,8 @@ function SMEElitePublicProfile({ profile, displayName, displayDesignation, displ
       </div>
 
       <div className="bg-white dark:bg-[#122238] rounded-3xl border-2 border-emerald-200 dark:border-emerald-900/30 shadow-xl overflow-hidden mb-6">
-        {/* Emerald cinematic banner */}
-        <div className="h-32 relative overflow-hidden group cursor-pointer" onClick={() => {}}>
+        {/* Emerald banner */}
+        <div className="h-32 relative overflow-hidden group">
           {bannerBase64 ? (
             <img src={bannerBase64} alt="banner" className="w-full h-full object-cover" />
           ) : (
@@ -33,7 +33,7 @@ function SMEElitePublicProfile({ profile, displayName, displayDesignation, displ
           )}
           <div className="absolute top-3 right-4">
             <span className="text-[9px] font-black uppercase tracking-widest text-emerald-200 bg-emerald-500/20 backdrop-blur-sm border border-emerald-400/20 px-3 py-1.5 rounded-full">
-              ★ SME Elite
+              ★ ASME Elite
             </span>
           </div>
         </div>
@@ -52,8 +52,8 @@ function SMEElitePublicProfile({ profile, displayName, displayDesignation, displ
             <div className="flex-1 pt-14">
               <div className="flex items-center gap-2 flex-wrap">
                 <h1 className="text-xl font-bold text-[#1D1D46] dark:text-white">{displayName}</h1>
-                <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase bg-emerald-600 text-white px-2.5 py-0.5 rounded-full tracking-widest">
-                  <Star className="w-3 h-3 fill-white" /> SME Elite
+                <span className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase bg-emerald-600 text-white px-2.5 py-0.5 rounded-full tracking-widest">
+                  <Star className="w-3 h-3 fill-white" /> ASME Elite
                 </span>
                 {openToConsulting && (
                   <span className="text-[9px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/30 px-2 py-0.5 rounded-full">
@@ -79,7 +79,7 @@ function SMEElitePublicProfile({ profile, displayName, displayDesignation, displ
           {/* Affiliate Promotion Coupon Card */}
           {(() => {
             const firstPart = displayName.split(" ")[0].toUpperCase();
-            const couponCode = `SME-${firstPart}-10`;
+            const couponCode = `ASME-${firstPart}-10`;
             return (
               <div className="mb-4 p-4 bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 rounded-2xl flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2.5">
@@ -123,7 +123,7 @@ function SMEElitePublicProfile({ profile, displayName, displayDesignation, displ
 
       {/* Published articles */}
       {articles.length > 0 && (
-        <div className="bg-white dark:bg-[#122238] rounded-2xl border border-gray-100 dark:border-white/5 shadow-sm p-5 mb-6">
+        <div className="bg-white dark:bg-[#122238] rounded-2xl border border-gray-100 dark:border-white/5 shadow-sm p-5">
           <h2 className="font-bold text-[#1D1D46] dark:text-white text-sm flex items-center gap-2 mb-4">
             <FileText className="w-4 h-4 text-emerald-500" /> Published Articles
           </h2>
@@ -140,20 +140,12 @@ function SMEElitePublicProfile({ profile, displayName, displayDesignation, displ
           </div>
         </div>
       )}
-
-      {/* IGE-Sealed Reports section */}
-      <div className="bg-white dark:bg-[#122238] rounded-2xl border border-gray-100 dark:border-white/5 shadow-sm p-5">
-        <h2 className="font-bold text-[#1D1D46] dark:text-white text-sm flex items-center gap-2 mb-3">
-          <Award className="w-4 h-4 text-amber-500" /> IGE-Sealed Trade Reports
-        </h2>
-        <p className="text-xs text-gray-400 italic">No reports published yet.</p>
-      </div>
     </div>
   );
 }
 
-// ─── Main Dashboard ──────────────────────────────────────
-export default function SMEEliteDashboard() {
+// ─── Main ASME Elite Dashboard ───────────────────────────
+export default function AssociateSMEEliteDashboard() {
   const { user } = useAuth();
   const params = useParams();
   const router = useRouter();
@@ -163,37 +155,36 @@ export default function SMEEliteDashboard() {
   const [viewMode, setViewMode] = useState<"private" | "public">("private");
   const [copiedUrl, setCopiedUrl] = useState(false);
 
-  const sampleName = "Dr. Vikram Malhotra";
+  const sampleName = "Ananya Krishnan";
   const rawName = profile.fullName || user?.name;
   const isGeneric = !rawName || rawName === "SME Pro User" || rawName === "Your Name" || rawName.toLowerCase().includes("user");
   const displayName = isGeneric ? sampleName : rawName;
 
   const firstPart = displayName.split(" ")[0].toUpperCase();
-  const couponCode = `SME-${firstPart}-10`;
+  const couponCode = `ASME-${firstPart}-10`;
   const [activeTab, setActiveTab] = useState<"overview" | "articles" | "consulting" | "revenue" | "settings">("overview");
   const [avatarBase64, setAvatarBase64] = useState(profile.profilePic || "");
   const [bannerBase64, setBannerBase64] = useState(profile.bannerBase64 || "");
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const bannerInputRef = useRef<HTMLInputElement>(null);
   const [openToConsulting, setOpenToConsulting] = useState(true);
-  const [consultingRate, setConsultingRate] = useState(profile.consultingRate || "5,000");
+  const [consultingRate, setConsultingRate] = useState(profile.consultingRate || "4,000");
   const [editingRate, setEditingRate] = useState(false);
 
   const [articles, setArticles] = useState([
-    { title: "India-UAE CEPA: 18 Months of Impact on Chemical Exports", sector: "chemicals", date: "Aug 12, 2026", reads: 3842, revenue: 192 },
-    { title: "Alloy Steel Import Substitution Strategy for Indian SMEs", sector: "steel", date: "Jul 28, 2026", reads: 2190, revenue: 109 },
+    { title: "Specialist steel sourcing alternatives for MSMEs", sector: "steel", date: "Aug 11, 2026", reads: 1450, revenue: 72 },
+    { title: "Logistics tracking structures in bilateral corridors", sector: "logistics", date: "Jul 15, 2026", reads: 890, revenue: 44 },
   ]);
-  const [bookings, setBookings] = useState([
-    { name: "Ananya Krishnan", company: "PharmaTech Exports", topic: "API regulatory pathway", date: "Aug 28, 2026 · 3PM", status: "Confirmed", amount: 5000 },
-    { name: "Vikram Malhotra", company: "Steel Hub Industries", topic: "Bilateral duty optimization", date: "Sep 2, 2026 · 11AM", status: "Pending", amount: 5000 },
+  const [bookings] = useState([
+    { name: "Vikram Malhotra", company: "Steel Hub Industries", topic: "Bilateral duty optimization", date: "Sep 2, 2026 · 11AM", status: "Pending", amount: 4000 },
   ]);
 
-  const displayDesignation = profile.currentDesignation || "Senior Trade Consultant";
-  const displayOrg = profile.organisation || "Independent Specialist";
+  const displayDesignation = profile.currentDesignation || "Associate Trade Consultant";
+  const displayOrg = profile.organisation || "Logistics & Sourcing Specialist";
   const displayCity = profile.city || "Mumbai";
   const displayCountry = profile.country || "India";
   const profileUrl = typeof window !== "undefined"
-    ? `${window.location.origin}/${locale}/sme/${user?.id || "profile"}`
+    ? `${window.location.origin}/${locale}/associate-sme/${user?.uid || "profile"}`
     : "";
 
   const totalRevenue = articles.reduce((a, b) => a + b.revenue, 0) + bookings.reduce((a, b) => a + b.amount, 0) * 0.7;
@@ -223,7 +214,7 @@ export default function SMEEliteDashboard() {
   // ── PUBLIC VIEW ─────────────────────────────────────────
   if (viewMode === "public") {
     return (
-      <SMEElitePublicProfile
+      <ASMEElitePublicProfile
         profile={profile}
         displayName={displayName}
         displayDesignation={displayDesignation}
@@ -243,7 +234,7 @@ export default function SMEEliteDashboard() {
   // ── PRIVATE / DASHBOARD VIEW ─────────────────────────────
   const tabs = [
     { id: "overview", label: "Overview" },
-    { id: "articles", label: "Articles" },
+    { id: "articles", label: `Articles (${articles.length}/6)` },
     { id: "consulting", label: `Bookings (${bookings.length})` },
     { id: "revenue", label: "Revenue" },
     { id: "settings", label: "Settings" },
@@ -255,7 +246,7 @@ export default function SMEEliteDashboard() {
       {/* View toggle bar */}
       <div className="flex items-center justify-between mb-5">
         <div className="text-xs text-gray-400">
-          <span className="font-bold text-gray-600 dark:text-gray-300">SME Elite Dashboard</span> — private view
+          <span className="font-bold text-gray-600 dark:text-gray-300">ASME Elite Dashboard</span> — private view
         </div>
         <button
           onClick={() => setViewMode("public")}
@@ -267,7 +258,7 @@ export default function SMEEliteDashboard() {
 
       {/* Profile header */}
       <div className="relative bg-white dark:bg-[#122238] rounded-3xl border-2 border-emerald-300/40 dark:border-emerald-900/30 shadow-xl overflow-hidden mb-8">
-        {/* Emerald cinematic banner */}
+        {/* Emerald banner */}
         <div className="h-40 relative overflow-hidden group cursor-pointer" onClick={() => bannerInputRef.current?.click()}>
           {bannerBase64 ? (
             <img src={bannerBase64} alt="banner" className="w-full h-full object-cover" />
@@ -284,7 +275,7 @@ export default function SMEEliteDashboard() {
           )}
           <div className="absolute top-3 right-4">
             <span className="text-[9px] font-black uppercase tracking-widest text-emerald-200 bg-emerald-500/20 backdrop-blur-sm border border-emerald-400/20 px-3 py-1.5 rounded-full">
-              ★ SME Elite
+              ★ ASME Elite
             </span>
           </div>
           <input ref={bannerInputRef} type="file" accept="image/*" className="hidden" onChange={handleBannerUpload} />
@@ -313,7 +304,7 @@ export default function SMEEliteDashboard() {
               <div className="flex items-center gap-2 flex-wrap">
                 <h1 className="text-2xl font-bold text-[#1D1D46] dark:text-white">{displayName}</h1>
                 <span className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-3 py-1 rounded-full tracking-widest shadow-sm">
-                  <Star className="w-3 h-3 fill-white" /> SME Elite
+                  <Star className="w-3 h-3 fill-white" /> ASME Elite
                 </span>
                 {openToConsulting && (
                   <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/30 px-2 py-0.5 rounded-full">
@@ -360,7 +351,7 @@ export default function SMEEliteDashboard() {
               { label: "Total Revenue", value: `₹${totalRevenue.toLocaleString(undefined, { maximumFractionDigits: 0 })}`, icon: TrendingUp, color: "from-emerald-600 to-teal-500" },
               { label: "Total Reads", value: articles.reduce((a, b) => a + b.reads, 0).toLocaleString(), icon: Eye, color: "from-blue-600 to-blue-500" },
               { label: "Bookings", value: bookings.length, icon: Calendar, color: "from-amber-500 to-yellow-500" },
-              { label: "Articles", value: articles.length, icon: FileText, color: "from-purple-600 to-violet-500" },
+              { label: "Articles", value: `${articles.length}/6`, icon: FileText, color: "from-purple-600 to-violet-500" },
             ].map((s, i) => (
               <div key={i} className={`rounded-2xl p-4 bg-gradient-to-br ${s.color} text-white shadow-md`}>
                 <s.icon className="w-5 h-5 mb-2 opacity-80" />
@@ -523,7 +514,7 @@ export default function SMEEliteDashboard() {
             <div className="flex justify-between items-center py-3 border-b border-gray-50 dark:border-white/5">
               <div>
                 <p className="font-bold text-[#1D1D46] dark:text-white">Open to Consulting</p>
-                <p className="text-gray-400 mt-0.5">Allow Readers to send consulting inquiries</p>
+                <p className="text-gray-400 mt-0.5">Allow Readers to book consulting sessions</p>
               </div>
               <button onClick={() => setOpenToConsulting(v => !v)} className={`w-11 h-6 rounded-full transition-all ${openToConsulting ? "bg-emerald-500" : "bg-gray-200 dark:bg-white/10"}`}>
                 <div className={`w-5 h-5 rounded-full bg-white shadow-sm transition-all mx-0.5 ${openToConsulting ? "translate-x-5" : "translate-x-0"}`} />

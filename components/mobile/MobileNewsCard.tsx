@@ -73,6 +73,12 @@ export default function MobileNewsCard({ article }: MobileNewsCardProps) {
   const [articleOpen, setArticleOpen] = useState(false);
   const [commentOpen, setCommentOpen] = useState(false);
   const expandRef = useRef<HTMLDivElement>(null);
+  // Client-only time string to prevent SSR/client hydration mismatch
+  const [timeAgoStr, setTimeAgoStr] = useState("");
+
+  useEffect(() => {
+    setTimeAgoStr(timeAgo(article.publishedAt));
+  }, [article.publishedAt]);
 
   useEffect(() => {
     if (expandRef.current) {
@@ -135,7 +141,7 @@ export default function MobileNewsCard({ article }: MobileNewsCardProps) {
           </div>
           <span className="text-[11px] font-medium text-[var(--color-neutral-dark)]">{article.sourceName}</span>
           <span className="text-[var(--color-neutral-mid)]">·</span>
-          <span className="text-[11px] text-[var(--color-neutral-dark)]">{timeAgo(article.publishedAt)}</span>
+          {timeAgoStr && <span className="text-[11px] text-[var(--color-neutral-dark)]">{timeAgoStr}</span>}
           <span className="text-[var(--color-neutral-mid)]">·</span>
           <span className="flex items-center gap-0.5 text-[11px] text-[var(--color-neutral-dark)]">
             <Clock className="h-3 w-3" />

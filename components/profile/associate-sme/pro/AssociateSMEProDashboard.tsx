@@ -10,8 +10,8 @@ import {
 } from "lucide-react";
 import { SECTORS } from "@/lib/sectors";
 
-// ─── Public Profile Card ─────────────────────────────────
-function SMEProPublicProfile({
+// ─── Public Profile Card (ASME Pro Blue) ──────────────────
+function ASMEProPublicProfile({
   profile, displayName, displayDesignation, displayOrg,
   displayCity, displayCountry, avatarBase64, openToConsulting, articles,
   onBack,
@@ -31,7 +31,7 @@ function SMEProPublicProfile({
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_50%,rgba(96,165,250,0.25),transparent_60%)]" />
           <div className="absolute top-3 right-4">
             <span className="text-[9px] font-black uppercase tracking-widest text-blue-200 bg-blue-500/20 backdrop-blur-sm border border-blue-400/20 px-2.5 py-1 rounded-full">
-              ✦ SME Pro
+              ✦ ASME Pro
             </span>
           </div>
         </div>
@@ -51,7 +51,7 @@ function SMEProPublicProfile({
               <div className="flex items-center gap-2 flex-wrap">
                 <h1 className="text-xl font-bold text-[#1D1D46] dark:text-white">{displayName}</h1>
                 <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase bg-blue-600 text-white px-2.5 py-0.5 rounded-full tracking-widest">
-                  <ShieldCheck className="w-3 h-3" /> SME Pro
+                  <ShieldCheck className="w-3 h-3" /> ASME Pro
                 </span>
                 {openToConsulting && (
                   <span className="text-[9px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/30 px-2 py-0.5 rounded-full">
@@ -78,7 +78,7 @@ function SMEProPublicProfile({
           {/* Affiliate Promotion Coupon Card */}
           {(() => {
             const firstPart = displayName.split(" ")[0].toUpperCase();
-            const couponCode = `SME-${firstPart}-10`;
+            const couponCode = `ASME-${firstPart}-10`;
             return (
               <div className="mb-4 p-4 bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 rounded-2xl flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2.5">
@@ -150,27 +150,26 @@ export default function AssociateSMEProDashboard() {
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const [openToConsulting, setOpenToConsulting] = useState(true);
   const [articles, setArticles] = useState<{ title: string; sector: string; date: string; reads: number }[]>([
-    { title: "How India-UAE CEPA is reshaping chemical exports", sector: "chemicals", date: "Aug 10, 2026", reads: 1240 },
-    { title: "Steel procurement under FTA: A buyer's guide", sector: "steel", date: "Jul 22, 2026", reads: 890 },
+    { title: "Bilateral trade logs: MSME logistics optimizations", sector: "logistics", date: "Aug 14, 2026", reads: 420 },
+    { title: "Import substitutions on machinery components", sector: "manufacturing", date: "Jul 18, 2026", reads: 310 },
   ]);
   const [newTitle, setNewTitle] = useState("");
   const [newSector, setNewSector] = useState(profile.sector || "manufacturing");
   const [showPublishForm, setShowPublishForm] = useState(false);
   const [inquiries] = useState([
-    { name: "Rajiv Menon", company: "Chem Exports Ltd", topic: "CEPA duty advisory", date: "2 days ago" },
-    { name: "Priya Shah", company: "Textile Hub India", topic: "FTA negotiation guidance", date: "5 days ago" },
+    { name: "Suresh Pillai", company: "Pillai Engineering", topic: "Bilateral component export compliance", date: "3 days ago" },
   ]);
 
-  const sampleName = "Dr. Vikram Malhotra";
+  const sampleName = "Ananya Krishnan";
   const rawName = profile.fullName || user?.name;
   const isGeneric = !rawName || rawName === "SME Pro User" || rawName === "Your Name" || rawName.toLowerCase().includes("user");
   const displayName = isGeneric ? sampleName : rawName;
-  const displayDesignation = profile.currentDesignation || "Senior Trade Policy Specialist";
-  const displayOrg = profile.organisation || "Global Commerce Advisory";
+  const displayDesignation = profile.currentDesignation || "Associate Trade Specialist";
+  const displayOrg = profile.organisation || "Logistics & Sourcing Consultant";
   const displayCity = profile.city || "Mumbai";
   const displayCountry = profile.country || "India";
   const profileUrl = typeof window !== "undefined"
-    ? `${window.location.origin}/${locale}/sme/${user?.id || "profile"}`
+    ? `${window.location.origin}/${locale}/associate-sme/${user?.uid || "profile"}`
     : "";
 
   const handleCopy = () => {
@@ -189,6 +188,10 @@ export default function AssociateSMEProDashboard() {
 
   const handlePublish = () => {
     if (!newTitle.trim()) return;
+    if (articles.length >= 4) {
+      alert("Monthly limit reached (4/4 articles). Please upgrade to ASME Elite to publish up to 6 articles per month.");
+      return;
+    }
     setArticles(prev => [{ title: newTitle, sector: newSector, date: new Date().toLocaleDateString("en-IN"), reads: 0 }, ...prev]);
     setNewTitle("");
     setShowPublishForm(false);
@@ -197,7 +200,7 @@ export default function AssociateSMEProDashboard() {
   // ── PUBLIC VIEW ─────────────────────────────────────────
   if (viewMode === "public") {
     return (
-      <SMEProPublicProfile
+      <ASMEProPublicProfile
         profile={profile}
         displayName={displayName}
         displayDesignation={displayDesignation}
@@ -215,15 +218,14 @@ export default function AssociateSMEProDashboard() {
   // ── PRIVATE / DASHBOARD VIEW ─────────────────────────────
   const tabs = [
     { id: "overview", label: "Overview" },
-    { id: "articles", label: `Articles (${articles.length})` },
+    { id: "articles", label: `Articles (${articles.length}/4)` },
     { id: "consulting", label: `Inquiries (${inquiries.length})` },
     { id: "insights", label: "Insights" },
     { id: "affiliate", label: "Affiliate Tools" },
   ] as const;
 
   const firstPart = displayName.split(" ")[0].toUpperCase();
-  const rolePrefix = user?.onboardingRole === "associate-sme" ? "ASME" : "SME";
-  const couponCode = `${rolePrefix}-${firstPart}-10`;
+  const couponCode = `ASME-${firstPart}-10`;
 
   return (
     <div className="p-5 md:p-8 lg:p-10 max-w-5xl mx-auto pb-24">
@@ -231,7 +233,7 @@ export default function AssociateSMEProDashboard() {
       {/* View toggle bar */}
       <div className="flex items-center justify-between mb-5">
         <div className="text-xs text-gray-400">
-          <span className="font-bold text-gray-600 dark:text-gray-300">SME Pro Dashboard</span> — private view
+          <span className="font-bold text-gray-600 dark:text-gray-300">ASME Pro Dashboard</span> — private view
         </div>
         <button
           onClick={() => setViewMode("public")}
@@ -248,7 +250,7 @@ export default function AssociateSMEProDashboard() {
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_50%,rgba(96,165,250,0.2),transparent_60%)]" />
           <div className="absolute top-3 right-4">
             <span className="text-[9px] font-black uppercase tracking-widest text-blue-200 bg-blue-500/20 backdrop-blur-sm border border-blue-400/20 px-3 py-1.5 rounded-full">
-              ✦ SME Pro Verified
+              ✦ ASME Pro Verified
             </span>
           </div>
         </div>
@@ -275,7 +277,7 @@ export default function AssociateSMEProDashboard() {
               <div className="flex items-center gap-2 flex-wrap">
                 <h1 className="text-xl font-bold text-[#1D1D46] dark:text-white">{displayName}</h1>
                 <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase bg-blue-600 text-white px-2.5 py-0.5 rounded-full tracking-widest">
-                  <ShieldCheck className="w-3 h-3" /> SME Pro Verified
+                  <ShieldCheck className="w-3 h-3" /> ASME Pro Verified
                 </span>
                 {openToConsulting && (
                   <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/30 px-2 py-0.5 rounded-full">
@@ -333,7 +335,7 @@ export default function AssociateSMEProDashboard() {
       {activeTab === "overview" && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
           {[
-            { label: "Articles", value: articles.length, icon: FileText, color: "from-blue-600 to-blue-500" },
+            { label: "Articles Published", value: `${articles.length}/4`, icon: FileText, color: "from-blue-600 to-blue-500" },
             { label: "Total Reads", value: articles.reduce((a, b) => a + b.reads, 0).toLocaleString(), icon: Eye, color: "from-indigo-600 to-indigo-500" },
             { label: "Inquiries", value: inquiries.length, icon: MessageSquare, color: "from-emerald-600 to-teal-500" },
             { label: "Article Revenue", value: `₹${(articles.reduce((a, b) => a + b.reads, 0) * 0.05).toFixed(0)}`, icon: TrendingUp, color: "from-amber-500 to-yellow-500" },
@@ -353,7 +355,7 @@ export default function AssociateSMEProDashboard() {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="font-bold text-[#1D1D46] dark:text-white">Your Articles</h2>
-              <p className="text-xs text-gray-400 mt-0.5">Readers earn ₹50 per 1,000 reads</p>
+              <p className="text-xs text-gray-400 mt-0.5">ASME Pro limit: max 4 articles/month</p>
             </div>
             <button onClick={() => setShowPublishForm(v => !v)} className="px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl hover:bg-blue-700 flex items-center gap-1.5">
               <FileText className="w-3.5 h-3.5" /> New Article
@@ -367,7 +369,7 @@ export default function AssociateSMEProDashboard() {
                 value={newTitle}
                 onChange={e => setNewTitle(e.target.value)}
                 placeholder="Article title…"
-                className="w-full px-3 py-2.5 text-sm border border-gray-200 dark:border-white/10 rounded-xl bg-gray-50 dark:bg-white/5 text-[#1D1D46] dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full px-3 py-2.5 text-sm border border-gray-200 dark:border-white/10 rounded-xl bg-gray-50 dark:bg-white/5 text-[#1D1D46] dark:text-white focus:outline-none"
               />
               <select
                 value={newSector}
@@ -388,11 +390,6 @@ export default function AssociateSMEProDashboard() {
           )}
 
           <div className="bg-white dark:bg-[#122238] rounded-2xl border border-gray-100 dark:border-white/5 shadow-sm divide-y divide-gray-50 dark:divide-white/5">
-            {articles.length === 0 && (
-              <div className="p-8 text-center text-xs text-gray-400">
-                No articles yet. Publish your first trade insight!
-              </div>
-            )}
             {articles.map((a, i) => (
               <div key={i} className="flex items-center gap-3 p-4">
                 <div className="flex-1">
@@ -433,17 +430,17 @@ export default function AssociateSMEProDashboard() {
       )}
 
       {/* ── INSIGHTS TAB ── */}
+      {/* ── INSIGHTS TAB ── */}
       {activeTab === "insights" && (
         <div className="bg-white dark:bg-[#122238] rounded-2xl p-6 border border-gray-100 dark:border-white/5 shadow-sm">
           <h2 className="font-bold text-[#1D1D46] dark:text-white mb-4 flex items-center gap-2">
-            <BarChart3 className="w-4 h-4 text-blue-500" /> Profile & Content Insights
+            <BarChart3 className="w-4 h-4 text-blue-500" /> Profile Insights
           </h2>
           <div className="space-y-3 text-xs text-gray-500">
             {[
-              { label: "Profile views (30 days)", value: "842" },
-              { label: "Expert Directory rank", value: "#12 in Chemicals" },
-              { label: "Avg reads per article", value: ((articles.reduce((a, b) => a + b.reads, 0)) / Math.max(articles.length, 1)).toFixed(0) },
-              { label: "Consulting conversion rate", value: "4.2%" },
+              { label: "Profile views (30 days)", value: "310" },
+              { label: "Expert Directory rank", value: "#48 in Logistics" },
+              { label: "Avg reads per article", value: "365" },
             ].map((s, i) => (
               <div key={i} className="flex justify-between items-center py-2 border-b border-gray-50 dark:border-white/5 last:border-0">
                 <span>{s.label}</span>
@@ -452,9 +449,9 @@ export default function AssociateSMEProDashboard() {
             ))}
           </div>
           <div className="mt-5 p-4 bg-blue-50 dark:bg-blue-950/10 rounded-2xl border border-blue-100 dark:border-blue-900/20 text-xs text-blue-700 dark:text-blue-400">
-            <p className="font-bold mb-1">💡 Upgrade to SME Elite for full analytics</p>
-            <p className="text-blue-600/70 dark:text-blue-500/70">Elite unlocks booking revenue dashboard, CEPA tariff advisory pricing, and full IGE content calendar.</p>
-            <button onClick={() => router.push(`/${locale}/profile/plans/sme`)} className="mt-2 text-[10px] font-black text-blue-600 hover:underline flex items-center gap-1">
+            <p className="font-bold mb-1">💡 Upgrade to ASME Elite for full analytics</p>
+            <p className="text-blue-600/70 dark:text-blue-500/70">Elite unlocks booking revenue dashboard, calendar integration, and 70/30 read splits.</p>
+            <button onClick={() => router.push(`/${locale}/profile/plans/associate-sme`)} className="mt-2 text-[10px] font-black text-blue-600 hover:underline flex items-center gap-1">
               View Elite Plan <ArrowRight className="w-3 h-3" />
             </button>
           </div>
@@ -476,10 +473,10 @@ export default function AssociateSMEProDashboard() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { label: "Link Clicks", value: "142" },
-              { label: "Signups", value: "28" },
-              { label: "Conversions", value: "11" },
-              { label: "Earned Commissions", value: "₹12,450", green: true },
+              { label: "Link Clicks", value: "85" },
+              { label: "Signups", value: "14" },
+              { label: "Conversions", value: "6" },
+              { label: "Earned Commissions", value: "₹6,250", green: true },
             ].map((s, i) => (
               <div key={i} className="p-4 bg-gray-50 dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/5">
                 <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">{s.label}</p>
@@ -495,12 +492,12 @@ export default function AssociateSMEProDashboard() {
                 <input
                   type="text"
                   readOnly
-                  value={profileUrl.replace("/sme/", "/ref?code=" + couponCode.toLowerCase())}
+                  value={profileUrl.replace("/associate-sme/", "/ref?code=" + couponCode.toLowerCase())}
                   className="flex-1 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 px-3.5 py-2.5 rounded-xl text-xs text-gray-500 font-mono focus:outline-none"
                 />
                 <button
                   onClick={() => {
-                    navigator.clipboard.writeText(profileUrl.replace("/sme/", "/ref?code=" + couponCode.toLowerCase()));
+                    navigator.clipboard.writeText(profileUrl.replace("/associate-sme/", "/ref?code=" + couponCode.toLowerCase()));
                     alert("Affiliate link copied!");
                   }}
                   className="px-4 py-2.5 bg-[#1D1D46] hover:bg-[#F0652E] text-white text-xs font-bold rounded-xl transition-all"

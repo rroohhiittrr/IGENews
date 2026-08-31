@@ -61,6 +61,8 @@ export default function CheckoutModal({
             else if (category === "leader") updatePayload.leaderPlan = "free";
           } else {
             // For paid plans, activate instantly
+            updatePayload.onboardingRole = category;
+            updatePayload.onboardingStatus = "Approved";
             if (category === "sme") {
               updatePayload.smePlan = planId;
               updatePayload.accountType = "sme";
