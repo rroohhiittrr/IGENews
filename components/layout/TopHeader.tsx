@@ -89,18 +89,22 @@ export default function TopHeader() {
           {t("common.free")}
         </span>
 
-        {/* Profile Avatar */}
-        <button className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-primary-light)] text-white text-xs font-semibold">
+        {/* Profile Avatar / Dossier Link */}
+        <Link 
+          href="/profile"
+          className="flex h-8 w-8 items-center justify-center rounded-full bg-[#0B4FBA] text-white text-xs font-bold hover:opacity-90 shadow-2xs"
+          title="Company Dossier & Command Center"
+        >
           <User className="h-4 w-4" />
-        </button>
+        </Link>
 
         {/* Upgrade CTA */}
         <Link
-          href="/plans"
-          className="hidden items-center gap-1 rounded-full bg-[var(--color-accent-gold)] px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition-all hover:bg-[var(--color-accent-gold-dark)] hover:shadow-md sm:flex"
+          href="/profile/plans/company"
+          className="hidden items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F0652E] to-amber-500 px-3.5 py-1.5 text-xs font-bold text-white shadow-xs transition-all hover:opacity-95 sm:flex"
         >
           <Sparkles className="h-3.5 w-3.5" />
-          {t("common.upgrade")}
+          <span>Enterprise Plans</span>
         </Link>
       </div>
     </header>

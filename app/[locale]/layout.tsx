@@ -49,21 +49,14 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} suppressHydrationWarning>
-      <body
-        className="bg-[var(--background)] text-[var(--color-text-body)] antialiased"
-        style={{ fontFamily: "var(--font-body)" }}
-      >
-        <ThemeProvider>
-          <NextIntlClientProvider messages={messages} locale={locale}>
-            <NotificationProvider>
-              <AuthProvider>
-                <ActiveModeProvider>{children}</ActiveModeProvider>
-              </AuthProvider>
-            </NotificationProvider>
-          </NextIntlClientProvider>
-        </ThemeProvider>
-      </body>
-    </html>
+    <ThemeProvider>
+      <NextIntlClientProvider messages={messages} locale={locale}>
+        <NotificationProvider>
+          <AuthProvider>
+            <ActiveModeProvider>{children}</ActiveModeProvider>
+          </AuthProvider>
+        </NotificationProvider>
+      </NextIntlClientProvider>
+    </ThemeProvider>
   );
 }

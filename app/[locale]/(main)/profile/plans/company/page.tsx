@@ -40,121 +40,119 @@ export default function CompanyPlansPage() {
   const plans = [
     {
       id: "free",
-      name: "FREE COMPANY PROFILE",
-      tagline: "Basic Unverified Listing",
-      eligibility: "Best for: Early exploratory presence",
+      name: "Free Profile",
+      tagline: "Basic Company Directory Listing",
+      eligibility: "Best for: New companies exploring directory discoverability",
       price: "₹0",
       annualPrice: "₹0",
       annualSaving: "Always Free",
       period: "forever",
-      badge: "EXPLORATORY",
+      badge: "FREE TIER",
       color: "border-slate-200 dark:border-white/10 bg-white dark:bg-[#122238]",
       accentColor: "text-slate-600 dark:text-slate-300",
       checkColor: "text-slate-400",
       benefits: [
-        "Basic company profile page",
-        "Company name & primary sector tagging",
-        "Basic summary & corporate overview",
-        "Website URL & public social links",
-        "Public directory listing",
+        "Public company page across 5 core tabs (Overview, Our Vision, Offerings, Updates & Insights, Team)",
+        "Company overview, sector tagging, and official website link",
+        "Registered office address & workplace policy (Onsite/Hybrid/Remote)",
+        "Standard directory listing in iGEN sector search",
+        "Basic post engagement stats (Likes & Comments)",
       ],
       restrictions: [
-        "No Blue Tick KYC verification",
-        "Stakeholder tabs locked (Investors, Employees, Brand)",
-        "No bundled Executive Leader Profiles",
-        "No article or trade intelligence publishing",
-        "Unlisted in curated Top 10 Sector Directory",
+        "No verified Blue Checkmark badge",
+        "Direct lead inquiry buttons disabled",
+        "No bundled Executive Leader profiles",
+        "No PDF document or whitepaper publishing",
+        "0 Follower Invite credits",
       ],
-      cta: "Create Free Profile",
+      cta: "Get Started Free",
       popular: false,
     },
     {
       id: "startup",
-      name: "TOP START-UP",
-      tagline: "Emerging Trust & Authority",
-      eligibility: "Best for: Growing MSMEs & High-Growth Startups",
+      name: "Startup Plan",
+      tagline: "For Growing Companies & Early-Stage Ventures",
+      eligibility: "Best for: Seed to Series-A Startups and growing MSMEs",
       price: "₹9,999",
       annualPrice: "₹99,990",
-      annualSaving: "Save ₹19,998 (2 Mos Free)",
+      annualSaving: "Save ₹19,998 (2 Months Free)",
       period: "month",
-      badge: "EMERGING TRUST",
+      badge: "STARTUP TIER",
       color: "border-blue-500/30 bg-gradient-to-b from-white via-white to-blue-50/20 dark:from-[#122238] dark:to-[#172c47] relative",
       accentColor: "text-blue-600 dark:text-blue-400",
       checkColor: "text-blue-500",
       benefits: [
-        "Institutional Blue Tick Verification (KYC-backed)",
-        "Full Company Page — All 4 Core Stakeholder Tabs",
-        "📈 Investors Tab (Financials, capex roadmap & pitch deck)",
-        "👥 Employees Tab (Culture, EVP & employer branding)",
-        "🤝 Stakeholders Tab (Banking partners, governance & vendors)",
-        "📢 Brand Tab (Macro capability domains & awards)",
-        "1 Bundled Executive Leader Profile (Founder/MD)",
-        "Publish 2 trade articles/month (15-day pacing gap)",
-        "Curated Top 10 Sector Listing placement",
-        "High-authority Google indexing (topcompany/[name])",
+        "Verified Blue Checkmark badge on company profile",
+        "Full access to all 5 tabs (Overview, Our Vision, Offerings, Updates & Insights, Team)",
+        "Interactive 'Inquire Offerings' lead form with email routing",
+        "1 Bundled Verified Executive Leader profile (e.g. Founder/CEO)",
+        "100 Monthly Follower Invite Credits",
+        "Inline Post Performance summary (Impressions, CTR, Engagements)",
+        "Publish 2 thought leadership articles & updates per month",
+        "Curated Top 10 placement in your industry sector",
       ],
       restrictions: [
-        "Standard sector positioning (Slots #4 - #10)",
-        "No dedicated account manager",
+        "Standard sector ranking (Positions #4 to #10)",
+        "Standard customer support",
       ],
-      cta: "Upgrade to Top Start-up",
+      cta: "Choose Startup Plan",
       popular: false,
     },
     {
       id: "company",
-      name: "TOP COMPANY",
-      tagline: "Business Authority & Discovery",
-      eligibility: "Best for: Mid-Tier Enterprises & Proven Manufacturers",
+      name: "Company Plan",
+      tagline: "For Mid-Market Enterprises & Established Businesses",
+      eligibility: "Best for: Established businesses, manufacturers & SME leaders",
       price: "₹16,999",
       annualPrice: "₹1,69,990",
-      annualSaving: "Save ₹33,998 (2 Mos Free)",
+      annualSaving: "Save ₹33,998 (2 Months Free)",
       period: "month",
-      badge: "MOST POPULAR · 90X REACH",
-      color: "border-[#F0652E] dark:border-[#F0652E] bg-gradient-to-b from-white via-white to-orange-50/30 dark:from-[#122238] dark:to-[#221c17] relative shadow-xl shadow-orange-500/10",
-      accentColor: "text-[#F0652E]",
-      checkColor: "text-[#F0652E]",
+      badge: "MOST POPULAR",
+      color: "border-[#0a66c2] dark:border-blue-500 bg-gradient-to-b from-white via-white to-blue-50/30 dark:from-[#122238] dark:to-[#172338] relative shadow-xl shadow-blue-500/10",
+      accentColor: "text-[#0a66c2] dark:text-blue-400",
+      checkColor: "text-[#0a66c2] dark:text-blue-400",
       benefits: [
-        "Everything in Top Start-up",
-        "2 Bundled Executive Leader Profiles (e.g. CEO + CTO)",
-        "Publish 4 articles/month (1 article weekly)",
-        "Priority Sector Positioning (Top 3–5 search placement)",
-        "Interactive Production Gallery & Corporate Media Showcase",
-        "Direct Inbound Buyer RFQ & Lead Inquiry Form",
-        "AI Contextual Recommendations in reader feeds",
-        "Company comparison tool eligibility for global buyers",
-        "Full Traffic & Profile Views Analytics Dashboard",
+        "Everything included in the Startup Plan",
+        "2 Bundled Verified Executive Leader profiles (e.g. CEO + CTO)",
+        "300 Monthly Follower Invite Credits",
+        "Deep 'Metrics Overview' drilldown for published posts",
+        "'Who Visited Your Page' company visitor intelligence",
+        "Interactive demographic charts on Team tab (Location & Education)",
+        "PDF Document & Whitepaper reader directly in Updates & Insights",
+        "Publish 4 featured industry articles per month + 2x Feed Boost",
+        "Top 3 priority placement in your industry sector search",
+        "Instant WhatsApp & email lead routing for service inquiries",
       ],
       restrictions: [],
-      cta: "Upgrade to Top Company",
+      cta: "Choose Company Plan",
       popular: true,
     },
     {
       id: "corporate",
-      name: "TOP CORPORATE",
-      tagline: "Sector Leadership & Export Dominance",
-      eligibility: "Best for: Large Corporates, Industry Titans & Exporters",
+      name: "Corporate Plan",
+      tagline: "For Large Enterprises & Industry Market Leaders",
+      eligibility: "Best for: Large corporations, multinational brands & major exporters",
       price: "₹26,999",
       annualPrice: "₹2,69,990",
-      annualSaving: "Save ₹53,998 (2 Mos Free)",
+      annualSaving: "Save ₹53,998 (2 Months Free)",
       period: "month",
-      badge: "SECTOR LEADERSHIP · #1 PINNED",
+      badge: "TOP TIER · #1 PINNED",
       color: "border-purple-500/40 bg-gradient-to-b from-white via-white to-purple-50/25 dark:from-[#122238] dark:to-[#1b1236] relative shadow-xl shadow-purple-500/10",
       accentColor: "text-purple-600 dark:text-purple-400",
       checkColor: "text-purple-500",
       benefits: [
-        "Everything in Top Company",
-        "5 Bundled Executive Leader Profiles (Full C-Suite Suite)",
-        "TOP COMPANY — Guaranteed Sector #1 Pinned Placement",
-        "Publish 6 articles/month (1/week + 2 add-on top-ups)",
-        "🌍 Global Corridors Tab (Interactive export map & country flows)",
-        "International Certifications Hub (BIS, CE, FDA, AS9100, ISO)",
-        "Dedicated IGE Account Manager & PR Concierge",
-        "Co-bylined press releases with IGE editorial team",
-        "Speaking & keynote placement eligibility at IGE global expos",
-        "Institutional Investor Due Diligence & ROI tracking suite",
+        "Everything included in the Company Plan",
+        "5 Bundled Verified Executive Leader profiles (Full C-Suite suite)",
+        "500 Monthly Follower Invite Credits",
+        "Guaranteed #1 Pinned placement in your industry sector",
+        "Publish 6 featured industry articles per month + 5x Priority Feed Boost",
+        "International certifications hub (ISO, CE, BIS, FDA, AS9100)",
+        "Unlimited whitepaper & document uploads in Updates & Insights",
+        "Priority feed distribution across the iGEN network",
+        "Dedicated account manager & PR concierge",
       ],
       restrictions: [],
-      cta: "Upgrade to Top Corporate",
+      cta: "Choose Corporate Plan",
       popular: false,
     },
   ];
@@ -192,35 +190,35 @@ export default function CompanyPlansPage() {
   };
 
   // ROI Calculator Calculations
-  const calculatedMultiplier = "90x";
+  const calculatedMultiplier = "10x";
   const estimatedIgenCost = Math.min(Math.max(Math.round(linkedinBudget * 0.35), 9999), 26999);
   const estimatedSavings = linkedinBudget - estimatedIgenCost;
 
-  // Pre-handled Objections FAQs
+  // Pre-Handled Objection FAQs (Exact from Slide 19)
   const faqs = [
     {
-      q: "The platform is new — who will see my company page?",
-      a: "The digital platform is new, but the India Global Expo brand is 30+ years old with trust built across thousands of industry leaders since 1994. All Company Pages are Google-indexed and sector-tagged, ensuring international procurement teams and investors discover you organically from day one.",
+      q: "The platform is new — who will see my page?",
+      a: "The platform is new. The brand is 30 years old. ICE has built trust since 1994. All Company Pages are Google-indexed — global buyers and procurement delegations find you through organic search from day one.",
     },
     {
-      q: "We already have LinkedIn Premium — isn't that enough?",
-      a: "LinkedIn has 900+ million profiles where your company is buried by an algorithm. On iGEN, there are only 10 verified Top Companies per sector. You are 1 in 10, not 1 in 900 million. Furthermore, LinkedIn charges separately for employee verification, while iGEN bundles Company + Leader Pages.",
+      q: "We already have LinkedIn — isn't that enough?",
+      a: "LinkedIn has 900 million profiles. You are 1 in 900 million — buried by an algorithmic feed. On iGEN, there are only 10 verified Top Companies per sector. You are 1 in 10. That is the curated authority difference.",
     },
     {
-      q: "How is this different from IndiaMart or TradeIndia?",
-      a: "IndiaMart is a marketplace for individual product SKUs where suppliers compete on price. iGEN is an institutional trust asset. You go to IndiaMart to sell a commodity; you come to iGEN so global buyers, banks, and institutional investors trust your company enough to award high-value contracts and credit lines.",
+      q: "How is this different from IndiaMart?",
+      a: "IndiaMart is a marketplace for product SKUs. iGEN is a marketplace for institutional trust. You go to IndiaMart to sell individual commodities. You come to iGEN so global buyers, investors, and banks trust your enterprise enough to buy, invest, or partner with you.",
     },
     {
       q: "What is the Blue Tick and why does it matter?",
-      a: "The Blue Tick is iGEN's KYC-verified institutional seal, publicly confirming that your company has undergone corporate verification and is recognized as a Top Company in its sector. It drastically shortens sales cycles and removes buyer hesitation during overseas due diligence.",
+      a: "The Blue Tick is iGEN's institutional seal of verification — publicly signalling that your company has been reviewed, KYC-verified, and recognized as an official Top Company in its sector. It drastically reduces B2B purchase hesitation and sales cycle length.",
     },
     {
-      q: "How much time will it take for our team to manage?",
-      a: "Almost none. You fill in a structured onboarding form, and our editorial concierge team builds and structures all 4 stakeholder tabs for you. You approve it, and it goes live. Your page works for you 365 days a year.",
+      q: "How much time will it take to manage?",
+      a: "Almost none. You fill in a simple onboarding form. Our team builds your page. You approve it. It goes live. iGEN's SME team produces sector thought leadership articles that appear on your sector page automatically.",
     },
     {
-      q: "What if my direct competitor is already listed?",
-      a: "Because we enforce a strict limit of 10 verified companies per sector (and only 1 #1 slot), available sector slots fill up fast. If your competitor is already listed, you can use our 48-hour sector slot reservation to lock in your position before the category is capped.",
+      q: "What if my competitor is already listed?",
+      a: "Then you already know you need to act immediately before the sector slots are fully closed. Contact our corporate desk at aditya@igenworld.com. We will check which tier and sector position is still available and hold it for 48 hours.",
     },
   ];
 
@@ -264,7 +262,7 @@ export default function CompanyPlansPage() {
                 </span>
               </div>
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                Manage your 4 stakeholder tabs, bundled leader profiles, and buyer inquiries.
+                Manage your 5 company tabs, team members, and published updates.
               </p>
             </div>
           </div>
@@ -279,18 +277,18 @@ export default function CompanyPlansPage() {
 
       {/* Hero Header */}
       <div className="text-center max-w-4xl mx-auto mb-10">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-[#F0652E] text-xs font-bold tracking-wide uppercase mb-3">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-[#0a66c2] dark:text-blue-400 text-xs font-bold tracking-wide uppercase mb-3">
           <Sparkles className="w-3.5 h-3.5" />
-          iGEN Institutional Trust Asset · Mission 2047
+          iGEN Verified Company Pages
         </div>
         <h1 className="text-3xl md:text-5xl font-black text-[#1D1D46] dark:text-white tracking-tight leading-tight font-display mb-4">
-          Stop Being 1 in 900 Million.<br />
-          <span className="bg-gradient-to-r from-[#F0652E] via-amber-500 to-indigo-600 bg-clip-text text-transparent">
-            Be 1 in 10 Verified Companies in Your Sector.
+          Establish Verified B2B Presence.<br />
+          <span className="bg-gradient-to-r from-[#0a66c2] via-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            Be 1 of Top 10 Verified Companies in Your Sector.
           </span>
         </h1>
         <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
-          The verified 4-stakeholder digital trust asset that bundles your <strong>Company Page + Executive Leader Profiles</strong> with guaranteed Top 10 sector discoverability.
+          A modern company page across 5 core tabs (<strong>Overview, Our Vision, Offerings, Updates & Insights, Team</strong>) with bundled Executive Leader profiles and guaranteed sector discoverability.
         </p>
 
         {/* Billing Cycle Toggle */}
@@ -431,7 +429,144 @@ export default function CompanyPlansPage() {
       </div>
 
       {/* ========================================================================= */}
-      {/* 2. THE NUCLEAR CLOSE — Sector Slot Scarcity & 48-Hour Hold Engine */}
+      {/* 2. DEFINITIVE COMPETITOR COMPARISON TABLE (Exact from Slide 9)             */}
+      {/* ========================================================================= */}
+      <div className="mb-16 bg-white dark:bg-[#122238] border border-slate-200 dark:border-white/10 rounded-3xl p-6 md:p-10 shadow-lg overflow-hidden">
+        <div className="text-center max-w-3xl mx-auto mb-8">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-[#0a66c2] dark:text-blue-400 text-xs font-bold uppercase tracking-wider mb-2">
+            <Award className="w-3.5 h-3.5" /> Market Comparison Matrix
+          </div>
+          <h2 className="text-2xl md:text-4xl font-black text-gray-900 dark:text-white tracking-tight">
+            Why iGEN — The Definitive Comparison
+          </h2>
+          <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 mt-1 font-medium">
+            vs. LinkedIn Premium · X / Twitter Blue · IndiaMart
+          </p>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse min-w-[700px]">
+            <thead>
+              <tr className="border-b border-slate-200 dark:border-white/10 text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <th className="py-4 px-4 font-black">Feature</th>
+                <th className="py-4 px-4 font-bold text-slate-600 dark:text-slate-300">LinkedIn Premium</th>
+                <th className="py-4 px-4 font-bold text-slate-600 dark:text-slate-300">X / Twitter Blue</th>
+                <th className="py-4 px-4 font-bold text-slate-600 dark:text-slate-300">IndiaMart</th>
+                <th className="py-4 px-5 font-black text-[#0a66c2] dark:text-blue-400 bg-blue-50/70 dark:bg-blue-950/40 rounded-t-2xl">
+                  iGEN Company Page
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-white/5 text-xs text-slate-700 dark:text-slate-300">
+              
+              {/* Row 1: Profile Reach */}
+              <tr className="hover:bg-slate-50/60 dark:hover:bg-white/5 transition-colors">
+                <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">Profile Reach</td>
+                <td className="py-3.5 px-4 text-slate-500">1 in 900 Million (buried by algorithm)</td>
+                <td className="py-3.5 px-4 text-slate-500">1 in 500 Million</td>
+                <td className="py-3.5 px-4 text-slate-500">1 in Millions</td>
+                <td className="py-3.5 px-5 font-bold text-blue-700 dark:text-blue-300 bg-blue-50/70 dark:bg-blue-950/40">
+                  ⚡ 1 in 10 per sector ✓
+                </td>
+              </tr>
+
+              {/* Row 2: Verification */}
+              <tr className="hover:bg-slate-50/60 dark:hover:bg-white/5 transition-colors">
+                <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">Verification</td>
+                <td className="py-3.5 px-4 text-slate-500">Company page only</td>
+                <td className="py-3.5 px-4 text-slate-500">Paid Blue Tick</td>
+                <td className="py-3.5 px-4 text-slate-500">Basic listing</td>
+                <td className="py-3.5 px-5 font-bold text-blue-700 dark:text-blue-300 bg-blue-50/70 dark:bg-blue-950/40">
+                  🛡️ KYC-verified Blue Tick ✓
+                </td>
+              </tr>
+
+              {/* Row 3: Bundle */}
+              <tr className="hover:bg-slate-50/60 dark:hover:bg-white/5 transition-colors">
+                <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">Bundle</td>
+                <td className="py-3.5 px-4 text-slate-500">Company + Leader billed separately</td>
+                <td className="py-3.5 px-4 text-slate-500">Company + Leader billed separately</td>
+                <td className="py-3.5 px-4 text-slate-400">N/A</td>
+                <td className="py-3.5 px-5 font-bold text-emerald-700 dark:text-emerald-300 bg-blue-50/70 dark:bg-blue-950/40">
+                  🎁 Company + Leader Pages BUNDLED ✓
+                </td>
+              </tr>
+
+              {/* Row 4: Sector Visibility */}
+              <tr className="hover:bg-slate-50/60 dark:hover:bg-white/5 transition-colors">
+                <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">Sector Visibility</td>
+                <td className="py-3.5 px-4 text-slate-500">Algorithm-driven feed</td>
+                <td className="py-3.5 px-4 text-slate-500">Hashtag-based</td>
+                <td className="py-3.5 px-4 text-slate-500">Product SKU commodity</td>
+                <td className="py-3.5 px-5 font-bold text-blue-700 dark:text-blue-300 bg-blue-50/70 dark:bg-blue-950/40">
+                  ⭐ Curated Top 10 per sector ✓
+                </td>
+              </tr>
+
+              {/* Row 5: SEO Value */}
+              <tr className="hover:bg-slate-50/60 dark:hover:bg-white/5 transition-colors">
+                <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">SEO &amp; Canonical URL</td>
+                <td className="py-3.5 px-4 text-slate-500">LinkedIn domain</td>
+                <td className="py-3.5 px-4 text-slate-500">Twitter domain</td>
+                <td className="py-3.5 px-4 text-slate-500">IndiaMart product domain</td>
+                <td className="py-3.5 px-5 font-bold text-blue-700 dark:text-blue-300 bg-blue-50/70 dark:bg-blue-950/40 font-mono text-[11px]">
+                  🌐 iGEN + sector taxonomy ✓
+                </td>
+              </tr>
+
+              {/* Row 6: Investor Tab */}
+              <tr className="hover:bg-slate-50/60 dark:hover:bg-white/5 transition-colors">
+                <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">Investor Due Diligence Tab</td>
+                <td className="py-3.5 px-4 text-red-400 font-semibold">Not available ✕</td>
+                <td className="py-3.5 px-4 text-red-400 font-semibold">Not available ✕</td>
+                <td className="py-3.5 px-4 text-red-400 font-semibold">Not available ✕</td>
+                <td className="py-3.5 px-5 font-bold text-blue-700 dark:text-blue-300 bg-blue-50/70 dark:bg-blue-950/40">
+                  📈 Dedicated Stakeholder Tab ✓
+                </td>
+              </tr>
+
+              {/* Row 7: Content Quality */}
+              <tr className="hover:bg-slate-50/60 dark:hover:bg-white/5 transition-colors">
+                <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">Content Quality</td>
+                <td className="py-3.5 px-4 text-slate-500">User-generated noise</td>
+                <td className="py-3.5 px-4 text-slate-500">User-generated feed</td>
+                <td className="py-3.5 px-4 text-slate-500">Product listings</td>
+                <td className="py-3.5 px-5 font-bold text-blue-700 dark:text-blue-300 bg-blue-50/70 dark:bg-blue-950/40">
+                  ✍️ SME-written 10–20yr experts ✓
+                </td>
+              </tr>
+
+              {/* Row 8: Est Monthly Cost */}
+              <tr className="hover:bg-slate-50/60 dark:hover:bg-white/5 transition-colors bg-slate-50/30 dark:bg-white/5">
+                <td className="py-4 px-4 font-black text-slate-900 dark:text-white">Est. Monthly Cost</td>
+                <td className="py-4 px-4 font-bold text-slate-600 dark:text-slate-400">₹14,000 – ₹20,000</td>
+                <td className="py-4 px-4 font-bold text-slate-600 dark:text-slate-400">₹16,790 (tick only)</td>
+                <td className="py-4 px-4 font-bold text-slate-600 dark:text-slate-400">₹5,000 – ₹15,000</td>
+                <td className="py-4 px-5 font-black text-emerald-600 dark:text-emerald-400 bg-blue-100/80 dark:bg-blue-900/50 rounded-b-2xl text-sm">
+                  From ₹9,999 (full bundle) ✓
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+        {/* Highlight Callout */}
+        <div className="mt-6 p-4 bg-gradient-to-r from-blue-900 to-indigo-950 text-white rounded-2xl text-xs flex items-center justify-between flex-wrap gap-3 shadow-sm">
+          <div className="flex items-center gap-2">
+            <span className="text-base">💡</span>
+            <span className="font-semibold italic">
+              &quot;Twitter and LinkedIn sell verification separately. iGEN bundles Company Pages + Leader Pages — neither competitor offers this.&quot;
+            </span>
+          </div>
+          <span className="text-[10px] font-mono text-blue-200 uppercase tracking-wider font-bold">
+            iGEN Strategy Blueprint 2026
+          </span>
+        </div>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* 3. THE NUCLEAR CLOSE — Sector Slot Scarcity & 48-Hour Hold Engine */}
       {/* ========================================================================= */}
       <div className="mb-16 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 border border-slate-800 rounded-3xl p-6 md:p-10 text-white shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -580,7 +715,7 @@ export default function CompanyPlansPage() {
               </div>
               <div className="flex items-center gap-2 text-xs font-bold text-gray-700 dark:text-gray-200">
                 <Check className="w-4 h-4 text-emerald-500" />
-                <span>4 Dedicated Stakeholder Tabs (Investors, Talent, Ops, Brand)</span>
+                <span>5 Dedicated Company Tabs (Overview, Our Vision, Offerings, Updates & Insights, Team)</span>
               </div>
             </div>
           </div>

@@ -142,7 +142,7 @@ function ListCard({ article }: { article: Article }) {
           </div>
           <span className="text-xs font-medium text-[var(--color-neutral-dark)]">{article.sourceName}</span>
           <span className="text-[var(--color-neutral-mid)]">·</span>
-          <span className="text-xs text-[var(--color-neutral-dark)]">{timeAgo(article.publishedAt)}</span>
+          <span className="text-xs text-[var(--color-neutral-dark)]" suppressHydrationWarning>{timeAgo(article.publishedAt)}</span>
           <span className="text-[var(--color-neutral-mid)]">·</span>
           <span className="flex items-center gap-0.5 text-xs text-[var(--color-neutral-dark)]">
             <Clock className="h-3 w-3" />
@@ -385,7 +385,7 @@ function SidebarCard({ article }: { article: Article }) {
         <div className="mt-1 flex items-center gap-2 text-[11px] text-[var(--color-neutral-dark)]">
           {article.sector && <span>{article.sector.name}</span>}
           <span>·</span>
-          <span>{timeAgo(article.publishedAt)}</span>
+          <span suppressHydrationWarning>{timeAgo(article.publishedAt)}</span>
         </div>
       </div>
     </Link>
