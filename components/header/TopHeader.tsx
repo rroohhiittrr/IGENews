@@ -10,6 +10,7 @@ import ProfileAvatar from "@/components/header/ProfileAvatar";
 import UpgradeButton from "@/components/header/UpgradeButton";
 import AuthButtons from "@/components/header/AuthButtons";
 import EOIButton from "@/components/eoi-form/EOIButton";
+import POCV2Button from "@/components/poc-v2/POCV2Button";
 import NewsPOCButton from "@/components/news-poc/NewsPOCButton";
 import ActiveToggle from "@/components/header/ActiveToggle";
 import { useAuth } from "@/contexts/AuthContext";
@@ -23,6 +24,7 @@ export default function TopHeader() {
       <Logo />
       <SearchBar compact />
       <div className="flex items-center gap-1 sm:gap-2">
+        <POCV2Button />
         <ActiveToggle />
         <NewsPOCButton />
         <EOIButton />
