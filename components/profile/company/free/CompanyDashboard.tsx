@@ -13,7 +13,7 @@ import {
   UserPlus, Bell, Image as ImageIcon, Video,
   Search, Info, Filter,
   X, ArrowLeft, Calendar, Download,
-  MoreHorizontal, ChevronDown, Clock
+  MoreHorizontal, ChevronDown, Clock, Smile, Layers, Send
 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import CompanyPublicProfile from "@/components/profile/company/CompanyPublicProfile";
@@ -131,7 +131,7 @@ export default function CompanyDashboard() {
     leadership_first: true,
     wef: true,
   });
-  const [feedCommentsList, setFeedCommentsList] = useState([
+  const [feedCommentsList, setFeedCommentsList] = useState<any[]>([
     {
       id: "comm-1",
       author: "Sabrina Shirley, PMP",
@@ -3937,7 +3937,7 @@ export default function CompanyDashboard() {
                     {/* Comments Thread (Exact Screenshot 2) */}
                     <div className="space-y-4 pt-1">
                       
-                      {feedCommentsList.map((comm) => (
+                      {feedCommentsList.map((comm: any) => (
                         <div key={comm.id} className="space-y-3">
                           {/* Main Comment */}
                           <div className="flex items-start gap-2.5">
@@ -3967,7 +3967,7 @@ export default function CompanyDashboard() {
                               <div className="flex items-center gap-3 text-[11px] font-semibold text-slate-500 px-3">
                                 <button
                                   onClick={() => {
-                                    setFeedCommentsList(feedCommentsList.map((c) =>
+                                    setFeedCommentsList(feedCommentsList.map((c: any) =>
                                       c.id === comm.id ? { ...c, isLiked: !c.isLiked, likes: c.likes + (c.isLiked ? -1 : 1) } : c
                                     ));
                                   }}
@@ -3992,7 +3992,7 @@ export default function CompanyDashboard() {
                                         isLiked: false,
                                         text: replyText,
                                       };
-                                      setFeedCommentsList(feedCommentsList.map((c) =>
+                                      setFeedCommentsList(feedCommentsList.map((c: any) =>
                                         c.id === comm.id ? { ...c, replies: [...(c.replies || []), newReply] } : c
                                       ));
                                     }
@@ -4008,7 +4008,7 @@ export default function CompanyDashboard() {
                           {/* Nested Threaded Replies (Exact Screenshot 2: Latoya Newland) */}
                           {comm.replies && comm.replies.length > 0 && (
                             <div className="pl-8 space-y-2.5 border-l-2 border-slate-200 dark:border-slate-800 ml-4">
-                              {comm.replies.map((rep) => (
+                              {comm.replies.map((rep: any) => (
                                 <div key={rep.id} className="flex items-start gap-2.5">
                                   <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-700 text-white font-bold flex items-center justify-center text-[10px] shrink-0">
                                     {rep.author.charAt(0)}
@@ -6513,7 +6513,7 @@ export default function CompanyDashboard() {
                       type: "articles" as const,
                       metrics: { impressions: "1", ctr: "0.0%", shares: 0, clicks: 0, replies: 0 }
                     };
-                    setCompanyPostsList([newEventPost, ...companyPostsList]);
+                    setPostsList([newEventPost, ...postsList]);
                     alert(`Success! Event "${eventName}" created and broadcasted to your company followers.`);
                     setEventName("");
                     setEventDescription("");
@@ -6682,7 +6682,7 @@ export default function CompanyDashboard() {
                         type: "articles" as const,
                         metrics: { impressions: "1", ctr: "0.0%", shares: 0, clicks: 0, replies: 0 }
                       };
-                      setCompanyPostsList([newArticlePost, ...companyPostsList]);
+                      setPostsList([newArticlePost, ...postsList]);
                       alert(`Success! Long-form article "${articleTitle}" published.`);
                       setArticleTitle("");
                       setArticleBody("");
@@ -6929,7 +6929,7 @@ export default function CompanyDashboard() {
                       type: "articles" as const,
                       metrics: { impressions: "1", ctr: "0.0%", shares: 0, clicks: 0, replies: 0 }
                     };
-                    setCompanyPostsList([newNewsletterPost, ...companyPostsList]);
+                    setPostsList([newNewsletterPost, ...postsList]);
                     alert(`Success! Newsletter "${newsletterTitle}" created and broadcasted to your followers.`);
                     setNewsletterTitle("");
                     setNewsletterDesc("");

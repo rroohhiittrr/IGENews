@@ -4,7 +4,9 @@ import { useState, useMemo } from "react";
 import { 
   MapPin, ExternalLink, Share2, Check, 
   Search, Building2, Users, FileText,
-  Plus, ArrowUpRight
+  Plus, ArrowUpRight, Crown, Rocket,
+  Globe, TrendingUp, Lock, Eye,
+  GraduationCap, CheckCircle2, Download
 } from "lucide-react";
 
 export interface CompanyPublicProfileProps {
@@ -205,8 +207,8 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
 
   const filteredPosts = useMemo(() => {
     if (postFilter === "all") return postsList;
-    return postsList.filter((p) => p.type === postFilter);
-  }, [postFilter]);
+    return postsList.filter((p: any) => p.type === postFilter);
+  }, [postFilter, postsList]);
 
   const handleShare = () => {
     if (typeof window !== "undefined") {
@@ -627,7 +629,7 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                  {servicesList.slice(0, isFree ? 2 : isStartup ? 4 : isCompany ? 6 : 8).map((srv) => (
+                  {servicesList.slice(0, isFree ? 2 : isStartup ? 4 : isCompany ? 6 : 8).map((srv: any) => (
                     <div
                       key={srv.id}
                       onClick={() => openServiceInquiry(srv.name)}
@@ -693,7 +695,7 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {teamMembers.slice(0, isStartup ? 1 : isCompany ? 2 : isCorporate ? 4 : 2).map((ldr, idx) => {
+                  {teamMembers.slice(0, isStartup ? 1 : isCompany ? 2 : isCorporate ? 4 : 2).map((ldr: any, idx: number) => {
                     const isVerifiedLeader = idx < maxLeaderSeats;
                     return (
                       <div
@@ -761,7 +763,7 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                     { tag: "VB", name: "VB World", sub: "Events & Exhibitions", follow: true },
                     { tag: "iGEN", name: "India Global News", sub: "B2B Trade Media", follow: true },
                     { tag: "VBW", name: "Viksit Bharat World", sub: "Global Trade Portal", follow: false },
-                  ].map((aff, i) => (
+                  ].map((aff: any, i: number) => (
                     <div key={i} className="flex items-center justify-between gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200/80">
                       <div className="flex items-center gap-2.5">
                         <div className="w-8 h-8 rounded-lg bg-[#0a192f] text-white font-bold flex items-center justify-center text-xs">
@@ -1172,7 +1174,7 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
 
             {/* Services Grid (Tier-gated item visibility) */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {servicesList.slice(0, isFree ? 2 : isStartup ? 4 : isCompany ? 6 : servicesList.length).map((srv) => (
+              {servicesList.slice(0, isFree ? 2 : isStartup ? 4 : isCompany ? 6 : servicesList.length).map((srv: any) => (
                 <div
                   key={srv.id}
                   className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs space-y-2.5 hover:border-[#ea580c]/50 transition-all group"
@@ -1261,7 +1263,7 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
 
             {/* Post Feed */}
             <div className="space-y-4">
-              {filteredPosts.map((post) => (
+              {filteredPosts.map((post: any) => (
                 <div
                   key={post.id}
                   className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs space-y-4"
@@ -1375,7 +1377,7 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
 
                 {/* Department Filter */}
                 <div className="flex items-center gap-1.5 overflow-x-auto">
-                  {departments.slice(0, 4).map((d) => (
+                  {departments.slice(0, 4).map((d: any) => (
                     <button
                       key={d}
                       onClick={() => setSelectedDept(d)}
@@ -1493,7 +1495,7 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredMembers.map((member, idx) => {
+                {filteredMembers.map((member: any, idx: number) => {
                   const isBundledVerified = idx < maxLeaderSeats;
                   return (
                     <div
@@ -1638,7 +1640,7 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                       className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#ea580c]"
                     >
                       <option value="">Select a service...</option>
-                      {servicesList.map((s) => (
+                      {servicesList.map((s: any) => (
                         <option key={s.id} value={s.name}>{s.name}</option>
                       ))}
                     </select>

@@ -145,7 +145,7 @@ export default function AssociateSMEProDashboard() {
   const profile = user?.onboardingForm || {};
   const [viewMode, setViewMode] = useState<"private" | "public">("private");
   const [copiedUrl, setCopiedUrl] = useState(false);
-  const [activeTab, setActiveTab] = useState<"overview" | "articles" | "consulting" | "insights">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "articles" | "consulting" | "insights" | "affiliate">("overview");
   const [avatarBase64, setAvatarBase64] = useState(profile.profilePic || "");
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const [openToConsulting, setOpenToConsulting] = useState(true);
@@ -374,7 +374,7 @@ export default function AssociateSMEProDashboard() {
                 onChange={e => setNewSector(e.target.value)}
                 className="w-full px-3 py-2.5 text-sm border border-gray-200 dark:border-white/10 rounded-xl bg-gray-50 dark:bg-white/5 text-[#1D1D46] dark:text-white focus:outline-none"
               >
-                {SECTORS.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
+                {SECTORS.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
               </select>
               <div className="flex gap-2">
                 <button onClick={handlePublish} className="flex-1 py-2.5 bg-blue-600 text-white text-xs font-bold rounded-xl hover:bg-blue-700 flex items-center justify-center gap-1.5">
