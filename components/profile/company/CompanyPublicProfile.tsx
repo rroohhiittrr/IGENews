@@ -2,16 +2,10 @@
 
 import { useState, useMemo } from "react";
 import { 
-  ShieldCheck, MapPin, Mail, ExternalLink,
-  Share2, Check, Star, AlertCircle, 
-  Rocket, Crown, Search, ChevronRight, ChevronLeft,
-  Building2, Users, FileText, Video, Image as ImageIcon,
-  Download, Eye, ThumbsUp, MessageSquare, Repeat, Send,
-  Briefcase, GraduationCap, Globe, CheckCircle2, Lock,
-  Plus, MoreHorizontal, ArrowUpRight, Sparkles, Filter,
-  Layers, Compass, Award, TrendingUp, BadgeCheck
+  MapPin, ExternalLink, Share2, Check, 
+  Search, Building2, Users, FileText,
+  Plus, ArrowUpRight
 } from "lucide-react";
-import { useParams } from "next/navigation";
 
 export interface CompanyPublicProfileProps {
   companyData?: any;
@@ -24,11 +18,8 @@ export default function CompanyPublicProfile({
   companyData = {},
   tier: initialTier = "company",
   onUpgradeClick,
-  isOwner = false,
+  isOwner: _isOwner = false,
 }: CompanyPublicProfileProps) {
-  const params = useParams();
-  const locale = (params?.locale as string) || "en";
-
   // Active Plan State
   const [activeTier, setActiveTier] = useState<"free" | "startup" | "company" | "corporate">(initialTier);
 
@@ -62,12 +53,9 @@ export default function CompanyPublicProfile({
   const [overviewExpanded, setOverviewExpanded] = useState(false);
 
   // Profile data
-  const companyName = companyData.companyName || (
-    isStartup ? "Nexus Robotics & Automation" : 
-    isFree ? "Acme Enterprise Solutions" : 
-    isCorporate ? "Bharat Forge & Heavy Industries" : 
-    "IGEN - India Global Expo News"
-  );
+  const rawComp = companyData.companyName;
+  const isGeneric = !rawComp || rawComp === "SME Pro User" || rawComp === "Your Name" || rawComp.toLowerCase().includes("user");
+  const companyName = !isGeneric ? rawComp : "Mehta Traders";
 
   const website = companyData.website || "www.igenworld.com";
   const sector = companyData.sector || (isStartup ? "Industrial Robotics & Automation" : "International Trade and Development");
@@ -237,39 +225,40 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
     <div className="bg-[#f8fafc] text-slate-800 min-h-screen font-sans pb-28">
       
       {/* ========================================================================= */}
+      {/* ========================================================================= */}
       {/* 0. CLEAN PLAN PREVIEW BAR                                                 */}
       {/* ========================================================================= */}
-      <div className="bg-white border-b border-slate-200 sticky top-0 z-40 px-4 py-2.5 shadow-sm">
+      <div className="bg-white border-b border-slate-200 sticky top-0 z-40 px-4 py-2.5 shadow-2xs">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-slate-500">Preview Plan:</span>
-            <span className={`px-2.5 py-0.5 rounded-full font-bold text-[11px] uppercase ${
+            <span className="font-bold text-slate-500">Previewing Tier:</span>
+            <span className={`px-2.5 py-0.5 rounded-full font-extrabold text-[11px] uppercase tracking-wide ${
               isCorporate 
-                ? "bg-purple-100 text-purple-800 border border-purple-200" 
+                ? "bg-slate-900 text-amber-300 border border-amber-400/40 shadow-2xs" 
                 : isCompany 
-                ? "bg-blue-100 text-blue-800 border border-blue-200" 
+                ? "bg-blue-50 text-[#0a192f] border border-blue-200" 
                 : isStartup 
-                ? "bg-emerald-100 text-emerald-800 border border-emerald-200" 
-                : "bg-slate-100 text-slate-700"
+                ? "bg-orange-50 text-[#ea580c] border border-orange-200" 
+                : "bg-slate-100 text-slate-700 border border-slate-200"
             }`}>
-              {isCorporate ? "Corporate Plan" : isCompany ? "Company Plan" : isStartup ? "Startup Plan" : "Free Profile"}
+              {isCorporate ? "👑 Corporate Sovereign" : isCompany ? "🔵 Company Enterprise" : isStartup ? "🟠 Startup Vanguard" : "📋 Free Directory Profile"}
             </span>
           </div>
 
-          <div className="flex items-center gap-1.5 overflow-x-auto p-1 bg-slate-100 rounded-xl border border-slate-200">
+          <div className="flex items-center gap-1.5 overflow-x-auto p-1 bg-slate-100/80 rounded-xl border border-slate-200/80">
             {[
               { id: "free", label: "1. Free Profile (₹0)" },
-              { id: "startup", label: "2. Startup Plan (₹9,999)" },
-              { id: "company", label: "3. Company Plan (₹16,999)" },
-              { id: "corporate", label: "4. Corporate Plan (₹26,999)" },
+              { id: "startup", label: "2. Startup Plan (₹99,990)" },
+              { id: "company", label: "3. Company Plan (₹1,69,990)" },
+              { id: "corporate", label: "4. Corporate Plan (₹2,69,990)" },
             ].map((t) => (
               <button
                 key={t.id}
                 onClick={() => setActiveTier(t.id as any)}
-                className={`px-3 py-1 rounded-lg font-semibold text-xs transition-all whitespace-nowrap ${
+                className={`px-3 py-1 rounded-lg font-bold text-xs transition-all whitespace-nowrap ${
                   activeTier === t.id
-                    ? "bg-[#0a66c2] text-white shadow-sm"
-                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-200"
+                    ? "bg-[#0a192f] text-white shadow-xs"
+                    : "text-slate-600 hover:text-[#0a192f] hover:bg-white"
                 }`}
               >
                 {t.label}
@@ -280,9 +269,9 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
           {onUpgradeClick && (
             <button
               onClick={onUpgradeClick}
-              className="text-[#0a66c2] hover:underline font-semibold text-xs flex items-center gap-1"
+              className="text-[#ea580c] hover:text-[#c2410c] font-bold text-xs flex items-center gap-1 transition-colors"
             >
-              <span>View Pricing Plans</span>
+              <span>Compare Pricing Plans</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
           )}
@@ -292,40 +281,61 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
         
         {/* ========================================================================= */}
-        {/* 1. CLEAN PROFESSIONAL LINKEDIN COMPANY HEADER                             */}
+        {/* 1. CLEAN EDITORIAL iGEN COMPANY HEADER                                     */}
         {/* ========================================================================= */}
-        <div className="bg-white dark:bg-[#1b2228] rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xs mb-6">
+        <div className="bg-white rounded-2xl overflow-hidden border border-slate-200/90 shadow-xs mb-6">
           
-          {/* Cover Banner */}
-          <div className="h-36 sm:h-52 w-full bg-gradient-to-r from-slate-700 via-slate-800 to-slate-900 relative">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent" />
+          {/* Cover Banner (Tier-specific brand aesthetic) */}
+          <div className={`h-40 sm:h-56 w-full relative overflow-hidden transition-all duration-500 ${
+            isCorporate
+              ? "bg-gradient-to-r from-[#0a192f] via-[#112240] to-[#0a192f]"
+              : isCompany
+              ? "bg-gradient-to-r from-[#0a192f] via-[#1e3a8a] to-[#0f172a]"
+              : isStartup
+              ? "bg-gradient-to-r from-[#ea580c] via-[#f97316] to-[#0a192f]"
+              : "bg-gradient-to-r from-slate-700 via-slate-800 to-slate-900"
+          }`}>
+            {/* Subtle luxury geometric grid overlay */}
+            <div className="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:20px_20px] opacity-15" />
             
-            {/* Top Right Subtle Plan Tier Indicator */}
-            <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10">
-              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-md shadow-xs ${
+            {/* Top Left Pinned Badge for Corporate */}
+            {isCorporate && (
+              <div className="absolute top-3.5 left-4 z-10">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-md">
+                  <Crown className="w-3.5 h-3.5 text-slate-950 fill-slate-950" />
+                  <span>#1 PINNED SECTOR LEADER</span>
+                </span>
+              </div>
+            )}
+
+            {/* Top Right Tier Insignia */}
+            <div className="absolute top-3.5 right-4 z-10">
+              <span className={`inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold backdrop-blur-md shadow-xs ${
                 isCorporate
-                  ? "bg-slate-900/80 text-amber-300 border border-amber-500/40"
+                  ? "bg-[#0a192f]/90 text-amber-300 border border-amber-400/40"
                   : isCompany
-                  ? "bg-slate-900/80 text-blue-300 border border-blue-500/40"
+                  ? "bg-[#0a192f]/85 text-blue-200 border border-blue-400/30"
                   : isStartup
-                  ? "bg-slate-900/80 text-emerald-300 border border-emerald-500/40"
-                  : "bg-slate-900/80 text-slate-300 border border-slate-700"
+                  ? "bg-black/40 text-orange-200 border border-orange-300/40"
+                  : "bg-black/40 text-slate-300 border border-slate-700"
               }`}>
-                {isCorporate ? "👑 Corporate Enterprise" : isCompany ? "⭐ Verified Company" : isStartup ? "🚀 High-Growth Venture" : "📋 Standard Listing"}
+                {isCorporate ? "👑 Corporate Sovereign Apex" : isCompany ? "🔵 Premier Enterprise Member" : isStartup ? "🟠 Rising Vanguard Venture" : "📋 Directory Basic Profile"}
               </span>
             </div>
           </div>
 
           {/* Profile Identity & Action Bar */}
-          <div className="px-6 sm:px-8 pb-6 relative">
+          <div className="px-6 sm:px-8 pb-6 relative bg-white">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between -mt-14 sm:-mt-16 gap-4 mb-4">
               
               {/* Square Logo Overlapping Cover */}
-              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-white dark:bg-[#1b2228] border-4 border-white dark:border-[#1b2228] shadow-md flex items-center justify-center p-2 shrink-0 z-10">
+              <div className={`w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-white border-4 border-white shadow-md flex items-center justify-center p-2 shrink-0 z-10 ${
+                isCorporate ? "ring-2 ring-amber-400/80" : isCompany ? "ring-2 ring-blue-500/50" : isStartup ? "ring-2 ring-orange-500/60" : ""
+              }`}>
                 {companyData.logo ? (
                   <img src={companyData.logo} alt={companyName} className="w-full h-full object-contain rounded-xl" />
                 ) : (
-                  <div className="w-full h-full rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold text-3xl">
+                  <div className="w-full h-full rounded-xl bg-[#0a192f] text-white flex items-center justify-center font-bold text-3xl">
                     {companyName.charAt(0)}
                   </div>
                 )}
@@ -335,15 +345,15 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
               <div className="flex items-center gap-2.5 flex-wrap">
                 <button
                   onClick={() => setIsFollowing(!isFollowing)}
-                  className={`px-5 py-2 rounded-full font-bold text-xs sm:text-sm transition-all flex items-center gap-1.5 shadow-xs ${
+                  className={`px-5 py-2 rounded-full font-bold text-xs sm:text-sm transition-all flex items-center gap-1.5 shadow-2xs ${
                     isFollowing
-                      ? "bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-600"
-                      : "bg-[#0a66c2] hover:bg-[#004182] text-white"
+                      ? "bg-slate-100 hover:bg-slate-200 text-[#0a192f] border border-slate-300"
+                      : "bg-[#0a192f] hover:bg-[#112240] text-white"
                   }`}
                 >
                   {isFollowing ? (
                     <>
-                      <Check className="w-4 h-4 text-slate-600 dark:text-slate-300" />
+                      <Check className="w-4 h-4 text-emerald-600" />
                       <span>Following</span>
                     </>
                   ) : (
@@ -358,15 +368,15 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                   href={`https://${website}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="px-4 py-2 border border-[#0a66c2] text-[#0a66c2] dark:text-[#70b5f9] dark:border-[#70b5f9] hover:bg-blue-50 dark:hover:bg-blue-950/30 rounded-full font-bold text-xs sm:text-sm transition-all flex items-center gap-1.5"
+                  className="px-4 py-2 border border-slate-300 text-[#0a192f] hover:bg-slate-100 rounded-full font-bold text-xs sm:text-sm transition-all flex items-center gap-1.5"
                 >
                   <span>Visit website</span>
-                  <ExternalLink className="w-4 h-4" />
+                  <ExternalLink className="w-4 h-4 text-slate-500" />
                 </a>
 
                 <button
                   onClick={handleShare}
-                  className="px-3.5 py-2 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full font-bold text-xs sm:text-sm transition-all flex items-center gap-1.5"
+                  className="px-3.5 py-2 border border-slate-300 text-slate-700 hover:bg-slate-100 rounded-full font-bold text-xs sm:text-sm transition-all flex items-center gap-1.5"
                   title="Share page"
                 >
                   {copiedLink ? (
@@ -384,27 +394,54 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
               </div>
             </div>
 
-            {/* Title & Metadata */}
+            {/* Title, 3 Verified Tick Badges & Metadata */}
             <div className="space-y-1.5 text-left">
-              <div className="flex items-center gap-2 flex-wrap">
-                <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <h1 className="text-2xl sm:text-3xl font-black text-[#0a192f] tracking-tight">
                   {companyName}
                 </h1>
-                {!isFree && (
-                  <BadgeCheck className="w-6 h-6 text-[#0a66c2] fill-[#0a66c2]/10 shrink-0" />
+                
+                {/* 3 DISTINCT VERIFIED TICK MARK BADGES */}
+                {isCorporate ? (
+                  <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-gradient-to-r from-[#0a192f] via-[#112240] to-[#0a192f] border border-orange-400/50 text-white text-xs font-bold shadow-xs">
+                    <span className="w-4 h-4 rounded-full bg-gradient-to-tr from-[#ea580c] to-[#f59e0b] p-[1.5px] flex items-center justify-center shadow-xs">
+                      <span className="w-full h-full rounded-full bg-[#0a192f] flex items-center justify-center text-orange-400">
+                        <Check className="w-2.5 h-2.5 stroke-[3.5]" />
+                      </span>
+                    </span>
+                    <span className="tracking-tight font-extrabold text-orange-300">Verified Corporate</span>
+                  </div>
+                ) : isCompany ? (
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-100 border border-slate-300 text-[#0a192f] text-xs font-bold shadow-2xs">
+                    <span className="w-4 h-4 rounded-full bg-[#0a192f] flex items-center justify-center text-white shadow-xs">
+                      <Check className="w-2.5 h-2.5 stroke-[3.5]" />
+                    </span>
+                    <span>Verified Company</span>
+                  </div>
+                ) : isStartup ? (
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-orange-50 border border-orange-200/80 text-orange-700 text-xs font-bold shadow-2xs">
+                    <span className="w-4 h-4 rounded-full bg-gradient-to-tr from-[#ea580c] to-[#f97316] flex items-center justify-center text-white shadow-xs">
+                      <Check className="w-2.5 h-2.5 stroke-[3.5]" />
+                    </span>
+                    <span>Verified Startup</span>
+                  </div>
+                ) : (
+                  <span className="px-2 py-0.5 rounded-md bg-slate-100 border border-slate-200 text-slate-500 text-[10px] font-bold">
+                    Standard Profile
+                  </span>
                 )}
               </div>
 
-              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-3xl leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-600 max-w-3xl leading-relaxed font-normal">
                 {tagline}
               </p>
 
-              <div className="text-xs text-slate-500 dark:text-slate-400 flex flex-wrap items-center gap-x-2 gap-y-1 pt-1 font-normal">
-                <span>{sector}</span>
+              <div className="text-xs text-slate-500 flex flex-wrap items-center gap-x-2 gap-y-1 pt-1 font-normal">
+                <span className="font-semibold text-[#0a192f]">{sector}</span>
                 <span>•</span>
                 <span>{city}, {state}, {country}</span>
                 <span>•</span>
-                <span className="font-semibold text-slate-700 dark:text-slate-300">{followersCount}</span>
+                <span className="font-bold text-[#ea580c]">{followersCount}</span>
                 <span>•</span>
                 <span>{employeeBracket}</span>
                 <span>•</span>
@@ -413,8 +450,8 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
             </div>
           </div>
 
-          {/* Clean Horizontal Tabs Navigation */}
-          <div className="border-t border-slate-200 dark:border-slate-800 px-4 sm:px-8 bg-white dark:bg-[#1b2228]">
+          {/* Clean Horizontal Tabs Navigation with Orange Accent */}
+          <div className="border-t border-slate-200 px-4 sm:px-8 bg-white">
             <nav className="flex items-center gap-2 sm:gap-4 overflow-x-auto">
               {[
                 { id: "home", label: "Overview" },
@@ -428,8 +465,8 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                   onClick={() => setActiveTab(tab.id as any)}
                   className={`px-4 py-3.5 border-b-2 font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center shrink-0 ${
                     activeTab === tab.id
-                      ? "border-[#0a66c2] text-[#0a66c2]"
-                      : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-300"
+                      ? "border-[#ea580c] text-[#0a192f]"
+                      : "border-transparent text-slate-500 hover:text-[#0a192f] hover:border-slate-300"
                   }`}
                 >
                   {tab.label}
@@ -440,7 +477,7 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
         </div>
 
         {/* ========================================================================= */}
-        {/* TAB 1: HOME                                                               */}
+        {/* TAB 1: OVERVIEW                                                           */}
         {/* ========================================================================= */}
         {activeTab === "home" && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -448,59 +485,142 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
             {/* Main Left Column */}
             <div className="lg:col-span-2 space-y-6">
               
-              {/* 1. Overview */}
-              <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-                <h2 className="text-base font-bold text-slate-900 mb-2">Overview</h2>
-                <p className={`text-xs sm:text-sm text-slate-600 leading-relaxed ${overviewExpanded ? "" : "line-clamp-3"}`}>
+              {/* 1. Overview Summary Card */}
+              <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs">
+                <div className="flex items-center justify-between mb-3">
+                  <h2 className="text-base font-bold text-[#0a192f]">Company Overview</h2>
+                  <span className="text-[11px] font-bold text-[#ea580c] uppercase tracking-wider">
+                    {isCorporate ? "👑 Global Conglomerate" : isCompany ? "🔵 Enterprise Verified" : isStartup ? "🟠 High-Growth Startup" : "Basic Registry"}
+                  </span>
+                </div>
+                <p className={`text-xs sm:text-sm text-slate-600 leading-relaxed font-normal ${overviewExpanded ? "" : "line-clamp-3"}`}>
                   {fullOverviewText}
                 </p>
                 <button
                   onClick={() => setOverviewExpanded(!overviewExpanded)}
-                  className="mt-2 text-xs font-bold text-[#0a66c2] hover:underline"
+                  className="mt-2 text-xs font-bold text-[#ea580c] hover:underline"
                 >
-                  {overviewExpanded ? "Show less" : "... See more"}
+                  {overviewExpanded ? "Show less" : "... See full overview"}
                 </button>
               </div>
 
-              {/* Startup Metrics Widget */}
-              {isStartup && (
-                <div className="bg-white border border-emerald-200 rounded-2xl p-5 shadow-sm space-y-3">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-700 flex items-center gap-1.5">
-                    <Rocket className="w-3.5 h-3.5" /> Startup Growth Highlights
-                  </h3>
+              {/* TIER-SPECIFIC FEATURE 1: CORPORATE SOVEREIGN LIAISON & GLOBAL CORRIDORS */}
+              {isCorporate && (
+                <div className="bg-gradient-to-r from-[#0a192f] via-[#112240] to-[#0a192f] text-white rounded-2xl p-6 shadow-md border border-amber-400/40 space-y-4">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <div className="flex items-center gap-2">
+                      <Crown className="w-5 h-5 text-amber-400 fill-amber-400" />
+                      <h3 className="text-sm font-black text-amber-300 tracking-wide uppercase">
+                        Global Trade Corridors &amp; Institutional Governance
+                      </h3>
+                    </div>
+                    <span className="text-[10px] font-extrabold px-3 py-1 rounded-full bg-amber-400 text-[#0a192f]">
+                      ESG &amp; VIKSIT BHARAT 2047 CERTIFIED
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-slate-200 leading-relaxed">
+                    Direct bilateral trade corridors operating across 42+ partner nations. Priority institutional routing, high-volume containerized logistics, and dedicated C-Suite trade liaisons.
+                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                    <div className="p-3 bg-white/10 rounded-xl border border-white/10 backdrop-blur-xs">
+                      <span className="text-[10px] text-amber-300 uppercase font-bold block">Trade Footprint</span>
+                      <span className="text-lg font-black text-white">42+ Nations</span>
+                      <span className="text-[10px] text-slate-300 block">GCC, EU, ASEAN &amp; Americas</span>
+                    </div>
+                    <div className="p-3 bg-white/10 rounded-xl border border-white/10 backdrop-blur-xs">
+                      <span className="text-[10px] text-amber-300 uppercase font-bold block">Institutional SLA</span>
+                      <span className="text-lg font-black text-white">&lt; 4 Hours</span>
+                      <span className="text-[10px] text-slate-300 block">Dedicated Trade Officer</span>
+                    </div>
+                    <div className="p-3 bg-white/10 rounded-xl border border-white/10 backdrop-blur-xs">
+                      <span className="text-[10px] text-amber-300 uppercase font-bold block">Annual Capacity</span>
+                      <span className="text-lg font-black text-white">₹500+ Cr</span>
+                      <span className="text-[10px] text-slate-300 block">Tier-1 Export Volume</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* TIER-SPECIFIC FEATURE 2: COMPANY PLAN ENTERPRISE OPERATIONS & DOMESTIC SUPPLY */}
+              {isCompany && (
+                <div className="bg-blue-50/70 border border-blue-200 rounded-2xl p-5 shadow-xs space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-[#0a192f] flex items-center gap-1.5">
+                      <Building2 className="w-4 h-4 text-[#1e3a8a]" />
+                      <span>Enterprise Operations &amp; Verified Supply Chain</span>
+                    </h3>
+                    <span className="text-[10px] font-bold text-blue-700 bg-white px-2.5 py-0.5 rounded-full border border-blue-200">
+                      Domestic &amp; Export Verified
+                    </span>
+                  </div>
+                  
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div className="p-3 bg-emerald-50/50 rounded-xl border border-emerald-100">
-                      <span className="text-[10px] text-slate-500 uppercase font-bold block">Annual Revenue</span>
-                      <span className="text-lg font-black text-emerald-800">₹8.4 Cr</span>
-                      <span className="text-[10px] text-emerald-600 font-semibold block">+140% YoY</span>
+                    <div className="p-3 bg-white rounded-xl border border-blue-100 shadow-2xs">
+                      <span className="text-[10px] text-slate-500 uppercase font-bold block">Production Footprint</span>
+                      <span className="text-base font-black text-[#0a192f]">4 Hubs</span>
+                      <span className="text-[10px] text-slate-500 block">Across 3 Industrial Zones</span>
                     </div>
-                    <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <div className="p-3 bg-white rounded-xl border border-blue-100 shadow-2xs">
+                      <span className="text-[10px] text-slate-500 uppercase font-bold block">Commercial Deliverables</span>
+                      <span className="text-base font-black text-[#0a192f]">99.4% On-Time</span>
+                      <span className="text-[10px] text-emerald-600 font-bold block">ISO 9001:2015</span>
+                    </div>
+                    <div className="p-3 bg-white rounded-xl border border-blue-100 shadow-2xs">
+                      <span className="text-[10px] text-slate-500 uppercase font-bold block">Direct Inquiries</span>
+                      <span className="text-base font-black text-[#ea580c]">24-Hour SLA</span>
+                      <span className="text-[10px] text-slate-500 block">Executive Team Routing</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* TIER-SPECIFIC FEATURE 3: STARTUP PLAN GROWTH & INNOVATION HIGHLIGHTS */}
+              {isStartup && (
+                <div className="bg-orange-50/70 border border-orange-200 rounded-2xl p-5 shadow-xs space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-[#ea580c] flex items-center gap-1.5">
+                      <Rocket className="w-4 h-4 text-[#ea580c]" />
+                      <span>Startup Venture &amp; Innovation Signals</span>
+                    </h3>
+                    <span className="text-[10px] font-bold text-orange-800 bg-white px-2.5 py-0.5 rounded-full border border-orange-200">
+                      High Growth
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className="p-3 bg-white rounded-xl border border-orange-100 shadow-2xs">
+                      <span className="text-[10px] text-slate-500 uppercase font-bold block">Growth Trajectory</span>
+                      <span className="text-lg font-black text-[#ea580c]">+140% YoY</span>
+                      <span className="text-[10px] text-slate-500 block">Scale &amp; Tech Velocity</span>
+                    </div>
+                    <div className="p-3 bg-white rounded-xl border border-orange-100 shadow-2xs">
                       <span className="text-[10px] text-slate-500 uppercase font-bold block">Funding Stage</span>
-                      <span className="text-lg font-black text-slate-900">Series A</span>
-                      <span className="text-[10px] text-slate-500 block">Backed by Top VCs</span>
+                      <span className="text-lg font-black text-[#0a192f]">Series A</span>
+                      <span className="text-[10px] text-slate-500 block">Top Institutional VCs</span>
                     </div>
-                    <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
-                      <span className="text-[10px] text-slate-500 uppercase font-bold block">Active Clients</span>
-                      <span className="text-lg font-black text-slate-900">18 Enterprise</span>
-                      <span className="text-[10px] text-slate-500 block">Supply Chain & Tech</span>
+                    <div className="p-3 bg-white rounded-xl border border-orange-100 shadow-2xs">
+                      <span className="text-[10px] text-slate-500 uppercase font-bold block">Client Deployments</span>
+                      <span className="text-lg font-black text-[#0a192f]">18 Enterprise</span>
+                      <span className="text-[10px] text-slate-500 block">Active B2B Contracts</span>
                     </div>
                   </div>
                 </div>
               )}
 
               {/* 2. Offerings Preview */}
-              <div className="bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-white/10 rounded-2xl p-6 shadow-2xs space-y-4">
+              <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs space-y-4">
                 <div className="flex items-center justify-between flex-wrap gap-2">
                   <div>
-                    <h2 className="text-base font-bold text-slate-900 dark:text-white font-display">Commercial Capabilities &amp; Solutions</h2>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">Structured product modules and client deliverables</p>
+                    <h2 className="text-base font-bold text-[#0a192f]">Commercial Capabilities &amp; Solutions</h2>
+                    <p className="text-xs text-slate-500">Structured product modules and client deliverables</p>
                   </div>
                   <button
                     onClick={() => {
                       setInquiryService("Commercial RFP & Solutions Inquiry");
                       setInquiryModalOpen(true);
                     }}
-                    className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white dark:bg-white dark:text-slate-900 font-bold text-xs rounded-xl transition-all shadow-2xs"
+                    className="px-4 py-2 bg-[#0a192f] hover:bg-[#112240] text-white font-bold text-xs rounded-xl transition-all shadow-2xs"
                   >
                     Submit Commercial RFP
                   </button>
@@ -511,168 +631,177 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                     <div
                       key={srv.id}
                       onClick={() => openServiceInquiry(srv.name)}
-                      className="p-3.5 bg-slate-50 dark:bg-slate-800/60 hover:bg-blue-50/50 dark:hover:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer transition-all group"
+                      className="p-3.5 bg-slate-50 hover:bg-orange-50/50 rounded-xl border border-slate-200/80 cursor-pointer transition-all group"
                     >
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-[#0B4FBA] dark:group-hover:text-blue-400 transition-colors">{srv.name}</span>
-                        <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#0B4FBA] dark:group-hover:text-blue-400 transition-colors" />
+                        <span className="text-xs font-bold text-[#0a192f] group-hover:text-[#ea580c] transition-colors">{srv.name}</span>
+                        <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#ea580c] transition-colors" />
                       </div>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1">{srv.desc}</p>
+                      <p className="text-[11px] text-slate-500 line-clamp-1">{srv.desc}</p>
                     </div>
                   ))}
                 </div>
 
                 <button
                   onClick={() => setActiveTab("services")}
-                  className="text-xs font-bold text-[#0B4FBA] dark:text-blue-400 hover:underline flex items-center gap-1 pt-1 font-mono"
+                  className="text-xs font-bold text-[#ea580c] hover:underline flex items-center gap-1 pt-1"
                 >
                   <span>View all {servicesList.length} capabilities →</span>
                 </button>
               </div>
 
               {/* 3. Articles & Publications */}
-              <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+              <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs space-y-4">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-base font-bold text-slate-900">Featured Articles</h2>
+                  <h2 className="text-base font-bold text-[#0a192f]">Featured Articles</h2>
                   <span className="text-xs text-slate-500">By Company Leadership</span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600">Trade Analysis</span>
-                    <h3 className="text-xs font-bold text-slate-900 line-clamp-2">
+                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200/80 space-y-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#ea580c]">Trade Analysis</span>
+                    <h3 className="text-xs font-bold text-[#0a192f] line-clamp-2">
                       How Indian Manufacturing Can Benefit from New Bilateral Trade Corridors
                     </h3>
                     <p className="text-[11px] text-slate-500">6 min read · 218 readers</p>
                   </div>
-                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-amber-600">Industry Report</span>
-                    <h3 className="text-xs font-bold text-slate-900 line-clamp-2">
-                      Precision Manufacturing & Global Supply Chains in 2026
+                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200/80 space-y-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700">Industry Report</span>
+                    <h3 className="text-xs font-bold text-[#0a192f] line-clamp-2">
+                      Precision Manufacturing &amp; Global Supply Chains in 2026
                     </h3>
                     <p className="text-[11px] text-slate-500">8 min read · 340 readers</p>
                   </div>
                 </div>
               </div>
 
-              {/* 4. Team Highlights */}
-              <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+              {/* 4. Team Highlights (Customized per Tier) */}
+              <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-base font-bold text-slate-900">Team Highlights</h2>
-                    <p className="text-xs text-slate-500">Core leadership team</p>
+                    <h2 className="text-base font-bold text-[#0a192f]">Team Highlights</h2>
+                    <p className="text-xs text-slate-500">
+                      {isCorporate ? "5 Bundled Verified Executives" : isCompany ? "2 Bundled Verified Executives" : isStartup ? "1 Bundled Verified Founder" : "Core Directory"}
+                    </p>
                   </div>
                   <button
                     onClick={() => setActiveTab("people")}
-                    className="text-xs font-bold text-[#0a66c2] hover:underline"
+                    className="text-xs font-bold text-[#ea580c] hover:underline"
                   >
-                    View Full Team →
+                    View Full Team ({teamMembers.length}) →
                   </button>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {teamMembers.slice(0, isStartup ? 1 : isCompany ? 2 : 4).map((ldr) => (
-                    <div
-                      key={ldr.id}
-                      onClick={() => setSelectedLeaderModal(ldr)}
-                      className="p-4 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer transition-all flex items-center justify-between gap-3 group"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-slate-900 text-white font-bold flex items-center justify-center text-sm shrink-0">
-                          {ldr.avatar}
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-1">
-                            <h4 className="text-xs font-bold text-slate-900 group-hover:text-[#0a66c2] transition-colors">{ldr.name}</h4>
-                            {ldr.verified && <Check className="w-3 h-3 text-blue-600" />}
-                          </div>
-                          <p className="text-[11px] text-slate-500 line-clamp-1">{ldr.role}</p>
-                        </div>
-                      </div>
-                      <span className="text-[10px] font-bold text-slate-400 group-hover:text-[#0a66c2] transition-colors shrink-0 flex items-center gap-0.5">
-                        <span>Profile</span>
-                        <ArrowUpRight className="w-3 h-3" />
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* 5. Unlock Insights Card */}
-              <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 space-y-4">
-                <div className="flex items-center justify-between flex-wrap gap-2">
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-amber-500" />
-                    <h2 className="text-base font-bold text-slate-900">Company Insights & Benchmarks</h2>
-                  </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white text-slate-700 border border-slate-200 shadow-sm">
-                    Verified Stats
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-sm">
-                    <span className="text-[10px] text-slate-500 uppercase font-bold block">Trust & Verification Score</span>
-                    <span className="text-xl font-black text-emerald-600">94 / 100</span>
-                    <span className="text-[10px] text-slate-500 block mt-0.5">Top 5% in Sector</span>
-                  </div>
-                  <div className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-sm">
-                    <span className="text-[10px] text-slate-500 uppercase font-bold block">Trade Alignment</span>
-                    <span className="text-xl font-black text-[#0a66c2]">High Match</span>
-                    <span className="text-[10px] text-slate-500 block mt-0.5">Active Export Corridors</span>
-                  </div>
-                  <div className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-sm">
-                    <span className="text-[10px] text-slate-500 uppercase font-bold block">Inbound Inquiries</span>
-                    <span className="text-xl font-black text-slate-900">↑ +38% MoM</span>
-                    <span className="text-[10px] text-slate-500 block mt-0.5">High Buyer Intent</span>
-                  </div>
-                </div>
-
-                {isFree && (
-                  <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-center justify-between text-xs">
-                    <span className="text-amber-900">Upgrade your company plan to unlock full analytics and detailed competitor benchmarks.</span>
-                    {onUpgradeClick && (
-                      <button
-                        onClick={onUpgradeClick}
-                        className="px-3 py-1 bg-[#0a66c2] text-white font-bold rounded-lg text-xs hover:bg-[#004182] shrink-0 ml-2 shadow-sm"
+                  {teamMembers.slice(0, isStartup ? 1 : isCompany ? 2 : isCorporate ? 4 : 2).map((ldr, idx) => {
+                    const isVerifiedLeader = idx < maxLeaderSeats;
+                    return (
+                      <div
+                        key={ldr.id}
+                        onClick={() => setSelectedLeaderModal(ldr)}
+                        className="p-4 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200/80 cursor-pointer transition-all flex items-center justify-between gap-3 group"
                       >
-                        Upgrade
-                      </button>
-                    )}
-                  </div>
-                )}
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-[#0a192f] text-white font-bold flex items-center justify-center text-sm shrink-0">
+                            {ldr.avatar}
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-1">
+                              <h4 className="text-xs font-bold text-[#0a192f] group-hover:text-[#ea580c] transition-colors">{ldr.name}</h4>
+                              {isVerifiedLeader && (
+                                <span className={`w-3.5 h-3.5 rounded-full flex items-center justify-center text-white ${
+                                  isCorporate ? "bg-[#0a192f] ring-1 ring-amber-400" : isCompany ? "bg-[#0a192f]" : "bg-[#ea580c]"
+                                }`}>
+                                  <Check className="w-2.5 h-2.5 stroke-[3]" />
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-[11px] text-slate-500 line-clamp-1">{ldr.role}</p>
+                          </div>
+                        </div>
+                        <span className="text-[10px] font-bold text-slate-400 group-hover:text-[#ea580c] transition-colors shrink-0 flex items-center gap-0.5">
+                          <span>Profile</span>
+                          <ArrowUpRight className="w-3 h-3" />
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
+
+              {/* 5. Free Plan Upgrade Notice */}
+              {isFree && (
+                <div className="p-4 bg-orange-50 border border-orange-200 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+                  <div>
+                    <h4 className="font-bold text-[#0a192f]">Unlock Verified Checkmark &amp; Inbound Buyer Leads</h4>
+                    <p className="text-slate-600 mt-0.5">Upgrade to Startup, Company, or Corporate Plan to receive RFPs, publish documents, and get verified.</p>
+                  </div>
+                  {onUpgradeClick && (
+                    <button
+                      onClick={onUpgradeClick}
+                      className="px-4 py-2 bg-[#ea580c] hover:bg-[#c2410c] text-white font-bold rounded-xl text-xs shrink-0 shadow-xs transition-all"
+                    >
+                      View Plans
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
 
-            {/* Right Column: Affiliated Pages */}
+            {/* Right Column: Affiliated Pages & Quick Facts */}
             <div className="space-y-6">
-              <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <Globe className="w-4 h-4 text-[#0a66c2]" />
-                  <span>Affiliated Pages</span>
+              <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs space-y-4">
+                <h3 className="text-sm font-bold text-[#0a192f] flex items-center gap-2">
+                  <Globe className="w-4 h-4 text-[#ea580c]" />
+                  <span>Affiliated Pages &amp; Trade Ecosystem</span>
                 </h3>
                 
                 <div className="space-y-3">
                   {[
                     { tag: "VB", name: "VB World", sub: "Events & Exhibitions", follow: true },
-                    { tag: "iGEN", name: "India Global News", sub: "B2B News Platform", follow: true },
-                    { tag: "VBW", name: "Viksit Bharat World", sub: "Trade & Industry Portal", follow: false },
+                    { tag: "iGEN", name: "India Global News", sub: "B2B Trade Media", follow: true },
+                    { tag: "VBW", name: "Viksit Bharat World", sub: "Global Trade Portal", follow: false },
                   ].map((aff, i) => (
-                    <div key={i} className="flex items-center justify-between gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
+                    <div key={i} className="flex items-center justify-between gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200/80">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-lg bg-slate-800 text-white font-bold flex items-center justify-center text-xs">
+                        <div className="w-8 h-8 rounded-lg bg-[#0a192f] text-white font-bold flex items-center justify-center text-xs">
                           {aff.tag}
                         </div>
                         <div>
-                          <h4 className="text-xs font-bold text-slate-900">{aff.name}</h4>
+                          <h4 className="text-xs font-bold text-[#0a192f]">{aff.name}</h4>
                           <p className="text-[10px] text-slate-500">{aff.sub}</p>
                         </div>
                       </div>
-                      <button className="text-xs font-bold text-[#0a66c2] hover:underline">
+                      <button className="text-xs font-bold text-[#ea580c] hover:underline">
                         {aff.follow ? "✓ Following" : "+ Follow"}
                       </button>
                     </div>
                   ))}
+                </div>
+              </div>
+
+              {/* Quick Credentials Widget */}
+              <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs space-y-3">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                  Quick Credentials
+                </h3>
+                <div className="space-y-2 text-xs">
+                  <div className="flex justify-between py-1.5 border-b border-slate-100">
+                    <span className="text-slate-500">Founded</span>
+                    <span className="font-bold text-[#0a192f]">{foundedYear}</span>
+                  </div>
+                  <div className="flex justify-between py-1.5 border-b border-slate-100">
+                    <span className="text-slate-500">Workplace</span>
+                    <span className="font-bold text-[#0a192f]">{workplacePolicy}</span>
+                  </div>
+                  <div className="flex justify-between py-1.5 border-b border-slate-100">
+                    <span className="text-slate-500">Company Type</span>
+                    <span className="font-bold text-[#0a192f]">Privately Held</span>
+                  </div>
+                  <div className="flex justify-between py-1.5">
+                    <span className="text-slate-500">Global Verification</span>
+                    <span className="font-bold text-emerald-600">Active ✓</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -680,54 +809,52 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
         )}
 
         {/* ========================================================================= */}
-        {/* TAB 2: ABOUT                                                              */}
+        {/* TAB 2: OUR VISION                                                         */}
         {/* ========================================================================= */}
         {activeTab === "about" && (
           <div className="max-w-4xl space-y-6">
             
             {/* Overview / Vision */}
-            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs space-y-5">
               <div>
-                <h2 className="text-lg font-bold text-slate-900 mb-2">Our Vision & Mission</h2>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                <h2 className="text-lg font-bold text-[#0a192f] mb-2">Our Vision &amp; Strategic Roadmap</h2>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
                   {fullOverviewText}
                 </p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-slate-100 text-xs">
-                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
-                  <span className="text-slate-400 font-bold block uppercase text-[10px]">Website</span>
-                  <a href={`https://${website}`} target="_blank" rel="noreferrer" className="text-[#0a66c2] font-bold flex items-center gap-1 mt-0.5 hover:underline">
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                  <span className="text-slate-400 font-bold block uppercase text-[10px]">Official Website</span>
+                  <a href={`https://${website}`} target="_blank" rel="noreferrer" className="text-[#ea580c] font-bold flex items-center gap-1 mt-0.5 hover:underline">
                     {website} <ExternalLink className="w-3 h-3" />
                   </a>
                 </div>
-                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
                   <span className="text-slate-400 font-bold block uppercase text-[10px]">Primary Sector</span>
-                  <span className="text-slate-900 font-bold">{sector}</span>
+                  <span className="text-[#0a192f] font-bold">{sector}</span>
                 </div>
-                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
-                  <span className="text-slate-400 font-bold block uppercase text-[10px]">Company Size</span>
-                  <span className="text-slate-900 font-bold">{employeeBracket}</span>
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                  <span className="text-slate-400 font-bold block uppercase text-[10px]">Company Scale</span>
+                  <span className="text-[#0a192f] font-bold">{employeeBracket}</span>
                 </div>
-                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
-                  <span className="text-slate-400 font-bold block uppercase text-[10px]">Founded</span>
-                  <span className="text-slate-900 font-bold">{foundedYear}</span>
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                  <span className="text-slate-400 font-bold block uppercase text-[10px]">Establishment</span>
+                  <span className="text-[#0a192f] font-bold">Founded in {foundedYear}</span>
                 </div>
               </div>
             </div>
 
-            {/* ========================================================================= */}
-            {/* STRATEGIC STAKEHOLDER PERSPECTIVES HUB (4 Lenses)                         */}
-            {/* ========================================================================= */}
-            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
+            {/* STRATEGIC PERSPECTIVES / LENSES (Corporate & Company Plans) */}
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs space-y-5">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
                 <div>
-                  <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4 text-[#0a66c2]" />
+                  <h3 className="text-base font-bold text-[#0a192f] flex items-center gap-2">
+                    <TrendingUp className="w-4 h-4 text-[#ea580c]" />
                     <span>Strategic Stakeholder Perspectives</span>
                   </h3>
                   <p className="text-xs text-slate-500 mt-0.5">
-                    Select a strategic stakeholder lens to review macro growth signals, leadership ethos, and partnership credentials.
+                    Select a strategic lens to review macro growth signals, leadership ethos, and trade partnership credentials.
                   </p>
                 </div>
 
@@ -743,8 +870,8 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                       onClick={() => setStakeholderLens(lens.id as any)}
                       className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
                         stakeholderLens === lens.id
-                          ? "bg-white text-[#0a66c2] shadow-2xs"
-                          : "text-slate-600 hover:text-slate-900"
+                          ? "bg-white text-[#0a192f] shadow-2xs"
+                          : "text-slate-600 hover:text-[#0a192f]"
                       }`}
                     >
                       {lens.label}
@@ -757,37 +884,37 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
               {stakeholderLens === "capital" && (
                 <div className="space-y-4 pt-1 animate-fadeIn">
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div className="p-3.5 bg-blue-50/50 rounded-xl border border-blue-100">
-                      <span className="text-[10px] font-bold text-blue-700 uppercase tracking-wider block mb-1">Growth Stage</span>
-                      <span className="text-xs font-bold text-slate-900">{companyData.growthStage || "Profitable & Scaling"}</span>
+                    <div className="p-3.5 bg-blue-50/60 rounded-xl border border-blue-100">
+                      <span className="text-[10px] font-bold text-blue-800 uppercase tracking-wider block mb-1">Growth Stage</span>
+                      <span className="text-xs font-bold text-[#0a192f]">{companyData.growthStage || "Profitable & Scaling"}</span>
                       <p className="text-[11px] text-slate-500 mt-0.5">Positive Operating Cash Flow</p>
                     </div>
-                    <div className="p-3.5 bg-emerald-50/50 rounded-xl border border-emerald-100">
-                      <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider block mb-1">CapEx Allocation</span>
-                      <span className="text-xs font-bold text-slate-900">{companyData.capexAllocation || "Automation & R&D"}</span>
+                    <div className="p-3.5 bg-emerald-50/60 rounded-xl border border-emerald-100">
+                      <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider block mb-1">CapEx Allocation</span>
+                      <span className="text-xs font-bold text-[#0a192f]">{companyData.capexAllocation || "Automation & R&D"}</span>
                       <p className="text-[11px] text-slate-500 mt-0.5">Phase-2 Infrastructure Expansion</p>
                     </div>
-                    <div className="p-3.5 bg-purple-50/50 rounded-xl border border-purple-100">
-                      <span className="text-[10px] font-bold text-purple-700 uppercase tracking-wider block mb-1">Target Corridors</span>
-                      <span className="text-xs font-bold text-slate-900">{companyData.targetCorridors || "GCC & European Union"}</span>
+                    <div className="p-3.5 bg-orange-50/60 rounded-xl border border-orange-100">
+                      <span className="text-[10px] font-bold text-orange-800 uppercase tracking-wider block mb-1">Target Corridors</span>
+                      <span className="text-xs font-bold text-[#0a192f]">{companyData.targetCorridors || "GCC & European Union"}</span>
                       <p className="text-[11px] text-slate-500 mt-0.5">25% Export Revenue Target</p>
                     </div>
                   </div>
 
-                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600 leading-relaxed space-y-2">
-                    <p className="font-semibold text-slate-800">
+                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200/80 text-xs text-slate-600 leading-relaxed space-y-2">
+                    <p className="font-semibold text-[#0a192f]">
                       Strategic Capital &amp; Infrastructure Roadmap (2026–2028):
                     </p>
                     <p>
-                      {companyData.capitalRoadmap || "Deploying state-of-the-art automated assembly lines, expanding localized supply chain integration across India, and accelerating B2B digital export capabilities to support Mission Viksit Bharat 2047."}
+                      {companyData.capitalRoadmap || "Deploying automated assembly lines, expanding localized supply chain integration across India, and accelerating B2B digital export capabilities to support Mission Viksit Bharat 2047."}
                     </p>
                   </div>
 
-                  <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 bg-gradient-to-r from-slate-900 to-indigo-950 text-white rounded-xl shadow-sm">
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 bg-gradient-to-r from-[#0a192f] to-[#112240] text-white rounded-xl shadow-xs">
                     <div>
                       <h4 className="text-xs font-bold text-white flex items-center gap-1.5">
                         <Lock className="w-3.5 h-3.5 text-amber-400" />
-                        <span>Investor Due Diligence &amp; Confidential Pitch Deck</span>
+                        <span>Investor Due Diligence &amp; Pitch Deck</span>
                       </h4>
                       <p className="text-[11px] text-slate-300 mt-0.5">
                         Qualified family offices, VC funds, and institutional banks can request official corporate documentation.
@@ -798,9 +925,9 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                         setInquiryService("Investor & Capital Due Diligence Deck Request");
                         setInquiryModalOpen(true);
                       }}
-                      className="px-4 py-2 bg-gradient-to-r from-[#F0652E] to-amber-500 text-white text-xs font-bold rounded-lg shadow-sm hover:opacity-90 transition-all shrink-0"
+                      className="px-4 py-2 bg-[#ea580c] hover:bg-[#c2410c] text-white font-bold text-xs rounded-xl transition-all shrink-0 shadow-xs"
                     >
-                      Request Corporate Deck
+                      Request Deck Access
                     </button>
                   </div>
                 </div>
@@ -1018,31 +1145,37 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
           <div className="max-w-4xl space-y-6">
             
             {/* Header Banner */}
-            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
               <div>
-                <h2 className="text-xl font-bold text-slate-900 dark:text-white font-display">Commercial Offerings &amp; Solutions</h2>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-lg">
-                  Explore verified B2B capabilities, technical deliverables, and commercial scopes.
+                <h2 className="text-xl font-black text-[#0a192f]">Commercial Offerings &amp; Solutions</h2>
+                <p className="text-xs text-slate-500 mt-1 max-w-lg">
+                  {isCorporate 
+                    ? "Turnkey enterprise solutions with fast-track RFP routing, guaranteed SLA, and dedicated trade desk."
+                    : isCompany
+                    ? "Verified commercial scopes, customized contract deliverables, and corporate B2B capabilities."
+                    : isStartup
+                    ? "Agile venture capabilities and modular tech solutions for rapid deployment."
+                    : "Basic directory capability listing."}
                 </p>
               </div>
 
               <button
                 onClick={() => {
-                  setInquiryService("Commercial RFP & Solutions Inquiry");
+                  setInquiryService(isCorporate ? "VIP Turnkey RFP Submission" : "Commercial RFP & Solutions Inquiry");
                   setInquiryModalOpen(true);
                 }}
-                className="px-5 py-2.5 bg-[#0B4FBA] hover:bg-[#083884] text-white font-bold text-xs rounded-xl shadow-xs transition-all shrink-0"
+                className="px-5 py-2.5 bg-[#ea580c] hover:bg-[#c2410c] text-white font-bold text-xs rounded-xl shadow-xs transition-all shrink-0"
               >
-                Submit Commercial RFP
+                {isCorporate ? "Submit Turnkey RFP" : "Submit Commercial RFP"}
               </button>
             </div>
 
-            {/* Services Grid */}
+            {/* Services Grid (Tier-gated item visibility) */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {servicesList.map((srv) => (
+              {servicesList.slice(0, isFree ? 2 : isStartup ? 4 : isCompany ? 6 : servicesList.length).map((srv) => (
                 <div
                   key={srv.id}
-                  className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-2.5 hover:border-slate-400 transition-all"
+                  className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs space-y-2.5 hover:border-[#ea580c]/50 transition-all group"
                 >
                   <div className="flex items-center justify-between">
                     <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-[10px] font-bold text-slate-700">
@@ -1050,7 +1183,7 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                     </span>
                     <button
                       onClick={() => openServiceInquiry(srv.name)}
-                      className="text-xs font-bold text-[#0a66c2] hover:underline flex items-center gap-1"
+                      className="text-xs font-bold text-[#ea580c] hover:underline flex items-center gap-1"
                     >
                       <span>Inquire</span>
                       <ArrowUpRight className="w-3.5 h-3.5" />
@@ -1058,23 +1191,39 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                   </div>
 
                   <div>
-                    <h3 className="text-sm font-bold text-slate-900">{srv.name}</h3>
+                    <h3 className="text-sm font-bold text-[#0a192f] group-hover:text-[#ea580c] transition-colors">{srv.name}</h3>
                     <p className="text-xs text-slate-500 mt-1 leading-relaxed">{srv.desc}</p>
                   </div>
                 </div>
               ))}
             </div>
+
+            {isFree && (
+              <div className="p-4 bg-orange-50 border border-orange-200 rounded-2xl text-center space-y-2">
+                <p className="text-xs text-slate-700 font-semibold">
+                  Free profiles show 2 standard offerings. Upgrade to list all 8+ commercial capabilities with active RFPs.
+                </p>
+                {onUpgradeClick && (
+                  <button
+                    onClick={onUpgradeClick}
+                    className="px-4 py-1.5 bg-[#ea580c] text-white text-xs font-bold rounded-xl hover:bg-[#c2410c] transition-all"
+                  >
+                    Unlock All Capabilities
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         )}
 
         {/* ========================================================================= */}
-        {/* TAB 4: POSTS                                                              */}
+        {/* TAB 4: POSTS & THOUGHT LEADERSHIP                                         */}
         {/* ========================================================================= */}
         {activeTab === "posts" && (
           <div className="max-w-4xl space-y-6">
             
             {/* Filters */}
-            <div className="bg-white border border-slate-200 rounded-2xl p-3 shadow-sm flex items-center justify-between flex-wrap gap-3">
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-3 shadow-xs flex items-center justify-between flex-wrap gap-3">
               <div className="flex items-center gap-2 overflow-x-auto">
                 {[
                   { id: "all", label: "All Posts" },
@@ -1086,9 +1235,9 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                   <button
                     key={f.id}
                     onClick={() => setPostFilter(f.id as any)}
-                    className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap ${
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
                       postFilter === f.id
-                        ? "bg-[#0a66c2] text-white shadow-sm"
+                        ? "bg-[#0a192f] text-white shadow-xs"
                         : "bg-slate-100 text-slate-700 hover:bg-slate-200"
                     }`}
                   >
@@ -1102,7 +1251,7 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                 <select
                   value={postSort}
                   onChange={(e) => setPostSort(e.target.value as any)}
-                  className="bg-transparent font-bold text-slate-900 focus:outline-none cursor-pointer"
+                  className="bg-transparent font-bold text-[#0a192f] focus:outline-none cursor-pointer"
                 >
                   <option value="top">Top Posts</option>
                   <option value="latest">Latest Posts</option>
@@ -1115,51 +1264,55 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
               {filteredPosts.map((post) => (
                 <div
                   key={post.id}
-                  className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4"
+                  className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs space-y-4"
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-slate-900 text-white font-bold flex items-center justify-center text-sm">
+                      <div className="w-10 h-10 rounded-xl bg-[#0a192f] text-white font-bold flex items-center justify-center text-sm">
                         {post.author.charAt(0)}
                       </div>
                       <div>
-                        <h4 className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-                          <span>{post.author}</span>
-                          <Check className="w-3 h-3 text-blue-600" />
-                        </h4>
+                        <div className="flex items-center gap-1.5">
+                          <h4 className="text-xs font-bold text-[#0a192f]">{post.author}</h4>
+                          <span className={`w-3.5 h-3.5 rounded-full flex items-center justify-center text-white ${
+                            isCorporate ? "bg-[#0a192f] ring-1 ring-amber-400" : isCompany ? "bg-[#0a192f]" : "bg-[#ea580c]"
+                          }`}>
+                            <Check className="w-2.5 h-2.5 stroke-[3]" />
+                          </span>
+                        </div>
                         <p className="text-[10px] text-slate-500">{post.timestamp}</p>
                       </div>
                     </div>
                   </div>
 
                   <div>
-                    <h3 className="text-sm font-bold text-slate-900 mb-2">{post.title}</h3>
-                    <p className="text-xs text-slate-600 leading-relaxed whitespace-pre-line">
+                    <h3 className="text-sm font-bold text-[#0a192f] mb-2">{post.title}</h3>
+                    <p className="text-xs text-slate-600 leading-relaxed whitespace-pre-line font-normal">
                       {post.content}
                     </p>
                   </div>
 
                   {/* Document Carousel Viewer */}
                   {post.mediaType === "document" && (
-                    <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3 text-slate-900">
+                    <div className="p-4 bg-slate-50 rounded-xl border border-slate-200/80 space-y-3 text-slate-900">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <FileText className="w-5 h-5 text-red-500" />
-                          <span className="text-xs font-bold">{post.docTitle}</span>
+                          <span className="text-xs font-bold text-[#0a192f]">{post.docTitle}</span>
                         </div>
                         <span className="text-[10px] text-slate-500">{post.docPages} Pages · {post.docSize}</span>
                       </div>
 
-                      <div className="h-36 rounded-lg bg-white border border-slate-200 flex flex-col items-center justify-center p-4 text-center shadow-sm">
-                        <p className="text-xs text-slate-700 mb-2 font-bold">Interactive PDF Preview</p>
+                      <div className="h-36 rounded-lg bg-white border border-slate-200 flex flex-col items-center justify-center p-4 text-center shadow-xs">
+                        <p className="text-xs text-[#0a192f] mb-2 font-bold">Interactive PDF Preview</p>
                         <button
                           onClick={() => {
                             setDocViewerModal(post);
                             setDocPageNum(1);
                           }}
-                          className="px-4 py-2 bg-[#0a66c2] hover:bg-[#004182] text-white font-bold text-xs rounded-xl transition-all flex items-center gap-1.5 shadow-sm"
+                          className="px-4 py-2 bg-[#0a192f] hover:bg-[#112240] text-white font-bold text-xs rounded-xl transition-all flex items-center gap-1.5 shadow-2xs"
                         >
-                          <Eye className="w-3.5 h-3.5" /> Read Full Document (1 of {post.docPages})
+                          <Eye className="w-3.5 h-3.5 text-amber-300" /> Read Full Document (1 of {post.docPages})
                         </button>
                       </div>
                     </div>
@@ -1172,13 +1325,13 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                   )}
 
                   {post.mediaType === "article" && (
-                    <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between gap-4">
+                    <div className="p-4 bg-slate-50 rounded-xl border border-slate-200/80 flex items-center justify-between gap-4">
                       <div>
-                        <span className="text-[10px] font-bold text-blue-600 uppercase">Article</span>
-                        <h4 className="text-xs font-bold text-slate-900 mt-0.5">{post.title}</h4>
+                        <span className="text-[10px] font-bold text-[#ea580c] uppercase">Article</span>
+                        <h4 className="text-xs font-bold text-[#0a192f] mt-0.5">{post.title}</h4>
                         <p className="text-[10px] text-slate-500 mt-1">By {post.authorName} · {post.readTime}</p>
                       </div>
-                      <button className="px-3 py-1.5 bg-[#0a66c2] text-white text-xs font-bold rounded-lg shrink-0">
+                      <button className="px-3 py-1.5 bg-[#ea580c] text-white text-xs font-bold rounded-lg shrink-0 hover:bg-[#c2410c] transition-all">
                         Read
                       </button>
                     </div>
@@ -1195,21 +1348,29 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
         )}
 
         {/* ========================================================================= */}
-        {/* TAB 5: TEAM                                                               */}
+        {/* TAB 5: TEAM & LEADERSHIP                                                  */}
         {/* ========================================================================= */}
         {activeTab === "people" && (
           <div className="max-w-5xl space-y-6">
             
             {/* Demographics Overview Card */}
-            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs space-y-5">
               
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <h2 className="text-xl font-black text-slate-900 flex items-center gap-2">
-                    <Users className="w-5 h-5 text-[#0a66c2]" />
-                    <span>{teamMembers.length} Team Members</span>
+                  <h2 className="text-xl font-black text-[#0a192f] flex items-center gap-2">
+                    <Users className="w-5 h-5 text-[#ea580c]" />
+                    <span>{teamMembers.length} Associated Team Members</span>
                   </h2>
-                  <p className="text-xs text-slate-500 mt-0.5">Demographics and full team directory</p>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    {isCorporate 
+                      ? "5 Bundled Sovereign Executive Leader seats unlocked" 
+                      : isCompany 
+                      ? "2 Bundled Enterprise Executive Leader seats unlocked" 
+                      : isStartup 
+                      ? "1 Bundled Verified Founder seat unlocked" 
+                      : "Standard directory roster (0 verified leader seats)"}
+                  </p>
                 </div>
 
                 {/* Department Filter */}
@@ -1218,9 +1379,9 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                     <button
                       key={d}
                       onClick={() => setSelectedDept(d)}
-                      className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all whitespace-nowrap ${
+                      className={`px-3 py-1 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
                         selectedDept === d
-                          ? "bg-slate-900 text-white shadow-sm"
+                          ? "bg-[#0a192f] text-white shadow-xs"
                           : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                       }`}
                     >
@@ -1237,8 +1398,8 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                   type="text"
                   value={peopleSearch}
                   onChange={(e) => setPeopleSearch(e.target.value)}
-                  placeholder="Search employees by title, keyword or school..."
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0a66c2]"
+                  placeholder="Search team by name, executive role, or department..."
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#ea580c]"
                 />
               </div>
 
@@ -1247,10 +1408,10 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
                   
                   {/* Where they live */}
-                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200/80 space-y-3">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                        <MapPin className="w-3.5 h-3.5 text-slate-500" />
+                      <h3 className="text-xs font-bold uppercase tracking-wider text-[#0a192f] flex items-center gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-[#ea580c]" />
                         <span>Where they live</span>
                       </h3>
                       <span className="text-[10px] font-mono text-slate-400">5 Cities</span>
@@ -1259,12 +1420,12 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                     <div className="space-y-2.5 text-xs">
                       {liveStats.map((item, idx) => (
                         <div key={idx} className="space-y-1">
-                          <div className="flex justify-between text-[11px] font-semibold text-slate-700">
+                          <div className="flex justify-between text-[11px] font-bold text-slate-700">
                             <span>{item.count} | {item.label}</span>
                           </div>
                           <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
                             <div
-                              className="h-full bg-[#566848] rounded-full transition-all duration-500"
+                              className="h-full bg-[#ea580c] rounded-full transition-all duration-500"
                               style={{ width: `${item.percent}%` }}
                             />
                           </div>
@@ -1274,24 +1435,24 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                   </div>
 
                   {/* Where they studied */}
-                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200/80 space-y-3">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                        <GraduationCap className="w-3.5 h-3.5 text-slate-500" />
+                      <h3 className="text-xs font-bold uppercase tracking-wider text-[#0a192f] flex items-center gap-1.5">
+                        <GraduationCap className="w-3.5 h-3.5 text-[#1e3a8a]" />
                         <span>Where they studied</span>
                       </h3>
-                      <span className="text-[10px] font-mono text-slate-400">Schools</span>
+                      <span className="text-[10px] font-mono text-slate-400">Institutes</span>
                     </div>
 
                     <div className="space-y-2.5 text-xs">
                       {studyStats.map((item, idx) => (
                         <div key={idx} className="space-y-1">
-                          <div className="flex justify-between text-[11px] font-semibold text-slate-700">
+                          <div className="flex justify-between text-[11px] font-bold text-slate-700">
                             <span>{item.count} | {item.label}</span>
                           </div>
                           <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
                             <div
-                              className="h-full bg-[#006070] rounded-full transition-all duration-500"
+                              className="h-full bg-[#0a192f] rounded-full transition-all duration-500"
                               style={{ width: `${item.percent}%` }}
                             />
                           </div>
@@ -1301,15 +1462,15 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                   </div>
                 </div>
               ) : (
-                <div className="p-4 bg-slate-50 border border-dashed border-slate-300 rounded-xl flex items-center justify-between gap-4">
+                <div className="p-4 bg-orange-50/60 border border-orange-200 rounded-xl flex items-center justify-between gap-4">
                   <div>
-                    <h4 className="text-xs font-bold text-slate-900">Interactive Team Demographics (Location &amp; Education)</h4>
-                    <p className="text-[11px] text-slate-500 mt-0.5">Where team members live and studied is available on Company &amp; Corporate Plans.</p>
+                    <h4 className="text-xs font-bold text-[#0a192f]">Interactive Team Demographics (Location &amp; Education)</h4>
+                    <p className="text-[11px] text-slate-600 mt-0.5">Where team members live and studied is available on Company &amp; Corporate Plans.</p>
                   </div>
                   {onUpgradeClick && (
                     <button
                       onClick={onUpgradeClick}
-                      className="px-3 py-1.5 bg-[#0a66c2] text-white text-xs font-bold rounded-lg shrink-0 hover:bg-[#084e96] transition-all"
+                      className="px-3.5 py-1.5 bg-[#ea580c] text-white text-xs font-bold rounded-lg shrink-0 hover:bg-[#c2410c] transition-all shadow-2xs"
                     >
                       Upgrade Plan
                     </button>
@@ -1321,11 +1482,11 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
             {/* Team Directory Grid */}
             <div className="space-y-3">
               <div className="flex items-center justify-between px-1">
-                <h3 className="text-sm font-bold text-slate-900">
+                <h3 className="text-sm font-bold text-[#0a192f]">
                   Associated Team Directory ({filteredMembers.length})
                 </h3>
                 {maxLeaderSeats > 0 && (
-                  <span className="text-xs font-semibold text-slate-500">
+                  <span className="text-xs font-bold text-[#ea580c]">
                     {maxLeaderSeats} Bundled Verified {maxLeaderSeats === 1 ? "Leader" : "Leaders"} ({activeTier.toUpperCase()})
                   </span>
                 )}
@@ -1338,31 +1499,41 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                     <div
                       key={member.id}
                       onClick={() => setSelectedLeaderModal(member)}
-                      className="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm hover:border-slate-400 transition-all cursor-pointer group flex flex-col justify-between"
+                      className="p-5 bg-white border border-slate-200/90 rounded-2xl shadow-xs hover:border-[#ea580c]/60 transition-all cursor-pointer group flex flex-col justify-between"
                     >
                       <div className="space-y-2.5">
                         <div className="flex items-start justify-between gap-3">
-                          <div className="w-11 h-11 rounded-xl bg-slate-900 text-white font-bold flex items-center justify-center text-sm shrink-0">
+                          <div className="w-11 h-11 rounded-xl bg-[#0a192f] text-white font-bold flex items-center justify-center text-sm shrink-0">
                             {member.avatar}
                           </div>
-                          <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-[10px] font-semibold text-slate-600">
+                          <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-[10px] font-bold text-slate-600">
                             {member.dept}
                           </span>
                         </div>
 
                         <div>
                           <div className="flex items-center gap-1.5 flex-wrap">
-                            <h4 className="text-sm font-bold text-slate-900 group-hover:text-[#0a66c2] transition-colors">
+                            <h4 className="text-sm font-bold text-[#0a192f] group-hover:text-[#ea580c] transition-colors">
                               {member.name}
                             </h4>
                             {isBundledVerified && (
-                              <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-blue-50 border border-blue-200 text-blue-700 text-[10px] font-bold" title="Bundled Verified Leader">
-                                <Check className="w-3 h-3 text-blue-600" />
-                                <span className="text-[9px]">Verified</span>
+                              <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                                isCorporate 
+                                  ? "bg-slate-900 text-amber-300 border border-amber-400/40" 
+                                  : isCompany 
+                                  ? "bg-blue-50 text-[#0a192f] border border-blue-200" 
+                                  : "bg-orange-50 text-[#ea580c] border border-orange-200"
+                              }`} title="Bundled Verified Leader">
+                                <span className={`w-3 h-3 rounded-full flex items-center justify-center text-white ${
+                                  isCorporate ? "bg-amber-400 text-slate-950" : isCompany ? "bg-[#0a192f]" : "bg-[#ea580c]"
+                                }`}>
+                                  <Check className="w-2 h-2 stroke-[3.5]" />
+                                </span>
+                                <span>Verified</span>
                               </span>
                             )}
                           </div>
-                          <p className="text-xs text-[#0a66c2] font-semibold mt-0.5 line-clamp-1">{member.role}</p>
+                          <p className="text-xs text-slate-500 font-semibold mt-0.5 line-clamp-1">{member.role}</p>
                         </div>
 
                         <div className="space-y-0.5 text-[11px] text-slate-500 pt-1">
@@ -1375,7 +1546,7 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                         </div>
                       </div>
 
-                      <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-slate-400 group-hover:text-[#0a66c2] transition-colors">
+                      <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-400 group-hover:text-[#ea580c] transition-colors">
                         <span>View Profile</span>
                         <ArrowUpRight className="w-4 h-4" />
                       </div>
@@ -1392,7 +1563,7 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
       {/* MODAL 1: REQUEST SERVICES FORM                                            */}
       {/* ========================================================================= */}
       {inquiryModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
           <div className="bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-6 text-slate-900 shadow-2xl relative">
             <button
               onClick={() => {
@@ -1409,16 +1580,16 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                 <div className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
-                <h3 className="text-xl font-bold">Inquiry Sent Successfully</h3>
+                <h3 className="text-xl font-bold text-[#0a192f]">Inquiry Sent Successfully</h3>
                 <p className="text-xs text-slate-600 max-w-sm mx-auto">
-                  Your message has been sent to <strong>{companyName}</strong>. You will receive a confirmation email shortly.
+                  Your message has been routed to <strong>{companyName}</strong>. You will receive an official response and trade verification confirmation.
                 </p>
                 <button
                   onClick={() => {
                     setInquiryModalOpen(false);
                     setInquirySent(false);
                   }}
-                  className="mt-4 px-6 py-2 bg-[#0a66c2] text-white font-bold text-xs rounded-xl"
+                  className="mt-4 px-6 py-2 bg-[#ea580c] text-white font-bold text-xs rounded-xl shadow-xs hover:bg-[#c2410c] transition-all"
                 >
                   Done
                 </button>
@@ -1426,7 +1597,7 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
             ) : (
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-lg font-bold font-display text-slate-900 dark:text-white">B2B Trade &amp; Commercial Inquiry</h3>
+                  <h3 className="text-lg font-black text-[#0a192f]">B2B Trade &amp; Commercial Inquiry</h3>
                   <p className="text-xs text-slate-500">Submit a direct commercial inquiry or RFP to {companyName}.</p>
                 </div>
 
@@ -1436,7 +1607,7 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                     <input
                       type="text"
                       placeholder="e.g. Sarah Jenkins"
-                      className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none"
+                      className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#ea580c]"
                     />
                   </div>
 
@@ -1446,7 +1617,7 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                       <input
                         type="email"
                         placeholder="sarah@company.com"
-                        className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none"
+                        className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#ea580c]"
                       />
                     </div>
                     <div>
@@ -1454,7 +1625,7 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                       <input
                         type="text"
                         placeholder="+91 98765 43210"
-                        className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none"
+                        className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#ea580c]"
                       />
                     </div>
                   </div>
@@ -1464,7 +1635,7 @@ Introducing the IGEN SSO (Sector Session Outcome) publicity model:
                     <select
                       value={inquiryService}
                       onChange={(e) => setInquiryService(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none"
+                      className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#ea580c]"
                     >
                       <option value="">Select a service...</option>
                       {servicesList.map((s) => (

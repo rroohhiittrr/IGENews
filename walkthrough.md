@@ -1,4 +1,54 @@
-# Walkthrough — LinkedIn Premium Company Admin Panel: Analytics (Full 6 Sub-Tabs Complete)
+# LinkedIn Premium Company Admin Panel & Analytics Hub — Walkthrough
+
+## Summary of Completed Work
+
+### 1. LinkedIn Admin Panel & 6 Analytics Sub-Tabs Fully Implemented
+All 6 Analytics sub-tabs have been crafted with high fidelity matching LinkedIn Company Premium Admin aesthetics, pastel and royal executive tones, and zero mentions of job functions or titles:
+
+1. **Content Analytics**:
+   - Highlight KPIs (Impressions, Unique Viewers, Clicks, Reactions).
+   - Dynamic SVG Trend Chart with selectable metric dropdown (`Impressions`, `Unique viewers`, `Clicks`, `Reactions`, `Comments`, `Reposts`).
+   - Content Engagement data table categorized by `All`, `Articles`, `Media`, `Documents` with full-screen per-post drilldown modal.
+
+2. **Visitors Analytics**:
+   - Total Page Views & Unique Visitors KPI cards.
+   - Dual-series SVG interactive graph with desktop vs. mobile toggles.
+   - Page Filter Modal supporting `All pages`, `Overview`, `Our Vision`, `Offerings`, `Updates & Insights`, `Team`.
+   - "Who's visited your Page" cards with blurred viewer gating for lower tiers.
+   - Visitor Demographics (`Company size`, `Industry`, `Location`, `Seniority`).
+
+3. **Followers Analytics**:
+   - Total Followers, 30-Day Growth KPIs, and "Grow your audience" banner.
+   - 3-Series SVG Line Chart (`Sponsored`, `Organic`, `Auto-invited`) with interactive date point inspection popovers.
+   - Follower Demographics with "Show all" expandable ranking breakdown.
+   - "All Followers" directory roster with segmented `People` and `Pages` tabs.
+
+4. **Search Appearances Analytics**:
+   - Total Search Appearances KPI and "Reach more audience" banner with 1-click Boostable Post selector modal.
+   - "Who's visited your Page" search referral cards.
+   - Top Search Keywords list with search icons and percentages.
+   - Search Demographics filtered by `Company` (with custom logos) and `Industry`.
+
+5. **Competitors Analytics**:
+   - Competitor Highlights KPIs (`7 comments`, `1,410 new followers`).
+   - Interactive **Edit Competitors Modal** enabling dynamic search, add, and remove of tracked rivals within plan quota (Startup: 3, Company: 10, Corporate: 25).
+   - "Compare Growth" benchmark table across Gartner, World Economic Forum, CXO Lanes, FICCI, and ASSOCHAM.
+   - Trending Competitor Posts feed & 3 Actionable Tips cards.
+
+6. **Leads Analytics**:
+   - Header with 1-click CSV leads export.
+   - Interactive Leads Roster (Karan Johar, Shreya Venkat, Rohan Singhania) with lead metadata and download actions.
+   - Empty state preview toggle with custom boost illustration.
+
+---
+
+### 2. Standardized 4-Tier Plan Architecture
+- **Free Profile**: Basic listings, single administrator, standard public profile tabs, zero competitor tracking.
+- **Startup Plan (₹2,999/mo)**: 1 Leader seat, 100 invite credits, 3 competitor benchmarks, standard demographics.
+- **Company Plan (₹7,999/mo)**: 2 Leader seats, 300 invite credits, 10 competitor benchmarks, full visitor and search demography, XLS/CSV export.
+- **Corporate Plan (₹19,999/mo)**: 5 Leader seats, 500 invite credits, 25 competitor benchmarks, real-time leads download, API access.
+
+---
 
 ## 🎯 Overview
 Implemented the complete **LinkedIn Premium Analytics Architecture** in the Company Admin Panel ([`CompanyDashboard.tsx`](file:///c:/Users/adity/Downloads/IGENews/components/profile/company/free/CompanyDashboard.tsx)) with full interactive support for all 6 analytics sub-tabs:

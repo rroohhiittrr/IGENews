@@ -57,7 +57,11 @@ export default function ProfileAvatar() {
         <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20">
           <User className="h-4 w-4" />
         </div>
-        <span className="hidden md:inline text-sm font-semibold">{user.name}</span>
+        <span className="hidden md:inline text-sm font-semibold">
+          {(!user.name || user.name === "SME Pro User" || user.name === "Your Name" || user.name.toLowerCase().includes("user"))
+            ? (user.onboardingRole === "company" || user.accountType === "company" ? "Mehta Traders" : user.onboardingRole === "sme" ? "Dr. Vikram Malhotra" : user.onboardingRole === "associate-sme" ? "Ananya Krishnan" : user.onboardingRole === "leader" ? "Karan Singhania" : "Mehta Traders")
+            : user.name}
+        </span>
         <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""}`} />
       </button>
 
@@ -72,7 +76,9 @@ export default function ProfileAvatar() {
               </div>
               <div className="flex-1">
                 <h3 className="font-bold text-[var(--color-primary)] text-base" style={{ fontFamily: "var(--font-display)" }}>
-                  {user.name}
+                  {(!user.name || user.name === "SME Pro User" || user.name === "Your Name" || user.name.toLowerCase().includes("user"))
+                    ? (user.onboardingRole === "company" || user.accountType === "company" ? "Mehta Traders" : user.onboardingRole === "sme" ? "Dr. Vikram Malhotra" : user.onboardingRole === "associate-sme" ? "Ananya Krishnan" : user.onboardingRole === "leader" ? "Karan Singhania" : "Mehta Traders")
+                    : user.name}
                 </h3>
                 <p className="text-xs text-[var(--color-neutral-dark)]">{user.email}</p>
                 <div className="mt-1 inline-flex items-center gap-1 rounded-full bg-white px-2 py-0.5 text-xs font-semibold text-[var(--color-primary)] border border-[var(--color-primary)]/20">

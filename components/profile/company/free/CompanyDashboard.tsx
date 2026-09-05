@@ -4,16 +4,16 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { 
   Users, FileText, CheckCircle2, Lock, 
-  ArrowRight, Sparkles, ShieldCheck,
+  ArrowRight, Sparkles,
   Check, ChevronRight, ChevronLeft, BarChart3, AlertCircle, Edit3, 
   Settings, Eye, Plus, Mail, Briefcase, Building2,
-  Trash2, Globe, MapPin, Upload, Star, Award, Layers,
-  ExternalLink, Share2, Compass, HelpCircle, CheckCircle,
+  Trash2, Globe, MapPin, Upload, Award, Compass, Zap,
+  ExternalLink, Share2, HelpCircle,
   TrendingUp, TrendingDown, MessageSquare, ThumbsUp, Repeat,
-  Send, UserPlus, Zap, Bell, Image as ImageIcon, Video,
-  Search, SlidersHorizontal, Info, Play, Radio, Filter, EyeOff,
-  Flame, X, ArrowLeft, Calendar, Download, CheckSquare, Square,
-  MoreHorizontal, ChevronDown, Smile, Clock
+  UserPlus, Bell, Image as ImageIcon, Video,
+  Search, Info, Filter,
+  X, ArrowLeft, Calendar, Download,
+  MoreHorizontal, ChevronDown, Clock
 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import CompanyPublicProfile from "@/components/profile/company/CompanyPublicProfile";
@@ -24,13 +24,15 @@ export default function CompanyDashboard() {
   const router = useRouter();
   const locale = (params?.locale as string) || "en";
 
-  // Active Plan determination
+  // Active Plan determination (Default to company for rich experience, toggleable in UI)
   const rawPlan = user?.companyPlan || "free";
-  const activeTier: "free" | "startup" | "company" | "corporate" = 
+  const initialTier: "free" | "startup" | "company" | "corporate" = 
     rawPlan === "corporate" || rawPlan === "gold" ? "corporate"
     : rawPlan === "company" ? "company"
     : rawPlan === "startup" || rawPlan === "silver" ? "startup"
-    : "free";
+    : "company";
+
+  const [activeTier, setActiveTier] = useState<"free" | "startup" | "company" | "corporate">(initialTier);
 
   const isFree = activeTier === "free";
   const isStartup = activeTier === "startup";
@@ -378,13 +380,15 @@ export default function CompanyDashboard() {
   const profile = user?.onboardingForm || {};
 
   // 1. Basic Profile Form States
-  const [companyName, setCompanyName] = useState(profile.companyName || user?.name || "Nexus Robotics & Automation");
-  const [sector, setSector] = useState(profile.sector || "Industrial Robotics & Automation");
-  const [tagline, setTagline] = useState(profile.tagline || "AI-powered sorting robots and smart automation systems for modern warehouse supply chains.");
-  const [city, setCity] = useState(profile.city || "Bengaluru");
-  const [state, setState] = useState(profile.state || "Karnataka");
+  const rawCompanyName = profile.companyName || user?.name;
+  const isGenericCompany = !rawCompanyName || rawCompanyName === "SME Pro User" || rawCompanyName === "Your Name" || rawCompanyName.toLowerCase().includes("user") || rawCompanyName === "Nexus Robotics & Automation";
+  const [companyName, setCompanyName] = useState(isGenericCompany ? "Mehta Traders" : rawCompanyName);
+  const [sector, setSector] = useState(profile.sector || "Commodities, FMCG & Global Trade");
+  const [tagline, setTagline] = useState(profile.tagline || "Leading B2B exporter, distributor and supply chain partner across India & global trade corridors.");
+  const [city, setCity] = useState(profile.city || "Mumbai");
+  const [state, setState] = useState(profile.state || "Maharashtra");
   const [country, setCountry] = useState(profile.country || "India");
-  const [website, setWebsite] = useState(profile.website || "www.nexusrobotics.io");
+  const [website, setWebsite] = useState(profile.website || "www.mehtatraders.in");
   const [foundedYear, setFoundedYear] = useState(profile.foundedYear || "2021");
   const [employeeBracket, setEmployeeBracket] = useState(profile.employeeBracket || "51-200 employees");
   const [workplacePolicy, setWorkplacePolicy] = useState(profile.workplacePolicy || "Hybrid");
@@ -970,43 +974,61 @@ export default function CompanyDashboard() {
             <div className="lg:col-span-3 space-y-4">
             
             {/* Company Identity Widget */}
-            <div className="bg-white dark:bg-[#122238] border border-slate-200 dark:border-white/10 rounded-2xl p-4 shadow-sm space-y-3">
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-4 shadow-xs space-y-3">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-slate-900 text-white font-bold text-lg flex items-center justify-center shrink-0 border border-slate-200 dark:border-slate-700">
+                <div className={`w-12 h-12 rounded-xl bg-[#0a192f] text-white font-bold text-lg flex items-center justify-center shrink-0 border border-slate-200 ${
+                  isCorporate ? "ring-2 ring-amber-400" : isCompany ? "ring-2 ring-blue-500/60" : isStartup ? "ring-2 ring-orange-500/60" : ""
+                }`}>
                   {companyName.charAt(0)}
                 </div>
                 <div className="min-w-0">
-                  <div className="flex items-center gap-1.5">
-                    <h3 className="text-xs font-bold text-slate-900 dark:text-white truncate">{companyName}</h3>
-                    {!isFree && <ShieldCheck className="w-3.5 h-3.5 text-[#0a66c2] shrink-0" />}
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <h3 className="text-xs font-bold text-[#0a192f] truncate">{companyName}</h3>
+                    
+                    {/* 3 VERIFIED TICK MARK BADGES */}
+                    {isCorporate ? (
+                      <span className="w-4 h-4 rounded-full bg-gradient-to-tr from-[#ea580c] to-[#f59e0b] p-[1.5px] flex items-center justify-center shadow-xs" title="Corporate Sovereign Apex Verified">
+                        <span className="w-full h-full rounded-full bg-[#0a192f] flex items-center justify-center text-orange-400">
+                          <Check className="w-2.5 h-2.5 stroke-[3.5]" />
+                        </span>
+                      </span>
+                    ) : isCompany ? (
+                      <span className="w-4 h-4 rounded-full bg-[#0a192f] flex items-center justify-center text-white shadow-xs" title="Company Enterprise Verified">
+                        <Check className="w-2.5 h-2.5 stroke-[3.5]" />
+                      </span>
+                    ) : isStartup ? (
+                      <span className="w-4 h-4 rounded-full bg-gradient-to-tr from-[#ea580c] to-[#f97316] flex items-center justify-center text-white shadow-xs" title="Startup Vanguard Verified">
+                        <Check className="w-2.5 h-2.5 stroke-[3.5]" />
+                      </span>
+                    ) : null}
                   </div>
                   <p className="text-[11px] text-slate-500 truncate">{website}</p>
-                  <p className="text-[10px] text-slate-400 font-semibold">{followersCount}</p>
+                  <p className="text-[10px] text-[#ea580c] font-bold">{followersCount}</p>
                 </div>
               </div>
 
               {/* Action Buttons: + Create and View as Member */}
-              <div className="space-y-2 pt-1 border-t border-slate-100 dark:border-white/5">
+              <div className="space-y-2 pt-1 border-t border-slate-100">
                 <button
                   onClick={() => {
                     setCreateType("menu");
                     setCreateModalOpen(true);
                   }}
-                  className="w-full py-2 bg-[#0a66c2] hover:bg-[#084e96] text-white font-bold text-xs rounded-xl transition-all shadow-sm flex items-center justify-center gap-1.5"
+                  className="w-full py-2 bg-[#ea580c] hover:bg-[#c2410c] text-white font-bold text-xs rounded-xl transition-all shadow-xs flex items-center justify-center gap-1.5"
                 >
                   <Plus className="w-4 h-4" /> Create
                 </button>
                 <button
                   onClick={() => setViewMode("public")}
-                  className="w-full py-2 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-700 dark:text-slate-300 font-semibold text-xs rounded-xl transition-all border border-slate-200 dark:border-white/10 flex items-center justify-center gap-1.5"
+                  className="w-full py-2 bg-slate-100 hover:bg-slate-200 text-[#0a192f] font-bold text-xs rounded-xl transition-all border border-slate-200 flex items-center justify-center gap-1.5"
                 >
-                  <Eye className="w-3.5 h-3.5" /> View as member
+                  <Eye className="w-3.5 h-3.5" /> View public profile
                 </button>
               </div>
             </div>
 
             {/* Main Navigation Tabs */}
-            <div className="bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-white/10 rounded-2xl p-2 shadow-xs space-y-1 text-xs font-semibold">
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-2 shadow-xs space-y-1 text-xs font-semibold">
               {[
                 { id: "dashboard", label: "Executive Cockpit", icon: BarChart3 },
                 { id: "page_posts", label: "Intelligence & Posts", icon: FileText },
@@ -1023,16 +1045,16 @@ export default function CompanyDashboard() {
                     onClick={() => setActiveAdminNav(item.id as any)}
                     className={`w-full px-3.5 py-2.5 rounded-xl transition-all flex items-center justify-between ${
                       isActive
-                        ? "bg-slate-100 dark:bg-slate-800 text-[#0B4FBA] dark:text-blue-400 font-bold border-l-4 border-[#0B4FBA] dark:border-blue-400 shadow-2xs"
-                        : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60"
+                        ? "bg-orange-50 text-[#0a192f] font-bold border-l-4 border-[#ea580c] shadow-2xs"
+                        : "text-slate-600 hover:bg-slate-50 hover:text-[#0a192f]"
                     }`}
                   >
                     <div className="flex items-center gap-2.5">
-                      <Icon className="w-4 h-4" />
+                      <Icon className={`w-4 h-4 ${isActive ? "text-[#ea580c]" : "text-slate-500"}`} />
                       <span>{item.label}</span>
                     </div>
                     {item.badge && (
-                      <span className="px-2 py-0.5 rounded-full bg-red-500 text-white font-bold text-[10px] font-mono">
+                      <span className="px-2 py-0.5 rounded-full bg-[#ea580c] text-white font-bold text-[10px] font-mono">
                         {item.badge}
                       </span>
                     )}
@@ -1614,38 +1636,88 @@ export default function CompanyDashboard() {
             {activeAdminNav === "analytics" && (
               <div className="space-y-6">
                 
-                {/* Main Analytics Container Card */}
+                {/* 1. FREE PLAN: LOCKED ANALYTICS PAYWALL */}
+                {isFree ? (
+                  <div className="bg-white dark:bg-[#122238] border border-slate-200 dark:border-white/10 rounded-2xl p-8 sm:p-12 text-center max-w-2xl mx-auto space-y-6 shadow-sm my-6">
+                    <div className="w-16 h-16 rounded-3xl bg-blue-50 dark:bg-blue-950/50 text-[#0a66c2] flex items-center justify-center mx-auto shadow-inner">
+                      <Lock className="w-8 h-8" />
+                    </div>
+                    <div className="space-y-2">
+                      <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Unlock Executive Analytics &amp; Benchmarks</h2>
+                      <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-lg mx-auto leading-relaxed">
+                        Analytics are locked for Basic Directory Profiles. Upgrade to Startup, Company, or Corporate plan to track page traffic, visitor demographics, search keywords, competitor metrics, and inbound buyer leads.
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left pt-2">
+                      <div className="p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+                        <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400 block mb-1">🚀 Startup Plan</span>
+                        <p className="text-[11px] text-slate-500">Content &amp; Visitor KPIs (30-day window)</p>
+                      </div>
+                      <div className="p-3.5 bg-blue-50/50 dark:bg-blue-950/30 rounded-xl border border-blue-200 dark:border-blue-900/50">
+                        <span className="text-xs font-bold text-[#0a66c2] block mb-1">⭐ Company Plan</span>
+                        <p className="text-[11px] text-slate-500">Followers, Search, 10 Competitors &amp; Leads</p>
+                      </div>
+                      <div className="p-3.5 bg-amber-50/50 dark:bg-amber-950/30 rounded-xl border border-amber-200 dark:border-amber-900/50">
+                        <span className="text-xs font-bold text-amber-700 dark:text-amber-400 block mb-1">👑 Corporate Plan</span>
+                        <p className="text-[11px] text-slate-500">Full 365d, 25 Competitors &amp; CRM sync</p>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => router.push(`/${locale}/profile/plans/company`)}
+                      className="px-6 py-2.5 bg-[#0a66c2] hover:bg-[#004182] text-white font-bold text-xs sm:text-sm rounded-full shadow-md transition-all inline-flex items-center gap-2"
+                    >
+                      <span>Explore Pricing Plans</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+
+                /* 2. PAID PLANS: UNLOCKED ANALYTICS HUB */
                 <div className="bg-white dark:bg-[#122238] border border-slate-200 dark:border-white/10 rounded-2xl p-6 shadow-sm space-y-6">
                   
                   {/* Top Analytics Title & Sub-Tabs Navigation */}
                   <div className="border-b border-slate-200 dark:border-white/10 pb-2 space-y-4">
                     <div className="flex items-center justify-between">
-                      <h2 className="text-xl font-black text-slate-900 dark:text-white">Analytics</h2>
-                      <span className="text-xs text-slate-500 font-medium">Page performance & audience intelligence</span>
+                      <div className="flex items-center gap-2">
+                        <h2 className="text-xl font-black text-slate-900 dark:text-white">Analytics</h2>
+                        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase font-mono ${
+                          isCorporate 
+                            ? "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300"
+                            : isCompany 
+                            ? "bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300"
+                            : "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"
+                        }`}>
+                          {isCorporate ? "👑 Corporate Unlimited" : isCompany ? "⭐ Company Pro" : "🚀 Startup Essential"}
+                        </span>
+                      </div>
+                      <span className="text-xs text-slate-500 font-medium">Page performance &amp; audience intelligence</span>
                     </div>
 
-                    {/* 6 Core LinkedIn Analytics Sub-Tabs */}
+                    {/* 6 Core LinkedIn Analytics Sub-Tabs with Tier Indicators */}
                     <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar pt-1">
                       {[
-                        { id: "content", label: "Content" },
-                        { id: "visitors", label: "Visitors" },
-                        { id: "followers", label: "Followers" },
-                        { id: "search", label: "Search appearances" },
-                        { id: "competitors", label: "Competitors" },
-                        { id: "leads", label: "Leads" },
+                        { id: "content", label: "Content", locked: false },
+                        { id: "visitors", label: "Visitors", locked: false },
+                        { id: "followers", label: "Followers", locked: isStartup },
+                        { id: "search", label: "Search appearances", locked: isStartup },
+                        { id: "competitors", label: "Competitors", locked: isStartup },
+                        { id: "leads", label: "Leads", locked: isStartup },
                       ].map((tab) => {
                         const isActive = activeAnalyticsTab === tab.id;
                         return (
                           <button
                             key={tab.id}
                             onClick={() => setActiveAnalyticsTab(tab.id as any)}
-                            className={`pb-2.5 px-3 text-xs sm:text-sm font-bold whitespace-nowrap transition-all border-b-2 ${
+                            className={`pb-2.5 px-3 text-xs sm:text-sm font-bold whitespace-nowrap transition-all border-b-2 flex items-center gap-1.5 ${
                               isActive
-                                ? "border-emerald-500 text-emerald-600 dark:text-emerald-400"
+                                ? "border-[#0a66c2] text-[#0a66c2]"
                                 : "border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200"
                             }`}
                           >
-                            {tab.label}
+                            <span>{tab.label}</span>
+                            {tab.locked && <Lock className="w-3 h-3 text-amber-500" />}
                           </button>
                         );
                       })}
@@ -3582,6 +3654,7 @@ export default function CompanyDashboard() {
                     </div>
                   )}
                 </div>
+                )}
               </div>
             )}
 
@@ -7543,6 +7616,135 @@ export default function CompanyDashboard() {
                 className="px-4 py-2 text-xs font-bold text-slate-600 dark:text-slate-400"
               >
                 Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* EDIT COMPETITORS MODAL (Competitors Tab Action Trigger)                   */}
+      {/* ========================================================================= */}
+      {editCompetitorsModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+          <div className="bg-white dark:bg-[#122238] border border-slate-200 dark:border-white/10 rounded-2xl p-6 max-w-lg w-full shadow-2xl space-y-4 text-left max-h-[85vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-white/10 pb-3">
+              <div className="flex items-center gap-2">
+                <Building2 className="w-4 h-4 text-[#0a66c2]" />
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white">Edit Monitored Competitors</h3>
+              </div>
+              <button
+                onClick={() => setEditCompetitorsModalOpen(false)}
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <p className="text-xs text-slate-600 dark:text-slate-300">
+              Benchmark your growth against key industry rivals and peer organizations ({trackedCompetitors.length} / {isCorporate ? "25" : isCompany ? "10" : isStartup ? "3" : "1"} tracked).
+            </p>
+
+            {/* Add Competitor Input */}
+            <div className="flex items-center gap-2">
+              <div className="relative flex-1">
+                <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  placeholder="Search and add company or institution..."
+                  value={newCompetitorInput}
+                  onChange={(e) => setNewCompetitorInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && newCompetitorInput.trim()) {
+                      const newComp = {
+                        id: `c_${Date.now()}`,
+                        name: newCompetitorInput.trim(),
+                        followers: "120,400",
+                        newFollowers: "2.1K",
+                        newFollowersPct: "+4.2%",
+                        posts: "45",
+                        postsPct: "+1.2%",
+                        comments: "150",
+                        commentsPct: "+3.0%",
+                        dailyComments: "5",
+                        dailyCommentsPct: "+3.0%",
+                        reactions: "12.4K",
+                        reactionsPct: "+8.1%",
+                        logoBg: "bg-indigo-700",
+                        logoText: newCompetitorInput.trim().slice(0, 3).toUpperCase(),
+                      };
+                      setTrackedCompetitors((prev) => [...prev, newComp]);
+                      setNewCompetitorInput("");
+                    }
+                  }}
+                  className="w-full pl-8 pr-3 py-2 text-xs bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-hidden focus:ring-1 focus:ring-[#0a66c2]"
+                />
+              </div>
+              <button
+                onClick={() => {
+                  if (newCompetitorInput.trim()) {
+                    const newComp = {
+                      id: `c_${Date.now()}`,
+                      name: newCompetitorInput.trim(),
+                      followers: "120,400",
+                      newFollowers: "2.1K",
+                      newFollowersPct: "+4.2%",
+                      posts: "45",
+                      postsPct: "+1.2%",
+                      comments: "150",
+                      commentsPct: "+3.0%",
+                      dailyComments: "5",
+                      dailyCommentsPct: "+3.0%",
+                      reactions: "12.4K",
+                      reactionsPct: "+8.1%",
+                      logoBg: "bg-indigo-700",
+                      logoText: newCompetitorInput.trim().slice(0, 3).toUpperCase(),
+                    };
+                    setTrackedCompetitors((prev) => [...prev, newComp]);
+                    setNewCompetitorInput("");
+                  }
+                }}
+                disabled={!newCompetitorInput.trim()}
+                className="px-3.5 py-2 bg-[#0a66c2] hover:bg-[#084e96] disabled:opacity-50 text-white font-bold text-xs rounded-xl shadow-xs shrink-0 flex items-center gap-1"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Add</span>
+              </button>
+            </div>
+
+            {/* Competitors List */}
+            <div className="space-y-2 max-h-60 overflow-y-auto">
+              {trackedCompetitors.map((comp) => (
+                <div
+                  key={comp.id}
+                  className="p-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-between gap-3 text-xs"
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className={`w-8 h-8 rounded-lg ${comp.logoBg} text-white font-bold flex items-center justify-center text-[10px] shrink-0`}>
+                      {comp.logoText}
+                    </div>
+                    <div className="min-w-0">
+                      <h4 className="font-bold text-slate-900 dark:text-white truncate">{comp.name}</h4>
+                      <p className="text-[11px] text-slate-500">{comp.followers} followers</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setTrackedCompetitors((prev) => prev.filter((c) => c.id !== comp.id))}
+                    className="p-1.5 text-slate-400 hover:text-red-500 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                    title="Remove competitor"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-white/10">
+              <button
+                onClick={() => setEditCompetitorsModalOpen(false)}
+                className="px-4 py-2 text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+              >
+                Done
               </button>
             </div>
           </div>
