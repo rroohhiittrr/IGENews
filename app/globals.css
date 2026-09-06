@@ -1,63 +1,63 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
-
 /* ==========================================
-   IGN DESIGN SYSTEM — TAILWIND V4 THEME
+   IGEN DESIGN SYSTEM — TAILWIND V4 THEME
    ========================================== */
 @theme inline {
-  /* ── Brand Primary: Light Blue ── */
-  --color-primary:           #0642BA;   /* Light Blue — Brand Primary */
-  --color-primary-light:     #2662DC;   /* Lightened primary */
-  --color-primary-dark:      #043292;   /* Deeper light blue — hover/pressed */
+  /* ── Brand Primary: Deep Editorial Blue ── */
+  --color-primary:           #0B4FBA;   /* Deep Blue */
+  --color-primary-light:     #2563EB;   /* Cobalt Blue */
+  --color-primary-dark:      #083884;   /* Midnight Navy */
 
-  /* ── Brand Secondary: Dark Blue ── */
-  --color-secondary:         #1D1D46;   /* Dark Blue — Brand Secondary */
-  --color-secondary-light:   #2B2B64;   /* Medium dark blue */
-  --color-secondary-dark:    #121232;   /* Deeper dark blue */
+  /* ── Brand Secondary: Ink ── */
+  --color-secondary:         #0F172A;   /* Deep Carbon Ink */
+  --color-secondary-light:   #1E293B;   /* Slate Ink */
+  --color-secondary-dark:    #090E17;   /* True Black Ink */
 
-  /* ── Accent: Brand Orange ── */
-  --color-accent-gold:       #F0652E;   /* Brand Orange — primary accent */
-  --color-accent-gold-light: #FDF0EB;   /* Orange tint — subtle backgrounds */
-  --color-accent-gold-bright:#F0652E;   /* Text on dark surfaces */
-  --color-accent-gold-dark:  #D44F1C;   /* Dark orange — hover state */
+  /* ── Accent: IGEN Terracotta & Amber ── */
+  --color-accent-gold:       #F0652E;   /* Warm Terracotta */
+  --color-accent-gold-light: #FFF7ED;   /* Warm paper tint */
+  --color-accent-gold-bright:#F97316;
+  --color-accent-gold-dark:  #C2410C;
   --color-accent-orange:     #F0652E;
 
-  /* ── Accent: Export Green — 15% ── */
-  --color-accent-green:      #2E7D32;   /* Export Green */
-  --color-accent-green-light:#E8F5E9;   /* Green tint */
-  --color-accent-green-dark: #1B5E20;   /* Dark green */
+  /* ── Accent: Signal Emerald & Coral ── */
+  --color-accent-green:      #059669;   /* Verified Emerald */
+  --color-accent-green-light:#ECFDF5;   /* Emerald wash */
+  --color-accent-green-dark: #047857;
 
-  /* ── Neutrals ── */
+  /* ── Neutrals (Paper & Slate) ── */
   --color-neutral-white:     #FFFFFF;
-  --color-neutral-light:     #F5F5F5;   /* Light Grey */
-  --color-neutral-mid:       #D0D7E0;   /* Divider/border */
-  --color-neutral-dark:      #5A6A7A;   /* Dark Grey */
-  --color-text-body:         #1A1A1A;
+  --color-neutral-light:     #F8FAFC;   /* Crisp neutral light */
+  --color-neutral-mid:       #E2E8F0;   /* Hairline border */
+  --color-neutral-dark:      #475569;   /* Muted Slate */
+  --color-text-body:         #0F172A;
 
-  /* ── Alerts / Breaking ── */
-  --color-breaking:          #DC2626;   /* Red — warnings, breaking, critical */
+  /* ── Alerts / Critical ── */
+  --color-breaking:          #DC2626;
   --color-breaking-light:    #FEF2F2;
 
   /* Fonts */
   --font-display: 'Playfair Display', Georgia, serif;
-  --font-body: 'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-
   /* Border Radius */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --radius-full: 999px;
+  --radius-xs: 2px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
 
-  /* Shadows */
-  --shadow-card:  0 2px 8px rgba(6, 66, 186, 0.08);
-  --shadow-hover: 0 8px 24px rgba(29, 29, 70, 0.16);
-  --shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.24);
-  --shadow-glow:  0 0 20px rgba(240, 101, 46, 0.3);
+  /* Shadows (Subtle, Crisp) */
+  --shadow-card:  0 1px 3px rgba(15, 23, 42, 0.05);
+  --shadow-hover: 0 4px 16px rgba(15, 23, 42, 0.08);
+  --shadow-modal: 0 20px 48px rgba(9, 14, 23, 0.22);
+  --shadow-glow:  0 0 24px rgba(11, 79, 186, 0.25);
 
   /* Font Sizes */
   --font-size-display-xl: 48px;
@@ -305,3 +305,47 @@ h3 {
   background: var(--color-accent-gold-light);
   color: var(--color-primary-dark);
 }
+
+/* ==========================================
+   IGEN EDITORIAL & INTELLIGENCE UTILITIES
+   ========================================== */
+.igen-editorial-headline {
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
+}
+
+.igen-data-sheet {
+  background: #ffffff;
+  border: 1px solid var(--color-neutral-mid);
+}
+.dark .igen-data-sheet {
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.igen-hairline-b {
+  border-bottom: 1px solid var(--color-neutral-mid);
+}
+.dark .igen-hairline-b {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.igen-hairline-r {
+  border-right: 1px solid var(--color-neutral-mid);
+}
+.dark .igen-hairline-r {
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.igen-tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+}
+

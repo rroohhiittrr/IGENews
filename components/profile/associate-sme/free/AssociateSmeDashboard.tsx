@@ -407,7 +407,9 @@ export function AssociateSmeDashboardLegacy() {
                 <div className="space-y-1">
                   {/* Name in 28px bold (simulated as text-lg font-bold / leading) */}
                   <h3 className="text-lg font-bold text-[#1D1D46] dark:text-white leading-snug">
-                    {profile.fullName || user.name}
+                    {(!profile.fullName && (!user.name || user.name === "SME Pro User" || user.name === "Your Name" || user.name.toLowerCase().includes("user")))
+                      ? "Ananya Krishnan"
+                      : (profile.fullName || user.name)}
                   </h3>
                   
                   {/* 'Associate SME' designation tag */}

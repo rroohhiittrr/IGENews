@@ -91,18 +91,18 @@ function ListCard({ article }: { article: Article }) {
   return (
     <article
       ref={expandRef}
-      className={`card-hover group relative overflow-hidden rounded-xl border border-[var(--color-neutral-light)] bg-white shadow-[var(--shadow-card)] transition-all duration-300 ${articleOpen ? "shadow-lg" : ""}`}
+      className={`group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0f172a] shadow-2xs hover:shadow-md transition-all duration-300 ${articleOpen ? "ring-2 ring-[#0B4FBA]/20" : ""}`}
     >
       {/* Badges */}
       <div className="absolute top-3 right-3 z-10 flex gap-1.5">
         {article.type === ContentType.MANUAL_AI && (
-          <span className="flex items-center gap-1 rounded-full bg-[var(--color-primary)] px-2 py-0.5 text-[10px] font-semibold text-white shadow-sm">
-            <Sparkles className="h-3 w-3" /> IGN Exclusive
+          <span className="flex items-center gap-1 rounded-full bg-[#0B4FBA] px-2.5 py-0.5 text-[10px] font-bold font-mono text-white shadow-xs">
+            <Sparkles className="h-3 w-3 text-amber-300" /> IGEN VERIFIED
           </span>
         )}
         {article.isTrending && (
-          <span className="flex items-center gap-1 rounded-full bg-orange-500 px-2 py-0.5 text-[10px] font-semibold text-white shadow-sm">
-            <Flame className="h-3 w-3" /> Trending
+          <span className="flex items-center gap-1 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 px-2.5 py-0.5 text-[10px] font-bold font-mono text-white shadow-xs">
+            <Flame className="h-3 w-3" /> TRENDING
           </span>
         )}
       </div>
@@ -117,33 +117,33 @@ function ListCard({ article }: { article: Article }) {
           src={article.heroImage}
           alt={article.title}
           fill
-          className={`object-cover transition-transform duration-500 ${!articleOpen ? "group-hover:scale-105" : ""}`}
+          className={`object-cover transition-transform duration-500 ${!articleOpen ? "group-hover:scale-102" : ""}`}
           sizes="(max-width: 768px) 100vw, 50vw"
         />
         {articleOpen && (
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
         )}
         {article.isLocked && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-            <div className="flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-[var(--color-primary)]">
-              <Lock className="h-4 w-4" />
-              Upgrade to Read
+          <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-xs">
+            <div className="flex items-center gap-2 rounded-xl bg-white/95 px-4 py-2 text-xs font-bold font-mono text-slate-900 shadow-md">
+              <Lock className="h-4 w-4 text-[#0B4FBA]" />
+              Enterprise Briefing Locked
             </div>
           </div>
         )}
       </button>
 
-      <div className="p-4">
+      <div className="p-5">
         {/* Source + Time */}
-        <div className="mb-2 flex items-center gap-2 text-[var(--color-meta)]">
-          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--color-neutral-light)] text-xs font-bold text-[var(--color-primary)]">
+        <div className="mb-2.5 flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 font-mono">
+          <div className="flex h-5 w-5 items-center justify-center rounded-md bg-slate-100 dark:bg-slate-800 text-[10px] font-bold text-slate-700 dark:text-slate-300">
             {article.sourceName.charAt(0)}
           </div>
-          <span className="text-xs font-medium text-[var(--color-neutral-dark)]">{article.sourceName}</span>
-          <span className="text-[var(--color-neutral-mid)]">·</span>
-          <span className="text-xs text-[var(--color-neutral-dark)]">{timeAgo(article.publishedAt)}</span>
-          <span className="text-[var(--color-neutral-mid)]">·</span>
-          <span className="flex items-center gap-0.5 text-xs text-[var(--color-neutral-dark)]">
+          <span className="font-semibold text-slate-700 dark:text-slate-300">{article.sourceName}</span>
+          <span>·</span>
+          <span suppressHydrationWarning>{timeAgo(article.publishedAt)}</span>
+          <span>·</span>
+          <span className="flex items-center gap-1">
             <Clock className="h-3 w-3" />
             {article.readTime} min read
           </span>
@@ -152,23 +152,22 @@ function ListCard({ article }: { article: Article }) {
         {/* Headline */}
         <button
           onClick={() => setArticleOpen(!articleOpen)}
-          className="mb-2 text-left w-full"
+          className="mb-2.5 text-left w-full"
         >
           <h3
-            className={`text-lg font-semibold leading-snug text-[var(--color-text-body)] transition-colors hover:text-[var(--color-secondary)] ${!articleOpen ? "line-clamp-2" : ""}`}
-            style={{ fontFamily: "var(--font-body)" }}
+            className={`text-xl font-bold font-display leading-snug text-slate-900 dark:text-white transition-colors hover:text-[#0B4FBA] dark:hover:text-blue-400 ${!articleOpen ? "line-clamp-2" : ""}`}
           >
             {article.title}
           </h3>
         </button>
 
         {/* Summary */}
-        <p className={`mb-3 text-sm leading-relaxed text-[var(--color-neutral-dark)] ${!articleOpen ? "line-clamp-3" : ""}`}>
+        <p className={`mb-3.5 text-sm leading-relaxed text-slate-600 dark:text-slate-300 ${!articleOpen ? "line-clamp-3" : ""}`}>
           {article.summary}
         </p>
 
         {/* Tags */}
-        <div className="mb-3 flex flex-wrap gap-1.5">
+        <div className="mb-3.5 flex flex-wrap gap-1.5">
           {article.tags.slice(0, articleOpen ? article.tags.length : 4).map((tag) => (
             <TagChip
               key={tag}
@@ -380,7 +379,7 @@ function SidebarCard({ article }: { article: Article }) {
         <div className="mt-1 flex items-center gap-2 text-[11px] text-[var(--color-neutral-dark)]">
           {article.sector && <span>{article.sector.name}</span>}
           <span>·</span>
-          <span>{timeAgo(article.publishedAt)}</span>
+          <span suppressHydrationWarning>{timeAgo(article.publishedAt)}</span>
         </div>
       </div>
     </Link>

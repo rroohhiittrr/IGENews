@@ -157,7 +157,7 @@ export default function AssociateSMESovereignDashboard() {
   const displayCity = profile.city || "New Delhi";
   const displayCountry = profile.country || "India";
   const profileUrl = typeof window !== "undefined"
-    ? `${window.location.origin}/${locale}/associate-sme/${user?.uid || "profile"}`
+    ? `${window.location.origin}/${locale}/associate-sme/${user?.id || user?.uid || "profile"}`
     : "";
 
   const firstPart = displayName.split(" ")[0].toUpperCase();

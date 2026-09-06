@@ -22,7 +22,7 @@ export default function FreeSMEDashboard() {
 
   const profileUrl =
     typeof window !== "undefined"
-      ? `${window.location.origin}/${locale}/sme/${user?.uid || "profile"}`
+      ? `${window.location.origin}/${locale}/sme/${user?.id || user?.uid || "profile"}`
       : "";
 
   const handleCopy = () => {

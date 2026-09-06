@@ -184,7 +184,7 @@ export default function AssociateSMEEliteDashboard() {
   const displayCity = profile.city || "Mumbai";
   const displayCountry = profile.country || "India";
   const profileUrl = typeof window !== "undefined"
-    ? `${window.location.origin}/${locale}/associate-sme/${user?.uid || "profile"}`
+    ? `${window.location.origin}/${locale}/associate-sme/${user?.id || user?.uid || "profile"}`
     : "";
 
   const totalRevenue = articles.reduce((a, b) => a + b.revenue, 0) + bookings.reduce((a, b) => a + b.amount, 0) * 0.7;

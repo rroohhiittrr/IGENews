@@ -1,7 +1,7 @@
 "use client";
 
 import { UserProfile } from "@/contexts/AuthContext";
-import { Edit2, Instagram, Facebook, Twitter, Linkedin, Send, BadgeCheck, Award, Star } from "lucide-react";
+import { Edit2, Instagram, Facebook, Twitter, Linkedin, Send, BadgeCheck, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -106,7 +106,11 @@ export default function ProfileHeader({ user }: ProfileHeaderProps) {
         {/* Info Area */}
         <div className="flex-1 text-center md:text-left space-y-4 pt-2">
            <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-2">
-              <h2 className="text-2xl font-bold text-[#1D1D46] dark:text-white">{user.name || "User Name"}</h2>
+              <h2 className="text-2xl font-bold text-[#1D1D46] dark:text-white">
+                {(!user.name || user.name === "SME Pro User" || user.name === "Your Name" || user.name.toLowerCase().includes("user"))
+                  ? (user.onboardingRole === "company" || user.accountType === "company" ? "Mehta Traders" : user.onboardingRole === "sme" ? "Dr. Vikram Malhotra" : user.onboardingRole === "associate-sme" ? "Ananya Krishnan" : user.onboardingRole === "leader" ? "Karan Singhania" : "Mehta Traders")
+                  : user.name}
+              </h2>
               {!statusInfo.isFree && (
                  <span className="px-2 py-0.5 bg-blue-50 text-[#1D1D46] dark:bg-blue-950/20 dark:text-blue-400 text-[10px] font-black rounded-lg border border-blue-200 dark:border-transparent uppercase tracking-wider flex items-center gap-1 shrink-0">
                     <BadgeCheck className="w-4 h-4 text-emerald-500 shrink-0" /> Verified

@@ -426,7 +426,9 @@ export function SmeDashboardLegacy() {
                 <div className="space-y-1">
                   {/* Full Name & Designation */}
                   <h3 className="text-lg font-bold text-[#1D1D46] dark:text-white leading-snug">
-                    {profile.fullName || user.name}
+                    {(!profile.fullName && (!user.name || user.name === "SME Pro User" || user.name === "Your Name" || user.name.toLowerCase().includes("user")))
+                      ? "Dr. Vikram Malhotra"
+                      : (profile.fullName || user.name)}
                   </h3>
                   <p className="text-xs text-gray-400 font-semibold max-w-[200px] mx-auto line-clamp-1">
                     {profile.currentDesignation || "Subject Matter Expert"}

@@ -489,7 +489,7 @@ export default function LeaderPublicProfile({
                   <span className={`px-3 py-1 rounded-lg text-xs font-bold border ${theme.pillBg}`}>
                     {primarySectorName}
                   </span>
-                  {secondarySectors.map((sec, i) => (
+                  {secondarySectors.map((sec: any, i: number) => (
                     <span key={i} className="px-2.5 py-1 rounded-lg text-xs font-medium bg-white/5 text-slate-300 border border-white/10">
                       {sec}
                     </span>
@@ -595,7 +595,7 @@ export default function LeaderPublicProfile({
                   <TrendingUp className={`w-4 h-4 ${theme.accentText}`} /> Leadership Milestones & Track Record
                 </h3>
                 <div className="space-y-4">
-                  {timeline.map((item, i) => (
+                  {timeline.map((item: any, i: number) => (
                     <div key={i} className="flex items-start gap-4 pb-4 border-b border-white/5 last:border-0 last:pb-0">
                       <div className="w-8 h-8 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 font-bold text-xs text-slate-300">
                         {i + 1}
@@ -618,7 +618,7 @@ export default function LeaderPublicProfile({
                   <GraduationCap className={`w-4 h-4 ${theme.accentText}`} /> Academic & Institutional Credentials
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {education.map((edu, i) => (
+                  {education.map((edu: any, i: number) => (
                     <div key={i} className="p-4 rounded-2xl bg-white/3 border border-white/5 space-y-1">
                       <h4 className="text-xs font-bold text-white">{edu.degree}</h4>
                       <p className="text-[11px] text-slate-400">{edu.institution}</p>
@@ -777,7 +777,7 @@ export default function LeaderPublicProfile({
 
             {/* Articles Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {articlesToShow.map((art) => (
+              {articlesToShow.map((art: any) => (
                 <div key={art.id} className={`rounded-3xl border p-6 ${theme.cardBg} space-y-4 flex flex-col justify-between hover:border-white/20 transition-all`}>
                   <div className="space-y-3">
                     {/* Byline Author Badge */}
@@ -829,7 +829,7 @@ export default function LeaderPublicProfile({
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {achievements.map((ach, i) => (
+              {achievements.map((ach: any, i: number) => (
                 <div key={i} className="p-5 rounded-2xl bg-white/3 border border-white/5 flex items-start gap-3.5">
                   <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center shrink-0 mt-0.5">
                     <Award className="w-5 h-5" />
