@@ -73,7 +73,7 @@ const SUBMENU_CONFIG: Record<Submenu, {
   button: string;
 }> = {
   my: {
-    label: "My Country Dashboard",
+    label: "My Country",
     sublabel: "Personalized Country Intelligence & News Feed",
     purpose: "Access country snapshot, economic metrics, trade leads, and local company profiles.",
     icon: Flag,
@@ -83,7 +83,7 @@ const SUBMENU_CONFIG: Record<Submenu, {
     button: "bg-blue-600 hover:bg-blue-700 text-white"
   },
   all: {
-    label: "All Countries (195 Bilateral)",
+    label: "All Country",
     sublabel: "Global Directory, Bilateral Trade Explorer & Comparison",
     purpose: "Discover 195 countries, explore bilateral trade flows, and compare economies side-by-side.",
     icon: Globe,
@@ -252,33 +252,44 @@ export default function NewsPOCCountryNewsSubmenu({ submenu }: Props) {
   const [aiPreviewCountry, setAiPreviewCountry] = useState<string>("India");
 
   const SubMenuHeader = () => (
-    <div className="mx-auto max-w-7xl px-4 lg:px-6">
-      <div className="flex items-center gap-2 py-4 border-b border-gray-200 dark:border-gray-800">
-        <button
-          onClick={() => router.push(basePath)}
-          className="p-2 rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-blue-500 transition-all mr-1"
-          aria-label="Go back to Country News main page"
-        >
-          <ArrowLeft className="h-4 w-4" />
-        </button>
+    <div className="sticky top-0 z-30 bg-white/95 dark:bg-[#090d16]/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 shadow-xs mb-4">
+      <div className="mx-auto max-w-7xl px-4 lg:px-6 py-3 flex items-center justify-between gap-4">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => router.push(basePath)}
+            className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-blue-500 transition-all text-gray-700 dark:text-gray-200 flex items-center gap-1.5 text-xs font-bold"
+            aria-label="Go back to Country News main page"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            <span className="hidden sm:inline">Country News</span>
+          </button>
 
-        <div className={`bg-gradient-to-r ${cfg.gradFrom} ${cfg.gradTo} text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 shrink-0 shadow-xs`}>
-          <IconComp className="h-3.5 w-3.5" />
-          <span className="text-[10px] font-bold">{cfg.label}</span>
+          <div className="h-4 w-[1px] bg-gray-300 dark:bg-gray-700 mx-1 hidden sm:block" />
+
+          <div className="flex items-center gap-1.5 text-xs font-bold text-gray-500 dark:text-gray-400">
+            <Filter className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+            <span className="hidden md:inline uppercase tracking-wider text-[11px]">Filters:</span>
+          </div>
         </div>
 
-        <div className="flex gap-1 flex-wrap">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+          <button
+            onClick={() => router.push(basePath)}
+            className="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all bg-gray-100 dark:bg-gray-800/80 text-gray-600 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:text-blue-600 border border-gray-200 dark:border-gray-700/60"
+          >
+            🌐 Country News Home
+          </button>
           {(["my", "all", "intelligence"] as Submenu[]).map((s) => (
             <button
               key={s}
               onClick={() => router.push(`${basePath}/${s}`)}
-              className={`px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all border ${
                 submenu === s
-                  ? "bg-blue-600 text-white shadow-xs"
-                  : "bg-gray-100 dark:bg-gray-900 text-gray-500 hover:text-blue-600 dark:hover:text-blue-400"
+                  ? "bg-blue-600 text-white border-blue-600 shadow-xs"
+                  : "bg-gray-100 dark:bg-gray-800/80 text-gray-600 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:text-blue-600 border-gray-200 dark:border-gray-700/60"
               }`}
             >
-              {SUBMENU_CONFIG[s].label}
+              {s === "my" ? "🇮🇳 My Country" : s === "all" ? "🌍 All Country" : "✨ Country Intelligence"}
             </button>
           ))}
         </div>

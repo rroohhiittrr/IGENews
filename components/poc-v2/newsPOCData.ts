@@ -85,9 +85,7 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
         description: "Free Tier company listings.",
         subSubItems: [
           { label: "Company Pages", slug: "pages", description: "Basic digital profiles for registered companies." },
-          { label: "Company News", slug: "news", description: "Press releases and announcements from registered companies." },
-          { label: "By Sector", slug: "sector", description: "Browse registered companies sorted by sector." },
-          { label: "All Sector", slug: "all", description: "Full repository of registered companies." }
+          { label: "Company News", slug: "news", description: "Press releases and announcements from registered companies." }
         ]
       },
       {
@@ -96,9 +94,7 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
         description: "Pro Tier verified business listings.",
         subSubItems: [
           { label: "Company Pages", slug: "pages", description: "Premium verified profiles with lead forms." },
-          { label: "Company News", slug: "news", description: "Verified business updates and announcements." },
-          { label: "By Sector", slug: "sector", description: "Browse verified companies by sector." },
-          { label: "All Sector", slug: "all", description: "Full repository of verified companies." }
+          { label: "Company News", slug: "news", description: "Verified business updates and announcements." }
         ]
       },
       {
@@ -107,9 +103,7 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
         description: "Enterprise Tier corporate listings.",
         subSubItems: [
           { label: "Company Pages", slug: "pages", description: "Advanced corporate dashboards and custom analytics." },
-          { label: "Company News", slug: "news", description: "Corporate breaking news and market disclosures." },
-          { label: "By Sector", slug: "sector", description: "Browse top corporates by sector." },
-          { label: "All Sector", slug: "all", description: "Full repository of enterprise corporates." }
+          { label: "Company News", slug: "news", description: "Corporate breaking news and market disclosures." }
         ]
       }
     ]
@@ -128,9 +122,7 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
         description: "Free Tier basic leader entries.",
         subSubItems: [
           { label: "Leader News", slug: "news", description: "News coverage for registered leaders." },
-          { label: "Leader Pages", slug: "pages", description: "Basic bio and profile card for registered executives." },
-          { label: "By Sector", slug: "sector", description: "Registered leaders categorized by industry sector." },
-          { label: "All Sector", slug: "all", description: "Full registry of registered leaders." }
+          { label: "Leader Pages", slug: "pages", description: "Basic bio and profile card for registered executives." }
         ]
       },
       {
@@ -139,9 +131,7 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
         description: "Pro Tier verified executive profiles.",
         subSubItems: [
           { label: "Leader News", slug: "news", description: "Exclusive news and activity logs of verified leaders." },
-          { label: "Leader Pages", slug: "pages", description: "Verified biography, network indicators, and decisions." },
-          { label: "By Sector", slug: "sector", description: "Verified leaders categorized by sector." },
-          { label: "All Sector", slug: "all", description: "Full repository of verified leaders." }
+          { label: "Leader Pages", slug: "pages", description: "Verified biography, network indicators, and decisions." }
         ]
       },
       {
@@ -150,18 +140,14 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
         description: "Enterprise Tier top movers & market leaders.",
         subSubItems: [
           { label: "Leader News", slug: "news", description: "Market-moving executive disclosures and investment news." },
-          { label: "Leader Pages", slug: "pages", description: "Influence score, investment trackers, and policy mentions." },
-          { label: "By Sector", slug: "sector", description: "Top leaders categorized by sector." },
-          { label: "All Sector", slug: "all", description: "Full database of top market leaders." }
+          { label: "Leader Pages", slug: "pages", description: "Influence score, investment trackers, and policy mentions." }
         ]
       },
       {
         label: "Leader Intelligence",
         slug: "intelligence",
         description: "C-suite strategic moves, executive quotes, leadership trends, and predictive signals.",
-        subSubItems: [
-          { label: "Compare Leaders", slug: "compare", description: "Compare corporate leaders side-by-side across influence, focus, and metrics." }
-        ]
+        subSubItems: []
       }
     ]
   },
@@ -179,9 +165,7 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
         description: "SME-authored columns and publication panels.",
         subSubItems: [
           { label: "SME News", slug: "news", description: "Columns, articles, and research published by SMEs." },
-          { label: "SME Pages", slug: "pages", description: "Profiles and consultation booking options for SMEs." },
-          { label: "By Sector", slug: "sector", description: "Browse verified SMEs sorted by sector." },
-          { label: "All Sector", slug: "all", description: "Full catalog of verified SMEs." }
+          { label: "SME Pages", slug: "pages", description: "Profiles and consultation booking options for SMEs." }
         ]
       },
       {
@@ -190,9 +174,7 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
         description: "ASME-authored business insights.",
         subSubItems: [
           { label: "ASME News", slug: "news", description: "Articles and analyses written by ASMEs." },
-          { label: "ASME Pages", slug: "pages", description: "Profiles and direct request forms for ASMEs." },
-          { label: "By Sector", slug: "sector", description: "Browse ASMEs by industry sector." },
-          { label: "All Sector", slug: "all", description: "Full catalog of ASMEs." }
+          { label: "ASME Pages", slug: "pages", description: "Profiles and direct request forms for ASMEs." }
         ]
       }
     ]
@@ -206,30 +188,22 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
     tier: "Verified/Pro",
     subItems: [
       {
-        label: "All Sector",
+        label: "Sector Feed",
         slug: "all",
         description: "Comprehensive feed covering all 50 sectors.",
-        subSubItems: [
-          { label: "50 Sector Directory", slug: "directory", description: "Master index of all 50 sectors." },
-          { label: "1,350+ Industries", slug: "industries", description: "Granular sub-industry taxonomy." }
-        ]
+        subSubItems: []
       },
       {
         label: "Sector Engagement",
         slug: "engagement",
         description: "Crowd popularity, sector discussions, and active polls.",
-        subSubItems: [
-          { label: "Sector Polls", slug: "polls", description: "Live sentiment & export outlook polls." },
-          { label: "Discussion Hub", slug: "discussions", description: "Industry peer comments & Q&A." }
-        ]
+        subSubItems: []
       },
       {
         label: "Sector Intelligence",
         slug: "intelligence",
         description: "Merged sector reports, KPIs, and predictive charts.",
-        subSubItems: [
-          { label: "Compare Sector", slug: "compare", description: "Compare industrial sectors side-by-side." }
-        ]
+        subSubItems: []
       },
       {
         label: "Industry Intelligence",
@@ -240,11 +214,7 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
       {
         label: "Industry Feed",
         slug: "industry-feed",
-        description: "News feed filtered by industry tags.",
-        subSubItems: [
-          { label: "My Industry", slug: "my", description: "Personalized feed for your selected industry segments." },
-          { label: "All Industry", slug: "all", description: "Read sample news from 1,300+ industries." }
-        ]
+        description: "News feed filtered by industry tags."
       }
     ]
   },
@@ -256,24 +226,6 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
     purpose: "Bilateral trade details and country business intelligence.",
     tier: "Verified/Pro",
     subItems: [
-      {
-        label: "My Country",
-        slug: "my",
-        description: "Bilateral trade details for your chosen countries.",
-        subSubItems: [
-          { label: "My Country Feed", slug: "feed", description: "Personalized stream for selected countries." },
-          { label: "Trade Leads & Metrics", slug: "metrics", description: "Bilateral economic indicators." }
-        ]
-      },
-      {
-        label: "All Country",
-        slug: "all",
-        description: "Full directory of 195 countries with bilateral trade graphs.",
-        subSubItems: [
-          { label: "195 Countries Directory", slug: "directory", description: "Full global country index." },
-          { label: "Bilateral Corridor Matrix", slug: "matrix", description: "Compare any two nations side-by-side." }
-        ]
-      },
       {
         label: "Country Intelligence",
         slug: "intelligence",
@@ -318,12 +270,7 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
       {
         label: "My Activities",
         slug: "activities",
-        description: "Track comment history, likes, and saved records.",
-        subSubItems: [
-          { label: "My Likes", slug: "likes", description: "All liked articles and reports." },
-          { label: "My Comments", slug: "comments", description: "Log of your comments and discussions." },
-          { label: "My Trade-News Analytics", slug: "analytics", description: "Custom dashboards highlighting reading topics." }
-        ]
+        description: "Track comment history, likes, and saved records."
       },
       {
         label: "Reader Intelligence",

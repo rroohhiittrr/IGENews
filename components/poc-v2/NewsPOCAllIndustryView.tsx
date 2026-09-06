@@ -1353,7 +1353,7 @@ export default function NewsPOCAllIndustryView({ onBack }: NewsPOCAllIndustryVie
           {/* Sub-menu switcher (My Industry | All Industry | Industry Intelligence) */}
           <div className="flex items-center gap-1.5 bg-white dark:bg-gray-950 p-1 rounded-xl border border-gray-200 dark:border-gray-800 shadow-xs">
             <button
-              onClick={() => router.push("/en/poc-v2/feed/industry")}
+              onClick={() => router.push("/en/poc-v2/sector-news/industry-feed/my")}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
                 isMyActive
                   ? "bg-blue-600 text-white shadow-xs"
@@ -1363,7 +1363,7 @@ export default function NewsPOCAllIndustryView({ onBack }: NewsPOCAllIndustryVie
               My Industry
             </button>
             <button
-              onClick={() => router.push("/en/poc-v2/feed/industry/all")}
+              onClick={() => router.push("/en/poc-v2/sector-news/industry-feed/all")}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
                 isAllActive
                   ? "bg-blue-600 text-white shadow-xs"

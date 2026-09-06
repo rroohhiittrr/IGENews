@@ -116,6 +116,40 @@ export default function NewsPOCCountryNewsHome() {
   return (
     <div className="bg-gray-50 dark:bg-[#070b12] text-gray-900 dark:text-gray-100 min-h-screen pb-16 transition-colors duration-300">
 
+      {/* ─── Country News Submenu Filters Navigation Header Bar ─── */}
+      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 py-3 px-4 lg:px-6 sticky top-0 z-30 shadow-xs">
+        <div className="mx-auto max-w-7xl flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-extrabold text-gray-400 dark:text-gray-500 uppercase tracking-wider mr-1">
+              Country Filters:
+            </span>
+            <Link
+              href="/en/poc-v2/country-news"
+              className="px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 bg-blue-600 text-white shadow-sm"
+            >
+              🌐 Country News Home
+            </Link>
+            <Link
+              href="/en/poc-v2/country-news/my"
+              className="px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+            >
+              🇮🇳 My Country
+            </Link>
+            <Link
+              href="/en/poc-v2/country-news/all"
+              className="px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+            >
+              🌍 All Country
+            </Link>
+          </div>
+          <div className="flex items-center gap-1.5 text-xs text-gray-400 font-semibold">
+            <span>Country News</span>
+            <ChevronRight className="h-3 w-3" />
+            <span className="text-blue-500 font-bold">Overview</span>
+          </div>
+        </div>
+      </div>
+
       {/* ══════════════════════════════════════════════════════════════════
           1. HERO BANNER — 195-Country Bilateral Intelligence Hub
       ══════════════════════════════════════════════════════════════════ */}

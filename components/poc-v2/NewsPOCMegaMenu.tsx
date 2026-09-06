@@ -46,6 +46,9 @@ export default function NewsPOCMegaMenu() {
 
   const getSubHref = (itemSlug: string, subSlug: string) => {
     const prefix = getLocalePrefix();
+    if (itemSlug === "sector-news" && subSlug === "industry-feed") {
+      return `${prefix}/poc-v2/sector-news/industry-feed/my`;
+    }
     return `${prefix}/poc-v2/${itemSlug}/${subSlug}`;
   };
 
