@@ -2664,12 +2664,12 @@ export default function NewsPOCCatchAllPage() {
     const editorName = subMatch?.label || "IGEN Editor";
     const subTab = slugParts[2] || "my"; // "my" or "all"
 
-    if (editorSlug === "ai-editor" && subTab === "my") {
-      return <NewsPOCHeadlinesAIEditorMySector onBack={() => router.back()} />;
+    if (editorSlug === "ai-editor" && (subTab === "all" || slugParts.length === 2)) {
+      return <NewsPOCHeadlinesAIEditorAllSectors onBack={() => router.back()} />;
     }
 
-    if (editorSlug === "ai-editor" && subTab === "all") {
-      return <NewsPOCHeadlinesAIEditorAllSectors onBack={() => router.back()} />;
+    if (editorSlug === "ai-editor" && subTab === "my") {
+      return <NewsPOCHeadlinesAIEditorMySector onBack={() => router.back()} />;
     }
     
     // Sample articles for different editors

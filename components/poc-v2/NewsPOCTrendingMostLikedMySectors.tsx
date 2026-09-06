@@ -278,19 +278,63 @@ export default function NewsPOCTrendingMostLikedMySectors({ onBack }: Props) {
   return (
     <div className="bg-gray-50 dark:bg-[#070b12] text-gray-900 dark:text-gray-100 min-h-screen pb-16 transition-colors duration-300">
       
-      {/* ─── Breadcrumb ─── */}
-      <nav className="mx-auto max-w-7xl px-4 pt-6 lg:px-6 text-xs text-gray-400 font-semibold flex items-center gap-1.5">
-        {onBack && (
-          <button onClick={onBack} className="mr-2 hover:text-blue-500 flex items-center gap-1">
-            <ArrowLeft className="h-3.5 w-3.5" /> Back
-          </button>
-        )}
-        <span>Trending</span>
-        <ChevronRight className="h-3 w-3" />
-        <span>Most Liked</span>
-        <ChevronRight className="h-3 w-3" />
-        <span className="text-blue-500 font-bold">My Sectors</span>
-      </nav>
+      {/* ─── Submenu Navigation Header Bar ─── */}
+      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 py-3 px-4 lg:px-6 sticky top-0 z-30 shadow-xs">
+        <div className="mx-auto max-w-7xl flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-extrabold text-gray-400 dark:text-gray-500 uppercase tracking-wider mr-1">
+              Trending Filters:
+            </span>
+            <Link
+              href="/en/poc-v2/trending/most-liked/my"
+              className="px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 bg-blue-600 text-white shadow-sm"
+            >
+              ❤️ Most Liked
+            </Link>
+            <Link
+              href="/en/poc-v2/trending/most-shared/my"
+              className="px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+            >
+              🔄 Most Shared
+            </Link>
+            <Link
+              href="/en/poc-v2/trending/most-commented/my"
+              className="px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+            >
+              💬 Most Commented
+            </Link>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1.5">
+              <Link
+                href="/en/poc-v2/trending/most-liked/my"
+                className="px-2.5 py-1 text-xs font-bold rounded-full transition-colors bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 border border-blue-300 dark:border-blue-700"
+              >
+                • My Sector
+              </Link>
+              <Link
+                href="/en/poc-v2/trending/most-liked/all"
+                className="px-2.5 py-1 text-xs font-semibold rounded-full transition-colors text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                • All Sector
+              </Link>
+            </div>
+            <span className="text-gray-300 dark:text-gray-700 hidden sm:inline">|</span>
+            <div className="flex items-center gap-1.5 text-xs text-gray-400 font-semibold hidden md:flex">
+              {onBack && (
+                <button onClick={onBack} className="mr-2 hover:text-blue-500 flex items-center gap-1">
+                  <ArrowLeft className="h-3.5 w-3.5" /> Back
+                </button>
+              )}
+              <span>Trending</span>
+              <ChevronRight className="h-3 w-3" />
+              <span>Most Liked</span>
+              <ChevronRight className="h-3 w-3" />
+              <span className="text-blue-500 font-bold">My Sector</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* ─── Hero Section ─── */}
       <section className="mx-auto max-w-7xl px-4 pt-6 lg:px-6">

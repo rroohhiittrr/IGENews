@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { TrendingLeadersCard, TrendingTopicsCard, RecommendedReportsCard } from "./NewsPOCLeaderSidebarWidgets";
 import {
   ArrowRight,
   Award,
@@ -379,10 +380,10 @@ export default function RegisteredLeaderNewsView() {
         </div>
       </section>
 
-      {/* ── 07. LEADERSHIP TOPIC CHIPS BAR ──────────────────────────────────── */}
+      {/* ── 07. LEADERSHIP TOPIC CHIPS BAR & CAPSULE FILTER BAR ──────────────── */}
       <div className="sticky top-0 z-30 bg-white dark:bg-[#0f172a] border-b border-gray-200 dark:border-gray-800 shadow-xs">
-        <div className="mx-auto max-w-7xl px-4 lg:px-6">
-          <div className="flex gap-1.5 overflow-x-auto py-2.5" style={{ scrollbarWidth: "none" }}>
+        <div className="mx-auto max-w-7xl px-4 lg:px-6 py-2.5 flex items-center justify-between gap-4 overflow-x-auto">
+          <div className="flex gap-1.5 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
             {LEADERSHIP_TOPICS.map((topic) => (
               <button
                 key={topic}
@@ -396,6 +397,19 @@ export default function RegisteredLeaderNewsView() {
                 {topic}
               </button>
             ))}
+          </div>
+
+          {/* Capsule Filter Bar matching screenshot */}
+          <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-full p-1 shadow-xs inline-flex items-center gap-1 shrink-0">
+            <button className="px-5 py-2 rounded-full text-xs font-bold transition-all bg-blue-600 text-white shadow-xs">
+              My Leader
+            </button>
+            <button className="px-5 py-2 rounded-full text-xs font-bold transition-all text-gray-900 dark:text-white hover:text-blue-600">
+              All Leader
+            </button>
+            <button className="px-5 py-2 rounded-full text-xs font-bold transition-all text-gray-900 dark:text-white hover:text-blue-600">
+              Leader Intelligence
+            </button>
           </div>
         </div>
       </div>
@@ -486,56 +500,66 @@ export default function RegisteredLeaderNewsView() {
               </span>
             }
           />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredNews.slice(1).map((item) => (
-              <Card key={item.id} className="p-4 space-y-3 flex flex-col justify-between hover:shadow-md transition-shadow">
-                <div className="space-y-2.5">
-                  <div className="flex items-center justify-between text-[9px] text-gray-500">
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-bold text-blue-600">{item.industry}</span>
-                      {item.trending && <Badge color="indigo">Trending</Badge>}
+          <div className="grid grid-cols-12 gap-8">
+            <div className="col-span-12 lg:col-span-8 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {filteredNews.slice(1).map((item) => (
+                  <Card key={item.id} className="p-4 space-y-3 flex flex-col justify-between hover:shadow-md transition-shadow">
+                    <div className="space-y-2.5">
+                      <div className="flex items-center justify-between text-[9px] text-gray-500">
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-bold text-blue-600">{item.industry}</span>
+                          {item.trending && <Badge color="indigo">Trending</Badge>}
+                        </div>
+                        <span>{item.time}</span>
+                      </div>
+                      <h3 className="font-display text-sm font-bold text-gray-950 dark:text-white leading-snug hover:text-blue-600 cursor-pointer">
+                        {item.headline}
+                      </h3>
+                      <p className="text-[10px] text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed">
+                        {item.summary}
+                      </p>
+                      <div className="flex items-center justify-between text-[9px] text-gray-400 pt-1">
+                        <span><strong>{item.leader}</strong> · {item.company}</span>
+                        <span>{item.readTime}</span>
+                      </div>
                     </div>
-                    <span>{item.time}</span>
-                  </div>
-                  <h3 className="font-display text-sm font-bold text-gray-950 dark:text-white leading-snug hover:text-blue-600 cursor-pointer">
-                    {item.headline}
-                  </h3>
-                  <p className="text-[10px] text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed">
-                    {item.summary}
-                  </p>
-                  <div className="flex items-center justify-between text-[9px] text-gray-400 pt-1">
-                    <span><strong>{item.leader}</strong> · {item.company}</span>
-                    <span>{item.readTime}</span>
-                  </div>
-                </div>
 
-                <div className="border-t border-gray-100 dark:border-gray-800 pt-3 flex items-center justify-between">
-                  <Link href="/eoi" className="text-[10px] font-bold text-blue-600 hover:underline">
-                    Read Story →
-                  </Link>
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      onClick={() => toggleBookmark(item.id)}
-                      className={`p-1.5 rounded-lg border text-[10px] transition-colors ${
-                        bookmarkedIds[item.id]
-                          ? "bg-blue-50 border-blue-300 text-blue-600 dark:bg-blue-950/40"
-                          : "border-gray-200 dark:border-gray-700 text-gray-400 hover:text-blue-600"
-                      }`}
-                      aria-label={`Bookmark ${item.headline}`}
-                    >
-                      <Bookmark className="h-3.5 w-3.5" />
-                    </button>
-                    <button
-                      onClick={() => alert("Story link copied to clipboard")}
-                      className="p-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-400 hover:text-blue-600 text-[10px]"
-                      aria-label={`Share ${item.headline}`}
-                    >
-                      <Share2 className="h-3.5 w-3.5" />
-                    </button>
-                  </div>
-                </div>
-              </Card>
-            ))}
+                    <div className="border-t border-gray-100 dark:border-gray-800 pt-3 flex items-center justify-between">
+                      <Link href="/eoi" className="text-[10px] font-bold text-blue-600 hover:underline">
+                        Read Story →
+                      </Link>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          onClick={() => toggleBookmark(item.id)}
+                          className={`p-1.5 rounded-lg border text-[10px] transition-colors ${
+                            bookmarkedIds[item.id]
+                              ? "bg-blue-50 border-blue-300 text-blue-600 dark:bg-blue-950/40"
+                              : "border-gray-200 dark:border-gray-700 text-gray-400 hover:text-blue-600"
+                          }`}
+                          aria-label={`Bookmark ${item.headline}`}
+                        >
+                          <Bookmark className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          onClick={() => alert("Story link copied to clipboard")}
+                          className="p-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-400 hover:text-blue-600 text-[10px]"
+                          aria-label={`Share ${item.headline}`}
+                        >
+                          <Share2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            <div className="col-span-12 lg:col-span-4 space-y-6">
+              <TrendingLeadersCard />
+              <TrendingTopicsCard />
+              <RecommendedReportsCard />
+            </div>
           </div>
         </section>
 

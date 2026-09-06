@@ -34,9 +34,27 @@ export default function NewsPOCMegaMenu() {
     return cleanPath.startsWith(`/poc-v2/${slug}`);
   };
 
-  const getHref = (slug: string) => {
-    return slug === "feed" ? "/poc-v2" : `/poc-v2/${slug}`;
+  const getLocalePrefix = () => {
+    const match = pathname.match(/^\/(en|hi|ta|kn)/);
+    return match ? match[0] : "/en";
   };
+
+  const getHref = (slug: string) => {
+    const prefix = getLocalePrefix();
+    return slug === "feed" ? `${prefix}/poc-v2` : `${prefix}/poc-v2/${slug}`;
+  };
+
+  const getSubHref = (itemSlug: string, subSlug: string) => {
+    const prefix = getLocalePrefix();
+    return `${prefix}/poc-v2/${itemSlug}/${subSlug}`;
+  };
+
+  const getSubSubHref = (itemSlug: string, subSlug: string, subSubSlug: string) => {
+    const prefix = getLocalePrefix();
+    return `${prefix}/poc-v2/${itemSlug}/${subSlug}/${subSubSlug}`;
+  };
+
+  const cleanPath = pathname.replace(/^\/(en|hi|ta|kn)/, '') || '/';
 
   return (
     <nav className="sticky top-16 z-40 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 shadow-sm transition-colors duration-250 overflow-visible">
@@ -72,7 +90,8 @@ export default function NewsPOCMegaMenu() {
 
           {NEWS_POC_MENU_ITEMS.map((item, index) => {
             const isSelected = isActive(item.slug);
-            const isOpen = openIndex === index;
+            const hasSubItems = item.subItems && item.subItems.length > 0;
+            const isOpen = openIndex === index && hasSubItems;
             const colCount = item.subItems.length;
             const gridClass = 
               colCount === 5 ? "grid-cols-5" :
@@ -84,7 +103,7 @@ export default function NewsPOCMegaMenu() {
               <div
                 key={item.id}
                 className="overflow-visible"
-                onMouseEnter={() => setOpenIndex(index)}
+                onMouseEnter={() => hasSubItems && setOpenIndex(index)}
                 onMouseLeave={() => setOpenIndex(null)}
               >
                 <Link
@@ -97,14 +116,16 @@ export default function NewsPOCMegaMenu() {
                 >
                   <span className="text-base leading-none">{item.icon}</span>
                   <span className="whitespace-nowrap">{item.label}</span>
-                  <ChevronDown
-                    className={`h-3 w-3 opacity-60 transition-transform duration-200 ${
-                      isOpen ? "rotate-180 text-blue-600" : ""
-                    }`}
-                  />
+                  {hasSubItems && (
+                    <ChevronDown
+                      className={`h-3 w-3 opacity-60 transition-transform duration-200 ${
+                        isOpen ? "rotate-180 text-blue-600" : ""
+                      }`}
+                    />
+                  )}
                 </Link>
 
-                {isOpen && (
+                {isOpen && hasSubItems && (
                   /* Full-width premium mega dropdown anchored to max-w-7xl container */
                   <div className="absolute left-4 right-4 top-full mt-0 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-xl animate-in fade-in slide-in-from-top-2 duration-150 z-50">
                     {/* Header of Dropdown */}
@@ -129,14 +150,15 @@ export default function NewsPOCMegaMenu() {
                     <div className={`grid ${gridClass} gap-6`}>
                       {item.subItems.map((sub) => {
                         const hasSubSub = sub.subSubItems && sub.subSubItems.length > 0;
+                        const subHref = getSubHref(item.slug, sub.slug);
                         return (
                           <div key={sub.slug} className="space-y-2">
                             {/* Sub-menu title */}
                             <div>
                               <Link
-                                href={`/poc-v2/${item.slug}/${sub.slug}`}
+                                href={subHref}
                                 onClick={() => setOpenIndex(null)}
-                                className="block text-[11px] font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:underline"
+                                className="block text-[11px] font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:underline cursor-pointer"
                               >
                                 {sub.label}
                               </Link>
@@ -148,18 +170,26 @@ export default function NewsPOCMegaMenu() {
                             {/* Sub-sub-menu links */}
                             {hasSubSub && (
                               <ul className="space-y-1.5 pl-1.5 border-l border-gray-100 dark:border-gray-800">
-                                {sub.subSubItems?.map((subSub) => (
-                                  <li key={subSub.slug}>
-                                    <Link
-                                      href={`/poc-v2/${item.slug}/${sub.slug}/${subSub.slug}`}
-                                      onClick={() => setOpenIndex(null)}
-                                      className="block text-xs text-gray-650 dark:text-gray-350 hover:text-blue-600 dark:hover:text-blue-400 transition-colors py-0.5 truncate"
-                                      title={subSub.description}
-                                    >
-                                      • {subSub.label}
-                                    </Link>
-                                  </li>
-                                ))}
+                                {sub.subSubItems?.map((subSub) => {
+                                  const subSubHref = getSubSubHref(item.slug, sub.slug, subSub.slug);
+                                  const isSubSubActive = cleanPath === `/poc-v2/${item.slug}/${sub.slug}/${subSub.slug}`;
+                                  return (
+                                    <li key={subSub.slug}>
+                                      <Link
+                                        href={subSubHref}
+                                        onClick={() => setOpenIndex(null)}
+                                        className={`block text-xs transition-colors py-0.5 truncate cursor-pointer ${
+                                          isSubSubActive 
+                                            ? "text-blue-600 dark:text-blue-400 font-bold" 
+                                            : "text-gray-650 dark:text-gray-350 hover:text-blue-600 dark:hover:text-blue-400"
+                                        }`}
+                                        title={subSub.description}
+                                      >
+                                        <span className={isSubSubActive ? "text-blue-600 dark:text-blue-400 font-extrabold mr-1" : "mr-1"}>•</span> {subSub.label}
+                                      </Link>
+                                    </li>
+                                  );
+                                })}
                               </ul>
                             )}
                           </div>

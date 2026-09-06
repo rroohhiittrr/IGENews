@@ -208,20 +208,28 @@ export default function NewsPOCSectorNewsSubmenu({ submenu, view }: Props) {
           <span className="text-[10px] font-bold">{cfg.label}</span>
         </div>
 
-        <div className="flex gap-1 flex-wrap">
-          {(["all", "engagement", "intelligence", "industry"] as Submenu[]).map((s) => (
-            <button
-              key={s}
-              onClick={() => router.push(`${basePath}/${s}`)}
-              className={`px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all ${
-                submenu === s
-                  ? "bg-blue-600 text-white shadow-xs"
-                  : "bg-gray-100 dark:bg-gray-900 text-gray-500 hover:text-blue-600 dark:hover:text-blue-400"
-              }`}
-            >
-              {SUBMENU_CONFIG[s].label}
-            </button>
-          ))}
+        {/* Capsule Filter Bar matching screenshot */}
+        <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-full p-1 shadow-xs inline-flex items-center gap-1">
+          {[
+            { key: "my", label: "My Sector", href: "/en/poc-v2/sector-news/all" },
+            { key: "all", label: "All Sector", href: "/en/poc-v2/sector-news/all" },
+            { key: "intelligence", label: "Sector Intelligence", href: "/en/poc-v2/sector-news/intelligence" }
+          ].map((tab) => {
+            const isActive = submenu === tab.key;
+            return (
+              <button
+                key={tab.key}
+                onClick={() => router.push(tab.href)}
+                className={`px-5 py-2 rounded-full text-xs font-bold transition-all ${
+                  isActive
+                    ? "bg-blue-600 text-white shadow-xs"
+                    : "text-gray-900 dark:text-white hover:text-blue-600"
+                }`}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

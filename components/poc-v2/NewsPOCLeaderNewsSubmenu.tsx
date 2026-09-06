@@ -411,32 +411,58 @@ export default function NewsPOCLeaderNewsSubmenu({ tier, view }: Props) {
 
   const SubMenuTabs = () => (
     <div className="mx-auto max-w-7xl px-4 lg:px-6">
-      <div className="flex items-center gap-2 py-4 border-b border-gray-200 dark:border-gray-800">
-        <button
-          onClick={() => router.push(tierPath)}
-          className="p-2 rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-purple-300 transition-all mr-1"
-          aria-label="Go back"
-        >
-          <ArrowLeft className="h-4 w-4" />
-        </button>
-        <div className={`bg-gradient-to-r ${tc.gradFrom} ${tc.gradTo} text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 shrink-0 shadow-xs`}>
-          <TierIcon className="h-3.5 w-3.5" />
-          <span className="text-[10px] font-bold">{tc.label}</span>
+      <div className="flex items-center justify-between gap-4 py-4 border-b border-gray-200 dark:border-gray-800 flex-wrap">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => router.push(tierPath)}
+            className="p-2 rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-purple-300 transition-all mr-1"
+            aria-label="Go back"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </button>
+          <div className={`bg-gradient-to-r ${tc.gradFrom} ${tc.gradTo} text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 shrink-0 shadow-xs`}>
+            <TierIcon className="h-3.5 w-3.5" />
+            <span className="text-[10px] font-bold">{tc.label}</span>
+          </div>
+          <div className="flex gap-1 flex-wrap">
+            {(["registered", "verified", "top", "intelligence"] as Tier[]).map((item) => (
+              <button
+                key={item}
+                onClick={() => router.push(item === "intelligence" ? `${tierPath}/intelligence` : `${tierPath}/${item}/news`)}
+                className={`px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all ${
+                  tier === item
+                    ? "bg-purple-600 text-white shadow-xs"
+                    : "bg-gray-100 dark:bg-gray-900 text-gray-500 hover:text-purple-600"
+                }`}
+              >
+                {TIER_CONFIG[item].label}
+              </button>
+            ))}
+          </div>
         </div>
-        <div className="flex gap-1 flex-wrap">
-          {(["registered", "verified", "top", "intelligence"] as Tier[]).map((item) => (
-            <button
-              key={item}
-              onClick={() => router.push(item === "intelligence" ? `${tierPath}/intelligence` : `${tierPath}/${item}/news`)}
-              className={`px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all ${
-                tier === item
-                  ? "bg-purple-600 text-white shadow-xs"
-                  : "bg-gray-100 dark:bg-gray-900 text-gray-500 hover:text-purple-600"
-              }`}
-            >
-              {TIER_CONFIG[item].label}
-            </button>
-          ))}
+
+        {/* Capsule Filter Bar matching screenshot: [ My Leader | All Leader | Leader Intelligence ] */}
+        <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-full p-1 shadow-xs inline-flex items-center gap-1">
+          {[
+            { key: "my", label: "My Leader", href: `/en/poc-v2/leader-news/${tier}/news` },
+            { key: "all", label: "All Leader", href: "/en/poc-v2/leader-news/registered/news" },
+            { key: "intelligence", label: "Leader Intelligence", href: "/en/poc-v2/leader-news/intelligence" }
+          ].map((tab) => {
+            const isActive = (tab.key === "my" && tier !== "intelligence") || (tab.key === "intelligence" && tier === "intelligence");
+            return (
+              <button
+                key={tab.key}
+                onClick={() => router.push(tab.href)}
+                className={`px-5 py-2 rounded-full text-xs font-bold transition-all ${
+                  isActive
+                    ? "bg-blue-600 text-white shadow-xs"
+                    : "text-gray-900 dark:text-white hover:text-blue-600"
+                }`}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

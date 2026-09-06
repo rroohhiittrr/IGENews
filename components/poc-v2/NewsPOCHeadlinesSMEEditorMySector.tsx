@@ -6,7 +6,7 @@ import {
   Sparkles, Share2, Lock, ChevronRight, Search, AlertTriangle, 
   CheckCircle, ThumbsUp, Bookmark, MessageCircle, ArrowLeft, X, HelpCircle, 
   TrendingUp, Globe, Filter, Star, Briefcase, Eye, ChevronDown, Check,
-  Play, Radio, ArrowUpRight, Flame, ShieldAlert, Cpu, Activity, Info, Users
+  Play, Radio, ArrowUpRight, Flame, ShieldAlert, Cpu, Activity, Info, Users, Award
 } from "lucide-react";
 import { IGEN_50_SECTORS } from "./igenTaxonomyData";
 
@@ -284,19 +284,50 @@ export default function NewsPOCHeadlinesSMEEditorMySector({ onBack }: Props) {
 
   return (
     <div className="bg-gray-50 dark:bg-[#070b12] text-gray-900 dark:text-gray-100 min-h-screen pb-16 transition-colors duration-300">
-      
+      {/* ─── Subject Matter Expert Editor Submenu Header Bar ─── */}
+      <nav aria-label="Subject Matter Expert Editor Submenu Navigation" className="mx-auto max-w-7xl px-4 pt-4 lg:px-6">
+        <div className="flex items-center justify-between py-3 px-4 bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-2xl shadow-xs flex-wrap gap-3">
+          <div className="flex items-center gap-2">
+            <Link href="/en/poc-v2/headlines" className="p-1.5 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-500 hover:text-blue-600 transition-colors" title="Back to Headlines">
+              <ArrowLeft className="h-3.5 w-3.5" />
+            </Link>
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-xs">
+              <Award className="h-3.5 w-3.5" />
+              <span className="text-xs font-bold uppercase tracking-wider">Subject Matter Expert Editor Submenu</span>
+            </div>
+            <span className="text-[11px] font-mono text-gray-400 hidden sm:inline">Curated list of SME-authored articles.</span>
+          </div>
+
+          {/* Submenu Pills */}
+          <div className="flex items-center gap-1.5 bg-gray-100 dark:bg-gray-900 p-1 rounded-xl border border-gray-200 dark:border-gray-800">
+            <Link
+              href="/en/poc-v2/headlines/sme-editor/my"
+              className="px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 bg-blue-600 text-white shadow-xs cursor-pointer"
+            >
+              <span>• My Sector</span>
+            </Link>
+            <Link
+              href="/en/poc-v2/headlines/sme-editor/all"
+              className="px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 text-gray-600 dark:text-gray-350 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-white/50 dark:hover:bg-gray-800/50 cursor-pointer"
+            >
+              <span>• All Sector</span>
+            </Link>
+          </div>
+        </div>
+      </nav>
+
       {/* ─── Breadcrumb ─── */}
-      <nav className="mx-auto max-w-7xl px-4 pt-6 lg:px-6 text-xs text-gray-400 font-semibold flex items-center gap-1.5">
+      <nav className="mx-auto max-w-7xl px-4 pt-3 lg:px-6 text-xs text-gray-400 font-semibold flex items-center gap-1.5">
         {onBack && (
           <button onClick={onBack} className="mr-2 hover:text-blue-500 flex items-center gap-1">
             <ArrowLeft className="h-3.5 w-3.5" /> Back
           </button>
         )}
-        <span>Headlines</span>
+        <Link href="/en/poc-v2/headlines" className="hover:text-blue-500">Headlines</Link>
         <ChevronRight className="h-3 w-3" />
-        <span>Subject Matter Expert Editor</span>
+        <Link href="/en/poc-v2/headlines/sme-editor/all" className="hover:text-blue-500">Subject Matter Expert Editor</Link>
         <ChevronRight className="h-3 w-3" />
-        <span className="text-blue-505 font-bold">My Sector</span>
+        <span className="text-blue-500 font-bold">My Sector</span>
       </nav>
 
       {/* ─── Premium SME Hero ─── */}

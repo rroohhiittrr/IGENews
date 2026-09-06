@@ -30,28 +30,7 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
     icon: "📱",
     purpose: "Personalized RSS-style stream from reader's tagged taxonomy.",
     tier: "All Tiers",
-    subItems: [
-      {
-        label: "Sector Feed",
-        slug: "sector",
-        description: "News feed filtered by sectors.",
-        subSubItems: [
-          { label: "My Sector", slug: "my", description: "Personalized news from your selected sectors." },
-          { label: "All Sector", slug: "all", description: "Read sample news from all 50 sectors." }
-        ]
-      },
-
-
-      {
-        label: "Leader Feed",
-        slug: "leader",
-        description: "Executive intelligence feed.",
-        subSubItems: [
-          { label: "My Leader", slug: "my", description: "Activity updates from your followed leaders." },
-          { label: "All Leader", slug: "all", description: "Feed showing news of all 150 leaders." }
-        ]
-      }
-    ]
+    subItems: []
   },
   {
     id: "IGN-M02",
@@ -64,38 +43,22 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
       {
         label: "IGEN AI Editor",
         slug: "ai-editor",
-        description: "Automated AI producing real-time global news 24/7.",
-        subSubItems: [
-          { label: "My Sector", slug: "my", description: "AI news for your selected sectors." },
-          { label: "All Sector", slug: "all", description: "AI news from all sectors." }
-        ]
+        description: "Automated AI producing real-time global news 24/7."
       },
       {
         label: "IGEN Intelligence Editor",
         slug: "intelligence-editor",
-        description: "Internal IGEN research team producing curated reports.",
-        subSubItems: [
-          { label: "My Sector", slug: "my", description: "Intelligence editor stories from your selected sectors." },
-          { label: "All Sector", slug: "all", description: "Intelligence editor stories from all sectors." }
-        ]
+        description: "Internal IGEN research team producing curated reports."
       },
       {
         label: "Subject Matter Expert Editor",
         slug: "sme-editor",
-        description: "Curated list of SME-authored articles.",
-        subSubItems: [
-          { label: "My Sector", slug: "my", description: "SME-authored stories from your selected sectors." },
-          { label: "All Sector", slug: "all", description: "SME-authored stories from all sectors." }
-        ]
+        description: "Curated list of SME-authored articles."
       },
       {
         label: "Viksit Bharat Panel Editor",
         slug: "viksit-bharat-panel",
-        description: "Panel discussions aligned to Viksit Bharat 2047.",
-        subSubItems: [
-          { label: "My Sector", slug: "my", description: "Viksit Bharat stories from your selected sectors." },
-          { label: "All Sector", slug: "all", description: "Viksit Bharat stories from all sectors." }
-        ]
+        description: "Panel discussions aligned to Viksit Bharat 2047."
       }
     ]
   },
@@ -106,35 +69,7 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
     icon: "📈",
     purpose: "Surfaces popular news based on crowd reactions (likes/shares/comments).",
     tier: "Free/Registered",
-    subItems: [
-      {
-        label: "Most Liked",
-        slug: "most-liked",
-        description: "Surfaces articles with high likes count.",
-        subSubItems: [
-          { label: "My Sectors", slug: "my", description: "Most liked news in your selected sectors." },
-          { label: "All Sectors", slug: "all", description: "Most liked news globally." }
-        ]
-      },
-      {
-        label: "Most Shared",
-        slug: "most-shared",
-        description: "Surfaces articles with high shares count.",
-        subSubItems: [
-          { label: "My Sectors", slug: "my", description: "Most shared news in your selected sectors." },
-          { label: "All Sectors", slug: "all", description: "Most shared news globally." }
-        ]
-      },
-      {
-        label: "Most Commented",
-        slug: "most-commented",
-        description: "Surfaces articles with high comment activity.",
-        subSubItems: [
-          { label: "My Sectors", slug: "my", description: "Most commented news in your selected sectors." },
-          { label: "All Sectors", slug: "all", description: "Most commented news globally." }
-        ]
-      }
-    ]
+    subItems: []
   },
   {
     id: "IGN-M04",
@@ -358,29 +293,17 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
       {
         label: "SME & ASME Community",
         slug: "sme-asme",
-        description: "Private network for Subject Matter Experts.",
-        subSubItems: [
-          { label: "All", slug: "all", description: "Discussion forums for all verified experts." },
-          { label: "Top", slug: "top", description: "Premium discussions and advisory logs." }
-        ]
+        description: "Private network for Subject Matter Experts."
       },
       {
         label: "Reader Community",
         slug: "reader",
-        description: "Open community discussions for news readers.",
-        subSubItems: [
-          { label: "All", slug: "all", description: "Public threads and news comments." },
-          { label: "Top", slug: "top", description: "Top readers board and badge rankings." }
-        ]
+        description: "Open community discussions for news readers."
       },
       {
         label: "Leader Community",
         slug: "leader",
-        description: "Executive-only roundtable conversations.",
-        subSubItems: [
-          { label: "All", slug: "all", description: "Executive forums." },
-          { label: "Top", slug: "top", description: "Elite board-level discussions." }
-        ]
+        description: "Executive-only roundtable conversations."
       }
     ]
   },
@@ -392,12 +315,6 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
     purpose: "Personal workspace for trade news bookmarks, reader intelligence, and analytics.",
     tier: "Verified/Pro",
     subItems: [
-      {
-        label: "My News",
-        slug: "my",
-        description: "Personalized news feed matching selected sector streams.",
-        subSubItems: []
-      },
       {
         label: "My Activities",
         slug: "activities",

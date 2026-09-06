@@ -572,7 +572,7 @@ export default function NewsPOCCatchAllPage() {
             </div>
 
             {/* Dynamic Sub-menu tabs (My | All | Intelligence) */}
-            <div className="flex items-center gap-1.5 bg-gray-50 dark:bg-gray-950 p-1 rounded-xl border border-gray-200 dark:border-gray-800 shadow-xs">
+            <div className="flex items-center gap-1 bg-white dark:bg-[#0f172a] p-1 rounded-full border border-gray-200 dark:border-gray-800 shadow-xs">
               {[
                 { key: "my", label: `My ${categoryName.split(" ")[0]}` },
                 { key: "all", label: `All ${categoryName.split(" ")[0]}` },
@@ -613,10 +613,10 @@ export default function NewsPOCCatchAllPage() {
                     }
                     setActiveSub(sub.key);
                   }}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  className={`px-5 py-2 rounded-full text-xs font-bold transition-all ${
                     activeSub === sub.key
                       ? "bg-blue-600 text-white shadow-xs"
-                      : "text-gray-655 dark:text-gray-350 hover:bg-gray-150 dark:hover:bg-gray-850"
+                      : "text-gray-900 dark:text-white hover:text-blue-600"
                   }`}
                 >
                   {sub.label}
@@ -2678,12 +2678,12 @@ export default function NewsPOCCatchAllPage() {
     const editorName = subMatch?.label || "IGEN Editor";
     const subTab = slugParts[2] || "my"; // "my" or "all"
 
-    if (editorSlug === "ai-editor" && subTab === "my") {
-      return <NewsPOCHeadlinesAIEditorMySector onBack={() => router.back()} />;
+    if (editorSlug === "ai-editor" && (subTab === "all" || slugParts.length === 2)) {
+      return <NewsPOCHeadlinesAIEditorAllSectors onBack={() => router.back()} />;
     }
 
-    if (editorSlug === "ai-editor" && subTab === "all") {
-      return <NewsPOCHeadlinesAIEditorAllSectors onBack={() => router.back()} />;
+    if (editorSlug === "ai-editor" && subTab === "my") {
+      return <NewsPOCHeadlinesAIEditorMySector onBack={() => router.back()} />;
     }
     
     // Sample articles for different editors
@@ -2713,28 +2713,28 @@ export default function NewsPOCCatchAllPage() {
 
     const articles = editorArticlesMap[editorSlug] || editorArticlesMap["ai-editor"];
 
+    if (editorSlug === "intelligence-editor" && (subTab === "all" || slugParts.length === 2)) {
+      return <NewsPOCHeadlinesIntelligenceEditorAllSectors onBack={() => router.back()} />;
+    }
+
     if (editorSlug === "intelligence-editor" && subTab === "my") {
       return <NewsPOCHeadlinesIntelligenceEditorMySector onBack={() => router.back()} />;
     }
 
-    if (editorSlug === "intelligence-editor" && subTab === "all") {
-      return <NewsPOCHeadlinesIntelligenceEditorAllSectors onBack={() => router.back()} />;
+    if (editorSlug === "sme-editor" && (subTab === "all" || slugParts.length === 2)) {
+      return <NewsPOCHeadlinesSMEEditorAllSectors onBack={() => router.back()} />;
     }
 
     if (editorSlug === "sme-editor" && subTab === "my") {
       return <NewsPOCHeadlinesSMEEditorMySector onBack={() => router.back()} />;
     }
 
-    if (editorSlug === "sme-editor" && subTab === "all") {
-      return <NewsPOCHeadlinesSMEEditorAllSectors onBack={() => router.back()} />;
+    if (editorSlug === "viksit-bharat-panel" && (subTab === "all" || slugParts.length === 2)) {
+      return <NewsPOCHeadlinesViksitBharatPanelEditorAllSectors onBack={() => router.back()} />;
     }
 
     if (editorSlug === "viksit-bharat-panel" && subTab === "my") {
       return <NewsPOCHeadlinesViksitBharatPanelEditorMySector onBack={() => router.back()} />;
-    }
-
-    if (editorSlug === "viksit-bharat-panel" && subTab === "all") {
-      return <NewsPOCHeadlinesViksitBharatPanelEditorAllSectors onBack={() => router.back()} />;
     }
 
     if (editorSlug === "intelligence-editor") {

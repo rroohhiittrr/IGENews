@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { TrendingLeadersCard, TrendingTopicsCard, RecommendedReportsCard } from "./NewsPOCLeaderSidebarWidgets";
 import {
   ArrowRight,
   Award,
@@ -309,6 +310,18 @@ export default function VerifiedLeaderNewsView() {
           </div>
 
           <div className="flex items-center gap-2 shrink-0 border-l border-gray-200 dark:border-gray-800 pl-4">
+            {/* Capsule Filter Bar matching screenshot */}
+            <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-full p-1 shadow-xs inline-flex items-center gap-1 shrink-0">
+              <button className="px-5 py-2 rounded-full text-xs font-bold transition-all bg-blue-600 text-white shadow-xs">
+                My Leader
+              </button>
+              <button className="px-5 py-2 rounded-full text-xs font-bold transition-all text-gray-900 dark:text-white hover:text-blue-600">
+                All Leader
+              </button>
+              <button className="px-5 py-2 rounded-full text-xs font-bold transition-all text-gray-900 dark:text-white hover:text-blue-600">
+                Leader Intelligence
+              </button>
+            </div>
             <Badge color="purple">UNLIMITED PRO ACCESS</Badge>
           </div>
         </div>
@@ -415,6 +428,10 @@ export default function VerifiedLeaderNewsView() {
           {/* Right Intelligence Column */}
           <div className="lg:col-span-4 space-y-6">
 
+            <TrendingLeadersCard />
+            <TrendingTopicsCard />
+            <RecommendedReportsCard />
+
             {/* 04. Executive Moves */}
             <Card className="p-5 space-y-4">
               <SectionTitle
@@ -466,25 +483,6 @@ export default function VerifiedLeaderNewsView() {
               >
                 + Create Custom Alert
               </button>
-            </Card>
-
-            {/* 09. Trending Leadership Topics */}
-            <Card className="p-5 space-y-3">
-              <SectionTitle title="Trending Leadership Topics" action={<Flame className="h-4 w-4 text-orange-500" />} />
-              <div className="flex flex-wrap gap-1.5">
-                {[
-                  "AI Governance & LLMs",
-                  "CEO Succession",
-                  "Green Hydrogen Subsidies",
-                  "IMEC Multi-Modal Routing",
-                  "Semiconductor OSAT CapEx",
-                  "Cross-Border Liquidity",
-                ].map((top) => (
-                  <span key={top} className="px-2.5 py-1 rounded-lg text-[10px] font-semibold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700">
-                    #{top}
-                  </span>
-                ))}
-              </div>
             </Card>
 
           </div>
