@@ -80,11 +80,7 @@ export const NEWS_POC_MENU_ITEMS: MegaMenuItem[] = [
       {
         label: "IGEN AI Editor",
         slug: "ai-editor",
-        description: "Automated AI producing real-time global news 24/7.",
-        subSubItems: [
-          { label: "My Sector", slug: "my", description: "AI news for your selected sectors." },
-          { label: "All Sector", slug: "all", description: "AI news from all sectors." }
-        ]
+        description: "Automated AI producing real-time global news 24/7."
       },
       {
         label: "IGEN Intelligence Editor",

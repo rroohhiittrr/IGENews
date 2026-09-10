@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { TrendingLeadersCard, TrendingTopicsCard, RecommendedReportsCard } from "./NewsPOCLeaderSidebarWidgets";
 import {
   AlertTriangle,
   ArrowRight,
@@ -260,90 +261,114 @@ export default function TopLeaderNewsView() {
             title="Global Executive News & Strategic Dispatches"
             subtitle="Verified executive announcements, strategic board approvals, and leadership restructuring."
             action={
-              <div className="flex items-center gap-1.5 overflow-x-auto">
-                {["All", "CEO News", "C-Suite", "Board News", "M&A Intelligence", "Appointments"].map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setActiveNewsCategory(cat)}
-                    className={`text-[10px] px-2.5 py-1 rounded-md font-bold transition-all shrink-0 ${
-                      activeNewsCategory === cat
-                        ? "bg-amber-500 text-gray-950"
-                        : "bg-gray-100 dark:bg-gray-900 text-gray-500 hover:text-amber-600"
-                    }`}
-                  >
-                    {cat}
+              <div className="flex items-center gap-3 overflow-x-auto flex-wrap">
+                {/* Capsule Filter Bar matching screenshot */}
+                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-full p-1 shadow-xs inline-flex items-center gap-1 shrink-0">
+                  <button className="px-5 py-2 rounded-full text-xs font-bold transition-all bg-blue-600 text-white shadow-xs">
+                    My Leader
                   </button>
-                ))}
+                  <button className="px-5 py-2 rounded-full text-xs font-bold transition-all text-gray-900 dark:text-white hover:text-blue-600">
+                    All Leader
+                  </button>
+                  <button className="px-5 py-2 rounded-full text-xs font-bold transition-all text-gray-900 dark:text-white hover:text-blue-600">
+                    Leader Intelligence
+                  </button>
+                </div>
+                <div className="flex items-center gap-1.5 overflow-x-auto">
+                  {["All", "CEO News", "C-Suite", "Board News", "M&A Intelligence", "Appointments"].map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => setActiveNewsCategory(cat)}
+                      className={`text-[10px] px-2.5 py-1 rounded-md font-bold transition-all shrink-0 ${
+                        activeNewsCategory === cat
+                          ? "bg-amber-500 text-gray-950"
+                          : "bg-gray-100 dark:bg-gray-900 text-gray-500 hover:text-amber-600"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
               </div>
             }
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                id: "en-1",
-                category: "CEO NEWS",
-                tagColor: "amber",
-                title: "Tata Sons & NVIDIA Commission $14B Sovereign AI Supercluster in Mumbai & Singapore",
-                exec: "N. Chandrasekaran & Jensen Huang",
-                company: "Tata Sons / NVIDIA",
-                time: "2h ago",
-                impact: "High Capital Velocity",
-                desc: "Strategic C-suite pact deploying 100,000 next-gen GPU accelerators to anchor enterprise sovereignty across Asian corridors."
-              },
-              {
-                id: "en-2",
-                category: "M&A INTELLIGENCE",
-                tagColor: "emerald",
-                title: "Standard Chartered Acquires Strategic 40% Stake in GIFT City Tokenized Treasury Hub",
-                exec: "Ananya Sengupta (Managing Director)",
-                company: "Standard Chartered",
-                time: "4h ago",
-                impact: "Cross-Border Liquidity",
-                desc: "Boardroom-approved $1.5B capital allocation to institutionalize instant smart-contract bill-of-lading trade clearances."
-              },
-              {
-                id: "en-3",
-                category: "BOARD NEWS",
-                tagColor: "blue",
-                title: "Zoho Corporation Board Greenlights $700M Fabless Chip Packaging R&D Unit",
-                exec: "Sridhar Vembu (CEO & Founder)",
-                company: "Zoho Corporation",
-                time: "6h ago",
-                impact: "Semiconductor OSAT",
-                desc: "Expands national fabless silicon design footprint with dedicated RISC-V hardware development centers in South India."
-              }
-            ].map((news) => (
-              <Card key={news.id} className="p-5 flex flex-col justify-between space-y-4 hover:border-amber-400 transition-all shadow-xs">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between text-[9px]">
-                    <span className="font-bold text-amber-600 uppercase font-mono">{news.category}</span>
-                    <span className="text-gray-400">{news.time}</span>
-                  </div>
+          <div className="grid grid-cols-12 gap-8">
+            <div className="col-span-12 lg:col-span-8 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[
+                  {
+                    id: "en-1",
+                    category: "CEO NEWS",
+                    tagColor: "amber",
+                    title: "Tata Sons & NVIDIA Commission $14B Sovereign AI Supercluster in Mumbai & Singapore",
+                    exec: "N. Chandrasekaran & Jensen Huang",
+                    company: "Tata Sons / NVIDIA",
+                    time: "2h ago",
+                    impact: "High Capital Velocity",
+                    desc: "Strategic C-suite pact deploying 100,000 next-gen GPU accelerators to anchor enterprise sovereignty across Asian corridors."
+                  },
+                  {
+                    id: "en-2",
+                    category: "M&A INTELLIGENCE",
+                    tagColor: "emerald",
+                    title: "Standard Chartered Acquires Strategic 40% Stake in GIFT City Tokenized Treasury Hub",
+                    exec: "Ananya Sengupta (Managing Director)",
+                    company: "Standard Chartered",
+                    time: "4h ago",
+                    impact: "Cross-Border Liquidity",
+                    desc: "Boardroom-approved $1.5B capital allocation to institutionalize instant smart-contract bill-of-lading trade clearances."
+                  },
+                  {
+                    id: "en-3",
+                    category: "BOARD NEWS",
+                    tagColor: "blue",
+                    title: "Zoho Corporation Board Greenlights $700M Fabless Chip Packaging R&D Unit",
+                    exec: "Sridhar Vembu (CEO & Founder)",
+                    company: "Zoho Corporation",
+                    time: "6h ago",
+                    impact: "Semiconductor OSAT",
+                    desc: "Expands national fabless silicon design footprint with dedicated RISC-V hardware development centers in South India."
+                  }
+                ].map((news) => (
+                  <Card key={news.id} className="p-5 flex flex-col justify-between space-y-4 hover:border-amber-400 transition-all shadow-xs">
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between text-[9px]">
+                        <span className="font-bold text-amber-600 uppercase font-mono">{news.category}</span>
+                        <span className="text-gray-400">{news.time}</span>
+                      </div>
 
-                  <h3 className="font-display text-sm font-bold text-gray-950 dark:text-white leading-snug">{news.title}</h3>
+                      <h3 className="font-display text-sm font-bold text-gray-950 dark:text-white leading-snug">{news.title}</h3>
 
-                  <div className="p-2.5 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 space-y-1">
-                    <p className="text-[10px] text-gray-700 dark:text-gray-300 font-semibold">
-                      Key Figure: <span className="text-amber-600">{news.exec}</span>
-                    </p>
-                    <p className="text-[9px] text-gray-400">{news.company} · {news.impact}</p>
-                  </div>
+                      <div className="p-2.5 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 space-y-1">
+                        <p className="text-[10px] text-gray-700 dark:text-gray-300 font-semibold">
+                          Key Figure: <span className="text-amber-600">{news.exec}</span>
+                        </p>
+                        <p className="text-[9px] text-gray-400">{news.company} · {news.impact}</p>
+                      </div>
 
-                  <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed font-normal">{news.desc}</p>
-                </div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed font-normal">{news.desc}</p>
+                    </div>
 
-                <div className="border-t border-gray-100 dark:border-gray-800 pt-3 flex items-center justify-between">
-                  <Link href="/eoi" className="text-xs font-bold text-amber-600 hover:underline flex items-center gap-1">
-                    <span>Executive Analysis</span>
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
-                  <button onClick={() => toggleWatchlist(news.exec)} className="text-[10px] font-bold text-gray-400 hover:text-amber-600">
-                    {watchlist.includes(news.exec) ? "★ Watched" : "+ Watch"}
-                  </button>
-                </div>
-              </Card>
-            ))}
+                    <div className="border-t border-gray-100 dark:border-gray-800 pt-3 flex items-center justify-between">
+                      <Link href="/eoi" className="text-xs font-bold text-amber-600 hover:underline flex items-center gap-1">
+                        <span>Executive Analysis</span>
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
+                      <button onClick={() => toggleWatchlist(news.exec)} className="text-[10px] font-bold text-gray-400 hover:text-amber-600">
+                        {watchlist.includes(news.exec) ? "★ Watched" : "+ Watch"}
+                      </button>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            <div className="col-span-12 lg:col-span-4 space-y-6">
+              <TrendingLeadersCard />
+              <TrendingTopicsCard />
+              <RecommendedReportsCard />
+            </div>
           </div>
         </section>
 

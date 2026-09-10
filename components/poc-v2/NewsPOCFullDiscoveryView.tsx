@@ -489,7 +489,29 @@ export default function NewsPOCFullDiscoveryView({
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3 flex-wrap">
+            {/* Capsule Filter Bar matching screenshot */}
+            <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-full p-1 shadow-xs inline-flex items-center gap-1">
+              <button
+                onClick={() => router.push("/en/poc-v2/sector-news/all")}
+                className="px-5 py-2 rounded-full text-xs font-bold transition-all text-gray-900 dark:text-white hover:text-blue-600"
+              >
+                My Sector
+              </button>
+              <button
+                onClick={() => router.push("/en/poc-v2/sector-news/all")}
+                className="px-5 py-2 rounded-full text-xs font-bold transition-all bg-blue-600 text-white shadow-xs"
+              >
+                All Sector
+              </button>
+              <button
+                onClick={() => router.push("/en/poc-v2/sector-news/intelligence")}
+                className="px-5 py-2 rounded-full text-xs font-bold transition-all text-gray-900 dark:text-white hover:text-blue-600"
+              >
+                Sector Intelligence
+              </button>
+            </div>
+
             <span className="text-[10px] font-mono font-bold uppercase text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-900/40 flex items-center gap-1.5 shadow-xs">
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-ping" />
               Live News Stream
@@ -886,6 +908,66 @@ export default function NewsPOCFullDiscoveryView({
 
           {/* RIGHT 4-COLUMN: TRENDING, MOST READ & ENGAGEMENT SIDEBAR */}
           <div className="col-span-12 lg:col-span-4 space-y-6">
+
+            {/* ── TRENDING TOPICS ── */}
+            <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-3xl p-6 shadow-xs space-y-4">
+              <h4 className="text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest flex items-center gap-2 font-mono">
+                <Flame className="h-4 w-4 text-orange-500 shrink-0" />
+                TRENDING TOPICS
+              </h4>
+              
+              <div className="space-y-2.5">
+                {[
+                  { tag: "#ViksitBharat2047", reads: "1.2k reads" },
+                  { tag: "#SemiconductorIncentives", reads: "984 reads" },
+                  { tag: "#BilateralCorridors", reads: "512 reads" }
+                ].map((item, idx) => (
+                  <div key={idx} className="bg-gray-50 dark:bg-gray-900/60 p-3.5 rounded-2xl flex items-center justify-between border border-gray-100/60 dark:border-gray-800">
+                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer">
+                      {item.tag}
+                    </span>
+                    <span className="text-[11px] text-gray-400 dark:text-gray-500 font-medium">
+                      {item.reads}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* ── RECOMMENDED REPORTS ── */}
+            <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-3xl p-6 shadow-xs space-y-4">
+              <h4 className="text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest flex items-center gap-2 font-mono">
+                <FileText className="h-4 w-4 text-blue-500 shrink-0" />
+                RECOMMENDED REPORTS
+              </h4>
+              
+              <div className="space-y-3">
+                {[
+                  { title: "Q3 Electronics & IT Trade Report", code: "REP-ELE-16", price: "$149" },
+                  { title: "Agriculture Export & Supply Outlook", code: "REP-AGR-01", price: "$129" }
+                ].map((rep, idx) => (
+                  <div 
+                    key={idx} 
+                    className="p-4 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 flex items-center justify-between gap-3 shadow-2xs"
+                  >
+                    <div className="space-y-1 min-w-0">
+                      <h5 className="font-bold text-xs md:text-sm text-gray-900 dark:text-white leading-snug truncate" title={rep.title}>
+                        {rep.title}
+                      </h5>
+                      <span className="text-[10px] font-mono text-gray-400 dark:text-gray-500 block">
+                        {rep.code}
+                      </span>
+                    </div>
+                    <Link
+                      href="/en/eoi"
+                      className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition-all shrink-0 whitespace-nowrap shadow-xs"
+                    >
+                      Get {rep.price}
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
 
             {/* Trending Now */}
             <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 rounded-3xl p-5 shadow-xs space-y-3">

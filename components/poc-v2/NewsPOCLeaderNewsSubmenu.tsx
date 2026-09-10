@@ -410,34 +410,77 @@ export default function NewsPOCLeaderNewsSubmenu({ tier, view }: Props) {
   const [aiPreviewLeader, setAiPreviewLeader] = useState("Jensen Huang");
 
   const SubMenuTabs = () => (
-    <div className="mx-auto max-w-7xl px-4 lg:px-6">
-      <div className="flex items-center gap-2 py-4 border-b border-gray-200 dark:border-gray-800">
-        <button
-          onClick={() => router.push(tierPath)}
-          className="p-2 rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-purple-300 transition-all mr-1"
-          aria-label="Go back"
-        >
-          <ArrowLeft className="h-4 w-4" />
-        </button>
-        <div className={`bg-gradient-to-r ${tc.gradFrom} ${tc.gradTo} text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 shrink-0 shadow-xs`}>
-          <TierIcon className="h-3.5 w-3.5" />
-          <span className="text-[10px] font-bold">{tc.label}</span>
-        </div>
-        <div className="flex gap-1 flex-wrap">
-          {(["registered", "verified", "top", "intelligence"] as Tier[]).map((item) => (
+    <div className="sticky top-0 z-30 bg-white/95 dark:bg-[#090d16]/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 shadow-xs mb-4">
+      <div className="mx-auto max-w-7xl px-4 lg:px-6 py-3 space-y-2.5">
+        <div className="flex items-center justify-between gap-4 flex-wrap">
+          <div className="flex items-center gap-2">
             <button
-              key={item}
-              onClick={() => router.push(item === "intelligence" ? `${tierPath}/intelligence` : `${tierPath}/${item}/news`)}
-              className={`px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all ${
-                tier === item
-                  ? "bg-purple-600 text-white shadow-xs"
-                  : "bg-gray-100 dark:bg-gray-900 text-gray-500 hover:text-purple-600"
-              }`}
+              onClick={() => router.push(tierPath)}
+              className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-purple-500 transition-all text-gray-700 dark:text-gray-200 flex items-center gap-1.5 text-xs font-bold"
+              aria-label="Go back to Leader News main page"
             >
-              {TIER_CONFIG[item].label}
+              <ArrowLeft className="h-4 w-4" />
+              <span className="hidden sm:inline">Leader News</span>
             </button>
-          ))}
+
+            <div className="h-4 w-[1px] bg-gray-300 dark:bg-gray-700 mx-1 hidden sm:block" />
+
+            <div className="flex items-center gap-1.5 text-xs font-bold text-gray-500 dark:text-gray-400 mr-1">
+              <Filter className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
+              <span className="hidden md:inline uppercase tracking-wider text-[11px]">Leader Tier:</span>
+            </div>
+
+            <div className="flex gap-1.5 flex-wrap">
+              {(["registered", "verified", "top", "intelligence"] as Tier[]).map((item) => {
+                const isItemActive = tier === item;
+                const targetView = (view && ["news", "pages", "sector", "all"].includes(view)) ? view : "news";
+                return (
+                  <button
+                    key={item}
+                    onClick={() => router.push(item === "intelligence" ? `${tierPath}/intelligence` : `${tierPath}/${item}/${targetView}`)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
+                      isItemActive
+                        ? "bg-purple-600 text-white border-purple-600 shadow-xs"
+                        : "bg-gray-100 dark:bg-gray-800/80 text-gray-600 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-950/40 hover:text-purple-600 border-gray-200 dark:border-gray-700/60"
+                    }`}
+                  >
+                    {item === "registered" ? "👤 Registered" : item === "verified" ? "✅ Verified" : item === "top" ? "👑 Enterprise" : "✨ Leader Intelligence"}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
+
+        {/* Sub-options for Registered, Verified, Enterprise tiers */}
+        {tier !== "intelligence" && (
+          <div className="pt-2 border-t border-gray-100 dark:border-gray-800/60 flex items-center gap-2 overflow-x-auto no-scrollbar">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 shrink-0 mr-1">
+              Options:
+            </span>
+            {[
+              { key: "news", label: "📰 Leader News", href: `${tierPath}/${tier}/news` },
+              { key: "pages", label: "📄 Leader Pages", href: `${tierPath}/${tier}/pages` },
+              { key: "sector", label: "🏢 By Sector", href: `${tierPath}/${tier}/sector` },
+              { key: "all", label: "🌐 All Sector", href: `${tierPath}/${tier}/all` }
+            ].map((opt) => {
+              const isActive = view === opt.key;
+              return (
+                <button
+                  key={opt.key}
+                  onClick={() => router.push(opt.href)}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap border ${
+                    isActive
+                      ? "bg-blue-600 text-white border-blue-600 shadow-xs"
+                      : "bg-gray-100 dark:bg-gray-800/60 text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:text-blue-600 border-gray-200 dark:border-gray-700/60"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

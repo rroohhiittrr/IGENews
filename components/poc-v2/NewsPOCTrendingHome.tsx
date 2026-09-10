@@ -554,6 +554,46 @@ export default function NewsPOCTrendingHome() {
   return (
     <div className="bg-gray-50 dark:bg-[#070b12] text-gray-900 dark:text-gray-100 min-h-screen pb-16 transition-colors duration-300">
       
+      {/* ─── Trending Submenu Filters Navigation Header Bar ─── */}
+      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 py-3 px-4 lg:px-6 sticky top-0 z-30 shadow-xs">
+        <div className="mx-auto max-w-7xl flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-extrabold text-gray-400 dark:text-gray-500 uppercase tracking-wider mr-1">
+              Trending Filters:
+            </span>
+            <Link
+              href="/en/poc-v2/trending"
+              className="px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 bg-blue-600 text-white shadow-sm"
+            >
+              🔥 Trending Home
+            </Link>
+            <Link
+              href="/en/poc-v2/trending/most-liked"
+              className="px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+            >
+              ❤️ Most Liked
+            </Link>
+            <Link
+              href="/en/poc-v2/trending/most-shared"
+              className="px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+            >
+              🔄 Most Shared
+            </Link>
+            <Link
+              href="/en/poc-v2/trending/most-commented"
+              className="px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+            >
+              💬 Most Commented
+            </Link>
+          </div>
+          <div className="flex items-center gap-1.5 text-xs text-gray-400 font-semibold">
+            <span>Trending</span>
+            <ChevronRight className="h-3 w-3" />
+            <span className="text-blue-500 font-bold">Overview</span>
+          </div>
+        </div>
+      </div>
+      
       {/* Title & Refinement Filter fold */}
       <section className="mx-auto max-w-7xl px-4 pt-6 lg:px-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-250 dark:border-gray-855 pb-4">

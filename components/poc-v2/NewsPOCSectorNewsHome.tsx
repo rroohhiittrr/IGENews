@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import {
   Factory, Search, CheckCircle, Crown, Star, Globe, TrendingUp,
@@ -94,12 +95,49 @@ const TOP_LEADERS = [
 const NEWS_TABS = ["Latest", "Trending", "Most Read", "Editor's Pick"];
 
 export default function NewsPOCSectorNewsHome() {
+  const router = useRouter();
   const [activeNewsTab, setActiveNewsTab] = useState("Latest");
   const [followedSectors, setFollowedSectors] = useState<string[]>([]);
   const [selectedBulletin, setSelectedBulletin] = useState<{ text: string; cat: string; details: string } | null>(null);
 
   return (
     <div className="bg-gray-50 dark:bg-[#070b12] text-gray-900 dark:text-gray-100 min-h-screen pb-16 transition-colors duration-300">
+
+      {/* ── Sticky Top Filter Bar ── */}
+      <div className="sticky top-0 z-30 bg-white/95 dark:bg-[#090d16]/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 shadow-xs mb-4">
+        <div className="mx-auto max-w-7xl px-4 lg:px-6 py-3 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2 text-xs font-bold text-gray-500 dark:text-gray-400">
+            <Filter className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+            <span className="uppercase tracking-wider text-[11px]">Sector Filters:</span>
+          </div>
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+            <button
+              onClick={() => router.push("/en/poc-v2/sector-news")}
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all bg-blue-600 text-white shadow-xs"
+            >
+              🏭 Sector News Home
+            </button>
+            <button
+              onClick={() => router.push("/en/poc-v2/sector-news/all")}
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all bg-gray-100 dark:bg-gray-800/80 text-gray-600 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:text-blue-600 border border-gray-200 dark:border-gray-700/60"
+            >
+              ⚙️ My Sector
+            </button>
+            <button
+              onClick={() => router.push("/en/poc-v2/sector-news/all")}
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all bg-gray-100 dark:bg-gray-800/80 text-gray-600 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:text-blue-600 border border-gray-200 dark:border-gray-700/60"
+            >
+              🌐 All Sector
+            </button>
+            <button
+              onClick={() => router.push("/en/poc-v2/sector-news/intelligence")}
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all bg-gray-100 dark:bg-gray-800/80 text-gray-600 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:text-blue-600 border border-gray-200 dark:border-gray-700/60"
+            >
+              ✨ Sector Intelligence
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* ══════════════════════════════════════════════════════════════════
           1. HERO BANNER — 50-Sector Industry Intelligence Hub

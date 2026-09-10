@@ -229,7 +229,6 @@ export default function NewsPOCMyNewsSubmenu({ submenuSlug, viewSlug }: Props) {
 
           <div className="flex gap-1 flex-wrap">
             {[
-              { slug: "my", label: "My Sector Trade News" },
               { slug: "activities", label: "My Activities" },
               { slug: "intelligence", label: "Reader Intelligence" }
             ].map((s) => (

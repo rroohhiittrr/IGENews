@@ -201,7 +201,7 @@ export default function NewsPOCCommunitiesSubmenu({ trackSlug, viewSlug }: Props
           </div>
 
           <div className="flex gap-1 flex-wrap">
-            {(["sme", "reader", "leader", "expo"] as Track[]).map((t) => (
+            {(["sme", "reader", "leader"] as Track[]).map((t) => (
               <button
                 key={t}
                 onClick={() => router.push(`${basePath}/${t}/${TRACK_CONFIG[t].views[0].slug}`)}
