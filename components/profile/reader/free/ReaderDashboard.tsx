@@ -5,9 +5,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
 import { 
   Star, Copy, Edit, Clock, Bookmark, ExternalLink,
-  ShieldAlert, Sparkles, 
-  Check,
-  Upload, X, MapPin, Briefcase, Building
+  ShieldAlert, Sparkles, Check,
+  Upload, X, MapPin, Briefcase, Building, ShieldCheck, Zap
 } from "lucide-react";
 import { SECTORS } from "@/lib/sectors";
 import { useParams, useRouter } from "next/navigation";
@@ -33,10 +32,42 @@ export default function ReaderDashboard() {
   const router = useRouter();
   const locale = (params?.locale as string) || "en";
 
-  const profile = user?.onboardingForm || {}; const currentPlan = user?.readerPlan || "free";
+  const profile = user?.onboardingForm || {};
+  const actualPlan = user?.readerPlan || "free";
+  
+  // Interactive Tier Simulator / Switcher
+  const [simulatedPlan, setSimulatedPlan] = useState<"free" | "pro" | "premium" | "enterprise">((user?.readerPlan as any) || "free");
+  const currentPlan = simulatedPlan;
 
   const [viewMode, setViewMode] = useState<"private" | "public">("private");
   const [profileVisibility, setProfileVisibility] = useState<"private" | "platform" | "public">("private");
+
+  // Determine which tiers the user can switch between in the overview
+  const getAllowedTiers = () => {
+    switch (actualPlan) {
+      case "enterprise":
+      case "premium":
+        return [
+          { id: "free", label: "Free Reader", badge: "Basic" },
+          { id: "pro", label: "Pro Reader", badge: "Pro" },
+          { id: "premium", label: "Premium Reader", badge: "Premium" },
+          { id: "enterprise", label: "Pro Plus (Enterprise)", badge: "Enterprise" },
+        ];
+      case "pro":
+        return [
+          { id: "free", label: "Free Reader", badge: "Basic" },
+          { id: "pro", label: "Pro Reader (Active)", badge: "Active" },
+          { id: "premium", label: "Premium Reader", badge: "Next Tier" },
+        ];
+      default: // free
+        return [
+          { id: "free", label: "Free Reader (Active)", badge: "Active" },
+          { id: "pro", label: "Pro Reader", badge: "Upgrade Preview" },
+        ];
+    }
+  };
+
+  const allowedTiers = getAllowedTiers();
 
   const getPlanInfo = () => {
     switch (currentPlan) {
@@ -74,8 +105,8 @@ export default function ReaderDashboard() {
   const planInfo = getPlanInfo();
 
   const handleAvatarClick = () => {
-    if (currentPlan === "free" || currentPlan === "pro") {
-      alert("Custom profile picture upload is a Premium Reader benefit. Please upgrade your plan.");
+    if (currentPlan === "free") {
+      alert("Custom profile picture upload is available from Pro and Premium Reader plans. Please upgrade your plan.");
       router.push(`/${locale}/profile/plans/reader`);
       return;
     }
@@ -104,10 +135,10 @@ export default function ReaderDashboard() {
   const bannerInputRef = useRef<HTMLInputElement>(null);
 
   const handleBannerClick = () => {
-    if (currentPlan === "enterprise") {
+    if (currentPlan === "enterprise" || currentPlan === "premium") {
       bannerInputRef.current?.click();
     } else {
-      alert("Upgrade to Pro Plus to upload a customized profile header banner!");
+      alert("Upgrade to Pro Plus or Premium to upload a customized profile header banner!");
     }
   };
 
@@ -155,8 +186,8 @@ export default function ReaderDashboard() {
 
   // Stats / Quota Trackers
   const [copiedUrl, setCopiedUrl] = useState(false);
-  const [articlesRead, setArticlesRead] = useState(14);
-  const [activeTab, setActiveTab] = useState<string>("all"); // "all", "for-you", or sectorId
+  const [articlesRead] = useState(14);
+  const [activeTab, setActiveTab] = useState<string>("all");
 
   // Simulation of Saved Articles & Followed Sectors in state
   const [savedArticles, setSavedArticles] = useState<{ id: string; title: string; sector: string; date: string }[]>([
@@ -174,14 +205,14 @@ export default function ReaderDashboard() {
   const [cepaResult, setCepaResult] = useState<{ originalDuty: number; cepaDuty: number; savings: number } | null>(null);
 
   const handleCalculateCepa = () => {
-    let baseRate = 0.075; // 7.5% standard duty
-    let cepaRate = 0.01; // 1% concessional duty
+    let baseRate = 0.075;
+    let cepaRate = 0.01;
     if (cepaSector === "steel") {
-      baseRate = 0.15; // 15%
-      cepaRate = 0.05; // 5%
+      baseRate = 0.15;
+      cepaRate = 0.05;
     } else if (cepaSector === "textiles") {
-      baseRate = 0.10; // 10%
-      cepaRate = 0.0; // 0% duty free
+      baseRate = 0.10;
+      cepaRate = 0.0;
     }
 
     if (cepaCountry === "Australia") {
@@ -195,7 +226,6 @@ export default function ReaderDashboard() {
     setCepaResult({ originalDuty, cepaDuty, savings });
   };
 
-  // Sector and Follow simulations
   const followedSectors = user?.sectors || ["pharma", "it", "logistics", "energy", "manufacturing", "retail", "aerospace"];
   const savesCount = savedArticles.length;
   const followsCount = followedSectors.length;
@@ -215,7 +245,7 @@ export default function ReaderDashboard() {
 
   if (!user) return null;
 
-  const username = user.email.split("@")[0];
+  const username = user.email ? user.email.split("@")[0] : "reader";
   const publicUrl = `indiaglobalnews.com/reader/${username}`;
 
   const handleCopyUrl = () => {
@@ -254,7 +284,6 @@ export default function ReaderDashboard() {
     setIsEditingName(false);
   };
 
-  // Mock Trade Articles based on followed sectors
   const getMockFeed = () => {
     const feed = [
       { id: "feed-1", title: "Pharma API Import Duty Reductions: What Exporters Need to Know", sector: "pharma", date: "25 May 2026", readTime: "4 min read", desc: "Understanding the newest custom tariff amendments on chemical active ingredients." },
@@ -265,17 +294,16 @@ export default function ReaderDashboard() {
     ];
 
     if (activeTab === "all") return feed;
-    if (activeTab === "for-you") return feed.slice(0, 3); // Simulated basic personalization
+    if (activeTab === "for-you") return feed.slice(0, 3);
     return feed.filter(art => art.sector === activeTab);
   };
 
-  // Simulated Save toggle
   const toggleSaveArticle = (article: { id: string; title: string; sector: string; date: string }) => {
     const exists = savedArticles.find(a => a.title === article.title);
     if (exists) {
       setSavedArticles(prev => prev.filter(a => a.title !== article.title));
     } else {
-      if (savesCount >= 20) {
+      if (currentPlan === "free" && savesCount >= 20) {
         alert("Saved article limit reached (20 / 20 saves). Upgrade to Pro to save unlimited articles!");
         return;
       }
@@ -295,51 +323,90 @@ export default function ReaderDashboard() {
   return (
     <div className="max-w-6xl mx-auto p-4 md:p-8 pb-24 text-left">
       
-      {/* ── STICKY PREVIEW BAR ── */}
-      <div className="mb-6 bg-gradient-to-r from-[#1D1D46] to-[#0A0A28] rounded-2xl p-4 border border-white/10 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="text-left">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <h4 className="text-[10px] font-black text-white uppercase tracking-widest">Profile View Mode Controller</h4>
+      {/* ── TOP CONTROLLER: VIEW MODE & TIER EXPERIENCE SWITCHER ── */}
+      <div className="mb-6 space-y-3">
+        {/* Tier switcher bar */}
+        <div className="bg-white dark:bg-[#122238] rounded-2xl p-4 border border-gray-200 dark:border-white/10 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="text-left">
+            <div className="flex items-center gap-2">
+              <Zap className="w-4 h-4 text-[#F0652E]" />
+              <h4 className="text-xs font-bold text-[#1D1D46] dark:text-white">Reader Tier Experience Switcher</h4>
+            </div>
+            <p className="text-[10px] text-gray-400 mt-0.5">
+              Current account tier: <strong className="text-emerald-600 capitalize">{actualPlan}</strong>. Switch to preview and test unlocked features.
+            </p>
           </div>
-          <p className="text-[9px] text-gray-300 mt-0.5">Toggle between your private owner dashboard and what external visitors see.</p>
+
+          <div className="flex bg-gray-100 dark:bg-white/5 p-1 rounded-xl border border-gray-200 dark:border-white/10 shrink-0 overflow-x-auto max-w-full">
+            {allowedTiers.map((t: any) => (
+              <button
+                key={t.id}
+                onClick={() => setSimulatedPlan(t.id)}
+                className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all whitespace-nowrap flex items-center gap-1.5 ${
+                  simulatedPlan === t.id
+                    ? "bg-[#1D1D46] text-white shadow-sm dark:bg-[#F0652E]"
+                    : "text-gray-500 hover:text-[#1D1D46] dark:hover:text-white"
+                }`}
+              >
+                <span>{t.label}</span>
+                {t.badge && (
+                  <span className={`text-[8px] font-black px-1.5 py-0.2 rounded uppercase ${
+                    simulatedPlan === t.id ? "bg-white/20 text-white" : "bg-gray-200 dark:bg-white/10 text-gray-600 dark:text-gray-300"
+                  }`}>
+                    {t.badge}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
         </div>
-        <div className="flex bg-white/5 p-1 rounded-xl border border-white/10 shrink-0">
-          <button
-            onClick={() => setViewMode("private")}
-            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
-              viewMode === "private"
-                ? "bg-[#F0652E] text-white"
-                : "text-gray-300 hover:text-white"
-            }`}
-          >
-            Private Dashboard (Owner View)
-          </button>
-          <button
-            onClick={() => setViewMode("public")}
-            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
-              viewMode === "public"
-                ? "bg-[#F0652E] text-white"
-                : "text-gray-300 hover:text-white"
-            }`}
-          >
-            Public Profile (Visitor View)
-          </button>
+
+        {/* View Mode Switcher */}
+        <div className="bg-gradient-to-r from-[#1D1D46] to-[#0A0A28] rounded-2xl p-4 border border-white/10 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="text-left">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <h4 className="text-[10px] font-black text-white uppercase tracking-widest">Profile View Mode Controller</h4>
+            </div>
+            <p className="text-[9px] text-gray-300 mt-0.5">Toggle between your private owner dashboard and what external visitors see.</p>
+          </div>
+          <div className="flex bg-white/5 p-1 rounded-xl border border-white/10 shrink-0">
+            <button
+              onClick={() => setViewMode("private")}
+              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
+                viewMode === "private"
+                  ? "bg-[#F0652E] text-white"
+                  : "text-gray-300 hover:text-white"
+              }`}
+            >
+              Private Dashboard (Owner View)
+            </button>
+            <button
+              onClick={() => setViewMode("public")}
+              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
+                viewMode === "public"
+                  ? "bg-[#F0652E] text-white"
+                  : "text-gray-300 hover:text-white"
+              }`}
+            >
+              Public Profile (Visitor View)
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* ── PROFILE HEADER CARD (Section 1.3) ── */}
+      {/* ── PROFILE HEADER CARD ── */}
       <div className={`rounded-3xl border relative text-left mb-8 transition-all duration-300 overflow-hidden ${headerCardStyles}`}>
         
-        {/* Cover Banner — Enterprise Only */}
-        {currentPlan === "enterprise" && (
+        {/* Cover Banner — Enterprise/Premium Only */}
+        {(currentPlan === "enterprise" || currentPlan === "premium") && (
           <div className="relative w-full h-32 md:h-48 border-b border-white/5">
             {bannerBase64 ? (
               <img src={bannerBase64} alt="Profile Cover" className="w-full h-full object-cover" />
             ) : (
               <div className="w-full h-full bg-gradient-to-r from-indigo-950 via-purple-900 to-violet-950 flex items-center justify-end p-6 relative">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(124,58,237,0.15),transparent)] pointer-events-none" />
-                <span className="text-white/20 font-black text-xl uppercase tracking-widest hidden md:inline">B2B Trade Intelligence Enterprise</span>
+                <span className="text-white/20 font-black text-xl uppercase tracking-widest hidden md:inline">B2B Trade Intelligence Reader</span>
               </div>
             )}
             <button 
@@ -347,15 +414,13 @@ export default function ReaderDashboard() {
               className="absolute top-4 right-4 bg-white/80 dark:bg-black/60 backdrop-blur-sm p-2 rounded-full shadow hover:scale-105 transition-all text-[#1D1D46] dark:text-white"
               title="Upload Custom Cover Banner"
             >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-              </svg>
+              <Upload className="w-4 h-4" />
             </button>
             <input type="file" ref={bannerInputRef} onChange={handleBannerUpload} accept="image/png, image/jpeg" className="hidden" />
           </div>
         )}
 
-        {/* DYNAMIC MEMBER Badge (Top-Right) */}
+        {/* Dynamic Member Badge (Top-Right) */}
         <div className="absolute top-6 right-6 flex items-center gap-3">
           <button 
             onClick={() => router.push(`/${locale}/profile/plans/reader`)}
@@ -397,7 +462,7 @@ export default function ReaderDashboard() {
                     type="text" 
                     value={editName}
                     onChange={(e) => setEditName(e.target.value)}
-                    className="px-2.5 py-1 bg-gray-100 dark:bg-white/5 text-sm font-bold text-[#1D1D46] dark:text-white rounded focus:outline-none"
+                    className="px-2.5 py-1 bg-gray-100 dark:bg-white/5 text-sm font-bold text-[#1D1D46] dark:text-white rounded focus:outline-hidden"
                   />
                   <button onClick={handleSaveName} className="px-2.5 py-1 bg-emerald-600 text-white text-[10px] font-bold rounded">Save</button>
                   <button onClick={() => { setEditName(profile.displayName || user.name); setIsEditingName(false); }} className="px-2.5 py-1 bg-gray-400 text-white text-[10px] font-bold rounded">Cancel</button>
@@ -457,7 +522,7 @@ export default function ReaderDashboard() {
                     value={bio}
                     onChange={(e) => setBio(e.target.value)}
                     placeholder="Describe your trade role, procurement focus, or regional experience..."
-                    className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-xs text-[#1D1D46] dark:text-white rounded-xl focus:outline-none focus:border-[#F0652E]"
+                    className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-xs text-[#1D1D46] dark:text-white rounded-xl focus:outline-hidden focus:border-[#F0652E]"
                     rows={2}
                   />
                   <div className="flex gap-2">
@@ -500,7 +565,7 @@ export default function ReaderDashboard() {
         </div>
       </div>
 
-      {/* ── BREAKING NEWS STRIP (Horizontal scroll) ── */}
+      {/* ── BREAKING NEWS STRIP ── */}
       <div className="bg-[#1D1D46] dark:bg-[#122238] rounded-2xl py-3 px-4 border border-white/5 shadow-sm mb-8 overflow-hidden relative flex items-center">
         <div className="bg-[#F0652E] text-white text-[9px] font-black px-2 py-1 rounded uppercase tracking-wider shrink-0 mr-4 z-10 shadow-sm">
           Breaking
@@ -512,7 +577,6 @@ export default function ReaderDashboard() {
             className="inline-flex gap-16 text-xs text-gray-100 font-medium"
             style={{ width: "fit-content" }}
           >
-            {/* Duplicated list to scroll smoothly without seams */}
             {[...MOCK_BREAKING_NEWS, ...MOCK_BREAKING_NEWS].map((news, idx) => (
               <span key={idx} className="inline-flex items-center gap-2">
                 {news}
@@ -526,9 +590,7 @@ export default function ReaderDashboard() {
       {viewMode === "public" ? (
         // Public Preview / Visitor View
         <div className="bg-white dark:bg-[#122238] rounded-3xl p-8 border border-gray-150 dark:border-white/5 shadow-sm text-left space-y-8">
-          
-          {/* Banner notification depending on tier */}
-          {currentPlan === "free" || currentPlan === "pro" ? (
+          {currentPlan === "free" ? (
             <div className="bg-amber-500/5 border border-amber-500/15 rounded-2xl p-6 text-center space-y-4">
               <div className="w-12 h-12 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto">
                 <ShieldAlert className="w-6 h-6 text-amber-500" />
@@ -543,24 +605,24 @@ export default function ReaderDashboard() {
                 onClick={() => router.push(`/${locale}/profile/plans/reader`)}
                 className="px-5 py-2 bg-[#C55A11] text-white text-xs font-bold rounded-xl hover:opacity-90 shadow-sm"
               >
-                Upgrade to Premium to Unlock Public Networking
+                Upgrade to Pro or Premium to Unlock Public Networking
               </button>
             </div>
           ) : (
-            // Premium or Pro Plus active visitor view preview
             <div className="space-y-8">
               <div className="bg-emerald-500/5 border border-emerald-500/15 rounded-2xl p-4 flex gap-3 items-center text-xs text-emerald-700 dark:text-emerald-400">
                 <Check className="w-5 h-5 shrink-0" />
                 <div>
                   <span className="font-bold">Visitor Preview Active: </span>
-                  {currentPlan === "premium" 
-                    ? "Other verified logged-in community members can view this profile. It is hidden from search engines."
+                  {currentPlan === "pro" 
+                    ? "Verified platform members can discover your sector profile in the reader directory."
+                    : currentPlan === "premium"
+                    ? "Other verified logged-in community members can view this profile with full contact options."
                     : "This profile is Fully Public, optimized for SEO, and crawlable on Google search."}
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {/* Left Side: Designation Card */}
                 <div className="md:col-span-1 space-y-6">
                   <div className="bg-[#f4f7fb]/60 dark:bg-white/5 p-6 rounded-2xl border border-gray-100 dark:border-white/5 space-y-4">
                     <div className="space-y-2">
@@ -588,7 +650,6 @@ export default function ReaderDashboard() {
                   </div>
                 </div>
 
-                {/* Right Side: Followed Sectors & Focus Areas */}
                 <div className="md:col-span-2 space-y-6">
                   <div className="space-y-3 text-left">
                     <h3 className="font-bold text-[#1D1D46] dark:text-white text-base">Trade Focus & Sourcing Interests</h3>
@@ -633,7 +694,7 @@ export default function ReaderDashboard() {
           )}
         </div>
       ) : (
-        // Private Owner view (original grid)
+        // Private Owner view
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* MAIN CONTENT AREA: MY FEED (Columns 1-8) */}
@@ -707,23 +768,29 @@ export default function ReaderDashboard() {
                 <div className="bg-orange-500/5 border border-orange-500/15 rounded-2xl p-4 mb-6 flex gap-3 text-left">
                   <Sparkles className="w-6 h-6 text-orange-500 shrink-0 mt-0.5" />
                   <div className="space-y-1">
-                    <h4 className="text-xs font-bold text-[#1D1D46] dark:text-white">Basic Curation Active</h4>
+                    <h4 className="text-xs font-bold text-[#1D1D46] dark:text-white">
+                      {currentPlan === "free" ? "Basic Personalization" : "AI Intelligence Feed Active"}
+                    </h4>
                     <p className="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed">
-                      You are viewing a basic version of your 'For You' feed. Upgrade to a **Pro Reader** to unlock full AI-personalised news intelligence matching deep taxonomy.
+                      {currentPlan === "free"
+                        ? "You are viewing a basic version of your 'For You' feed. Upgrade to a Pro Reader to unlock full AI-personalised news intelligence matching deep taxonomy."
+                        : "Your feed is dynamically tuned by AI to match your trade sectors, customs tariff priorities, and bilateral interests."}
                     </p>
-                    <button 
-                      onClick={() => router.push(`/${locale}/profile/plans/reader`)}
-                      className="text-[10px] font-bold text-[#C55A11] hover:underline uppercase tracking-wider block pt-1"
-                    >
-                      View Pro Benefits →
-                    </button>
+                    {currentPlan === "free" && (
+                      <button 
+                        onClick={() => router.push(`/${locale}/profile/plans/reader`)}
+                        className="text-[10px] font-bold text-[#C55A11] hover:underline uppercase tracking-wider block pt-1"
+                      >
+                        View Pro Benefits →
+                      </button>
+                    )}
                   </div>
                 </div>
               )}
 
               {/* CEPA Calculator Tab */}
               {activeTab === "cepa-calc" && (
-                currentPlan === "enterprise" ? (
+                currentPlan === "enterprise" || currentPlan === "premium" ? (
                   <div className="bg-gradient-to-r from-purple-500/5 to-indigo-500/5 border border-purple-500/15 rounded-3xl p-6 space-y-6 text-left">
                     <div>
                       <h4 className="text-base font-bold text-[#1D1D46] dark:text-white flex items-center gap-2">
@@ -738,7 +805,7 @@ export default function ReaderDashboard() {
                         <select 
                           value={cepaSector}
                           onChange={(e) => setCepaSector(e.target.value)}
-                          className="w-full px-3.5 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-xs text-gray-700 dark:text-gray-250 rounded-xl focus:outline-none focus:border-[#7c3aed]"
+                          className="w-full px-3.5 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-xs text-gray-700 dark:text-gray-200 rounded-xl focus:outline-hidden focus:border-[#7c3aed]"
                         >
                           <option value="chemicals">Chemicals & APIs (Standard 7.5% vs. 1% CEPA)</option>
                           <option value="steel">Alloys & Structural Steel (Standard 15% vs. 5% CEPA)</option>
@@ -751,7 +818,7 @@ export default function ReaderDashboard() {
                         <select 
                           value={cepaCountry}
                           onChange={(e) => setCepaCountry(e.target.value)}
-                          className="w-full px-3.5 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-xs text-gray-700 dark:text-gray-250 rounded-xl focus:outline-none focus:border-[#7c3aed]"
+                          className="w-full px-3.5 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-xs text-gray-700 dark:text-gray-200 rounded-xl focus:outline-hidden focus:border-[#7c3aed]"
                         >
                           <option value="UAE">India-UAE CEPA</option>
                           <option value="Australia">India-Australia ECTA</option>
@@ -767,7 +834,7 @@ export default function ReaderDashboard() {
                           type="number"
                           value={cepaValue}
                           onChange={(e) => setCepaValue(Number(e.target.value))}
-                          className="flex-1 px-3.5 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-xs text-gray-700 dark:text-gray-250 rounded-xl focus:outline-none focus:border-[#7c3aed]"
+                          className="flex-1 px-3.5 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-xs text-gray-700 dark:text-gray-200 rounded-xl focus:outline-hidden focus:border-[#7c3aed]"
                         />
                         <button 
                           onClick={handleCalculateCepa}
@@ -796,7 +863,6 @@ export default function ReaderDashboard() {
                     )}
                   </div>
                 ) : (
-                  // Locked placard for Free, Pro, and Premium users
                   <div className="bg-purple-500/5 border border-purple-500/15 rounded-3xl p-8 text-center space-y-4">
                     <div className="w-12 h-12 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto">
                       <ShieldAlert className="w-6 h-6 text-purple-600" />
@@ -804,14 +870,14 @@ export default function ReaderDashboard() {
                     <div className="space-y-1.5">
                       <h4 className="text-base font-bold text-[#1D1D46] dark:text-white">🔒 CEPA Duty Calculator Locked</h4>
                       <p className="text-xs text-gray-500 max-w-md mx-auto leading-relaxed">
-                        The customs duty calculator and bilateral tariff optimizer is reserved exclusively for **Pro Plus (Enterprise)** members.
+                        The customs duty calculator and bilateral tariff optimizer is reserved for **Premium & Pro Plus** members.
                       </p>
                     </div>
                     <button 
                       onClick={() => router.push(`/${locale}/profile/plans/reader`)}
                       className="px-5 py-2 bg-[#7c3aed] text-white text-xs font-bold rounded-xl hover:opacity-90 transition-all shadow-md"
                     >
-                      Upgrade to Pro Plus to Unlock Custom Calculators
+                      Upgrade to Premium to Unlock Custom Calculators
                     </button>
                   </div>
                 )
@@ -866,7 +932,7 @@ export default function ReaderDashboard() {
           {/* SIDEBAR — QUICK STATS (Columns 9-12) */}
           <div className="lg:col-span-4 space-y-6">
             
-            {/* Profile Strength / Completeness Indicator */}
+            {/* Profile Strength Indicator */}
             <div className="bg-white dark:bg-[#122238] rounded-3xl p-6 border border-gray-100 dark:border-white/5 shadow-sm text-left space-y-4">
               <div>
                 <h3 className="font-bold text-[#1D1D46] dark:text-white text-base flex justify-between items-center">
@@ -916,7 +982,7 @@ export default function ReaderDashboard() {
                 <p className="text-[10px] text-gray-400 mt-0.5">Control how your B2B profile is viewed on the platform.</p>
               </div>
 
-              {currentPlan === "free" || currentPlan === "pro" ? (
+              {currentPlan === "free" ? (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between p-2.5 bg-amber-500/5 border border-amber-500/10 rounded-xl">
                     <span className="text-xs text-amber-600 font-bold flex items-center gap-1.5">
@@ -924,7 +990,7 @@ export default function ReaderDashboard() {
                     </span>
                   </div>
                   <p className="text-[10px] text-gray-500 leading-normal">
-                    Free and Pro reader profiles are strictly private. Upgrade to **Premium Reader** to upload custom photos and select platform public visibility modes.
+                    Free reader profiles are strictly private. Upgrade to **Pro or Premium Reader** to upload custom photos and select platform public visibility modes.
                   </p>
                   <button 
                     onClick={() => router.push(`/${locale}/profile/plans/reader`)}
@@ -935,7 +1001,6 @@ export default function ReaderDashboard() {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {/* Radio settings triggers */}
                   <div className="space-y-2">
                     <label className="flex items-center gap-2 text-xs text-gray-700 dark:text-gray-300 cursor-pointer">
                       <input 
@@ -965,7 +1030,7 @@ export default function ReaderDashboard() {
                       </div>
                     </label>
 
-                    {currentPlan === "enterprise" && (
+                    {(currentPlan === "enterprise" || currentPlan === "premium") && (
                       <label className="flex items-center gap-2 text-xs text-gray-700 dark:text-gray-300 cursor-pointer">
                         <input 
                           type="radio" 
@@ -981,17 +1046,11 @@ export default function ReaderDashboard() {
                       </label>
                     )}
                   </div>
-
-                  {currentPlan === "premium" && (
-                    <div className="p-2.5 bg-blue-500/5 border border-blue-500/10 rounded-xl text-[9px] text-blue-600 leading-normal flex items-start gap-1">
-                      <Sparkles className="w-3 h-3 mt-0.5 shrink-0" />
-                      <span>Upgrade to **Pro Plus** to enable Google SEO indexing and add external corporate social links!</span>
-                    </div>
-                  )}
                 </div>
               )}
             </div>
 
+            {/* Quick Stats Panel */}
             <div className="bg-white dark:bg-[#122238] rounded-3xl p-6 border border-gray-100 dark:border-white/5 shadow-sm text-left space-y-6">
               <h3 className="font-bold text-[#1D1D46] dark:text-white text-base border-b border-gray-100 dark:border-white/5 pb-2.5">
                 Quick Stats
@@ -1002,7 +1061,9 @@ export default function ReaderDashboard() {
                 <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Articles Read This Month</span>
                 <div className="flex items-center gap-2">
                   <span className="text-3xl font-black text-[#1D1D46] dark:text-white">{articlesRead}</span>
-                  <span className="text-[10px] text-gray-400 font-medium">unlimited basic reads active</span>
+                  <span className="text-[10px] text-gray-400 font-medium">
+                    {currentPlan === "free" ? "unlimited basic reads active" : "pro priority reads enabled"}
+                  </span>
                 </div>
               </div>
 
@@ -1025,66 +1086,33 @@ export default function ReaderDashboard() {
               <div className="space-y-2">
                 <div className="flex justify-between items-center text-[10px] font-black text-gray-400 uppercase tracking-widest">
                   <span>Saves Used</span>
-                  <span>{savesCount} / 20</span>
+                  <span>{currentPlan === "free" ? `${savesCount} / 20` : `${savesCount} (Unlimited)`}</span>
                 </div>
                 <div className="h-2 w-full bg-gray-100 dark:bg-white/5 rounded-full overflow-hidden">
                   <div 
                     className={`h-full rounded-full transition-all duration-300 ${
-                      savesCount >= 20 ? "bg-red-500" : savesCount >= 15 ? "bg-orange-500" : "bg-[#1D1D46]"
+                      currentPlan !== "free" ? "bg-emerald-500" : savesCount >= 20 ? "bg-red-500" : savesCount >= 15 ? "bg-orange-500" : "bg-[#1D1D46]"
                     }`} 
-                    style={{ width: `${(savesCount / 20) * 100}%` }} 
+                    style={{ width: currentPlan !== "free" ? "35%" : `${(savesCount / 20) * 100}%` }} 
                   />
                 </div>
-
-                {savesCount >= 15 && (
-                  <div className="p-3 bg-orange-500/5 border border-orange-500/15 rounded-xl text-[10px] text-orange-600 dark:text-orange-400 leading-relaxed space-y-1.5">
-                    <div className="flex items-center gap-1.5 font-bold">
-                      <ShieldAlert className="w-3.5 h-3.5 shrink-0" />
-                      <span>Nearing Saves Quota Limit</span>
-                    </div>
-                    <p>You have used {savesCount} of your 20 free bookmark saves. Upgrade to Pro Reader plan to save unlimited articles.</p>
-                    <button 
-                      onClick={() => router.push(`/${locale}/profile/plans/reader`)}
-                      className="px-3 py-1.5 bg-[#C55A11] hover:bg-[#A0450B] text-white font-extrabold rounded-lg uppercase tracking-wider block text-[8px] transition-all shadow-sm"
-                    >
-                      Upgrade Plan
-                    </button>
-                  </div>
-                )}
               </div>
 
               {/* Follows Limit */}
               <div className="space-y-2">
                 <div className="flex justify-between items-center text-[10px] font-black text-gray-400 uppercase tracking-widest">
                   <span>Follows Used</span>
-                  <span>{followsCount} / 10</span>
+                  <span>{currentPlan === "free" ? `${followsCount} / 10` : `${followsCount} (Unlimited)`}</span>
                 </div>
                 <div className="h-2 w-full bg-gray-100 dark:bg-white/5 rounded-full overflow-hidden">
                   <div 
                     className={`h-full rounded-full transition-all duration-300 ${
-                      followsCount >= 10 ? "bg-red-500" : followsCount >= 8 ? "bg-orange-500" : "bg-[#1D1D46]"
+                      currentPlan !== "free" ? "bg-emerald-500" : followsCount >= 10 ? "bg-red-500" : followsCount >= 8 ? "bg-orange-500" : "bg-[#1D1D46]"
                     }`} 
-                    style={{ width: `${(followsCount / 10) * 100}%` }} 
+                    style={{ width: currentPlan !== "free" ? "40%" : `${(followsCount / 10) * 100}%` }} 
                   />
                 </div>
-
-                {followsCount >= 8 && (
-                  <div className="p-3 bg-orange-500/5 border border-orange-500/15 rounded-xl text-[10px] text-orange-600 dark:text-orange-400 leading-relaxed space-y-1.5">
-                    <div className="flex items-center gap-1.5 font-bold">
-                      <ShieldAlert className="w-3.5 h-3.5 shrink-0" />
-                      <span>Nearing Follows Limit</span>
-                    </div>
-                    <p>You are following {followsCount} sectors (max 10). Upgrade to Pro Reader to follow unlimited leaders, companies, and sectors.</p>
-                    <button 
-                      onClick={() => router.push(`/${locale}/profile/plans/reader`)}
-                      className="px-3 py-1.5 bg-[#C55A11] hover:bg-[#A0450B] text-white font-extrabold rounded-lg uppercase tracking-wider block text-[8px] transition-all shadow-sm"
-                    >
-                      Upgrade Plan
-                    </button>
-                  </div>
-                )}
               </div>
-
             </div>
 
             {/* Interactive Saves List Panel */}
@@ -1092,7 +1120,7 @@ export default function ReaderDashboard() {
               <div className="bg-white dark:bg-[#122238] rounded-3xl p-6 border border-gray-100 dark:border-white/5 shadow-sm text-left space-y-4">
                 <h4 className="font-bold text-[#1D1D46] dark:text-white text-sm flex items-center justify-between">
                   <span>Saved Articles ({savesCount})</span>
-                  <span className="text-[10px] text-gray-400 font-medium">{savesCount}/20 slots</span>
+                  <span className="text-[10px] text-gray-400 font-medium">{currentPlan === "free" ? `${savesCount}/20 slots` : "Unlimited"}</span>
                 </h4>
                 <div className="divide-y divide-gray-100 dark:divide-white/5 max-h-60 overflow-y-auto pr-1">
                   {savedArticles.map((art) => (
@@ -1114,17 +1142,19 @@ export default function ReaderDashboard() {
               </div>
             )}
 
-            {/* Trade Intelligence Briefings Library (PDF downloads) */}
+            {/* Trade Intelligence Briefings Library */}
             <div className="bg-white dark:bg-[#122238] rounded-3xl p-6 border border-gray-100 dark:border-white/5 shadow-sm text-left space-y-4 relative overflow-hidden">
               <div>
                 <h4 className="font-bold text-[#1D1D46] dark:text-white text-sm flex items-center justify-between">
                   <span>Custom PDF Briefings</span>
-                  <span className="text-[9px] bg-purple-500/10 text-purple-600 dark:text-purple-400 font-extrabold px-2 py-0.5 rounded-lg uppercase tracking-wider">Pro Plus Exclusive</span>
+                  <span className="text-[9px] bg-purple-500/10 text-purple-600 dark:text-purple-400 font-extrabold px-2 py-0.5 rounded-lg uppercase tracking-wider">
+                    {currentPlan === "enterprise" || currentPlan === "premium" ? "Unlocked" : "Pro Plus Exclusive"}
+                  </span>
                 </h4>
                 <p className="text-[10px] text-gray-400 mt-0.5">Download full-length trade compliance intelligence reports.</p>
               </div>
 
-              {currentPlan === "enterprise" ? (
+              {currentPlan === "enterprise" || currentPlan === "premium" ? (
                 <div className="space-y-3">
                   <div className="p-3 bg-[#f4f7fb] dark:bg-white/5 rounded-xl flex items-center justify-between gap-3 text-xs">
                     <div className="truncate">
@@ -1159,16 +1189,15 @@ export default function ReaderDashboard() {
                     </div>
                     <div className="space-y-1">
                       <h5 className="text-xs font-bold text-gray-700 dark:text-white">PDF Downloads Locked</h5>
-                      <p className="text-[10px] text-gray-400 max-w-[200px] leading-relaxed">Upgrade to **Pro Plus Reader** to download trade intel PDF briefings.</p>
+                      <p className="text-[10px] text-gray-400 max-w-[200px] leading-relaxed">Upgrade to **Premium or Pro Plus Reader** to download trade intel PDF briefings.</p>
                     </div>
                     <button 
                       onClick={() => router.push(`/${locale}/profile/plans/reader`)}
                       className="px-3.5 py-1.5 bg-[#7c3aed] text-white text-[10px] font-bold rounded-lg shadow-md hover:opacity-90 transition-opacity"
                     >
-                      Upgrade to Pro Plus
+                      Upgrade to Premium
                     </button>
                   </div>
-                  {/* Mock content below blur for premium layout effect */}
                   <div className="opacity-20 space-y-3 select-none pointer-events-none">
                     <div className="p-3 bg-[#f4f7fb] dark:bg-white/5 rounded-xl flex items-center justify-between text-xs">
                       <span>Mock CEPA Briefing.pdf</span>

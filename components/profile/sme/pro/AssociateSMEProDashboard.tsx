@@ -5,15 +5,16 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useParams, useRouter } from "next/navigation";
 import {
   Copy, Check, Upload, MapPin, FileText, Eye, EyeOff,
-  BarChart3, MessageSquare, ShieldCheck, Lock, Globe,
-  Send, ArrowRight, TrendingUp, Calendar
+  BarChart3, ShieldCheck, Globe, Send, ArrowRight,
+  TrendingUp, Calendar, Settings as SettingsIcon, Edit3, User, Award
 } from "lucide-react";
 import { SECTORS } from "@/lib/sectors";
+import SmeAnalyticsHub from "@/components/profile/common/SmeAnalyticsHub";
 
-// ─── Public Profile Card ─────────────────────────────────
+// ─── Public Profile Card (SME Pro Blue) ──────────────────
 function SMEProPublicProfile({
   profile, displayName, displayDesignation, displayOrg,
-  displayCity, displayCountry, avatarBase64, openToConsulting, articles,
+  displayCity, displayCountry, avatarBase64, articles,
   onBack,
 }: any) {
   return (
@@ -53,11 +54,6 @@ function SMEProPublicProfile({
                 <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase bg-blue-600 text-white px-2.5 py-0.5 rounded-full tracking-widest">
                   <ShieldCheck className="w-3 h-3" /> SME Pro
                 </span>
-                {openToConsulting && (
-                  <span className="text-[9px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/30 px-2 py-0.5 rounded-full">
-                    Open to Consulting
-                  </span>
-                )}
               </div>
               <p className="text-xs text-gray-500 mt-0.5">{displayDesignation} · {displayOrg}</p>
               <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
@@ -75,39 +71,10 @@ function SMEProPublicProfile({
             </div>
           )}
 
-          {/* Affiliate Promotion Coupon Card */}
-          {(() => {
-            const firstPart = displayName.split(" ")[0].toUpperCase();
-            const couponCode = `SME-${firstPart}-10`;
-            return (
-              <div className="mb-4 p-4 bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 rounded-2xl flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500 font-bold shrink-0">🏷️</div>
-                  <div className="text-left">
-                    <p className="text-xs font-bold text-[#1D1D46] dark:text-white">IGE Affiliate Invitation</p>
-                    <p className="text-[10px] text-gray-500 dark:text-gray-400">Get 10% off premium reader plans using my code.</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-1.5 bg-white dark:bg-[#122238] border border-amber-500/30 px-3 py-1.5 rounded-xl shrink-0">
-                  <span className="text-xs font-black text-amber-600 font-mono tracking-wide">{couponCode}</span>
-                  <button onClick={() => {
-                    navigator.clipboard.writeText(couponCode);
-                    alert("Coupon code copied to clipboard!");
-                  }} className="text-[10px] font-bold text-gray-500 hover:text-amber-600 ml-1">Copy</button>
-                </div>
-              </div>
-            );
-          })()}
-
-          {/* Consulting CTA */}
-          {openToConsulting ? (
-            <button className="w-full py-3 bg-[#1E3A5F] hover:bg-blue-800 text-white text-sm font-bold rounded-2xl transition-all flex items-center justify-center gap-2">
-              <Send className="w-4 h-4" /> Send Consulting Inquiry
-            </button>
-          ) : (
-            <div className="w-full py-3 bg-gray-50 dark:bg-white/5 border border-dashed border-gray-200 dark:border-white/10 text-center text-xs text-gray-400 rounded-2xl">
-              Currently not accepting new inquiries
-            </div>
+          {profile.bio && (
+            <p className="text-xs text-gray-600 dark:text-gray-300 italic leading-relaxed border-t border-gray-100 dark:border-white/5 pt-3">
+              "{profile.bio}"
+            </p>
           )}
         </div>
       </div>
@@ -145,10 +112,10 @@ export default function AssociateSMEProDashboard() {
   const profile = user?.onboardingForm || {};
   const [viewMode, setViewMode] = useState<"private" | "public">("private");
   const [copiedUrl, setCopiedUrl] = useState(false);
-  const [activeTab, setActiveTab] = useState<"overview" | "articles" | "consulting" | "insights">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "articles" | "insights" | "settings">("overview");
   const [avatarBase64, setAvatarBase64] = useState(profile.profilePic || "");
   const avatarInputRef = useRef<HTMLInputElement>(null);
-  const [openToConsulting, setOpenToConsulting] = useState(true);
+
   const [articles, setArticles] = useState<{ title: string; sector: string; date: string; reads: number }[]>([
     { title: "How India-UAE CEPA is reshaping chemical exports", sector: "chemicals", date: "Aug 10, 2026", reads: 1240 },
     { title: "Steel procurement under FTA: A buyer's guide", sector: "steel", date: "Jul 22, 2026", reads: 890 },
@@ -156,19 +123,25 @@ export default function AssociateSMEProDashboard() {
   const [newTitle, setNewTitle] = useState("");
   const [newSector, setNewSector] = useState(profile.sector || "manufacturing");
   const [showPublishForm, setShowPublishForm] = useState(false);
-  const [inquiries] = useState([
-    { name: "Rajiv Menon", company: "Chem Exports Ltd", topic: "CEPA duty advisory", date: "2 days ago" },
-    { name: "Priya Shah", company: "Textile Hub India", topic: "FTA negotiation guidance", date: "5 days ago" },
-  ]);
 
+  // Settings State
   const sampleName = "Dr. Vikram Malhotra";
   const rawName = profile.fullName || user?.name;
   const isGeneric = !rawName || rawName === "SME Pro User" || rawName === "Your Name" || rawName.toLowerCase().includes("user");
-  const displayName = isGeneric ? sampleName : rawName;
-  const displayDesignation = profile.currentDesignation || "Senior Trade Policy Specialist";
-  const displayOrg = profile.organisation || "Global Commerce Advisory";
-  const displayCity = profile.city || "Mumbai";
-  const displayCountry = profile.country || "India";
+  const [editName, setEditName] = useState(isGeneric ? sampleName : rawName);
+  const [editDesignation, setEditDesignation] = useState(profile.currentDesignation || "Senior Trade Policy Specialist");
+  const [editOrg, setEditOrg] = useState(profile.organisation || "Global Commerce Advisory");
+  const [editCity, setEditCity] = useState(profile.city || "Mumbai");
+  const [editCountry, setEditCountry] = useState(profile.country || "India");
+  const [editBio, setEditBio] = useState(profile.bio || "Subject Matter Expert focused on cross-border tariff structures, CEPA trade agreements, and bilateral export compliance.");
+  const [settingsSaved, setSettingsSaved] = useState(false);
+
+  const displayName = editName;
+  const displayDesignation = editDesignation;
+  const displayOrg = editOrg;
+  const displayCity = editCity;
+  const displayCountry = editCountry;
+
   const profileUrl = typeof window !== "undefined"
     ? `${window.location.origin}/${locale}/sme/${user?.id || "profile"}`
     : "";
@@ -194,36 +167,36 @@ export default function AssociateSMEProDashboard() {
     setShowPublishForm(false);
   };
 
+  const handleSaveSettings = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSettingsSaved(true);
+    setTimeout(() => setSettingsSaved(false), 2500);
+  };
+
   // ── PUBLIC VIEW ─────────────────────────────────────────
   if (viewMode === "public") {
     return (
       <SMEProPublicProfile
-        profile={profile}
+        profile={{ ...profile, bio: editBio }}
         displayName={displayName}
         displayDesignation={displayDesignation}
         displayOrg={displayOrg}
         displayCity={displayCity}
         displayCountry={displayCountry}
         avatarBase64={avatarBase64}
-        openToConsulting={openToConsulting}
         articles={articles}
         onBack={() => setViewMode("private")}
       />
     );
   }
 
-  // ── PRIVATE / DASHBOARD VIEW ─────────────────────────────
+  // ── PRIVATE / DASHBOARD VIEW (4 Tabs: Overview, Articles, Insights, Settings) ──
   const tabs = [
     { id: "overview", label: "Overview" },
     { id: "articles", label: `Articles (${articles.length})` },
-    { id: "consulting", label: `Inquiries (${inquiries.length})` },
     { id: "insights", label: "Insights" },
-    { id: "affiliate", label: "Affiliate Tools" },
+    { id: "settings", label: "Settings" },
   ] as const;
-
-  const firstPart = displayName.split(" ")[0].toUpperCase();
-  const rolePrefix = user?.onboardingRole === "associate-sme" ? "ASME" : "SME";
-  const couponCode = `${rolePrefix}-${firstPart}-10`;
 
   return (
     <div className="p-5 md:p-8 lg:p-10 max-w-5xl mx-auto pb-24">
@@ -277,19 +250,14 @@ export default function AssociateSMEProDashboard() {
                 <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase bg-blue-600 text-white px-2.5 py-0.5 rounded-full tracking-widest">
                   <ShieldCheck className="w-3 h-3" /> SME Pro Verified
                 </span>
-                {openToConsulting && (
-                  <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/30 px-2 py-0.5 rounded-full">
-                    Open to Consulting
-                  </span>
-                )}
               </div>
               <p className="text-xs text-gray-500 mt-0.5">{displayDesignation} · {displayOrg}</p>
               <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5"><MapPin className="w-3 h-3" /> {displayCity}, {displayCountry}</p>
             </div>
           </div>
 
-          {/* Profile URL + consulting toggle */}
-          <div className="flex items-center gap-3 flex-wrap mb-4">
+          {/* Profile URL */}
+          <div className="flex items-center gap-3 flex-wrap">
             <div className="flex items-center gap-2 flex-1 min-w-[200px] p-2.5 bg-blue-50/40 dark:bg-blue-950/10 rounded-xl border border-blue-100 dark:border-blue-900/20">
               <Globe className="w-3.5 h-3.5 text-blue-400 shrink-0" />
               <span className="flex-1 truncate text-[10px] text-gray-500">{profileUrl}</span>
@@ -298,21 +266,11 @@ export default function AssociateSMEProDashboard() {
                 {copiedUrl ? "Copied!" : "Copy"}
               </button>
             </div>
-            <button
-              onClick={() => setOpenToConsulting(v => !v)}
-              className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-[10px] font-bold transition-all ${
-                openToConsulting
-                  ? "bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-400"
-                  : "bg-gray-50 dark:bg-white/5 border-gray-200 dark:border-white/10 text-gray-400"
-              }`}
-            >
-              {openToConsulting ? "✓ Open to Consulting" : "Consulting Off"}
-            </button>
           </div>
         </div>
       </div>
 
-      {/* Tabs */}
+      {/* Tabs Navigation: Exactly 4 Tabs */}
       <div className="flex gap-1 mb-6 bg-gray-100 dark:bg-white/5 p-1 rounded-2xl border border-gray-200 dark:border-white/10 w-fit overflow-x-auto">
         {tabs.map(tab => (
           <button
@@ -329,31 +287,81 @@ export default function AssociateSMEProDashboard() {
         ))}
       </div>
 
-      {/* ── OVERVIEW TAB ── */}
+      {/* ── 1. OVERVIEW TAB ── */}
       {activeTab === "overview" && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-          {[
-            { label: "Articles", value: articles.length, icon: FileText, color: "from-blue-600 to-blue-500" },
-            { label: "Total Reads", value: articles.reduce((a, b) => a + b.reads, 0).toLocaleString(), icon: Eye, color: "from-indigo-600 to-indigo-500" },
-            { label: "Inquiries", value: inquiries.length, icon: MessageSquare, color: "from-emerald-600 to-teal-500" },
-            { label: "Article Revenue", value: `₹${(articles.reduce((a, b) => a + b.reads, 0) * 0.05).toFixed(0)}`, icon: TrendingUp, color: "from-amber-500 to-yellow-500" },
-          ].map((s, i) => (
-            <div key={i} className={`rounded-2xl p-4 bg-gradient-to-br ${s.color} text-white shadow-md`}>
-              <s.icon className="w-5 h-5 mb-2 opacity-80" />
-              <p className="text-2xl font-black">{s.value}</p>
-              <p className="text-[9px] opacity-80 mt-0.5 uppercase tracking-wide">{s.label}</p>
+        <div className="space-y-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {[
+              { label: "Published Articles", value: articles.length, icon: FileText, color: "from-blue-600 to-blue-500" },
+              { label: "Total Reads", value: articles.reduce((a, b) => a + b.reads, 0).toLocaleString(), icon: Eye, color: "from-indigo-600 to-indigo-500" },
+              { label: "Profile Views", value: "842", icon: User, color: "from-emerald-600 to-teal-500" },
+              { label: "Article Revenue", value: `₹${(articles.reduce((a, b) => a + b.reads, 0) * 0.05).toFixed(0)}`, icon: TrendingUp, color: "from-amber-500 to-yellow-500" },
+            ].map((s, i) => (
+              <div key={i} className={`rounded-2xl p-4 bg-gradient-to-br ${s.color} text-white shadow-md`}>
+                <s.icon className="w-5 h-5 mb-2 opacity-80" />
+                <p className="text-2xl font-black">{s.value}</p>
+                <p className="text-[9px] opacity-80 mt-0.5 uppercase tracking-wide">{s.label}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="md:col-span-2 space-y-4">
+              <div className="bg-white dark:bg-[#122238] rounded-2xl p-5 border border-gray-100 dark:border-white/5 shadow-sm">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-bold text-sm text-[#1D1D46] dark:text-white flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-blue-500" /> Recent Published Analysis
+                  </h3>
+                  <button onClick={() => setActiveTab("articles")} className="text-xs text-blue-600 font-bold hover:underline">
+                    View all ({articles.length})
+                  </button>
+                </div>
+                <div className="divide-y divide-gray-50 dark:divide-white/5">
+                  {articles.slice(0, 3).map((a, i) => (
+                    <div key={i} className="py-3 flex items-center justify-between gap-3">
+                      <div>
+                        <p className="text-xs font-bold text-[#1D1D46] dark:text-white">{a.title}</p>
+                        <p className="text-[10px] text-gray-400 mt-0.5 capitalize">{a.sector} · {a.date}</p>
+                      </div>
+                      <span className="text-xs font-bold text-blue-600 shrink-0">{a.reads.toLocaleString()} reads</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-          ))}
+
+            <div className="space-y-4">
+              <div className="bg-white dark:bg-[#122238] rounded-2xl p-5 border border-gray-100 dark:border-white/5 shadow-sm space-y-3">
+                <h3 className="font-bold text-sm text-[#1D1D46] dark:text-white flex items-center gap-2">
+                  <Award className="w-4 h-4 text-amber-500" /> Authority Snapshot
+                </h3>
+                <div className="text-xs text-gray-500 space-y-2">
+                  <div className="flex justify-between py-1 border-b border-gray-50 dark:border-white/5">
+                    <span>Directory Rank</span>
+                    <span className="font-bold text-[#1D1D46] dark:text-white">#12 in Trade Policy</span>
+                  </div>
+                  <div className="flex justify-between py-1 border-b border-gray-50 dark:border-white/5">
+                    <span>Index Status</span>
+                    <span className="font-bold text-emerald-600">Google Indexed</span>
+                  </div>
+                  <div className="flex justify-between py-1">
+                    <span>Plan Tier</span>
+                    <span className="font-bold text-blue-600">SME Pro (Active)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
-      {/* ── ARTICLES TAB ── */}
+      {/* ── 2. ARTICLES TAB ── */}
       {activeTab === "articles" && (
         <div className="space-y-5">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="font-bold text-[#1D1D46] dark:text-white">Your Articles</h2>
-              <p className="text-xs text-gray-400 mt-0.5">Readers earn ₹50 per 1,000 reads</p>
+              <p className="text-xs text-gray-400 mt-0.5">Publish expert analysis and build authority in your sector</p>
             </div>
             <button onClick={() => setShowPublishForm(v => !v)} className="px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl hover:bg-blue-700 flex items-center gap-1.5">
               <FileText className="w-3.5 h-3.5" /> New Article
@@ -367,12 +375,12 @@ export default function AssociateSMEProDashboard() {
                 value={newTitle}
                 onChange={e => setNewTitle(e.target.value)}
                 placeholder="Article title…"
-                className="w-full px-3 py-2.5 text-sm border border-gray-200 dark:border-white/10 rounded-xl bg-gray-50 dark:bg-white/5 text-[#1D1D46] dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full px-3 py-2.5 text-sm border border-gray-200 dark:border-white/10 rounded-xl bg-gray-50 dark:bg-white/5 text-[#1D1D46] dark:text-white placeholder-gray-400 focus:outline-hidden focus:ring-2 focus:ring-blue-400"
               />
               <select
                 value={newSector}
                 onChange={e => setNewSector(e.target.value)}
-                className="w-full px-3 py-2.5 text-sm border border-gray-200 dark:border-white/10 rounded-xl bg-gray-50 dark:bg-white/5 text-[#1D1D46] dark:text-white focus:outline-none"
+                className="w-full px-3 py-2.5 text-sm border border-gray-200 dark:border-white/10 rounded-xl bg-gray-50 dark:bg-white/5 text-[#1D1D46] dark:text-white focus:outline-hidden"
               >
                 {SECTORS.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
               </select>
@@ -409,133 +417,100 @@ export default function AssociateSMEProDashboard() {
         </div>
       )}
 
-      {/* ── CONSULTING TAB ── */}
-      {activeTab === "consulting" && (
-        <div className="space-y-4">
-          <h2 className="font-bold text-[#1D1D46] dark:text-white">Consulting Inquiries</h2>
-          {inquiries.map((inq, i) => (
-            <div key={i} className="bg-white dark:bg-[#122238] rounded-2xl p-5 border border-gray-100 dark:border-white/5 shadow-sm flex items-start gap-4">
-              <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-950/20 flex items-center justify-center text-sm font-black text-blue-600 shrink-0">
-                {inq.name.charAt(0)}
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-bold text-[#1D1D46] dark:text-white">{inq.name}</p>
-                <p className="text-xs text-gray-500">{inq.company} · {inq.date}</p>
-                <p className="text-xs text-gray-600 dark:text-gray-300 mt-1 italic">"{inq.topic}"</p>
-              </div>
-              <div className="flex gap-2 shrink-0">
-                <button className="px-3 py-1.5 bg-blue-600 text-white text-[10px] font-bold rounded-xl hover:bg-blue-700">Accept</button>
-                <button className="px-3 py-1.5 bg-gray-100 dark:bg-white/5 text-gray-500 text-[10px] font-bold rounded-xl">Decline</button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* ── INSIGHTS TAB ── */}
+      {/* ── 3. INSIGHTS TAB ── */}
       {activeTab === "insights" && (
-        <div className="bg-white dark:bg-[#122238] rounded-2xl p-6 border border-gray-100 dark:border-white/5 shadow-sm">
-          <h2 className="font-bold text-[#1D1D46] dark:text-white mb-4 flex items-center gap-2">
-            <BarChart3 className="w-4 h-4 text-blue-500" /> Profile & Content Insights
-          </h2>
-          <div className="space-y-3 text-xs text-gray-500">
-            {[
-              { label: "Profile views (30 days)", value: "842" },
-              { label: "Expert Directory rank", value: "#12 in Chemicals" },
-              { label: "Avg reads per article", value: ((articles.reduce((a, b) => a + b.reads, 0)) / Math.max(articles.length, 1)).toFixed(0) },
-              { label: "Consulting conversion rate", value: "4.2%" },
-            ].map((s, i) => (
-              <div key={i} className="flex justify-between items-center py-2 border-b border-gray-50 dark:border-white/5 last:border-0">
-                <span>{s.label}</span>
-                <span className="font-bold text-[#1D1D46] dark:text-white">{s.value}</span>
-              </div>
-            ))}
-          </div>
-          <div className="mt-5 p-4 bg-blue-50 dark:bg-blue-950/10 rounded-2xl border border-blue-100 dark:border-blue-900/20 text-xs text-blue-700 dark:text-blue-400">
-            <p className="font-bold mb-1">💡 Upgrade to SME Elite for full analytics</p>
-            <p className="text-blue-600/70 dark:text-blue-500/70">Elite unlocks booking revenue dashboard, CEPA tariff advisory pricing, and full IGE content calendar.</p>
-            <button onClick={() => router.push(`/${locale}/profile/plans/sme`)} className="mt-2 text-[10px] font-black text-blue-600 hover:underline flex items-center gap-1">
-              View Elite Plan <ArrowRight className="w-3 h-3" />
-            </button>
-          </div>
+        <SmeAnalyticsHub currentTier="pro" role="sme" userName={displayName} />
+      )}
         </div>
       )}
 
-      {/* ── AFFILIATE TAB ── */}
-      {activeTab === "affiliate" && (
+      {/* ── 4. SETTINGS TAB ── */}
+      {activeTab === "settings" && (
         <div className="bg-white dark:bg-[#122238] rounded-2xl p-6 border border-gray-100 dark:border-white/5 shadow-sm space-y-6">
-          <div className="flex items-center justify-between border-b border-gray-50 dark:border-white/5 pb-4">
-            <div>
-              <h2 className="font-bold text-[#1D1D46] dark:text-white text-sm">Affiliate Partner Dashboard</h2>
-              <p className="text-xs text-gray-400 mt-0.5">Share IGE to earn cash commissions on reader purchases.</p>
+          <div>
+            <h2 className="font-bold text-[#1D1D46] dark:text-white text-base flex items-center gap-2">
+              <SettingsIcon className="w-4 h-4 text-blue-600" /> Profile & Account Settings
+            </h2>
+            <p className="text-xs text-gray-400 mt-0.5">Manage your public expert identity, verified details, and preferences</p>
+          </div>
+
+          {settingsSaved && (
+            <div className="p-3.5 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-300 rounded-xl text-xs font-bold flex items-center gap-2">
+              <Check className="w-4 h-4" /> Profile settings saved successfully!
             </div>
-            <span className="text-[10px] font-black uppercase bg-amber-500/10 text-amber-500 px-3 py-1 rounded-full border border-amber-500/20 tracking-wider">
-              ✦ Commission Eligible
-            </span>
-          </div>
+          )}
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { label: "Link Clicks", value: "142" },
-              { label: "Signups", value: "28" },
-              { label: "Conversions", value: "11" },
-              { label: "Earned Commissions", value: "₹12,450", green: true },
-            ].map((s, i) => (
-              <div key={i} className="p-4 bg-gray-50 dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/5">
-                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">{s.label}</p>
-                <p className={`text-xl font-black mt-1 ${s.green ? "text-emerald-600 animate-pulse" : "text-[#1D1D46] dark:text-white"}`}>{s.value}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="space-y-4">
-            <div>
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Your Affiliate Link</label>
-              <div className="flex gap-2 mt-1">
+          <form onSubmit={handleSaveSettings} className="space-y-4 text-xs">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-gray-600 dark:text-gray-300 font-bold mb-1">Full Name</label>
                 <input
                   type="text"
-                  readOnly
-                  value={profileUrl.replace("/sme/", "/ref?code=" + couponCode.toLowerCase())}
-                  className="flex-1 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 px-3.5 py-2.5 rounded-xl text-xs text-gray-500 font-mono focus:outline-none"
+                  value={editName}
+                  onChange={e => setEditName(e.target.value)}
+                  className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-hidden focus:ring-1 focus:ring-blue-500"
                 />
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(profileUrl.replace("/sme/", "/ref?code=" + couponCode.toLowerCase()));
-                    alert("Affiliate link copied!");
-                  }}
-                  className="px-4 py-2.5 bg-[#1D1D46] hover:bg-[#F0652E] text-white text-xs font-bold rounded-xl transition-all"
-                >
-                  Copy
-                </button>
+              </div>
+              <div>
+                <label className="block text-gray-600 dark:text-gray-300 font-bold mb-1">Designation</label>
+                <input
+                  type="text"
+                  value={editDesignation}
+                  onChange={e => setEditDesignation(e.target.value)}
+                  className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-hidden focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-gray-600 dark:text-gray-300 font-bold mb-1">Organisation</label>
+                <input
+                  type="text"
+                  value={editOrg}
+                  onChange={e => setEditOrg(e.target.value)}
+                  className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-hidden focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-600 dark:text-gray-300 font-bold mb-1">City</label>
+                <input
+                  type="text"
+                  value={editCity}
+                  onChange={e => setEditCity(e.target.value)}
+                  className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-hidden focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-600 dark:text-gray-300 font-bold mb-1">Country</label>
+                <input
+                  type="text"
+                  value={editCountry}
+                  onChange={e => setEditCountry(e.target.value)}
+                  className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-hidden focus:ring-1 focus:ring-blue-500"
+                />
               </div>
             </div>
 
             <div>
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Custom Invite Discount Coupon Code</label>
-              <div className="flex gap-2 mt-1">
-                <input
-                  type="text"
-                  readOnly
-                  value={couponCode}
-                  className="flex-1 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 px-3.5 py-2.5 rounded-xl text-xs text-gray-500 font-mono focus:outline-none"
-                />
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(couponCode);
-                    alert("Coupon code copied!");
-                  }}
-                  className="px-4 py-2.5 bg-[#1D1D46] hover:bg-[#F0652E] text-white text-xs font-bold rounded-xl transition-all"
-                >
-                  Copy
-                </button>
-              </div>
+              <label className="block text-gray-600 dark:text-gray-300 font-bold mb-1">Expert Bio</label>
+              <textarea
+                rows={3}
+                value={editBio}
+                onChange={e => setEditBio(e.target.value)}
+                className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-hidden focus:ring-1 focus:ring-blue-500"
+              />
             </div>
-          </div>
 
-          <div className="p-4 bg-emerald-50 dark:bg-emerald-950/10 rounded-2xl border border-emerald-100 dark:border-emerald-900/20 text-xs">
-            <p className="font-bold text-emerald-800 dark:text-emerald-400 mb-1">🏦 Commission Earnings Model</p>
-            <p className="text-gray-600 dark:text-gray-400">As a paid member, your commissions are paid directly in cash via bank transfer or UPI. Payouts are made automatically on the 1st of every month.</p>
-          </div>
+            <div className="pt-2">
+              <button
+                type="submit"
+                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors"
+              >
+                Save Changes
+              </button>
+            </div>
+          </form>
         </div>
       )}
     </div>

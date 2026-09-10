@@ -1,20 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
 import {
   User, Bell, Shield, Globe, Eye, EyeOff, Save, ChevronRight,
-  Moon, Sun, Building2, Lock, Zap, ArrowRight, Clock, Crown,
-  BookOpen, Star, Users, Briefcase, FileText, Key, Share2, Clipboard,
-  Mail, Phone, ShieldAlert, Check, HelpCircle
+  Moon, Sun, Building2, Lock, Zap, ArrowRight, Clock, Star,
+  Briefcase, FileText, Key, Share2, Clipboard,
+  Mail, Phone, ShieldAlert, Check, HelpCircle, Plus, Trash2, Download
 } from "lucide-react";
+import { SECTORS } from "@/lib/sectors";
 
 type SettingsTab = "account" | "interests" | "notifications" | "privacy" | "preferences" | "security" | "role" | "upgrade";
 
 function Toggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
   return (
-    <button onClick={onToggle} type="button" className={`w-12 h-6 rounded-full relative transition-colors shrink-0 ${on ? "bg-emerald-600" : "bg-gray-200 dark:bg-white/10"}`}>
+    <button
+      onClick={onToggle}
+      type="button"
+      className={`w-12 h-6 rounded-full relative transition-colors shrink-0 ${on ? "bg-emerald-600" : "bg-gray-200 dark:bg-white/10"}`}
+    >
       <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${on ? "translate-x-7" : "translate-x-1"}`} />
     </button>
   );
@@ -33,104 +38,228 @@ function Row({ label, desc, children }: { label: string; desc?: string; children
 }
 
 export default function SettingsPage() {
-  const { user, updateOnboarding, logout } = useAuth();
+  const { user, updateOnboarding } = useAuth();
   const [activeTab, setActiveTab] = useState<SettingsTab>("account");
-  const [showPass, setShowPass] = useState(false);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-  // Form states matching user
+  // Form states matching user profile
   const [displayName, setDisplayName] = useState(user?.name || "");
-  const [bio, setBio] = useState(user?.onboardingForm?.aboutText || "");
-  const [designation, setDesignation] = useState(user?.onboardingForm?.currentDesignation || "");
+  const [bio, setBio] = useState(user?.onboardingForm?.bio || user?.onboardingForm?.aboutText || "");
+  const [designation, setDesignation] = useState(user?.onboardingForm?.currentDesignation || user?.onboardingForm?.profession || "");
+  const [organisation, setOrganisation] = useState(user?.onboardingForm?.organisation || "");
   const [email, setEmail] = useState(user?.email || "");
-  const [mobile, setMobile] = useState(user?.mobile || "");
+  const [mobile, setMobile] = useState(user?.mobile || user?.onboardingForm?.mobile || "");
   const [linkedin, setLinkedin] = useState(user?.onboardingForm?.linkedinUrl || "");
-  
+  const [city, setCity] = useState(user?.onboardingForm?.city || "Mumbai");
+  const [country, setCountry] = useState(user?.onboardingForm?.country || "India");
+
+  // Sectors and countries
+  const [userSectors, setUserSectors] = useState<string[]>(user?.sectors || ["logistics", "pharma", "manufacturing"]);
+  const [userCountries, setUserCountries] = useState<string[]>(user?.countries || ["India", "UAE", "Germany"]);
+  const [newSectorInput, setNewSectorInput] = useState("");
+  const [newCountryInput, setNewCountryInput] = useState("");
+  const [showAddSector, setShowAddSector] = useState(false);
+  const [showAddCountry, setShowAddCountry] = useState(false);
+
   // Toggles & Preferences State
-  const [notifs, setNotifs] = useState({ breaking: true, digest: true, sme: true, events: true, messages: true });
-  const [privacy, setPrivacy] = useState({ publicProfile: true, showSectors: true, showCountries: false, readingHistoryPublic: false });
-  const [prefs, setPrefs] = useState({ darkMode: false, emailDigest: true, language: "English", commentModeration: "auto" });
+  const [notifs, setNotifs] = useState({
+    digest: true,
+    breaking: true,
+    weekly: true,
+    sectorReports: true,
+  });
+
+  const [privacy, setPrivacy] = useState({
+    publicProfile: true,
+    showSectors: true,
+    showCountries: false,
+    readingHistoryPublic: false,
+  });
+
+  const [prefs, setPrefs] = useState({
+    darkMode: false,
+    emailDigest: true,
+    language: "English",
+    commentModeration: "auto",
+  });
+
   const [mfaEnabled, setMfaEnabled] = useState(false);
-
-  // SME specifics
-  const [consultingOpen, setConsultingOpen] = useState(user?.onboardingForm?.consultingAvailable || false);
   const [smeCategory, setSmeCategory] = useState("Trade Analysis");
-
-  // Leader specifics
   const [companyLinkPrivacy, setCompanyLinkPrivacy] = useState(true);
-
-  // Associate SME specifics
-  const [copiedLink, setCopiedLink] = useState(false);
-
-  // Company Signatory
   const [signatoryEmailInput, setSignatoryEmailInput] = useState("");
 
-  if (!user) return null;
+  useEffect(() => {
+    if (user) {
+      setDisplayName(user.name || "");
+      setEmail(user.email || "");
+      if (user.onboardingForm) {
+        const f = user.onboardingForm;
+        setBio(f.bio || f.aboutText || "");
+        setDesignation(f.currentDesignation || f.profession || "");
+        setOrganisation(f.organisation || "");
+        setLinkedin(f.linkedinUrl || "");
+        setCity(f.city || "Mumbai");
+        setCountry(f.country || "India");
+      }
+      if (user.sectors && user.sectors.length > 0) {
+        setUserSectors(user.sectors);
+      }
+      if (user.countries && user.countries.length > 0) {
+        setUserCountries(user.countries);
+      }
+    }
+  }, [user]);
 
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const updatedForm = {
-      ...user.onboardingForm,
-      aboutText: bio,
-      currentDesignation: designation,
-      linkedinUrl: linkedin,
-      consultingAvailable: consultingOpen,
-    };
-    await updateOnboarding({
-      name: displayName,
-      email,
-      mobile,
-      onboardingForm: updatedForm,
-    });
-    triggerSuccess("Settings updated successfully!");
+  // Sync dark theme with document root
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const isDark = document.documentElement.classList.contains("dark");
+      setPrefs(p => ({ ...p, darkMode: isDark }));
+    }
+  }, []);
+
+  const handleToggleTheme = () => {
+    const nextDark = !prefs.darkMode;
+    setPrefs(p => ({ ...p, darkMode: nextDark }));
+    if (nextDark) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+    triggerSuccess(`Theme changed to ${nextDark ? "Dark" : "Light"} mode`);
   };
+
+  if (!user) return null;
 
   const triggerSuccess = (msg: string) => {
     setSuccessMsg(msg);
     setTimeout(() => setSuccessMsg(null), 3000);
   };
 
-  const copyAffiliate = () => {
-    setCopiedLink(true);
-    navigator.clipboard.writeText(`https://igenews.com/ref?code=associate_${user.id}`);
-    setTimeout(() => setCopiedLink(false), 2000);
+  const handleSaveAccount = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const updatedForm = {
+      ...user.onboardingForm,
+      bio,
+      aboutText: bio,
+      currentDesignation: designation,
+      profession: designation,
+      organisation,
+      linkedinUrl: linkedin,
+      city,
+      country,
+      mobile,
+    };
+
+    await updateOnboarding({
+      name: displayName,
+      email,
+      mobile,
+      sectors: userSectors,
+      countries: userCountries,
+      onboardingForm: updatedForm,
+    });
+    triggerSuccess("Profile & account settings saved successfully!");
   };
 
-  const userRole = user.onboardingRole || "reader";
+  const handleAddSector = () => {
+    if (!newSectorInput.trim()) return;
+    const clean = newSectorInput.trim().toLowerCase();
+    if (!userSectors.includes(clean)) {
+      const updated = [...userSectors, clean];
+      setUserSectors(updated);
+      updateOnboarding({ sectors: updated });
+      triggerSuccess(`Added sector: ${clean}`);
+    }
+    setNewSectorInput("");
+    setShowAddSector(false);
+  };
 
-  const tabsConfig: { id: SettingsTab; icon: any; label: string; badge?: string }[] = [
+  const handleRemoveSector = (sec: string) => {
+    const updated = userSectors.filter(s => s !== sec);
+    setUserSectors(updated);
+    updateOnboarding({ sectors: updated });
+    triggerSuccess(`Removed sector: ${sec}`);
+  };
+
+  const handleAddCountry = () => {
+    if (!newCountryInput.trim()) return;
+    const clean = newCountryInput.trim();
+    if (!userCountries.includes(clean)) {
+      const updated = [...userCountries, clean];
+      setUserCountries(updated);
+      updateOnboarding({ countries: updated });
+      triggerSuccess(`Added country: ${clean}`);
+    }
+    setNewCountryInput("");
+    setShowAddCountry(false);
+  };
+
+  const handleRemoveCountry = (c: string) => {
+    const updated = userCountries.filter(item => item !== c);
+    setUserCountries(updated);
+    updateOnboarding({ countries: updated });
+    triggerSuccess(`Removed country: ${c}`);
+  };
+
+  const handleDownloadGDPR = () => {
+    const data = {
+      name: displayName,
+      email,
+      mobile,
+      role: user.onboardingRole || "reader",
+      sectors: userSectors,
+      countries: userCountries,
+      profileDetails: user.onboardingForm,
+      exportedAt: new Date().toISOString(),
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `igenews_profile_${user.id || "user"}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    triggerSuccess("GDPR Profile dump downloaded successfully!");
+  };
+
+  const handleSendOTP = () => {
+    triggerSuccess(`Security password verification OTP sent to ${email}`);
+  };
+
+  const userRole = user.onboardingRole || user.accountType || "reader";
+
+  const tabsConfig: { id: SettingsTab; icon: any; label: string }[] = [
     { id: "account", icon: User, label: "Account Customiser" },
     { id: "interests", icon: Globe, label: "Interests & Sectors" },
     { id: "notifications", icon: Bell, label: "Digests & Alerts" },
     { id: "privacy", icon: Shield, label: "Privacy Controls" },
     { id: "preferences", icon: Globe, label: "Language & Theme" },
     { id: "security", icon: Key, label: "Security & MFA" },
-    { id: "role", icon: Star, label: "Role Extensions" },
-    { id: "upgrade", icon: Zap, label: "Upgrade Plan", badge: "FREE" },
+    { id: "role", icon: Star, label: "Role Options" },
+    { id: "upgrade", icon: Zap, label: "Upgrade Plans" },
   ];
 
   return (
     <div className="p-5 md:p-8 lg:p-10 max-w-6xl mx-auto pb-24 text-left">
-      
       {/* Header */}
       <div className="mb-8 flex justify-between items-center flex-wrap gap-4">
         <div>
-          <span className="px-3 py-1 bg-[#C55A11] text-white text-[10px] font-black rounded-lg uppercase tracking-wider inline-flex items-center gap-1.5 mb-2.5">
-            <Star className="w-3.5 h-3.5 fill-white text-white" /> FREE MEMBER
+          <span className="px-3 py-1 bg-[#1D1D46] text-white text-[10px] font-black rounded-lg uppercase tracking-wider inline-flex items-center gap-1.5 mb-2.5">
+            <Star className="w-3.5 h-3.5 fill-white text-white" /> Settings Center
           </span>
-          <h1 className="text-3xl font-bold text-[#1D1D46] dark:text-white" style={{ fontFamily: "var(--font-display)" }}>
-            Profile Settings
+          <h1 className="text-3xl font-bold text-[#1D1D46] dark:text-white">
+            Profile & Account Settings
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            Configure preferences, contact details, and role-specific customizers.
+            Manage your credentials, followed sectors, notification alerts, and security.
           </p>
         </div>
 
-        {/* Status Indicator */}
         <div className="px-4 py-2 bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl">
-          <span className="text-[10px] text-gray-400 block font-bold uppercase tracking-wider">Profile Status</span>
-          <span className="text-xs font-bold text-amber-600">
-            {userRole === "reader" ? "Free Reader" : "Free & Unverified — Self-Declared"}
+          <span className="text-[10px] text-gray-400 block font-bold uppercase tracking-wider">Account Role</span>
+          <span className="text-xs font-bold text-emerald-600 capitalize">
+            {userRole.replace("-", " ")} Member
           </span>
         </div>
       </div>
@@ -143,7 +272,6 @@ export default function SettingsPage() {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
-        
         {/* Sidebar Nav */}
         <div className="lg:col-span-1">
           <div className="bg-white dark:bg-[#122238] rounded-3xl p-3 shadow-sm border border-gray-100 dark:border-white/5 space-y-1">
@@ -153,19 +281,12 @@ export default function SettingsPage() {
                 onClick={() => setActiveTab(t.id)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all ${
                   activeTab === t.id
-                    ? "bg-[#1D1D46] text-white shadow dark:bg-[#F0652E]"
+                    ? "bg-[#1D1D46] text-white shadow-sm dark:bg-[#F0652E]"
                     : "text-gray-500 hover:bg-[#f4f7fb] hover:text-[#1D1D46] dark:text-gray-400 dark:hover:bg-white/5"
                 }`}
               >
                 <t.icon className="w-4 h-4 shrink-0" />
                 <span>{t.label}</span>
-                {t.badge && (
-                  <span className={`ml-auto text-[9px] font-black px-2 py-0.5 rounded-md ${
-                    activeTab === t.id ? "bg-white text-[#1D1D46]" : "bg-[#C55A11] text-white"
-                  }`}>
-                    {t.badge}
-                  </span>
-                )}
               </button>
             ))}
           </div>
@@ -175,43 +296,75 @@ export default function SettingsPage() {
         <div className="lg:col-span-3">
           <div className="bg-white dark:bg-[#122238] rounded-[32px] p-6 md:p-8 shadow-sm border border-gray-100 dark:border-white/5 min-h-[500px]">
             
-            {/* ── ACCOUNT TAB ── */}
+            {/* ── 1. ACCOUNT TAB ── */}
             {activeTab === "account" && (
-              <form onSubmit={handleSave} className="space-y-6">
+              <form onSubmit={handleSaveAccount} className="space-y-6">
                 <div>
                   <h3 className="text-base font-bold text-[#1D1D46] dark:text-white border-b border-gray-100 dark:border-white/5 pb-2.5 mb-5">
-                    1. Profile Customiser
+                    1. Profile Details
                   </h3>
                   <div className="space-y-4">
-                    <div>
-                      <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-1.5">Display Name</label>
-                      <input 
-                        type="text" 
-                        value={displayName}
-                        onChange={(e) => setDisplayName(e.target.value)}
-                        className="w-full px-4 py-3 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs text-[#1D1D46] dark:text-white font-semibold border-none focus:outline-none"
-                      />
-                    </div>
-                    {userRole !== "reader" && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-1.5">Designation</label>
+                        <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-1.5">Full Name</label>
+                        <input 
+                          type="text" 
+                          value={displayName}
+                          onChange={(e) => setDisplayName(e.target.value)}
+                          className="w-full px-4 py-3 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs text-[#1D1D46] dark:text-white font-semibold border border-transparent focus:border-blue-500 focus:outline-hidden"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-1.5">Designation / Role</label>
                         <input 
                           type="text" 
                           value={designation}
                           onChange={(e) => setDesignation(e.target.value)}
-                          placeholder="e.g. Chief Director"
-                          className="w-full px-4 py-3 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs text-[#1D1D46] dark:text-white font-semibold border-none focus:outline-none"
+                          placeholder="e.g. Senior Trade Analyst"
+                          className="w-full px-4 py-3 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs text-[#1D1D46] dark:text-white font-semibold border border-transparent focus:border-blue-500 focus:outline-hidden"
                         />
                       </div>
-                    )}
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-1.5">Organisation</label>
+                        <input 
+                          type="text" 
+                          value={organisation}
+                          onChange={(e) => setOrganisation(e.target.value)}
+                          placeholder="Company or Institution"
+                          className="w-full px-4 py-3 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs text-[#1D1D46] dark:text-white font-semibold border border-transparent focus:border-blue-500 focus:outline-hidden"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-1.5">City</label>
+                        <input 
+                          type="text" 
+                          value={city}
+                          onChange={(e) => setCity(e.target.value)}
+                          className="w-full px-4 py-3 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs text-[#1D1D46] dark:text-white font-semibold border border-transparent focus:border-blue-500 focus:outline-hidden"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-1.5">Country</label>
+                        <input 
+                          type="text" 
+                          value={country}
+                          onChange={(e) => setCountry(e.target.value)}
+                          className="w-full px-4 py-3 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs text-[#1D1D46] dark:text-white font-semibold border border-transparent focus:border-blue-500 focus:outline-hidden"
+                        />
+                      </div>
+                    </div>
+
                     <div>
-                      <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-1.5">Bio Update</label>
+                      <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-1.5">Bio / Summary</label>
                       <textarea 
-                        rows={4}
+                        rows={3}
                         value={bio}
                         onChange={(e) => setBio(e.target.value)}
-                        placeholder="Write your professional bio..."
-                        className="w-full px-4 py-3 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs text-[#1D1D46] dark:text-white font-semibold border-none focus:outline-none resize-none"
+                        placeholder="Write a brief professional summary..."
+                        className="w-full px-4 py-3 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs text-[#1D1D46] dark:text-white font-semibold border border-transparent focus:border-blue-500 focus:outline-hidden resize-none"
                       />
                     </div>
                   </div>
@@ -219,7 +372,7 @@ export default function SettingsPage() {
 
                 <div>
                   <h3 className="text-base font-bold text-[#1D1D46] dark:text-white border-b border-gray-100 dark:border-white/5 pb-2.5 mb-5">
-                    2. Contact Details
+                    2. Contact Details & Social
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -228,7 +381,7 @@ export default function SettingsPage() {
                         type="email" 
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full px-4 py-3 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs text-[#1D1D46] dark:text-white font-semibold border-none focus:outline-none"
+                        className="w-full px-4 py-3 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs text-[#1D1D46] dark:text-white font-semibold border border-transparent focus:border-blue-500 focus:outline-hidden"
                       />
                     </div>
                     <div>
@@ -237,40 +390,32 @@ export default function SettingsPage() {
                         type="text" 
                         value={mobile}
                         onChange={(e) => setMobile(e.target.value)}
-                        className="w-full px-4 py-3 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs text-[#1D1D46] dark:text-white font-semibold border-none focus:outline-none"
+                        placeholder="+91 98765 43210"
+                        className="w-full px-4 py-3 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs text-[#1D1D46] dark:text-white font-semibold border border-transparent focus:border-blue-500 focus:outline-hidden"
                       />
                     </div>
                   </div>
                   <div className="mt-4">
-                    <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-1.5">LinkedIn URL</label>
+                    <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-1.5">LinkedIn Profile URL</label>
                     <input 
                       type="url" 
                       value={linkedin}
                       onChange={(e) => setLinkedin(e.target.value)}
                       placeholder="https://linkedin.com/in/username"
-                      className="w-full px-4 py-3 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs text-[#1D1D46] dark:text-white font-semibold border-none"
+                      className="w-full px-4 py-3 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs text-[#1D1D46] dark:text-white font-semibold border border-transparent focus:border-blue-500 focus:outline-hidden"
                     />
                   </div>
                 </div>
 
-                <div className="pt-6 border-t border-gray-100 dark:border-white/5 flex flex-wrap justify-between items-center gap-4">
-                  <div className="space-y-1">
-                    <h4 className="text-xs font-bold text-red-500">Account Management</h4>
-                    <p className="text-[10px] text-gray-400">Temporarily suspend or permanently delete your account profile.</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <button type="button" onClick={() => triggerSuccess("Account temporarily deactivated.")} className="px-3.5 py-2 text-[10px] font-bold bg-amber-500/10 text-amber-600 rounded-xl hover:bg-amber-500/20">Deactivate</button>
-                    <button type="button" onClick={() => triggerSuccess("Profile deleted.")} className="px-3.5 py-2 text-[10px] font-bold bg-red-500/10 text-red-600 rounded-xl hover:bg-red-500/20">Delete Profile</button>
-                  </div>
+                <div className="pt-4">
+                  <button type="submit" className="px-6 py-3 bg-[#1D1D46] hover:bg-[#0642BA] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-md">
+                    <Save className="w-4 h-4" /> Save Account Changes
+                  </button>
                 </div>
-
-                <button type="submit" className="px-6 py-3 bg-[#1D1D46] hover:bg-[#0642BA] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-md">
-                  <Save className="w-4 h-4" /> Save Account Changes
-                </button>
               </form>
             )}
 
-            {/* ── INTERESTS TAB ── */}
+            {/* ── 2. INTERESTS TAB ── */}
             {activeTab === "interests" && (
               <div className="space-y-6">
                 <div>
@@ -278,206 +423,287 @@ export default function SettingsPage() {
                     Sector & Interest Manager
                   </h3>
                   <p className="text-xs text-gray-400 mb-6 leading-relaxed">
-                    Update followed sectors, countries of interest, and news alignment to direct your personalized intelligence feed. (Free Reader plan: follow up to 10 sectors maximum).
+                    Personalize your daily intelligence stream by adding or removing trade sectors and target countries.
                   </p>
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-3">Sectors Followed</label>
-                  <div className="flex flex-wrap gap-2">
-                    {(user.sectors || []).map((s) => (
-                      <span key={s} className="px-3 py-1.5 bg-[#1D1D46] text-white text-xs font-bold rounded-xl flex items-center gap-1.5">
+                  <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-3">
+                    Followed Sectors ({userSectors.length})
+                  </label>
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {userSectors.map((s) => (
+                      <span key={s} className="px-3 py-1.5 bg-[#1D1D46] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 capitalize">
                         <span>{s.replace("-", " ")}</span>
-                        <button onClick={() => triggerSuccess("Sector removed.")} className="hover:text-red-300 font-bold">×</button>
+                        <button type="button" onClick={() => handleRemoveSector(s)} className="hover:text-red-300 font-bold ml-1">×</button>
                       </span>
                     ))}
-                    <button onClick={() => triggerSuccess("Add Sector modal loaded.")} className="px-3 py-1.5 border-2 border-dashed border-[#1D1D46] text-[#1D1D46] dark:border-white/20 dark:text-white text-xs font-bold rounded-xl hover:bg-[#f4f7fb] dark:hover:bg-white/5">
-                      + Add Sector (Limit 10)
-                    </button>
+                    {!showAddSector && (
+                      <button
+                        type="button"
+                        onClick={() => setShowAddSector(true)}
+                        className="px-3 py-1.5 border-2 border-dashed border-[#1D1D46] text-[#1D1D46] dark:border-white/20 dark:text-white text-xs font-bold rounded-xl hover:bg-[#f4f7fb] dark:hover:bg-white/5 flex items-center gap-1"
+                      >
+                        <Plus className="w-3.5 h-3.5" /> Add Sector
+                      </button>
+                    )}
                   </div>
+
+                  {showAddSector && (
+                    <div className="flex gap-2 max-w-md mt-2">
+                      <select
+                        value={newSectorInput}
+                        onChange={(e) => setNewSectorInput(e.target.value)}
+                        className="flex-1 px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-xs font-bold text-[#1D1D46] dark:text-white focus:outline-hidden"
+                      >
+                        <option value="">Select a sector to add...</option>
+                        {SECTORS.map(sec => (
+                          <option key={sec.id} value={sec.id}>{sec.label}</option>
+                        ))}
+                      </select>
+                      <button type="button" onClick={handleAddSector} className="px-4 py-2 bg-emerald-600 text-white text-xs font-bold rounded-xl hover:bg-emerald-700">Add</button>
+                      <button type="button" onClick={() => setShowAddSector(false)} className="px-3 py-2 bg-gray-200 dark:bg-white/10 text-xs font-bold rounded-xl">Cancel</button>
+                    </div>
+                  )}
                 </div>
 
-                <div>
-                  <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-3">Countries of Interest</label>
-                  <div className="flex flex-wrap gap-2">
-                    {(user.countries || []).map((c) => (
+                <div className="pt-4 border-t border-gray-100 dark:border-white/5">
+                  <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-3">
+                    Target Countries ({userCountries.length})
+                  </label>
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {userCountries.map((c) => (
                       <span key={c} className="px-3 py-1.5 bg-[#F0652E] text-white text-xs font-bold rounded-xl flex items-center gap-1.5">
                         <span>{c}</span>
-                        <button onClick={() => triggerSuccess("Country removed.")} className="hover:text-red-100 font-bold">×</button>
+                        <button type="button" onClick={() => handleRemoveCountry(c)} className="hover:text-red-100 font-bold ml-1">×</button>
                       </span>
                     ))}
-                    <button onClick={() => triggerSuccess("Add Country modal loaded.")} className="px-3 py-1.5 border-2 border-dashed border-[#F0652E] text-[#F0652E] text-xs font-bold rounded-xl hover:bg-orange-50">
-                      + Add Country
-                    </button>
+                    {!showAddCountry && (
+                      <button
+                        type="button"
+                        onClick={() => setShowAddCountry(true)}
+                        className="px-3 py-1.5 border-2 border-dashed border-[#F0652E] text-[#F0652E] text-xs font-bold rounded-xl hover:bg-orange-50 flex items-center gap-1"
+                      >
+                        <Plus className="w-3.5 h-3.5" /> Add Country
+                      </button>
+                    )}
                   </div>
+
+                  {showAddCountry && (
+                    <div className="flex gap-2 max-w-md mt-2">
+                      <input
+                        type="text"
+                        placeholder="e.g. United Kingdom, Singapore..."
+                        value={newCountryInput}
+                        onChange={(e) => setNewCountryInput(e.target.value)}
+                        className="flex-1 px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-xs font-bold text-[#1D1D46] dark:text-white focus:outline-hidden"
+                      />
+                      <button type="button" onClick={handleAddCountry} className="px-4 py-2 bg-[#F0652E] text-white text-xs font-bold rounded-xl hover:bg-orange-600">Add</button>
+                      <button type="button" onClick={() => setShowAddCountry(false)} className="px-3 py-2 bg-gray-200 dark:bg-white/10 text-xs font-bold rounded-xl">Cancel</button>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
 
-            {/* ── NOTIFICATIONS TAB ── */}
+            {/* ── 3. NOTIFICATIONS TAB ── */}
             {activeTab === "notifications" && (
               <div className="space-y-6">
                 <div>
                   <h3 className="text-base font-bold text-[#1D1D46] dark:text-white border-b border-gray-100 dark:border-white/5 pb-2.5 mb-5">
-                    Newsletter Preferences & Alerts
+                    Newsletter Preferences & Email Digests
                   </h3>
                   <p className="text-xs text-gray-400 mb-6">
-                    Manage digest frequencies and breaking news push alerts.
+                    Control which notifications and email reports reach your registered inbox.
                   </p>
                 </div>
 
                 <div className="divide-y divide-gray-100 dark:divide-white/5">
-                  <Row label="Daily Trade Digest" desc="Summary email digest sent morning calendar hours (Free: summary version only).">
-                    <Toggle on={notifs.digest} onToggle={() => setNotifs(prev => ({ ...prev, digest: !prev.digest }))} />
+                  <Row label="Daily Morning Trade Brief" desc="Curated summary of policy changes, CEPA tariff revisions, and bilateral market news.">
+                    <Toggle on={notifs.digest} onToggle={() => {
+                      setNotifs(p => ({ ...p, digest: !p.digest }));
+                      triggerSuccess(`Daily digest ${!notifs.digest ? "enabled" : "disabled"}`);
+                    }} />
                   </Row>
-                  <Row label="Breaking News Alerts" desc="Instant alerts for critical updates across followed sectors.">
-                    <Toggle on={notifs.breaking} onToggle={() => setNotifs(prev => ({ ...prev, breaking: !prev.breaking }))} />
+                  <Row label="Breaking Trade Alerts" desc="Immediate push updates for major trade treaty ratifications and export updates.">
+                    <Toggle on={notifs.breaking} onToggle={() => {
+                      setNotifs(p => ({ ...p, breaking: !p.breaking }));
+                      triggerSuccess(`Breaking alerts ${!notifs.breaking ? "enabled" : "disabled"}`);
+                    }} />
                   </Row>
-                  <Row label="Weekly Intelligence Reports" desc="Bilateral sector intelligence updates.">
-                    <Toggle on={notifs.events} onToggle={() => setNotifs(prev => ({ ...prev, events: !prev.events }))} />
-                  </Row>
-                </div>
-              </div>
-            )}
-
-            {/* ── PRIVACY TAB ── */}
-            {activeTab === "privacy" && (
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-base font-bold text-[#1D1D46] dark:text-white border-b border-gray-100 dark:border-white/5 pb-2.5 mb-5">
-                    Privacy Controls
-                  </h3>
-                </div>
-
-                <div className="divide-y divide-gray-100 dark:divide-white/5">
-                  <Row label="Public Profile Visibility" desc="Controls whether your profile URL can be viewed publicly by guests.">
-                    <Toggle on={privacy.publicProfile} onToggle={() => setPrivacy(prev => ({ ...prev, publicProfile: !prev.publicProfile }))} />
-                  </Row>
-                  <Row label="Display Followed Sectors" desc="Toggle sector interest chips visibility on your public landing page.">
-                    <Toggle on={privacy.showSectors} onToggle={() => setPrivacy(prev => ({ ...prev, showSectors: !prev.showSectors }))} />
-                  </Row>
-                </div>
-
-                <div className="pt-6 border-t border-gray-100 dark:border-white/5">
-                  <h4 className="text-xs font-bold text-[#1D1D46] dark:text-white mb-2">GDPR Data Portability</h4>
-                  <p className="text-[11px] text-gray-400 mb-4 leading-normal">
-                    Download a full dump of your self-declared metadata and activity stats index in a standard JSON format.
-                  </p>
-                  <button type="button" onClick={() => triggerSuccess("Profile dump downloaded.")} className="px-4 py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 text-xs font-bold text-[#1D1D46] dark:text-white rounded-xl">
-                    Download My Profile Data (JSON)
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* ── PREFERENCES TAB ── */}
-            {activeTab === "preferences" && (
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-base font-bold text-[#1D1D46] dark:text-white border-b border-gray-100 dark:border-white/5 pb-2.5 mb-5">
-                    Preferences & Theme
-                  </h3>
-                </div>
-
-                <div className="space-y-5">
-                  <Row label="Language Settings" desc="Choose primary localization interface language.">
-                    <select 
-                      value={prefs.language} 
-                      onChange={(e) => setPrefs(prev => ({ ...prev, language: e.target.value }))}
-                      className="px-3 py-2 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs font-bold text-[#1D1D46] dark:text-white border-none focus:outline-none"
-                    >
-                      <option value="English">English</option>
-                      <option value="Hindi">Hindi (हिंदी)</option>
-                    </select>
-                  </Row>
-
-                  <Row label="Dark Theme Interface" desc="Switch app layout contrast themes.">
-                    <div className="flex items-center gap-2">
-                      <Sun className="w-4 h-4 text-[#F0652E]" />
-                      <Toggle on={prefs.darkMode} onToggle={() => setPrefs(prev => ({ ...prev, darkMode: !prev.darkMode }))} />
-                      <Moon className="w-4 h-4 text-[#1D1D46]" />
-                    </div>
-                  </Row>
-                </div>
-              </div>
-            )}
-
-            {/* ── SECURITY TAB ── */}
-            {activeTab === "security" && (
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-base font-bold text-[#1D1D46] dark:text-white border-b border-gray-100 dark:border-white/5 pb-2.5 mb-5">
-                    Security & Account Protection
-                  </h3>
-                </div>
-
-                <div className="space-y-5">
-                  <div className="bg-[#f4f7fb] dark:bg-white/5 p-5 rounded-2xl">
-                    <h4 className="text-xs font-bold text-[#1D1D46] dark:text-white mb-2">Password Update (Email OTP Verification)</h4>
-                    <p className="text-[10px] text-gray-400 mb-4 leading-normal">
-                      Update your login credential. Triggering will send an security OTP code to your registered email {user.email}.
-                    </p>
-                    <button type="button" onClick={() => triggerSuccess("Verification OTP code sent to your registered email.")} className="px-4 py-2.5 bg-[#1D1D46] text-white text-xs font-bold rounded-xl">
-                      Send Password Reset OTP
-                    </button>
-                  </div>
-
-                  <Row label="Google Authenticator MFA (TOTP)" desc="Add multi-factor device authentication overrides to login screens.">
-                    <Toggle on={mfaEnabled} onToggle={() => {
-                      setMfaEnabled(!mfaEnabled);
-                      triggerSuccess(mfaEnabled ? "MFA disabled." : "MFA setup initialized. Scan key dynamically.");
+                  <Row label="Weekly Intelligence Overview" desc="Comprehensive Friday breakdown of shipping rates, port clearances, and sector indices.">
+                    <Toggle on={notifs.weekly} onToggle={() => {
+                      setNotifs(p => ({ ...p, weekly: !p.weekly }));
+                      triggerSuccess(`Weekly report ${!notifs.weekly ? "enabled" : "disabled"}`);
                     }} />
                   </Row>
                 </div>
               </div>
             )}
 
-            {/* ── ROLE EXTENSIONS TAB ── */}
+            {/* ── 4. PRIVACY TAB ── */}
+            {activeTab === "privacy" && (
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-base font-bold text-[#1D1D46] dark:text-white border-b border-gray-100 dark:border-white/5 pb-2.5 mb-5">
+                    Privacy Controls & Data Portability
+                  </h3>
+                </div>
+
+                <div className="divide-y divide-gray-100 dark:divide-white/5">
+                  <Row label="Public Profile Visibility" desc="Allow guest visitors and search engines to discover your public profile page.">
+                    <Toggle on={privacy.publicProfile} onToggle={() => {
+                      setPrivacy(p => ({ ...p, publicProfile: !p.publicProfile }));
+                      triggerSuccess(`Public profile visibility ${!privacy.publicProfile ? "enabled" : "disabled"}`);
+                    }} />
+                  </Row>
+                  <Row label="Show Followed Sectors" desc="Display sector tags publicly on your landing profile.">
+                    <Toggle on={privacy.showSectors} onToggle={() => {
+                      setPrivacy(p => ({ ...p, showSectors: !p.showSectors }));
+                      triggerSuccess(`Followed sectors display ${!privacy.showSectors ? "enabled" : "disabled"}`);
+                    }} />
+                  </Row>
+                  <Row label="Reading History Visibility" desc="Make your bookmarked articles visible to peer readers on the network.">
+                    <Toggle on={privacy.readingHistoryPublic} onToggle={() => {
+                      setPrivacy(p => ({ ...p, readingHistoryPublic: !p.readingHistoryPublic }));
+                      triggerSuccess(`Reading history ${!privacy.readingHistoryPublic ? "made public" : "made private"}`);
+                    }} />
+                  </Row>
+                </div>
+
+                <div className="pt-6 border-t border-gray-100 dark:border-white/5">
+                  <h4 className="text-xs font-bold text-[#1D1D46] dark:text-white mb-1">GDPR & Data Portability</h4>
+                  <p className="text-[11px] text-gray-400 mb-4 leading-normal">
+                    Download an archived copy of your account profile, preferences, and saved indices in standard JSON format.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleDownloadGDPR}
+                    className="px-4 py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 text-xs font-bold text-[#1D1D46] dark:text-white rounded-xl flex items-center gap-2"
+                  >
+                    <Download className="w-4 h-4" /> Download Profile Data (JSON)
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* ── 5. PREFERENCES TAB ── */}
+            {activeTab === "preferences" && (
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-base font-bold text-[#1D1D46] dark:text-white border-b border-gray-100 dark:border-white/5 pb-2.5 mb-5">
+                    Language & Theme Preferences
+                  </h3>
+                </div>
+
+                <div className="space-y-5">
+                  <Row label="Interface Language" desc="Choose your primary portal display language.">
+                    <select 
+                      value={prefs.language} 
+                      onChange={(e) => {
+                        setPrefs(p => ({ ...p, language: e.target.value }));
+                        triggerSuccess(`Language updated to ${e.target.value}`);
+                      }}
+                      className="px-3 py-2 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs font-bold text-[#1D1D46] dark:text-white border-none focus:outline-hidden"
+                    >
+                      <option value="English">English</option>
+                      <option value="Hindi">Hindi (हिंदी)</option>
+                    </select>
+                  </Row>
+
+                  <Row label="Dark Theme Interface" desc="Switch between sleek dark mode and high-contrast light theme.">
+                    <div className="flex items-center gap-2">
+                      <Sun className="w-4 h-4 text-[#F0652E]" />
+                      <Toggle on={prefs.darkMode} onToggle={handleToggleTheme} />
+                      <Moon className="w-4 h-4 text-[#1D1D46]" />
+                    </div>
+                  </Row>
+
+                  <Row label="Comment Moderation Mode" desc="Choose how community comments on your articles or profile are handled.">
+                    <select 
+                      value={prefs.commentModeration} 
+                      onChange={(e) => {
+                        setPrefs(p => ({ ...p, commentModeration: e.target.value }));
+                        triggerSuccess("Comment moderation updated");
+                      }}
+                      className="px-3 py-2 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs border-none font-bold text-[#1D1D46] dark:text-white"
+                    >
+                      <option value="auto">Auto-publish immediately</option>
+                      <option value="review">Hold for self-review approval</option>
+                    </select>
+                  </Row>
+                </div>
+              </div>
+            )}
+
+            {/* ── 6. SECURITY TAB ── */}
+            {activeTab === "security" && (
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-base font-bold text-[#1D1D46] dark:text-white border-b border-gray-100 dark:border-white/5 pb-2.5 mb-5">
+                    Security & Authentication
+                  </h3>
+                </div>
+
+                <div className="space-y-5">
+                  <div className="bg-[#f4f7fb] dark:bg-white/5 p-5 rounded-2xl">
+                    <h4 className="text-xs font-bold text-[#1D1D46] dark:text-white mb-1">Password Update & OTP Verification</h4>
+                    <p className="text-[10px] text-gray-400 mb-4 leading-normal">
+                      Update your login credential. Triggering will send a 6-digit security OTP code to registered email <strong>{email}</strong>.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={handleSendOTP}
+                      className="px-4 py-2.5 bg-[#1D1D46] hover:bg-blue-900 text-white text-xs font-bold rounded-xl transition-colors"
+                    >
+                      Send Password Reset OTP
+                    </button>
+                  </div>
+
+                  <Row label="Google Authenticator 2FA (TOTP)" desc="Require 2-factor authentication codes during account login.">
+                    <Toggle on={mfaEnabled} onToggle={() => {
+                      setMfaEnabled(!mfaEnabled);
+                      triggerSuccess(mfaEnabled ? "Two-factor authentication disabled." : "2FA enabled successfully.");
+                    }} />
+                  </Row>
+                </div>
+              </div>
+            )}
+
+            {/* ── 7. ROLE OPTIONS TAB ── */}
             {activeTab === "role" && (
               <div className="space-y-6">
                 <div>
                   <h3 className="text-base font-bold text-[#1D1D46] dark:text-white border-b border-gray-100 dark:border-white/5 pb-2.5 mb-5">
-                    {userRole.replace("-", " ").toUpperCase()} Specific Configurations
+                    {userRole.replace("-", " ").toUpperCase()} Specific Options
                   </h3>
                 </div>
 
-                {/* Reader Role Settings */}
                 {userRole === "reader" && (
-                  <div className="divide-y divide-gray-100 dark:divide-white/5">
-                    <Row label="Reading History Visibility" desc="Make your article read list history visible on public dashboard landing tabs.">
-                      <Toggle on={privacy.readingHistoryPublic} onToggle={() => setPrivacy(prev => ({ ...prev, readingHistoryPublic: !prev.readingHistoryPublic }))} />
-                    </Row>
-                    <Row label="Comment Moderation Mode" desc="Choose comment validation rules.">
-                      <select 
-                        value={prefs.commentModeration} 
-                        onChange={(e) => setPrefs(prev => ({ ...prev, commentModeration: e.target.value }))}
-                        className="px-3 py-2 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs border-none font-bold text-[#1D1D46] dark:text-white"
+                  <div className="space-y-4">
+                    <div className="p-4 bg-gray-50 dark:bg-white/5 rounded-2xl space-y-2">
+                      <h4 className="text-xs font-bold text-[#1D1D46] dark:text-white">Export Saved Articles</h4>
+                      <p className="text-[10px] text-gray-400">Download your saved articles and intelligence list formatted as CSV.</p>
+                      <button
+                        type="button"
+                        onClick={() => triggerSuccess("Saved articles list exported (CSV)!")}
+                        className="px-4 py-2 bg-[#1D1D46] text-white text-xs font-bold rounded-xl"
                       >
-                        <option value="auto">Auto-publish immediately</option>
-                        <option value="review">Hold for self-review approval</option>
-                      </select>
-                    </Row>
-                    <div className="py-4">
-                      <h4 className="text-xs font-bold text-[#1D1D46] dark:text-white mb-2">Export Saved Articles</h4>
-                      <p className="text-[11px] text-gray-400 mb-3">Download list of your saved books/articles index in csv formatting.</p>
-                      <button type="button" onClick={() => triggerSuccess("Exported CSV index download started.")} className="px-4 py-2 bg-[#1D1D46] text-white text-xs font-bold rounded-xl">
-                        Export Articles List (CSV)
+                        Export Saved Articles (CSV)
                       </button>
                     </div>
                   </div>
                 )}
 
-                {/* SME Specific Settings */}
                 {userRole === "sme" && (
-                  <div className="space-y-5">
-                    <Row label="Consulting Availability Tag" desc="Toggle 'Consulting Available' indicator chip visibility on your public directory listing profile.">
-                      <Toggle on={consultingOpen} onToggle={() => setConsultingOpen(!consultingOpen)} />
-                    </Row>
-
-                    <Row label="Default Article Sector Category" desc="Index categories when publishing columns.">
+                  <div className="space-y-4">
+                    <Row label="Default Article Category" desc="Default classification when drafting new trade articles.">
                       <select 
                         value={smeCategory}
-                        onChange={(e) => setSmeCategory(e.target.value)}
+                        onChange={(e) => {
+                          setSmeCategory(e.target.value);
+                          triggerSuccess(`Default article category set to ${e.target.value}`);
+                        }}
                         className="px-3 py-2 bg-[#f4f7fb] dark:bg-white/5 rounded-xl text-xs border-none font-bold text-[#1D1D46] dark:text-white"
                       >
                         <option value="Trade Analysis">Trade Analysis</option>
@@ -485,151 +711,91 @@ export default function SettingsPage() {
                         <option value="Bilateral Focus">Bilateral Focus</option>
                       </select>
                     </Row>
-
-                    <div className="pt-4 border-t border-dashed border-gray-100 dark:border-white/5 flex justify-between items-center bg-gray-50 dark:bg-white/5 p-4 rounded-xl">
-                      <div>
-                        <h4 className="text-xs font-bold text-gray-400 flex items-center gap-1"><Lock className="w-3.5 h-3.5" /> Professional Profile PDF Export</h4>
-                        <p className="text-[10px] text-gray-400 mt-1">Generate a styled executive profile resume page sheet. (Requires Upgrade).</p>
-                      </div>
-                      <button type="button" onClick={() => setActiveTab("upgrade")} className="px-3.5 py-2 text-[10px] font-bold bg-[#F0652E] text-white rounded-xl">Unlock Tool</button>
-                    </div>
                   </div>
                 )}
 
-                {/* Associate SME Settings */}
-                {userRole === "associate-sme" && (
-                  <div className="space-y-5">
-                    <div className="bg-[#f4f7fb] dark:bg-white/5 p-5 rounded-2xl space-y-4">
-                      <h4 className="text-xs font-bold text-[#1D1D46] dark:text-white">Affiliate Links & Credit Registry</h4>
-                      <p className="text-[10px] text-gray-400 leading-relaxed">
-                        Copy link referral, and redeem credits accumulated to unlock verified Pro plans discounts.
-                      </p>
-                      <div className="flex gap-2">
-                        <button type="button" onClick={copyAffiliate} className="px-4 py-2 bg-[#1D1D46] text-white text-xs font-bold rounded-xl">
-                          {copiedLink ? "Link Copied!" : "Copy Referral Link"}
-                        </button>
-                        <button type="button" onClick={() => triggerSuccess("Balance details updated.")} className="px-4 py-2 bg-gray-100 dark:bg-white/5 text-xs text-gray-600 dark:text-white font-bold rounded-xl">
-                          View Referrals tracking
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="pt-4 border-t border-dashed border-gray-100 dark:border-white/5 flex justify-between items-center bg-gray-50 dark:bg-white/5 p-4 rounded-xl">
-                      <div>
-                        <h4 className="text-xs font-bold text-gray-400 flex items-center gap-1"><Lock className="w-3.5 h-3.5" /> Consulting Rate Configurator</h4>
-                        <p className="text-[10px] text-gray-400 mt-1">Settings for booking appointments and setting fees. (Requires Upgrade).</p>
-                      </div>
-                      <button type="button" onClick={() => setActiveTab("upgrade")} className="px-3.5 py-2 text-[10px] font-bold bg-[#F0652E] text-white rounded-xl">Unlock Tool</button>
-                    </div>
-                  </div>
-                )}
-
-                {/* Company Settings */}
                 {userRole === "company" && (
-                  <div className="space-y-5">
-                    <div className="bg-[#f4f7fb] dark:bg-white/5 p-5 rounded-2xl space-y-4">
+                  <div className="space-y-4">
+                    <div className="bg-[#f4f7fb] dark:bg-white/5 p-5 rounded-2xl space-y-3">
                       <h4 className="text-xs font-bold text-[#1D1D46] dark:text-white">Signatory Rights Delegation</h4>
                       <p className="text-[10px] text-gray-400 leading-relaxed">
-                        Add or transfer administrative page ownership rights to another signatory. Requires registered OTP verification from both emails.
+                        Add an additional corporate admin signatory to manage company updates and offerings.
                       </p>
                       <div className="flex gap-2">
                         <input 
                           type="email" 
-                          placeholder="new-signatory@company.com" 
+                          placeholder="colleague@company.com" 
                           value={signatoryEmailInput}
                           onChange={(e) => setSignatoryEmailInput(e.target.value)}
-                          className="flex-1 px-3 py-2 bg-white dark:bg-[#122238] rounded-xl text-xs border-none"
+                          className="flex-1 px-3 py-2 bg-white dark:bg-[#122238] rounded-xl text-xs border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white"
                         />
-                        <button type="button" onClick={() => {
-                          if (signatoryEmailInput.includes("@")) {
-                            triggerSuccess("Delegation verification request sent to target email.");
-                            setSignatoryEmailInput("");
-                          }
-                        }} className="px-4 py-2 bg-[#1D1D46] text-white text-xs font-bold rounded-xl">Send Invite</button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (signatoryEmailInput.includes("@")) {
+                              triggerSuccess(`Invitation sent to ${signatoryEmailInput}`);
+                              setSignatoryEmailInput("");
+                            }
+                          }}
+                          className="px-4 py-2 bg-[#1D1D46] text-white text-xs font-bold rounded-xl"
+                        >
+                          Send Invite
+                        </button>
                       </div>
-                    </div>
-
-                    <div className="pt-4 border-t border-dashed border-gray-100 dark:border-white/5 flex justify-between items-center bg-gray-50 dark:bg-white/5 p-4 rounded-xl">
-                      <div>
-                        <h4 className="text-xs font-bold text-gray-400 flex items-center gap-1"><Lock className="w-3.5 h-3.5" /> Multiple Signatories & Admins Access</h4>
-                        <p className="text-[10px] text-gray-400 mt-1">Grant simultaneous administrative access keys to team members. (Requires Upgrade).</p>
-                      </div>
-                      <button type="button" onClick={() => setActiveTab("upgrade")} className="px-3.5 py-2 text-[10px] font-bold bg-[#F0652E] text-white rounded-xl">Unlock Tool</button>
                     </div>
                   </div>
                 )}
 
-                {/* Leader Settings */}
                 {userRole === "leader" && (
-                  <div className="space-y-5">
-                    <Row label="Display Associated Company on Profile" desc="Show or hide company linkage name from public biography banner layouts.">
-                      <Toggle on={companyLinkPrivacy} onToggle={() => setCompanyLinkPrivacy(!companyLinkPrivacy)} />
+                  <div className="space-y-4">
+                    <Row label="Display Associated Company on Profile" desc="Show or hide company linkage on public leader biography banner.">
+                      <Toggle on={companyLinkPrivacy} onToggle={() => {
+                        setCompanyLinkPrivacy(!companyLinkPrivacy);
+                        triggerSuccess("Company linkage visibility updated");
+                      }} />
                     </Row>
-
-                    <div className="p-5 bg-[#f4f7fb] dark:bg-white/5 rounded-2xl">
-                      <h4 className="text-xs font-bold text-[#1D1D46] dark:text-white mb-2">Company Portability Setup</h4>
-                      <p className="text-[10px] text-gray-400 mb-4 leading-normal">
-                        This leader profile belongs to you. Change company linkage association at any time to clear history display.
-                      </p>
-                      <button type="button" onClick={() => triggerSuccess("Redirection to company linkage tab triggered.")} className="px-4 py-2 bg-[#1D1D46] text-white text-xs font-bold rounded-xl">
-                        Manage Company Linkage
-                      </button>
-                    </div>
                   </div>
                 )}
               </div>
             )}
 
-            {/* ── UPGRADE TAB ── */}
+            {/* ── 8. UPGRADE TAB ── */}
             {activeTab === "upgrade" && (
-              <div className="space-y-8">
+              <div className="space-y-6">
                 <div>
                   <h3 className="text-base font-bold text-[#1D1D46] dark:text-white border-b border-gray-100 dark:border-white/5 pb-2.5 mb-5 flex items-center gap-2">
                     <Zap className="w-5 h-5 text-[#F0652E]" />
-                    Upgrade to Premium Authority Tier
+                    Upgrade Your Plan Tier
                   </h3>
                   <p className="text-xs text-gray-400 leading-relaxed">
-                    View features limits on your active free membership tier and choose package levels to unlock verified badges.
+                    Compare features and unlock advanced publication privileges, deep readership metrics, and directory listings.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Free Plan specs */}
-                  <div className="border border-gray-100 dark:border-white/5 p-6 rounded-2xl space-y-4">
-                    <h4 className="text-sm font-bold text-gray-500 uppercase">Active Free Tier</h4>
-                    <ul className="text-xs space-y-2.5 text-gray-600 dark:text-gray-400">
-                      <li>• Self-declared information listings</li>
-                      <li>• Persistent Orange FREE MEMBER badges</li>
-                      <li>• Basic keyword directory searches</li>
-                      <li>• Locked analytics charts logs</li>
+                  <div className="border border-gray-100 dark:border-white/5 p-6 rounded-2xl space-y-3 bg-gray-50/50 dark:bg-white/5">
+                    <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Current Membership</h4>
+                    <p className="text-lg font-black text-[#1D1D46] dark:text-white capitalize">{userRole.replace("-", " ")} Free</p>
+                    <ul className="text-xs space-y-2 text-gray-500 pt-2">
+                      <li>• Standard self-declared profile</li>
+                      <li>• Access to free intelligence articles</li>
+                      <li>• Follow up to 10 trade sectors</li>
                     </ul>
                   </div>
 
-                  {/* Paid Plan specs */}
-                  <div className="border-2 border-[#1D1D46] dark:border-[#F0652E] p-6 rounded-2xl bg-gradient-to-br from-[#1D1D46]/5 to-[#0642BA]/10 space-y-4 relative overflow-hidden">
-                    <span className="absolute top-3 right-3 text-[10px] bg-[#F0652E] text-white px-2 py-0.5 font-bold rounded uppercase">Recommended</span>
-                    <h4 className="text-sm font-bold text-[#1D1D46] dark:text-white uppercase">Premium Verified Tier</h4>
-                    <ul className="text-xs space-y-2.5 text-gray-700 dark:text-gray-300">
-                      <li>• Official Blue Tick verification badges</li>
-                      <li>• Unlimited articles/PR publication</li>
-                      <li>• Live B2B analytics dashboards</li>
-                      <li>• Sector ranking priority listings</li>
-                    </ul>
+                  <div className="border-2 border-emerald-500/40 p-6 rounded-2xl space-y-3 bg-emerald-50/10 dark:bg-emerald-950/10 relative">
+                    <span className="text-[9px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-100 dark:bg-emerald-900/30 px-2.5 py-0.5 rounded-full">
+                      Verified Upgrades
+                    </span>
+                    <h4 className="text-lg font-black text-[#1D1D46] dark:text-white">Pro & Elite Plans</h4>
+                    <p className="text-xs text-gray-500">Unlock official blue ticks, article publishing quotas, and live analytics dashboards.</p>
                     <button 
                       type="button" 
-                      onClick={() => window.location.href = `./plans/${userRole}`}
-                      className="w-full mt-4 py-3 bg-[#1D1D46] dark:bg-[#F0652E] text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow"
+                      onClick={() => window.location.href = `./profile/plans/${userRole}`}
+                      className="w-full mt-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow-sm transition-colors"
                     >
-                      Compare Plans & Upgrade <ArrowRight className="w-3.5 h-3.5" />
+                      Compare & Upgrade Plans <ArrowRight className="w-3.5 h-3.5" />
                     </button>
-                  </div>
-                </div>
-
-                {/* Empty billing logs */}
-                <div className="pt-6 border-t border-gray-100 dark:border-white/5">
-                  <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">Billing History</h4>
-                  <div className="p-4 bg-gray-50 dark:bg-white/5 rounded-2xl text-center">
-                    <p className="text-xs text-gray-400 italic">No payments found. (You are on a Free membership plan).</p>
                   </div>
                 </div>
               </div>
@@ -637,7 +803,6 @@ export default function SettingsPage() {
 
           </div>
         </div>
-
       </div>
     </div>
   );

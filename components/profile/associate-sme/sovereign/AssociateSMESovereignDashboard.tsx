@@ -6,10 +6,12 @@ import { useParams, useRouter } from "next/navigation";
 import {
   Copy, Edit, Check, Upload, MapPin,
   FileText, Eye, EyeOff, Sparkles, Send,
-  BarChart3, MessageSquare, ShieldCheck, Star,
-  Globe, Calendar, TrendingUp, BookOpen, Award,
-  ExternalLink, Crown, Mail, Phone, Users, Newspaper
+  BarChart3, ShieldCheck, Globe, TrendingUp, Award,
+  Crown, Newspaper, Users, Settings as SettingsIcon, MessageSquare
 } from "lucide-react";
+import { SECTORS } from "@/lib/sectors";
+import SmeAnalyticsHub from "@/components/profile/common/SmeAnalyticsHub";
+import SmePublicProfile from "@/components/profile/common/SmePublicProfile";
 
 // ─── Public Profile Card (ASME Sovereign Purple & Gold) ───
 function ASMESovereignPublicProfile({
@@ -17,118 +19,19 @@ function ASMESovereignPublicProfile({
   displayCity, displayCountry, avatarBase64, bannerBase64, onBack
 }: any) {
   return (
-    <div className="p-5 md:p-8 lg:p-10 max-w-3xl mx-auto pb-24">
-      <div className="flex justify-end mb-5">
-        <button
-          onClick={onBack}
-          className="flex items-center gap-2 text-xs font-bold text-gray-500 hover:text-[#1D1D46] dark:hover:text-white border border-gray-200 dark:border-white/10 px-4 py-2 rounded-xl transition-all"
-        >
-          <EyeOff className="w-3.5 h-3.5" /> Back to Dashboard
-        </button>
-      </div>
-
-      <div className="bg-white dark:bg-[#122238] rounded-3xl border-2 border-purple-500/30 shadow-2xl overflow-hidden mb-6">
-        {/* Cinematic banner */}
-        <div className="relative h-44 overflow-hidden">
-          {bannerBase64 ? (
-            <img src={bannerBase64} alt="banner" className="w-full h-full object-cover" />
-          ) : (
-            <div className="w-full h-full relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-[#1a113b] via-purple-800 to-violet-900" />
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_50%,rgba(167,139,250,0.3),transparent_60%)]" />
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_30%,rgba(245,158,11,0.15),transparent_60%)]" />
-            </div>
-          )}
-
-          <div className="absolute top-4 right-4 flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase text-amber-200 bg-amber-500/20 backdrop-blur-sm border border-amber-400/30 px-3 py-1.5 rounded-full tracking-widest">
-              <Crown className="w-3 h-3 text-amber-400" /> ASME Sovereign
-            </span>
-          </div>
-        </div>
-
-        <div className="px-6 pb-6">
-          <div className="flex items-end gap-4 -mt-16 mb-6 relative z-10">
-            <div className="relative">
-              <div className="absolute inset-[-6px] rounded-[20px] ring-2 ring-amber-400/60 ring-offset-2 ring-offset-white dark:ring-offset-[#122238]" />
-              <div className="absolute inset-[-2px] rounded-[18px] ring-4 ring-purple-500/50 ring-offset-1 ring-offset-white dark:ring-offset-[#122238]" />
-              <div className="w-32 h-32 rounded-[18px] border-4 border-white dark:border-[#122238] overflow-hidden shadow-2xl relative z-10">
-                {avatarBase64 ? (
-                  <img src={avatarBase64} alt="avatar" className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-5xl font-black text-purple-600 bg-gradient-to-br from-purple-50 to-violet-100 dark:from-purple-950/30 dark:to-violet-900/20">
-                    {displayName.charAt(0).toUpperCase()}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="flex-1 pt-16">
-              <div className="flex items-center gap-2 flex-wrap">
-                <h1 className="text-2xl font-bold text-[#1D1D46] dark:text-white">{displayName}</h1>
-                <span className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase bg-gradient-to-r from-amber-400 to-yellow-500 text-white px-3 py-1 rounded-full tracking-widest shadow-lg">
-                  <Crown className="w-3 h-3 fill-white" /> ASME Sovereign
-                </span>
-                <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase bg-purple-700 text-white px-2.5 py-0.5 rounded-full tracking-widest">
-                  <ShieldCheck className="w-3 h-3" /> Sovereign Verified
-                </span>
-              </div>
-              <p className="text-sm text-gray-600 dark:text-gray-300 mt-1 font-medium italic">
-                "{profile.tagline || `${(profile.experienceYears || 5)}+ years shaping trade insights.`}"
-              </p>
-              <p className="text-xs text-gray-500 mt-1">{displayDesignation} · {displayOrg}</p>
-              <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5"><MapPin className="w-3 h-3" /> {displayCity}, {displayCountry}</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3 flex-wrap mb-5">
-            {profile.linkedinUrl && (
-              <a href={profile.linkedinUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-[10px] font-bold text-blue-600 hover:underline bg-blue-50 dark:bg-blue-950/20 px-2.5 py-1.5 rounded-xl border border-blue-100 dark:border-blue-900/20">
-                <ExternalLink className="w-3 h-3" /> LinkedIn
-              </a>
-            )}
-          </div>
-
-          <div className="mb-5 p-4 bg-gradient-to-r from-amber-500/10 to-purple-500/10 border border-amber-500/20 rounded-2xl flex items-center gap-3">
-            <Crown className="w-5 h-5 text-amber-500 shrink-0" />
-            <div>
-              <p className="text-xs font-bold text-[#1D1D46] dark:text-white">Board Advisory Council</p>
-              <p className="text-[10px] text-gray-500 dark:text-gray-400">Contributor role supporting strategic trade updates.</p>
-            </div>
-          </div>
-
-          {/* Affiliate Promotion Coupon Card */}
-          {(() => {
-            const firstPart = displayName.split(" ")[0].toUpperCase();
-            const couponCode = `ASME-${firstPart}-10`;
-            return (
-              <div className="mb-5 p-4 bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 rounded-2xl flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500 font-bold shrink-0">🏷️</div>
-                  <div className="text-left">
-                    <p className="text-xs font-bold text-[#1D1D46] dark:text-white">IGE Affiliate Invitation</p>
-                    <p className="text-[10px] text-gray-500 dark:text-gray-400">Get 10% off premium reader plans using my code.</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-1.5 bg-white dark:bg-[#122238] border border-amber-500/30 px-3 py-1.5 rounded-xl shrink-0">
-                  <span className="text-xs font-black text-amber-600 font-mono tracking-wide">{couponCode}</span>
-                  <button onClick={() => {
-                    navigator.clipboard.writeText(couponCode);
-                    alert("Coupon code copied to clipboard!");
-                  }} className="text-[10px] font-bold text-gray-500 hover:text-amber-600 ml-1">Copy</button>
-                </div>
-              </div>
-            );
-          })()}
-
-          <div className="space-y-3">
-            <button className="w-full py-3 bg-gradient-to-r from-purple-700 to-violet-600 hover:opacity-90 text-white text-sm font-bold rounded-2xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20">
-              <Calendar className="w-4 h-4" /> Book a Dedicated Session
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <SmePublicProfile
+      profileData={{
+        name: displayName,
+        designation: displayDesignation,
+        organization: displayOrg,
+        city: displayCity,
+        country: displayCountry,
+      }}
+      tier="sovereign"
+      role="associate-sme"
+      isOwner={true}
+      onSwitchToAdmin={onBack}
+    />
   );
 }
 
@@ -142,36 +45,72 @@ export default function AssociateSMESovereignDashboard() {
   const profile = user?.onboardingForm || {};
   const [viewMode, setViewMode] = useState<"private" | "public">("private");
   const [copiedUrl, setCopiedUrl] = useState(false);
-  const [activeTab, setActiveTab] = useState<"overview" | "articles" | "revenue" | "editorial" | "advisory">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "articles" | "insights" | "advisory" | "settings">("overview");
   const [avatarBase64, setAvatarBase64] = useState(profile.profilePic || "");
   const [bannerBase64, setBannerBase64] = useState(profile.bannerBase64 || "");
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const bannerInputRef = useRef<HTMLInputElement>(null);
 
+  // Inbound Advisory Inquiries for Sovereign tier
+  const [inquiries, setInquiries] = useState([
+    {
+      id: "inq_1",
+      clientName: "Vikram Malhotra",
+      designation: "Managing Director, Global Supply Chain",
+      organization: "Tata International Logistics",
+      email: "v.malhotra@tata-intl.com",
+      topic: "India-GCC CEPA Tariff Modeling & Free Trade Zone Advisory",
+      budget: "₹2,50,000 - ₹5,00,000",
+      date: "Sept 06, 2026",
+      status: "New",
+    },
+    {
+      id: "inq_2",
+      clientName: "Sophie Van Der Bilt",
+      designation: "Principal Economist",
+      organization: "Rotterdam Port Authority",
+      email: "s.vanderbilt@portofrotterdam.com",
+      topic: "Cross-Border Green Hydrogen Logistics Corridor Audit",
+      budget: "€5,000 - €10,000",
+      date: "Sept 02, 2026",
+      status: "Responded",
+    },
+  ]);
+
+  // Settings State
   const sampleName = "Ananya Krishnan";
   const rawName = profile.fullName || user?.name;
   const isGeneric = !rawName || rawName === "SME Pro User" || rawName === "Your Name" || rawName.toLowerCase().includes("user");
-  const displayName = isGeneric ? sampleName : rawName;
-  const displayDesignation = profile.currentDesignation || "Associate Trade Policy Specialist";
-  const displayOrg = profile.organisation || "Independent Sovereign Contributor";
-  const displayCity = profile.city || "New Delhi";
-  const displayCountry = profile.country || "India";
+  const [editName, setEditName] = useState(isGeneric ? sampleName : rawName);
+  const [editDesignation, setEditDesignation] = useState(profile.currentDesignation || "Associate Trade Policy Specialist");
+  const [editOrg, setEditOrg] = useState(profile.organisation || "Independent Sovereign Contributor");
+  const [editCity, setEditCity] = useState(profile.city || "New Delhi");
+  const [editCountry, setEditCountry] = useState(profile.country || "India");
+  const [editBio, setEditBio] = useState(profile.bio || "Senior associate trade specialist contributing regularly to sovereign columns on trade developments and policy insights.");
+  const [settingsSaved, setSettingsSaved] = useState(false);
+
+  const displayName = editName;
+  const displayDesignation = editDesignation;
+  const displayOrg = editOrg;
+  const displayCity = editCity;
+  const displayCountry = editCountry;
+
   const profileUrl = typeof window !== "undefined"
-    ? `${window.location.origin}/${locale}/associate-sme/${user?.uid || "profile"}`
+    ? `${window.location.origin}/${locale}/associate-sme/${user?.uid || user?.id || "profile"}`
     : "";
 
-  const firstPart = displayName.split(" ")[0].toUpperCase();
-  const couponCode = `ASME-${firstPart}-10`;
+  const [articlesList, setArticlesList] = useState([
+    { title: "Specialist steel sourcing alternatives for MSMEs", sector: "Steel", reads: 3450, revenue: 172, date: "Aug 11, 2026" },
+    { title: "Logistics tracking structures in bilateral corridors", sector: "Logistics", reads: 2890, revenue: 144, date: "Jul 15, 2026" },
+  ]);
+  const [newTitle, setNewTitle] = useState("");
+  const [newSector, setNewSector] = useState(profile.sector || "Logistics");
+  const [showPublishForm, setShowPublishForm] = useState(false);
 
   const stats = {
-    totalRevenue: 184500,
-    articleRevenue: 24500,
-    bookingRevenue: 160000,
-    reportSales: 0,
+    totalRevenue: 24500,
     totalReads: 48400,
-    bookings: 8,
-    articles: 18,
-    reportDownloads: 0,
+    articles: articlesList.length,
     profileViews: 9200,
     newsletterColumn: true,
     seoDomainRank: 8,
@@ -199,11 +138,28 @@ export default function AssociateSMESovereignDashboard() {
     reader.readAsDataURL(file);
   };
 
+  const handlePublish = () => {
+    if (!newTitle.trim()) return;
+    if (articlesList.length >= 8) {
+      alert("Monthly limit reached (8/8 articles).");
+      return;
+    }
+    setArticlesList(prev => [{ title: newTitle, sector: newSector, reads: 0, revenue: 0, date: new Date().toLocaleDateString("en-IN") }, ...prev]);
+    setNewTitle("");
+    setShowPublishForm(false);
+  };
+
+  const handleSaveSettings = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSettingsSaved(true);
+    setTimeout(() => setSettingsSaved(false), 2500);
+  };
+
   // ── PUBLIC VIEW ─────────────────────────────────────────
   if (viewMode === "public") {
     return (
       <ASMESovereignPublicProfile
-        profile={profile}
+        profile={{ ...profile, bio: editBio }}
         displayName={displayName}
         displayDesignation={displayDesignation}
         displayOrg={displayOrg}
@@ -216,13 +172,13 @@ export default function AssociateSMESovereignDashboard() {
     );
   }
 
-  // ── PRIVATE / DASHBOARD VIEW ─────────────────────────────
+  // ── PRIVATE / DASHBOARD VIEW (4 Tabs: Overview, Articles, Insights, Settings) ──
   const tabs = [
     { id: "overview", label: "Overview" },
-    { id: "articles", label: `Articles (${stats.articles}/8)` },
-    { id: "revenue", label: "Revenue" },
-    { id: "editorial", label: "Editorial" },
-    { id: "advisory", label: "Advisory" },
+    { id: "articles", label: `Articles (${articlesList.length}/8)` },
+    { id: "insights", label: "Insights" },
+    { id: "advisory", label: "Inbound Advisory" },
+    { id: "settings", label: "Settings" },
   ] as const;
 
   return (
@@ -243,8 +199,7 @@ export default function AssociateSMESovereignDashboard() {
 
       {/* Profile header */}
       <div className="relative bg-white dark:bg-[#122238] rounded-3xl border-2 border-purple-500/30 shadow-2xl overflow-hidden mb-8">
-
-        {/* Cinematic banner */}
+        {/* Cinematic banner with click to change */}
         <div className="relative h-44 overflow-hidden group cursor-pointer" onClick={() => bannerInputRef.current?.click()}>
           {bannerBase64 ? (
             <img src={bannerBase64} alt="banner" className="w-full h-full object-cover" />
@@ -253,40 +208,25 @@ export default function AssociateSMESovereignDashboard() {
               <div className="absolute inset-0 bg-gradient-to-r from-[#1a113b] via-purple-800 to-violet-900" />
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_50%,rgba(167,139,250,0.3),transparent_60%)]" />
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_30%,rgba(245,158,11,0.15),transparent_60%)]" />
-              <div className="absolute inset-0" style={{
-                backgroundImage: "linear-gradient(45deg, transparent 40%, rgba(251,191,36,0.05) 50%, transparent 60%)",
-                backgroundSize: "200% 200%",
-                animation: "shimmer 4s linear infinite"
-              }} />
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/30">
-                <div className="flex items-center gap-2 text-white text-xs font-bold bg-white/15 px-4 py-2 rounded-xl backdrop-blur-sm border border-white/20">
-                  <Upload className="w-4 h-4" /> Upload Cinematic Banner
-                </div>
-              </div>
             </div>
           )}
-
-          <div className="absolute top-4 right-4 flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase text-amber-200 bg-amber-500/20 backdrop-blur-sm border border-amber-400/30 px-3 py-1.5 rounded-full tracking-widest">
-              <Crown className="w-3 h-3 text-amber-400" /> ASME Sovereign
+          <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <span className="text-xs text-white font-bold flex items-center gap-1.5 bg-black/50 px-3 py-1.5 rounded-xl backdrop-blur-xs">
+              <Upload className="w-3.5 h-3.5" /> Change Banner
             </span>
           </div>
-
-          <div className="absolute bottom-3 left-4">
-            <span className="text-[9px] font-bold text-white/80 bg-white/10 backdrop-blur-sm px-2.5 py-1 rounded-full border border-white/10">
-              🛡️ Dedicated IGE Account Manager Assigned
-            </span>
-          </div>
-
           <input ref={bannerInputRef} type="file" accept="image/*" className="hidden" onChange={handleBannerUpload} />
+          <div className="absolute top-4 right-4">
+            <span className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase text-amber-200 bg-amber-500/20 backdrop-blur-sm border border-amber-400/30 px-3 py-1.5 rounded-full tracking-widest">
+              <Crown className="w-3 h-3 text-amber-400" /> ASME Sovereign Member
+            </span>
+          </div>
         </div>
 
         <div className="px-6 pb-6">
           <div className="flex items-end gap-4 -mt-16 mb-6 relative z-10">
             <div className="relative group">
-              <div className="absolute inset-[-6px] rounded-[20px] ring-2 ring-amber-400/60 ring-offset-2 ring-offset-white dark:ring-offset-[#122238]" />
-              <div className="absolute inset-[-2px] rounded-[18px] ring-4 ring-purple-500/50 ring-offset-1 ring-offset-white dark:ring-offset-[#122238]" />
-              <div className="w-32 h-32 rounded-[18px] border-4 border-white dark:border-[#122238] overflow-hidden shadow-2xl relative z-10">
+              <div className="w-32 h-32 rounded-[18px] border-4 border-white dark:border-[#122238] overflow-hidden shadow-2xl relative z-10 ring-4 ring-purple-500/40">
                 {avatarBase64 ? (
                   <img src={avatarBase64} alt="avatar" className="w-full h-full object-cover" />
                 ) : (
@@ -295,11 +235,8 @@ export default function AssociateSMESovereignDashboard() {
                   </div>
                 )}
               </div>
-              <button
-                onClick={() => avatarInputRef.current?.click()}
-                className="absolute inset-0 z-20 flex items-center justify-center rounded-[18px] bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                <Upload className="w-5 h-5 text-white" />
+              <button onClick={() => avatarInputRef.current?.click()} className="absolute inset-0 z-20 flex items-center justify-center rounded-[18px] bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
+                <Upload className="w-6 h-6 text-white" />
               </button>
               <input ref={avatarInputRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarUpload} />
             </div>
@@ -314,37 +251,29 @@ export default function AssociateSMESovereignDashboard() {
                   <ShieldCheck className="w-3 h-3" /> Sovereign Verified
                 </span>
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-300 mt-1 font-medium italic">
-                "{profile.tagline || `${(profile.experienceYears || 5)}+ years shaping trade insights.`}"
-              </p>
               <p className="text-xs text-gray-500 mt-1">{displayDesignation} · {displayOrg}</p>
-              <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
-                <MapPin className="w-3 h-3" /> {displayCity}, {displayCountry}
-              </p>
+              <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5"><MapPin className="w-3 h-3" /> {displayCity}, {displayCountry}</p>
             </div>
           </div>
 
-          {/* Social + profile URL */}
-          <div className="flex items-center gap-3 flex-wrap mb-5">
-            <div className="flex items-center gap-2 flex-1 min-w-[200px] p-2.5 bg-purple-50/40 dark:bg-purple-950/10 rounded-xl border border-purple-100 dark:border-purple-900/20">
-              <Globe className="w-3.5 h-3.5 text-purple-400 shrink-0" />
-              <span className="flex-1 truncate text-[10px] text-gray-500">{profileUrl}</span>
-              <button onClick={handleCopy} className="flex items-center gap-1 text-[10px] font-bold text-purple-600 hover:text-[#F0652E]">
-                {copiedUrl ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
-                {copiedUrl ? "Copied!" : "Copy"}
-              </button>
-            </div>
+          <div className="flex items-center gap-2 p-2.5 bg-purple-50/40 dark:bg-purple-950/10 rounded-xl border border-purple-100 dark:border-purple-900/20">
+            <Globe className="w-3.5 h-3.5 text-purple-500 shrink-0" />
+            <span className="flex-1 truncate text-[10px] text-gray-500">{profileUrl}</span>
+            <button onClick={handleCopy} className="text-[10px] font-bold text-purple-600 hover:text-[#F0652E] transition-colors flex items-center gap-1">
+              {copiedUrl ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
+              {copiedUrl ? "Copied!" : "Copy Link"}
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Tabs */}
+      {/* Tabs Navigation: Exactly 4 Tabs */}
       <div className="flex gap-1 mb-6 bg-gray-100 dark:bg-white/5 p-1 rounded-2xl border border-gray-200 dark:border-white/10 w-fit overflow-x-auto">
         {tabs.map(tab => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-5 py-2 text-xs font-bold rounded-xl transition-all whitespace-nowrap ${
+            className={`px-4 py-2 text-xs font-bold rounded-xl transition-all whitespace-nowrap ${
               activeTab === tab.id
                 ? "bg-white dark:bg-[#1D1D46] text-[#1D1D46] dark:text-white shadow-sm"
                 : "text-gray-500 hover:text-gray-700"
@@ -355,17 +284,17 @@ export default function AssociateSMESovereignDashboard() {
         ))}
       </div>
 
-      {/* ── OVERVIEW ── */}
+      {/* ── 1. OVERVIEW TAB ── */}
       {activeTab === "overview" && (
         <div className="space-y-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
-              { label: "Total Revenue", value: `₹${(stats.totalRevenue / 1000).toFixed(0)}K`, icon: TrendingUp, color: "from-purple-600 to-violet-500 text-white" },
-              { label: "Total Reads", value: `${(stats.totalReads / 1000).toFixed(1)}K`, icon: Eye, color: "from-blue-600 to-blue-500 text-white" },
-              { label: "Profile Views", value: `${(stats.profileViews / 1000).toFixed(1)}K`, icon: BarChart3, color: "from-emerald-600 to-teal-500 text-white" },
-              { label: "Bookings", value: stats.bookings.toString(), icon: Calendar, color: "from-amber-500 to-yellow-500 text-white" },
+              { label: "Sovereign Quota", value: `${articlesList.length}/8`, icon: FileText, color: "from-purple-600 to-indigo-600" },
+              { label: "Total Reads", value: stats.totalReads.toLocaleString(), icon: Eye, color: "from-blue-600 to-cyan-600" },
+              { label: "Profile Impressions", value: stats.profileViews.toLocaleString(), icon: Users, color: "from-emerald-600 to-teal-600" },
+              { label: "Article Revenue", value: `₹${stats.totalRevenue.toLocaleString()}`, icon: TrendingUp, color: "from-amber-500 to-yellow-500" },
             ].map((s, i) => (
-              <div key={i} className={`rounded-2xl p-4 bg-gradient-to-br ${s.color} shadow-lg`}>
+              <div key={i} className={`rounded-2xl p-4 bg-gradient-to-br ${s.color} text-white shadow-md`}>
                 <s.icon className="w-5 h-5 mb-2 opacity-80" />
                 <p className="text-2xl font-black">{s.value}</p>
                 <p className="text-[9px] opacity-80 mt-0.5 uppercase tracking-wide">{s.label}</p>
@@ -374,102 +303,51 @@ export default function AssociateSMESovereignDashboard() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="md:col-span-2 space-y-5">
-              {/* Revenue summary */}
-              <div className="bg-gradient-to-b from-[#1a113b] to-purple-950 rounded-2xl p-6 text-white shadow-lg">
+            <div className="md:col-span-2 space-y-4">
+              <div className="bg-white dark:bg-[#122238] rounded-2xl p-5 border border-gray-100 dark:border-white/5 shadow-sm">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-bold flex items-center gap-2"><Crown className="w-4 h-4 text-amber-400" /> Revenue Dashboard</h3>
-                  <span className="text-[10px] font-black text-amber-400 uppercase">This Month</span>
+                  <h3 className="font-bold text-sm text-[#1D1D46] dark:text-white flex items-center gap-2">
+                    <Newspaper className="w-4 h-4 text-purple-600" /> Sovereign Articles
+                  </h3>
+                  <button onClick={() => setActiveTab("articles")} className="text-xs text-purple-600 font-bold hover:underline">
+                    View all ({articlesList.length})
+                  </button>
                 </div>
-                <div className="text-4xl font-black text-amber-400 mb-1">₹{stats.totalRevenue.toLocaleString()}</div>
-                <p className="text-xs text-white/60 mb-4">80% of gross consulting revenue</p>
-                <div className="grid grid-cols-3 gap-3 text-center">
-                  {[
-                    { label: "Article reads", value: `₹${stats.articleRevenue.toLocaleString()}` },
-                    { label: "Consulting (80%)", value: `₹${stats.bookingRevenue.toLocaleString()}` },
-                    { label: "Report sales", value: `₹${stats.reportSales.toLocaleString()}` },
-                  ].map((r, i) => (
-                    <div key={i} className="bg-white/10 rounded-xl py-2 px-1">
-                      <p className="text-sm font-black">{r.value}</p>
-                      <p className="text-[9px] text-white/60 mt-0.5">{r.label}</p>
+                <div className="divide-y divide-gray-50 dark:divide-white/5">
+                  {articlesList.map((a, i) => (
+                    <div key={i} className="py-3 flex items-center justify-between gap-3">
+                      <div>
+                        <p className="text-xs font-bold text-[#1D1D46] dark:text-white">{a.title}</p>
+                        <p className="text-[10px] text-gray-400 mt-0.5 capitalize">{a.sector} · {a.date}</p>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <span className="text-xs font-bold text-purple-600 block">{a.reads.toLocaleString()} reads</span>
+                        <span className="text-[10px] font-bold text-emerald-600">+₹{a.revenue}</span>
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
+            </div>
 
-              {/* Account manager card */}
-              <div className="bg-white dark:bg-[#122238] rounded-2xl p-5 border border-purple-200 dark:border-purple-900/30 shadow-sm">
-                <h3 className="font-bold text-[#1D1D46] dark:text-white text-sm mb-3 flex items-center gap-2">
-                  <Users className="w-4 h-4 text-purple-500" /> Your IGE Account Manager
+            <div className="space-y-4">
+              <div className="bg-white dark:bg-[#122238] rounded-2xl p-5 border border-purple-500/20 shadow-sm space-y-3 bg-gradient-to-br from-purple-500/5 to-amber-500/5">
+                <h3 className="font-bold text-sm text-[#1D1D46] dark:text-white flex items-center gap-2">
+                  <Crown className="w-4 h-4 text-amber-500" /> Sovereign Contributor Status
                 </h3>
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-950/20 flex items-center justify-center text-lg font-black text-purple-600">
-                    R
+                <div className="text-xs text-gray-500 space-y-2">
+                  <div className="flex justify-between py-1 border-b border-gray-100 dark:border-white/5">
+                    <span>Advisory Council</span>
+                    <span className="font-bold text-purple-600">Active Contributor</span>
                   </div>
-                  <div>
-                    <p className="text-sm font-bold text-[#1D1D46] dark:text-white">Rohan Kapoor</p>
-                    <p className="text-xs text-gray-500">Senior SME Partnerships, IGE News</p>
+                  <div className="flex justify-between py-1 border-b border-gray-100 dark:border-white/5">
+                    <span>Domain SEO Authority</span>
+                    <span className="font-bold text-emerald-600">Rank #{stats.seoDomainRank}</span>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-5">
-              <div className="bg-gradient-to-b from-amber-50 to-white dark:from-amber-950/20 dark:to-[#122238] rounded-2xl p-5 border border-amber-200 dark:border-amber-900/30 shadow-sm text-xs space-y-2">
-                <h3 className="font-bold text-[#1D1D46] dark:text-white text-sm flex items-center gap-2 mb-2">
-                  <Crown className="w-4 h-4 text-amber-500" /> Sovereign Features
-                </h3>
-                {["Sovereign Gold badge ✓", "IGE Account Manager ✓", "80/20 revenue share ✓", "Government & investor visibility ✓"].map((f, i) => (
-                  <div key={i} className="flex items-center gap-2 text-amber-700 dark:text-amber-400 py-0.5">
-                    <Star className="w-3 h-3 text-amber-500 fill-amber-500 shrink-0" /> {f}
+                  <div className="flex justify-between py-1">
+                    <span>Newsletter Syndication</span>
+                    <span className="font-bold text-amber-600">Enabled (Weekly)</span>
                   </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Affiliate Referral Section */}
-          <div className="bg-white dark:bg-[#122238] rounded-2xl p-6 border border-gray-100 dark:border-white/5 shadow-sm space-y-4 mt-6">
-            <div className="flex items-center justify-between border-b border-gray-50 dark:border-white/5 pb-3">
-              <h4 className="font-bold text-sm text-[#1D1D46] dark:text-white flex items-center gap-2">
-                🏷️ Affiliate Partner Program
-              </h4>
-              <span className="text-[10px] font-black uppercase bg-emerald-500/10 text-emerald-500 px-3 py-1 rounded-full border border-emerald-500/20">
-                Active Affiliate
-              </span>
-            </div>
-            
-            <p className="text-xs text-gray-500 leading-relaxed">
-              As an IGE Sovereign partner, you earn cash payouts for every colleague or reader who upgrades to an IGE paid subscription using your invite.
-            </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Your Custom Coupon Code (10% Off)</label>
-                <div className="flex gap-2 mt-1">
-                  <input
-                    type="text"
-                    readOnly
-                    value={couponCode}
-                    className="flex-1 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 px-3 py-2 rounded-xl text-xs text-gray-500 font-mono focus:outline-none"
-                  />
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(couponCode);
-                      alert("Coupon code copied!");
-                    }}
-                    className="px-4 py-2 bg-[#1D1D46] hover:bg-[#F0652E] text-white text-xs font-bold rounded-xl transition-all"
-                  >
-                    Copy
-                  </button>
-                </div>
-              </div>
-
-              <div>
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Estimated Affiliate Commissions</label>
-                <div className="p-2 bg-emerald-50 dark:bg-emerald-950/20 rounded-xl border border-emerald-500/10 mt-1 flex justify-between items-center h-10">
-                  <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400">₹8,500.00</span>
-                  <span className="text-[9px] text-emerald-600/70 dark:text-emerald-500/70">22 referrals conversion</span>
                 </div>
               </div>
             </div>
@@ -477,7 +355,206 @@ export default function AssociateSMESovereignDashboard() {
         </div>
       )}
 
-      {/* Other tabs remain legacy mock content */}
+      {/* ── 2. ARTICLES TAB ── */}
+      {activeTab === "articles" && (
+        <div className="space-y-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="font-bold text-[#1D1D46] dark:text-white">Sovereign Column Articles ({articlesList.length}/8 this month)</h2>
+              <p className="text-xs text-gray-400 mt-0.5">Publish high-priority trade and sourcing perspectives</p>
+            </div>
+            {articlesList.length < 8 && (
+              <button onClick={() => setShowPublishForm(v => !v)} className="px-4 py-2 bg-gradient-to-r from-purple-700 to-violet-600 text-white text-xs font-bold rounded-xl hover:opacity-90 flex items-center gap-1.5 shadow-sm">
+                <FileText className="w-3.5 h-3.5" /> New Article
+              </button>
+            )}
+          </div>
+
+          {showPublishForm && (
+            <div className="bg-white dark:bg-[#122238] rounded-2xl p-5 border border-purple-100 dark:border-purple-900/20 shadow-sm space-y-3">
+              <h3 className="text-sm font-bold text-[#1D1D46] dark:text-white">Publish Sovereign Article</h3>
+              <input
+                value={newTitle}
+                onChange={e => setNewTitle(e.target.value)}
+                placeholder="Article title…"
+                className="w-full px-3 py-2.5 text-sm border border-gray-200 dark:border-white/10 rounded-xl bg-gray-50 dark:bg-white/5 text-[#1D1D46] dark:text-white placeholder-gray-400 focus:outline-hidden focus:ring-2 focus:ring-purple-400"
+              />
+              <select
+                value={newSector}
+                onChange={e => setNewSector(e.target.value)}
+                className="w-full px-3 py-2.5 text-sm border border-gray-200 dark:border-white/10 rounded-xl bg-gray-50 dark:bg-white/5 text-[#1D1D46] dark:text-white focus:outline-hidden"
+              >
+                {SECTORS.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
+              </select>
+              <div className="flex gap-2">
+                <button onClick={handlePublish} className="flex-1 py-2.5 bg-purple-700 hover:bg-purple-800 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5">
+                  <Send className="w-3.5 h-3.5" /> Publish Instantly (Sovereign Priority)
+                </button>
+                <button onClick={() => setShowPublishForm(false)} className="px-4 py-2.5 text-xs font-bold text-gray-500 bg-gray-100 dark:bg-white/5 rounded-xl hover:bg-gray-200">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+
+          <div className="bg-white dark:bg-[#122238] rounded-2xl p-5 border border-gray-100 dark:border-white/5 shadow-sm space-y-3">
+            {articlesList.map((a, i) => (
+              <div key={i} className="flex items-start gap-3 py-3 border-b border-gray-50 dark:border-white/5 last:border-0">
+                <div className="flex-1">
+                  <p className="text-sm font-bold text-[#1D1D46] dark:text-white hover:text-[#F0652E] cursor-pointer">{a.title}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">{a.sector} · {a.date}</p>
+                </div>
+                <div className="text-right shrink-0">
+                  <p className="text-xs font-bold text-purple-600">{a.reads.toLocaleString()} reads</p>
+                  <p className="text-[10px] font-bold text-emerald-600">+₹{a.revenue}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── 3. INSIGHTS TAB ── */}
+      {activeTab === "insights" && (
+        <SmeAnalyticsHub currentTier="sovereign" role="associate-sme" userName={displayName} />
+      )}
+
+      {/* ── 4. ADVISORY TAB ── */}
+      {activeTab === "advisory" && (
+        <div className="space-y-6">
+          <div className="bg-white dark:bg-[#122238] rounded-2xl p-6 border border-gray-100 dark:border-white/5 shadow-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+              <div>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <MessageSquare className="w-4 h-4 text-purple-600" />
+                  <span>Inbound Advisory & Keynote Consultation Requests</span>
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                  Direct executive inquiries submitted via your Sovereign Public Profile advisory booking box.
+                </p>
+              </div>
+              <span className="text-xs font-bold px-3 py-1 rounded-lg bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300 border border-purple-300 dark:border-purple-800">
+                Sovereign Exclusive
+              </span>
+            </div>
+
+            <div className="space-y-4">
+              {inquiries.map((inq) => (
+                <div key={inq.id} className="p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <div>
+                      <h4 className="font-bold text-sm text-slate-900 dark:text-white">{inq.clientName}</h4>
+                      <p className="text-xs text-slate-500">{inq.designation} • <span className="font-semibold text-slate-700 dark:text-slate-300">{inq.organization}</span></p>
+                    </div>
+                    <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                      Budget: {inq.budget}
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800/80 p-3 rounded-xl border border-slate-100 dark:border-slate-700 font-medium">
+                    "{inq.topic}"
+                  </p>
+                  <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
+                    <span>Submitted on {inq.date}</span>
+                    <a href={`mailto:${inq.email}?subject=Re: ${inq.topic}`} className="px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-bold text-xs transition-all">
+                      Respond via Direct Email →
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── 4. SETTINGS TAB ── */}
+      {activeTab === "settings" && (
+        <div className="bg-white dark:bg-[#122238] rounded-2xl p-6 border border-gray-100 dark:border-white/5 shadow-sm space-y-6">
+          <div>
+            <h2 className="font-bold text-[#1D1D46] dark:text-white text-base flex items-center gap-2">
+              <SettingsIcon className="w-4 h-4 text-purple-600" /> Sovereign Profile Settings
+            </h2>
+            <p className="text-xs text-gray-400 mt-0.5">Manage your verified executive identity and contributor profile</p>
+          </div>
+
+          {settingsSaved && (
+            <div className="p-3.5 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-300 rounded-xl text-xs font-bold flex items-center gap-2">
+              <Check className="w-4 h-4" /> Sovereign profile details updated!
+            </div>
+          )}
+
+          <form onSubmit={handleSaveSettings} className="space-y-4 text-xs">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-gray-600 dark:text-gray-300 font-bold mb-1">Full Name</label>
+                <input
+                  type="text"
+                  value={editName}
+                  onChange={e => setEditName(e.target.value)}
+                  className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-hidden focus:ring-1 focus:ring-purple-500"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-600 dark:text-gray-300 font-bold mb-1">Designation</label>
+                <input
+                  type="text"
+                  value={editDesignation}
+                  onChange={e => setEditDesignation(e.target.value)}
+                  className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-hidden focus:ring-1 focus:ring-purple-500"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-gray-600 dark:text-gray-300 font-bold mb-1">Organisation</label>
+                <input
+                  type="text"
+                  value={editOrg}
+                  onChange={e => setEditOrg(e.target.value)}
+                  className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-hidden focus:ring-1 focus:ring-purple-500"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-600 dark:text-gray-300 font-bold mb-1">City</label>
+                <input
+                  type="text"
+                  value={editCity}
+                  onChange={e => setEditCity(e.target.value)}
+                  className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-hidden focus:ring-1 focus:ring-purple-500"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-600 dark:text-gray-300 font-bold mb-1">Country</label>
+                <input
+                  type="text"
+                  value={editCountry}
+                  onChange={e => setEditCountry(e.target.value)}
+                  className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-hidden focus:ring-1 focus:ring-purple-500"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-gray-600 dark:text-gray-300 font-bold mb-1">Summary / Tagline</label>
+              <textarea
+                rows={3}
+                value={editBio}
+                onChange={e => setEditBio(e.target.value)}
+                className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-hidden focus:ring-1 focus:ring-purple-500"
+              />
+            </div>
+
+            <div className="pt-2">
+              <button
+                type="submit"
+                className="px-5 py-2.5 bg-gradient-to-r from-purple-700 to-violet-600 hover:opacity-90 text-white font-bold text-xs rounded-xl shadow-xs transition-opacity"
+              >
+                Save Sovereign Profile
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 }

@@ -4,7 +4,9 @@ import { useState, useMemo } from "react";
 import { 
   MapPin, ExternalLink, Share2, Check, 
   Search, Building2, Users, FileText,
-  Plus, ArrowUpRight
+  Plus, ArrowUpRight, Rocket, Globe,
+  Lock, Eye, Download, CheckCircle2,
+  Crown, TrendingUp, GraduationCap
 } from "lucide-react";
 
 export interface CompanyPublicProfileProps {

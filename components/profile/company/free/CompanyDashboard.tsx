@@ -13,7 +13,7 @@ import {
   UserPlus, Bell, Image as ImageIcon, Video,
   Search, Info, Filter,
   X, ArrowLeft, Calendar, Download,
-  MoreHorizontal, ChevronDown, Clock
+  MoreHorizontal, ChevronDown, Clock, Smile, Layers, Send
 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import CompanyPublicProfile from "@/components/profile/company/CompanyPublicProfile";

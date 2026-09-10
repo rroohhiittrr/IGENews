@@ -115,7 +115,7 @@ const plans = [
     icon: "🌟",
     cta: "Become a Luminary",
     description: "Multi-sector authority with a collaborative content engine behind you.",
-    articles: { total: 6, self: 2, ai: 2, sme: 1, asme: 1 },
+    articles: { total: 6, self: 6, ai: 0, sme: 0, asme: 0 },
     tabs: 4,
     sectorTags: 3,
     benefits: [
@@ -130,7 +130,7 @@ const plans = [
       "Priority inquiry routing",
       "iGEN Sector Newsletter feature (your quote included)",
       "Associate up to 2 companies (board/advisor roles)",
-      "6 articles/month: 2 self + 2 AI Editor + 1 SME + 1 ASME",
+      "6 self-authored articles published per month",
     ],
     locked: [
       "Sector Authority tab (live ranking dashboard)",
@@ -153,7 +153,7 @@ const plans = [
     icon: "👑",
     cta: "Claim Sovereignty",
     description: "Own your sector. The only plan with a guaranteed Sector #1 ranking.",
-    articles: { total: 8, self: 4, ai: 2, sme: 1, asme: 1 },
+    articles: { total: 8, self: 8, ai: 0, sme: 0, asme: 0 },
     tabs: 5,
     sectorTags: 5,
     benefits: [
@@ -170,7 +170,7 @@ const plans = [
       "Institutional Investor Due Diligence Profile",
       "International sector tagging (global visibility)",
       "Editorial feature in iGEN articles",
-      "8 articles/month: 4 self + 2 AI Editor + 1 SME + 1 ASME",
+      "8 self-authored articles published per month",
     ],
     locked: [],
   },
