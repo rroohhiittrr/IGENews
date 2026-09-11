@@ -389,22 +389,14 @@ export default function LeaderDashboard() {
         <div className="bg-[#f4f7fb] dark:bg-white/5 p-1 rounded-2xl flex items-center shrink-0">
           <button
             onClick={() => setViewMode("private")}
-            className={`px-4 py-2 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all ${
-              viewMode === "private"
-                ? "bg-[#1D1D46] text-white shadow-md"
-                : "text-gray-500 hover:text-[#1D1D46] dark:text-gray-400 dark:hover:text-white"
-            }`}
+            className="px-4 py-2 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all bg-[#1D1D46] text-white shadow-md"
           >
             <Lock className="w-3.5 h-3.5" />
             Admin Dashboard
           </button>
           <button
             onClick={() => setViewMode("public")}
-            className={`px-4 py-2 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all ${
-              viewMode === "public"
-                ? "bg-[#1D1D46] text-white shadow-md"
-                : "text-gray-500 hover:text-[#1D1D46] dark:text-gray-400 dark:hover:text-white"
-            }`}
+            className="px-4 py-2 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all text-gray-500 hover:text-[#1D1D46] dark:text-gray-400 dark:hover:text-white"
           >
             <Eye className="w-3.5 h-3.5" />
             Public Page Preview

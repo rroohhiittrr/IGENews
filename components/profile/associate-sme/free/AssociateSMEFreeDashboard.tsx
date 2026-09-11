@@ -91,21 +91,13 @@ export default function AssociateSMEFreeDashboard() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setViewMode("private")}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-              viewMode === "private"
-                ? "bg-white text-slate-900 shadow-sm"
-                : "text-slate-400 hover:text-white"
-            }`}
+            className="px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-white text-slate-900 shadow-sm"
           >
             🛠️ Admin View
           </button>
           <button
             onClick={() => setViewMode("public")}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-              viewMode === "public"
-                ? "bg-blue-500 text-white shadow-sm"
-                : "bg-blue-600 hover:bg-blue-700 text-white"
-            }`}
+            className="px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-blue-600 hover:bg-blue-700 text-white"
           >
             👁️ View Public Profile ↗
           </button>

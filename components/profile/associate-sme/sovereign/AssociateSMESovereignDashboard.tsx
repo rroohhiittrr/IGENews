@@ -45,7 +45,7 @@ export default function AssociateSMESovereignDashboard() {
   const profile = user?.onboardingForm || {};
   const [viewMode, setViewMode] = useState<"private" | "public">("private");
   const [copiedUrl, setCopiedUrl] = useState(false);
-  const [activeTab, setActiveTab] = useState<"overview" | "articles" | "insights" | "advisory" | "settings">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "articles" | "insights" | "settings">("overview");
   const [avatarBase64, setAvatarBase64] = useState(profile.profilePic || "");
   const [bannerBase64, setBannerBase64] = useState(profile.bannerBase64 || "");
   const avatarInputRef = useRef<HTMLInputElement>(null);
@@ -177,7 +177,6 @@ export default function AssociateSMESovereignDashboard() {
     { id: "overview", label: "Overview" },
     { id: "articles", label: `Articles (${articlesList.length}/8)` },
     { id: "insights", label: "Insights" },
-    { id: "advisory", label: "Inbound Advisory" },
     { id: "settings", label: "Settings" },
   ] as const;
 
