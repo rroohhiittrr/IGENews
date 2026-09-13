@@ -13,7 +13,7 @@ import { useParams } from "next/navigation";
 
 export interface SmeAnalyticsHubProps {
   currentTier: "free" | "pro" | "elite" | "sovereign";
-  role?: "sme" | "associate-sme";
+  role?: "sme" | "associate-sme" | "leader";
   userName?: string;
 }
 
@@ -52,7 +52,7 @@ export default function SmeAnalyticsHub({
             {tabName} is Locked on {currentTier.toUpperCase()} Plan
           </h3>
           <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-            Upgrade your {role === "sme" ? "SME" : "Associate SME"} profile to {requiredTier} tier to unlock real-time {tabName.toLowerCase()} and comprehensive intelligence insights.
+            Upgrade your {role === "sme" ? "SME" : role === "leader" ? "Leader" : "Associate SME"} profile to {requiredTier} tier to unlock real-time {tabName.toLowerCase()} and comprehensive intelligence insights.
           </p>
         </div>
         <Link
@@ -342,7 +342,7 @@ export default function SmeAnalyticsHub({
                   Analytics Hub is Locked on Free Tier
                 </h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                  Upgrade your {role === "sme" ? "SME" : "Associate SME"} profile to access real-time readership insights, visitor traffic metrics, 3-series follower charts, competitor benchmarking, and 1-click lead downloads.
+                  Upgrade your {role === "sme" ? "SME" : role === "leader" ? "Leader" : "Associate SME"} profile to access real-time readership insights, visitor traffic metrics, 3-series follower charts, competitor benchmarking, and 1-click lead downloads.
                 </p>
               </div>
 
@@ -372,7 +372,7 @@ export default function SmeAnalyticsHub({
                 className="w-full py-4 bg-gradient-to-r from-[#0642BA] via-blue-600 to-emerald-600 hover:from-blue-700 hover:to-emerald-700 text-white font-bold rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wider"
               >
                 <Sparkles className="w-4 h-4 text-amber-300" />
-                <span>Upgrade to {role === "sme" ? "SME Pro" : "ASME Pro"} to Unlock</span>
+                <span>Upgrade to {role === "sme" ? "SME Pro" : role === "leader" ? "Pioneer" : "ASME Pro"} to Unlock</span>
                 <ChevronRight className="w-4 h-4" />
               </Link>
             </div>

@@ -421,8 +421,6 @@ export default function AssociateSMEProDashboard() {
       {activeTab === "insights" && (
         <SmeAnalyticsHub currentTier="pro" role="sme" userName={displayName} />
       )}
-        </div>
-      )}
 
       {/* ── 4. SETTINGS TAB ── */}
       {activeTab === "settings" && (

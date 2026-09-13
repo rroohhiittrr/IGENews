@@ -666,7 +666,7 @@ export default function LeaderPublicProfile({
                   </div>
 
                   <div className="divide-y divide-slate-100">
-                    {articlesToShow.slice(0, 2).map((art) => (
+                    {articlesToShow.slice(0, 2).map((art: any) => (
                       <div key={art.id} className="py-3 first:pt-0 space-y-1.5">
                         <span className="text-[10px] font-bold text-blue-600">{art.authorType} · {art.date}</span>
                         <h4 className="text-sm font-bold text-slate-900 hover:text-blue-600 cursor-pointer transition-colors">

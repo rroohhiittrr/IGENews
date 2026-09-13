@@ -7,7 +7,7 @@ import {
   Copy, Edit, Check, Upload, MapPin,
   FileText, Eye, EyeOff, Sparkles, Send,
   BarChart3, ShieldCheck, Globe, TrendingUp, Award,
-  Crown, Newspaper, Users, Settings as SettingsIcon, MessageSquare
+  Crown, Newspaper, Users, Settings as SettingsIcon
 } from "lucide-react";
 import { SECTORS } from "@/lib/sectors";
 import SmeAnalyticsHub from "@/components/profile/common/SmeAnalyticsHub";
@@ -51,31 +51,7 @@ export default function AssociateSMESovereignDashboard() {
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const bannerInputRef = useRef<HTMLInputElement>(null);
 
-  // Inbound Advisory Inquiries for Sovereign tier
-  const [inquiries, setInquiries] = useState([
-    {
-      id: "inq_1",
-      clientName: "Vikram Malhotra",
-      designation: "Managing Director, Global Supply Chain",
-      organization: "Tata International Logistics",
-      email: "v.malhotra@tata-intl.com",
-      topic: "India-GCC CEPA Tariff Modeling & Free Trade Zone Advisory",
-      budget: "₹2,50,000 - ₹5,00,000",
-      date: "Sept 06, 2026",
-      status: "New",
-    },
-    {
-      id: "inq_2",
-      clientName: "Sophie Van Der Bilt",
-      designation: "Principal Economist",
-      organization: "Rotterdam Port Authority",
-      email: "s.vanderbilt@portofrotterdam.com",
-      topic: "Cross-Border Green Hydrogen Logistics Corridor Audit",
-      budget: "€5,000 - €10,000",
-      date: "Sept 02, 2026",
-      status: "Responded",
-    },
-  ]);
+
 
   // Settings State
   const sampleName = "Ananya Krishnan";
@@ -418,52 +394,7 @@ export default function AssociateSMESovereignDashboard() {
         <SmeAnalyticsHub currentTier="sovereign" role="associate-sme" userName={displayName} />
       )}
 
-      {/* ── 4. ADVISORY TAB ── */}
-      {activeTab === "advisory" && (
-        <div className="space-y-6">
-          <div className="bg-white dark:bg-[#122238] rounded-2xl p-6 border border-gray-100 dark:border-white/5 shadow-xs">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-              <div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                  <MessageSquare className="w-4 h-4 text-purple-600" />
-                  <span>Inbound Advisory & Keynote Consultation Requests</span>
-                </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                  Direct executive inquiries submitted via your Sovereign Public Profile advisory booking box.
-                </p>
-              </div>
-              <span className="text-xs font-bold px-3 py-1 rounded-lg bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300 border border-purple-300 dark:border-purple-800">
-                Sovereign Exclusive
-              </span>
-            </div>
 
-            <div className="space-y-4">
-              {inquiries.map((inq) => (
-                <div key={inq.id} className="p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between flex-wrap gap-2">
-                    <div>
-                      <h4 className="font-bold text-sm text-slate-900 dark:text-white">{inq.clientName}</h4>
-                      <p className="text-xs text-slate-500">{inq.designation} • <span className="font-semibold text-slate-700 dark:text-slate-300">{inq.organization}</span></p>
-                    </div>
-                    <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
-                      Budget: {inq.budget}
-                    </span>
-                  </div>
-                  <p className="text-xs text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800/80 p-3 rounded-xl border border-slate-100 dark:border-slate-700 font-medium">
-                    "{inq.topic}"
-                  </p>
-                  <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
-                    <span>Submitted on {inq.date}</span>
-                    <a href={`mailto:${inq.email}?subject=Re: ${inq.topic}`} className="px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-bold text-xs transition-all">
-                      Respond via Direct Email →
-                    </a>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* ── 4. SETTINGS TAB ── */}
       {activeTab === "settings" && (

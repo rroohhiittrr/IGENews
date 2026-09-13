@@ -509,7 +509,7 @@ export default function SmePublicProfile({
           </div>
 
           <div className="divide-y divide-slate-100 dark:divide-slate-800 space-y-4">
-            {articlesList.map(art => (
+            {articlesList.map((art: any) => (
               <div key={art.id} className="pt-4 first:pt-0 space-y-3">
                 <div className="flex items-center justify-between text-xs text-slate-400 font-semibold">
                   <span>{art.date} · {art.readTime}</span>

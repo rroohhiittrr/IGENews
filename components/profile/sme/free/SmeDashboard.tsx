@@ -38,7 +38,6 @@ import {
   Tag,
   Paperclip,
   MessageSquare,
-  Mail,
   ArrowRight,
   CheckCheck,
 } from "lucide-react";
@@ -787,61 +786,7 @@ export default function SmeDashboard() {
           <SmeAnalyticsHub currentTier={currentTier} role="sme" userName={user?.name || "Specialist"} />
         )}
 
-        {/* TAB 4: ADVISORY & INQUIRIES (Sovereign Tier Only) */}
-        {activeTab === "advisory" && currentTier === "sovereign" && (
-          <div className="space-y-6">
-            <div className="bg-white dark:bg-[#0f172a] rounded-2xl border border-slate-200/80 dark:border-slate-800 p-6 shadow-xs">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                <div>
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <MessageSquare className="w-4 h-4 text-purple-600" />
-                    <span>Inbound Advisory & Keynote Consultation Requests</span>
-                  </h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                    Direct executive inquiries submitted via your Sovereign Public Profile advisory booking box.
-                  </p>
-                </div>
 
-                <span className="text-xs font-bold px-3 py-1 rounded-lg bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300 border border-purple-300 dark:border-purple-800">
-                  {inquiries.length} Active Requests
-                </span>
-              </div>
-
-              {/* Inquiries Table */}
-              <div className="space-y-3">
-                {inquiries.map((inq) => (
-                  <div
-                    key={inq.id}
-                    className="p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 hover:border-purple-500/40 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4"
-                  >
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-bold text-slate-900 dark:text-white">{inq.clientName}</span>
-                        <span className="text-xs text-slate-500 dark:text-slate-400">• {inq.designation}, {inq.organization}</span>
-                      </div>
-                      <p className="text-xs font-semibold text-purple-700 dark:text-purple-300">{inq.topic}</p>
-                      <div className="flex items-center gap-4 text-[11px] text-slate-500 dark:text-slate-400 mt-2">
-                        <span>Budget Range: <strong className="text-slate-700 dark:text-slate-200">{inq.budget}</strong></span>
-                        <span>Received: {inq.date}</span>
-                        <span>Email: <strong className="text-slate-700 dark:text-slate-200">{inq.email}</strong></span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2 shrink-0">
-                      <a
-                        href={`mailto:${inq.email}?subject=Re: iGEN Advisory Inquiry - ${encodeURIComponent(inq.topic)}`}
-                        className="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-purple-600 hover:bg-purple-700 text-white flex items-center gap-1.5 shadow-xs transition-all"
-                      >
-                        <Mail className="w-3.5 h-3.5" />
-                        <span>Respond</span>
-                      </a>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* TAB: SETTINGS (Available on all tiers) */}
         {activeTab === "settings" && (
