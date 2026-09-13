@@ -43,3 +43,8 @@ next-env.d.ts
 # Local Netlify folder
 .netlify
 deno.lock
+
+# Cloudflare OpenNext & Wrangler
+.open-next
+.wrangler
+Icon?
