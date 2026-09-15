@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useParams, useRouter } from "next/navigation";
-import { Check, X, ShieldAlert, Sparkles, Star, ArrowRight, Mail } from "lucide-react";
+import { Check, X, ShieldAlert, Sparkles, Star, ArrowRight, Mail, CheckCircle2 } from "lucide-react";
 import CheckoutModal from "@/components/profile/CheckoutModal";
 
 export default function SmePlansPage() {
@@ -44,7 +44,6 @@ export default function SmePlansPage() {
       ],
       restrictions: [
         "No article publishing allowed",
-        "No consulting revenue activation",
         "No premium badge or priority ranking",
         "No custom banner or profile styling",
       ],
@@ -69,15 +68,12 @@ export default function SmePlansPage() {
         "Publish up to 4 articles/month (Max 1/week)",
         "Up to 10 sector expertise tags",
         "Profile listed in Expert Directory",
-        "Consulting inquiry form on your profile",
         "Platform-Only public visibility toggle",
         "Article view & engagement insights",
         "Priority placement over Free members",
-        "AI discovery recommendations",
         "Podcast & interview opportunities",
       ],
       restrictions: [
-        "No full consulting booking system",
         "No article revenue share",
         "No custom banner or premium styling",
       ],
@@ -101,13 +97,11 @@ export default function SmePlansPage() {
         "Gold 'SME Elite' verification badge",
         "Publish up to 6 articles/month",
         "Priority #1 ranking in sector searches",
-        "Full consulting booking system (1:1 sessions)",
         "Revenue share on article reads (70/30 split)",
         "Downloadable PDF trade report publishing",
         "Custom profile banner + branding",
         "Eligible for IGE roundtables & webinars",
         "Featured in IGE Newsletter (20K+ subscribers)",
-        "'Open to Consulting' badge in Reader feeds",
         "Fully Public profile (Google SEO indexed)",
         "Speaking opportunities",
       ],
@@ -133,7 +127,6 @@ export default function SmePlansPage() {
         "Publish up to 8 articles/month (Max 2/week)",
         "Dedicated IGE Account Manager",
         "IGE-managed PR & co-bylined editorials",
-        "80/20 revenue share on consulting bookings",
         "Speaking & keynote placement at IGE events",
         "Sovereign SME widget in all Reader feeds",
         "White-label PDF reports under your seal",

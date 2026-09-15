@@ -7,6 +7,8 @@ export interface Industry {
 export interface Sector {
   id: string;
   name: string;
+  label?: string;
+  value?: string;
   icon: string; // lucide-react icon name
   description: string;
   industries: Industry[];

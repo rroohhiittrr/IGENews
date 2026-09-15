@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useParams, useRouter } from "next/navigation";
-import { Check, X, ShieldAlert, Sparkles, Star, ArrowRight, Mail } from "lucide-react";
+import { Check, X, ShieldAlert, Sparkles, Star, ArrowRight, Mail, CheckCircle2 } from "lucide-react";
 import CheckoutModal from "@/components/profile/CheckoutModal";
 
 export default function AssociateSmePlansPage() {
@@ -44,7 +44,6 @@ export default function AssociateSmePlansPage() {
       ],
       restrictions: [
         "No article publishing allowed",
-        "No consulting revenue activation",
         "No premium badge or priority ranking",
         "No custom banner or profile styling",
       ],
@@ -69,16 +68,13 @@ export default function AssociateSmePlansPage() {
         "Publish up to 4 articles/month (Max 1/week)",
         "Up to 10 sector expertise tags",
         "Profile listed in Expert Directory",
-        "Consulting inquiry form on your profile",
         "Platform-Only public visibility toggle",
         "Article view & engagement insights",
         "Priority placement over Free members",
-        "AI discovery recommendations",
         "Podcast & interview opportunities",
       ],
       restrictions: [
-        "No full consulting booking system",
-        "No article revenue share",
+        "No downloadable PDF reports attachment",
         "No custom banner or premium styling",
       ],
       cta: "Upgrade to ASME Pro",
@@ -101,13 +97,11 @@ export default function AssociateSmePlansPage() {
         "Gold 'ASME Elite' verification badge",
         "Publish up to 6 articles/month",
         "Priority #1 ranking in sector searches",
-        "Full consulting booking system (1:1 sessions)",
-        "Revenue share on article reads (70/30 split)",
+        "Co-authorship credits with Senior SMEs & Institutions",
         "Downloadable PDF trade report publishing",
         "Custom profile banner + branding",
         "Eligible for IGE roundtables & webinars",
         "Featured in IGE Newsletter (20K+ subscribers)",
-        "'Open to Consulting' badge in Reader feeds",
         "Fully Public profile (Google SEO indexed)",
         "Speaking opportunities",
       ],
@@ -133,7 +127,6 @@ export default function AssociateSmePlansPage() {
         "Publish up to 8 articles/month (Max 2/week)",
         "Dedicated IGE Account Manager",
         "IGE-managed PR & co-bylined editorials",
-        "80/20 revenue share on consulting bookings",
         "Speaking & keynote placement at IGE events",
         "Sovereign ASME widget in all Reader feeds",
         "White-label PDF reports under your seal",
@@ -187,7 +180,7 @@ export default function AssociateSmePlansPage() {
         <div className="mb-8 p-4 bg-gradient-to-r from-teal-50/70 to-emerald-50/50 dark:from-teal-950/20 dark:to-emerald-950/20 border border-teal-200 dark:border-teal-900/30 rounded-2xl flex items-center justify-between flex-wrap gap-4 shadow-sm">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-teal-600 text-white flex items-center justify-center font-bold text-sm shadow-md">
-              ✓
+              <CheckCircle2 className="w-5 h-5 text-white" />
             </div>
             <div>
               <div className="flex items-center gap-2">
@@ -335,8 +328,9 @@ export default function AssociateSmePlansPage() {
               {/* Action Button */}
               <div>
                 {isActive ? (
-                  <div className="w-full py-3.5 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/50 text-emerald-700 dark:text-emerald-400 text-center font-bold text-sm rounded-2xl">
-                    ✓ Your Current Plan
+                  <div className="w-full py-3.5 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/50 text-emerald-700 dark:text-emerald-400 text-center font-bold text-sm rounded-2xl flex items-center justify-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                    <span>Your Current Plan</span>
                   </div>
                 ) : (
                   <button

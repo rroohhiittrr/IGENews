@@ -7,6 +7,7 @@ export type AccountType = "reader" | "sme" | "associate-sme" | "company" | "lead
 export interface UserProfile {
   id?: string;
   uid?: string;
+  username?: string;
   name: string;
   email: string;
   mobile?: string;
