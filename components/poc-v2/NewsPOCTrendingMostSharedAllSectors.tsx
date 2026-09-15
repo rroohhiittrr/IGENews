@@ -1456,7 +1456,6 @@ export default function NewsPOCTrendingMostSharedAllSectors({ onBack }: Props) {
                   </div>
                 </div>
 
-                {/* ── Trending Products & Services ── */}
                 <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
                   <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block border-b border-gray-100 dark:border-gray-800 pb-2">
                     Trending Products & Services
@@ -1473,88 +1472,6 @@ export default function NewsPOCTrendingMostSharedAllSectors({ onBack }: Props) {
                       </div>
                     ))}
                   </div>
-                </div>
-
-                {/* ── Global Sharing Alerts Builder ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
-                  <h4 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider font-semibold">
-                    Know When a Story Goes Viral
-                  </h4>
-                  
-                  {!alertConfigured ? (
-                    <div className="space-y-3 text-[10px] font-semibold">
-                      <p className="text-gray-500 leading-relaxed font-normal">
-                        Configure threshold alerts to receive instant notifications when stories in your followed sectors become highly trending.
-                      </p>
-                      
-                      <div className="space-y-1.5">
-                        <span className="text-[8px] text-gray-400 uppercase font-bold">Sector Focus</span>
-                        <select 
-                          value={alertSector}
-                          onChange={(e) => setAlertSector(e.target.value)}
-                          className="w-full p-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-lg text-xs outline-none"
-                        >
-                          <option value="Technology">Technology & Wafer Packaging</option>
-                          <option value="Energy">Energy & Solar grids</option>
-                          <option value="Health">Healthcare & API Supply</option>
-                          <option value="Automotive">Automotive & Heavy EVs</option>
-                        </select>
-                      </div>
-
-                      <div className="space-y-1.5">
-                        <span className="text-[8px] text-gray-400 uppercase font-bold">Alert Threshold</span>
-                        <select 
-                          value={alertSharesThreshold}
-                          onChange={(e) => setAlertSharesThreshold(e.target.value)}
-                          className="w-full p-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-lg text-xs outline-none"
-                        >
-                          <option value="5,000">Exceeds 5,000 shares</option>
-                          <option value="10,000">Exceeds 10,000 shares</option>
-                          <option value="20,000">Exceeds 20,000 shares</option>
-                        </select>
-                      </div>
-
-                      <button 
-                        onClick={() => { setAlertConfigured(true); showToast(`Alert created for ${alertSector} stories over ${alertSharesThreshold} shares ✓`); }}
-                        className="w-full bg-[#1D1D46] hover:bg-[#152e4f] text-white font-bold py-2 rounded-lg transition-colors uppercase text-xs"
-                      >
-                        Create Alert
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-300 dark:border-emerald-900 text-emerald-800 dark:text-emerald-300 p-3 rounded-lg text-[10px] font-bold text-center">
-                      ✓ Global Sharing Alert Configured Successfully!
-                    </div>
-                  )}
-                </div>
-
-                {/* ── Premium Global Sharing Intelligence CTA ── */}
-                <div className="bg-gradient-to-br from-blue-900 to-indigo-950 text-white border border-blue-950 p-5 rounded-2xl shadow-sm space-y-4">
-                  <h4 className="font-display text-sm font-bold flex items-center gap-1.5">
-                    <Sparkles className="h-4 w-4 text-amber-400 animate-pulse" /> Go Beyond Share Counts
-                  </h4>
-                  <p className="text-[10px] text-slate-300 leading-relaxed font-normal">
-                    Understand how stories spread across industries and markets and identify emerging business conversations.
-                  </p>
-                  
-                  <ul className="space-y-2 text-[10px] text-slate-350 font-semibold">
-                    <li className="flex items-center gap-1.5">
-                      <CheckCircle className="h-3.5 w-3.5 text-emerald-400 shrink-0" /> Share Velocity & Heatmap Grids
-                    </li>
-                    <li className="flex items-center gap-1.5">
-                      <CheckCircle className="h-3.5 w-3.5 text-emerald-400 shrink-0" /> Advanced Viral Threshold Alarms
-                    </li>
-                    <li className="flex items-center gap-1.5">
-                      <CheckCircle className="h-3.5 w-3.5 text-emerald-400 shrink-0" /> Sector × Country Intelligence Matrix
-                    </li>
-                  </ul>
-
-                  <button 
-                    onClick={() => showToast("Opening premium checkout flow...")}
-                    className="w-full text-center bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold text-xs py-2 rounded-xl transition-all uppercase tracking-wider"
-                  >
-                    Unlock Global Sharing Intelligence
-                  </button>
                 </div>
 
                 {/* ── Sponsored Global Campaign (SPONSORED) ── */}

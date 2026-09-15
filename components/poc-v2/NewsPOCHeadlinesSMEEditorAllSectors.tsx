@@ -417,31 +417,7 @@ export default function NewsPOCHeadlinesSMEEditorAllSectors({ onBack }: Props) {
         </section>
       ) : (
         <>
-          {/* ─── Global Expert Snapshot ─── */}
-          <section id="snapshot-anchor" className="mx-auto max-w-7xl px-4 pt-4 lg:px-6">
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-4 rounded-2xl shadow-3xs text-center text-xs font-semibold">
-              <div className="p-3 bg-gray-50/50 dark:bg-gray-900/50 rounded-xl">
-                <span className="font-extrabold text-blue-500 text-sm md:text-base block">142</span>
-                <span className="text-[8px] text-gray-450 block uppercase tracking-wider mt-1">Verified Experts</span>
-              </div>
-              <div className="p-3 bg-gray-50/50 dark:bg-gray-900/50 rounded-xl">
-                <span className="font-extrabold text-amber-500 text-sm md:text-base block">38</span>
-                <span className="text-[8px] text-gray-450 block uppercase tracking-wider mt-1">Active SMEs</span>
-              </div>
-              <div className="p-3 bg-gray-50/50 dark:bg-gray-900/50 rounded-xl">
-                <span className="font-extrabold text-purple-500 text-sm md:text-base block">284</span>
-                <span className="text-[8px] text-gray-450 block uppercase tracking-wider mt-1">Expert Insights</span>
-              </div>
-              <div className="p-3 bg-gray-50/50 dark:bg-gray-900/50 rounded-xl">
-                <span className="font-extrabold text-red-500 text-sm md:text-base block">12</span>
-                <span className="text-[8px] text-gray-450 block uppercase tracking-wider mt-1">Countries Covered</span>
-              </div>
-              <div className="p-3 bg-gray-50/50 dark:bg-gray-900/50 rounded-xl">
-                <span className="font-extrabold text-emerald-500 text-sm md:text-base block">50</span>
-                <span className="text-[8px] text-gray-450 block uppercase tracking-wider mt-1">Sectors Covered</span>
-              </div>
-            </div>
-          </section>
+
           {/* ─── SME Editor's Top Picks ─── */}
           {filteredExperts.length > 0 && (
             <section className="mx-auto max-w-7xl px-4 pt-6 lg:px-6 space-y-4">
@@ -822,24 +798,7 @@ export default function NewsPOCHeadlinesSMEEditorAllSectors({ onBack }: Props) {
                   </div>
                 </div>
 
-                {/* Expert Q&A */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block border-b border-gray-100 dark:border-gray-800 pb-2">
-                    Expert Q&A
-                  </span>
-                  
-                  <div className="space-y-3 text-xs font-semibold">
-                    {MOCK_QUESTIONS.map((item, idx) => (
-                      <div key={idx} className="space-y-1.5">
-                        <span className="text-gray-900 dark:text-white block line-clamp-2">Q: "{item.question}"</span>
-                        <div className="bg-gray-50 dark:bg-gray-900/50 p-2.5 rounded-lg border border-gray-100 dark:border-gray-850 text-[10px] font-normal leading-relaxed text-gray-655 dark:text-gray-400">
-                          <span className="font-extrabold text-blue-500 block text-[8px] uppercase tracking-wider">Answered by {item.expertName}</span>
-                          <p>"{item.answerPreview}"</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+
 
                 {/* Expert Polls */}
                 <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">

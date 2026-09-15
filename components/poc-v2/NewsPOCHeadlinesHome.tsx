@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { 
-  Newspaper, Clock, ArrowUpRight, TrendingUp, RefreshCw, Lock, 
+  Newspaper, Clock, ArrowUpRight, TrendingUp, RefreshCw, Lock,
   ShieldAlert, FileText, ExternalLink, Eye, Share2, Compass, 
-  BookOpen, UserCheck, BarChart2, ChevronRight, Play, CheckCircle,
+  BookOpen, UserCheck, BarChart2, ChevronRight, Play,
   Sparkles, Bell
 } from "lucide-react";
 
@@ -520,66 +520,7 @@ export default function NewsPOCHeadlinesHome() {
         </div>
       </section>
 
-      {/* Ninth Fold: Premium Intelligence Banner */}
-      <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
-        <div className="bg-slate-950 text-white border border-slate-900 p-8 rounded-3xl relative overflow-hidden shadow-lg space-y-6">
-          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1000&auto=format&fit=crop&q=80')] bg-cover opacity-10" />
-          <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-6 border-b border-white/10">
-            <div className="space-y-2">
-              <span className="bg-amber-400/10 text-amber-400 border border-amber-400/20 text-[9px] font-bold px-2.5 py-0.5 rounded tracking-wider uppercase block w-max">
-                SUBSCRIBER EXCLUSIVE
-              </span>
-              <h3 className="font-display text-xl md:text-3xl font-bold leading-tight">
-                Unlock Corporate Intelligence Pro.
-              </h3>
-              <p className="text-xs md:text-sm text-slate-350 font-normal leading-relaxed max-w-2xl">
-                Get full access to 5,000+ verified corporate profiles, bilateral supply chain directories, and high-yielding B2B trade intelligence leads.
-              </p>
-            </div>
-            <Link href="/eoi" className="bg-amber-500 hover:bg-amber-600 text-gray-955 font-bold text-xs px-6 py-3 rounded-lg transition-colors whitespace-nowrap block">
-              Get Premium Access
-            </Link>
-          </div>
 
-          <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs pb-4">
-            {[
-              "5,000+ Company Intelligence Profiles",
-              "Bilateral Sourcing & Supply Chain Leads",
-              "Verified Supplier Badges & Priority Expo Access"
-            ].map((benefit, idx) => (
-              <div key={idx} className="flex items-center gap-2 text-slate-300">
-                <CheckCircle className="h-4 w-4 text-amber-400 shrink-0" />
-                <span>{benefit}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Locked preview cards */}
-          <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { type: "DEEP DIVE", title: "Why India is Becoming the Next Global Manufacturing Base", author: "By IGEN Research Team", read: "12 min read" },
-              { type: "FORECAST", title: "The Hidden Impact of AI Regulation on Global Trade", author: "By Trade Intelligence Desk", read: "15 min read" },
-              { type: "STRATEGY", title: "Global Supply Chain 2025: Risks, Shifts & Opportunities", author: "By Global Strategy Team", read: "22 min read" }
-            ].map((pCard, idx) => (
-              <div key={idx} className="bg-slate-900/60 backdrop-blur-xs p-5 rounded-xl border border-white/5 flex flex-col justify-between min-h-[140px] relative overflow-hidden group">
-                <Lock className="absolute right-4 top-4 h-4 w-4 text-white/40" />
-                <div className="space-y-2">
-                  <span className="text-[8px] font-bold text-amber-400 uppercase tracking-wider block">
-                    {pCard.type}
-                  </span>
-                  <h4 className="text-xs font-bold text-white leading-snug group-hover:text-amber-400 transition-colors">
-                    {pCard.title}
-                  </h4>
-                </div>
-                <div className="flex justify-between items-center text-[9px] text-slate-400 font-semibold pt-4">
-                  <span>{pCard.author}</span>
-                  <span>{pCard.read}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Tenth Fold: Global Policy Tracker */}
       <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
@@ -633,12 +574,12 @@ export default function NewsPOCHeadlinesHome() {
         </div>
       </section>
 
-      {/* Eleventh Fold: Case Study & Resilience Spotlight */}
+      {/* Eleventh Fold: Featured Insight Spotlight */}
       <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        <div className="w-full">
           
-          {/* Left Column: FEATURED INSIGHT */}
-          <div className="lg:col-span-7 relative rounded-3xl overflow-hidden bg-slate-950 text-white min-h-[380px] flex flex-col justify-end p-8 border border-slate-900 shadow-sm group">
+          {/* FEATURED INSIGHT */}
+          <div className="w-full relative rounded-3xl overflow-hidden bg-slate-950 text-white min-h-[380px] flex flex-col justify-end p-8 border border-slate-900 shadow-sm group">
             <div 
               className="absolute inset-0 z-0 bg-cover bg-center opacity-30 group-hover:scale-102 transition-transform duration-300"
               style={{ backgroundImage: `url('https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&auto=format&fit=crop&q=80')` }}
@@ -698,22 +639,6 @@ export default function NewsPOCHeadlinesHome() {
               </div>
             </div>
           </div>
-
-          {/* Right Column: Case study content card */}
-          <div className="lg:col-span-5 bg-white dark:bg-[#0f172a] border border-gray-255 dark:border-gray-800 p-6 rounded-3xl flex flex-col justify-between shadow-xs">
-            <div className="space-y-4">
-              <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider block">CASE STUDY</span>
-              <h4 className="font-display text-base font-bold text-gray-950 dark:text-white leading-snug">
-                How Apple is accelerating manufacturing expansion across India.
-              </h4>
-              <p className="text-xs text-gray-550 leading-relaxed font-normal">
-                The "China Plus One" strategy is maturing. India now accounts for 14% of iPhone production, a figure projected to hit 25% by 2028.
-              </p>
-            </div>
-            <button className="w-full mt-6 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-bold text-[10px] py-2.5 rounded-lg hover:bg-gray-50 transition-colors uppercase">
-              Read Strategic Analysis
-            </button>
-          </div>
         </div>
       </section>
 
@@ -758,34 +683,7 @@ export default function NewsPOCHeadlinesHome() {
         </div>
       </section>
 
-      {/* Thirteenth Fold: Market Snapshot Strip */}
-      <section className="mx-auto max-w-7xl px-4 pt-10 lg:px-6">
-        <div className="border-t border-gray-200 dark:border-gray-800 pt-8 space-y-4">
-          <div className="flex justify-between items-center text-[10px] text-gray-400 font-bold uppercase tracking-wider">
-            <span>Market Snapshot</span>
-            <span>REAL-TIME DATA • NYSE/LSE/NSE</span>
-          </div>
-          
-          <div className="grid grid-cols-2 sm:grid-cols-6 gap-4">
-            {[
-              { name: "S&P 500", val: "5,241.53", change: "+0.32%", up: true },
-              { name: "NASDAQ", val: "16,384.47", change: "+0.18%", up: true },
-              { name: "NIFTY 50", val: "22,475.20", change: "+0.68%", up: true },
-              { name: "BRENT", val: "$85.42", change: "-0.56%", up: false },
-              { name: "GOLD", val: "$2,358.40", change: "+0.35%", up: true },
-              { name: "BTC/USD", val: "$68,432", change: "+1.45%", up: true }
-            ].map((mVal, idx) => (
-              <div key={idx} className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 p-3 rounded-xl shadow-3xs text-center">
-                <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider block">{mVal.name}</span>
-                <span className="text-xs font-bold text-gray-950 dark:text-white block mt-1 font-mono">{mVal.val}</span>
-                <span className={`text-[9px] font-bold block mt-0.5 ${mVal.up ? "text-emerald-500" : "text-red-500"}`}>
-                  {mVal.change}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+
 
 
 

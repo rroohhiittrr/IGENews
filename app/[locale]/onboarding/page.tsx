@@ -36,8 +36,10 @@ import {
   Building, Award, TrendingUp, LayoutGrid, Target, Package, Monitor, FileEdit,
   Mic, ClipboardList, User,
   Microchip, Pickaxe, TestTube, Sparkles, AlertTriangle, Lock, Key, X, Info,
-  type LucideIcon,
 } from "lucide-react";
+import type { ComponentType, SVGProps } from "react";
+type LucideIcon = ComponentType<SVGProps<SVGSVGElement> & { size?: number | string; color?: string; strokeWidth?: number | string }>;
+
 import "./onboarding.css";
 
 /* ============================

@@ -309,7 +309,7 @@ export default function NewsPOCFeedHome() {
 
             {/* Selector Dropdowns */}
             <div className="flex flex-wrap items-center gap-2">
-              {["Sector", "Country", "Type", "Strength"].map((sel) => (
+              {["Sector", "Country"].map((sel) => (
                 <select 
                   key={sel}
                   className="bg-white dark:bg-[#0f172a] border border-gray-300 dark:border-gray-800 rounded px-2.5 py-1 text-[11px] font-semibold text-gray-650 dark:text-gray-350 focus:outline-none focus:border-blue-500"
@@ -321,22 +321,7 @@ export default function NewsPOCFeedHome() {
           </div>
         </div>
 
-        {/* Horizontal scrollbar of sector chips */}
-        <div className="flex gap-2 pb-4 mb-4 overflow-x-auto scrollbar-hide border-b border-gray-150 dark:border-gray-850">
-          {["All", "HEALTHCARE & PHARMA", "FINANCE & BANKING", "SUSTAINABLE ENERGY"].map((sector) => (
-            <button
-              key={sector}
-              onClick={() => setSelectedSector(sector)}
-              className={`px-3 py-1.5 rounded-full text-[10px] font-bold uppercase transition-all whitespace-nowrap ${
-                selectedSector === sector
-                  ? "bg-blue-600 text-white shadow-xs"
-                  : "bg-gray-100 dark:bg-gray-900 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 border border-gray-200 dark:border-gray-800"
-              }`}
-            >
-              {sector === "All" ? "All Sectors" : sector.replace("HEALTHCARE & PHARMA", "Healthcare").replace("FINANCE & BANKING", "Finance").replace("SUSTAINABLE ENERGY", "Energy")}
-            </button>
-          ))}
-        </div>
+
 
         {/* News Feed Items Stack */}
         <div className="space-y-6">

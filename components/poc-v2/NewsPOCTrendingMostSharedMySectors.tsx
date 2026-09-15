@@ -1073,71 +1073,7 @@ export default function NewsPOCTrendingMostSharedMySectors({ onBack }: Props) {
                   </div>
                 </div>
 
-                {/* ── Premium Intelligence Upgrade CTA ── */}
-                <div className="bg-gradient-to-br from-blue-900 to-indigo-950 text-white border border-blue-950 p-5 rounded-2xl shadow-3xs space-y-4">
-                  <h4 className="font-display text-sm font-bold flex items-center gap-1.5">
-                    <Sparkles className="h-4 w-4 text-amber-400 animate-pulse" /> Go Beyond Share Counts
-                  </h4>
-                  <p className="text-[10px] text-slate-300 leading-relaxed font-normal">
-                    Understand how stories spread across your sectors and identify emerging business conversations before they peak.
-                  </p>
-                  
-                  <ul className="space-y-2 text-[10px] text-slate-300 font-semibold">
-                    <li className="flex items-center gap-1.5">
-                      <CheckCircle className="h-3.5 w-3.5 text-emerald-400 shrink-0" /> Share Velocity History Charts
-                    </li>
-                    <li className="flex items-center gap-1.5">
-                      <CheckCircle className="h-3.5 w-3.5 text-emerald-400 shrink-0" /> Distribution Attributed Analytics
-                    </li>
-                    <li className="flex items-center gap-1.5">
-                      <CheckCircle className="h-3.5 w-3.5 text-emerald-400 shrink-0" /> Topic Propagation Maps
-                    </li>
-                  </ul>
 
-                  <button 
-                    onClick={() => showToast("Opening premium checkout flow...")}
-                    className="w-full text-center bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold text-xs py-2 rounded-xl transition-all uppercase tracking-wider"
-                  >
-                    Unlock Viral Intelligence
-                  </button>
-                </div>
-
-
-
-                {/* ── Sharing Alerts (ALERT) ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-3xs space-y-3">
-                  <h4 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">
-                    Know When Your Sector Goes Viral
-                  </h4>
-                  
-                  {!alertConfirmed ? (
-                    <div className="space-y-3 text-[10px]">
-                      <p className="text-gray-500 leading-relaxed font-normal">
-                        Configure threshold alerts to receive instant notifications when stories in your followed sectors become highly trending.
-                      </p>
-                      
-                      <div className="space-y-1.5">
-                        <span className="text-[8px] text-gray-400 uppercase font-bold">Alert Threshold</span>
-                        <select className="w-full p-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-850 rounded-lg font-semibold text-xs outline-none">
-                          <option>Spiking Fast (&gt;100 shares/hr)</option>
-                          <option>Highly Shared (&gt;10K Shares)</option>
-                          <option>Breaking News Alerts Only</option>
-                        </select>
-                      </div>
-
-                      <button 
-                        onClick={() => { setAlertConfirmed(true); showToast("Sectors Alert setup completed ✓"); }}
-                        className="w-full bg-[#1D1D46] hover:bg-[#152e4f] text-white font-bold py-2 rounded-lg transition-colors uppercase text-xs"
-                      >
-                        Create Sharing Alert
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-300 dark:border-emerald-900 text-emerald-800 dark:text-emerald-300 p-3 rounded-lg text-[10px] font-bold text-center">
-                      ✓ Alerts Configured Successfully!
-                    </div>
-                  )}
-                </div>
 
                 {/* ── Featured Company (FEATURED) ── */}
                 <div className="border border-blue-200/50 dark:border-blue-900/40 bg-blue-50/10 dark:bg-blue-955/5 p-4 rounded-xl shadow-3xs space-y-3">

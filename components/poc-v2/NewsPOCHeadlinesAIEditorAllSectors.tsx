@@ -802,40 +802,7 @@ export default function NewsPOCHeadlinesAIEditorAllSectors({ onBack }: Props) {
 
 
 
-                {/* ── Global Sector Highlights ── */}
-                <div className="space-y-4 pt-4">
-                  <div className="border-b border-gray-200 dark:border-gray-800 pb-2">
-                    <h3 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">
-                      Sector Highlights
-                    </h3>
-                  </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs font-semibold">
-                    {[
-                      { name: "Technology & AI", headlines: 42, devs: 8, trends: 3, breaking: 2, icon: "🤖", code: "S38" },
-                      { name: "Energy & sustainability", headlines: 31, devs: 6, trends: 4, breaking: 1, icon: "⚡", code: "S17" },
-                      { name: "Health & Pharma", headlines: 27, devs: 5, trends: 3, breaking: 0, icon: "🏥", code: "S23" },
-                      { name: "BFSI & Finance", headlines: 38, devs: 7, trends: 4, breaking: 0, icon: "🏦", code: "S41" }
-                    ].map((sec, idx) => (
-                      <div key={idx} className="bg-white dark:bg-[#0f172a] border border-gray-205 dark:border-gray-800 p-4 rounded-xl shadow-xs space-y-2">
-                        <div className="flex items-center gap-1 text-[11px] truncate">
-                          <span>{sec.icon}</span>
-                          <span className="font-bold text-gray-900 dark:text-white block">{sec.name.split(" & ")[0]}</span>
-                        </div>
-                        <div className="text-[9px] text-gray-500 pt-1 space-y-0.5">
-                          <div><span className="font-bold text-blue-500">{sec.headlines}</span> headlines</div>
-                          <div><span className="font-bold text-amber-500">{sec.devs}</span> developments</div>
-                        </div>
-                        <Link 
-                          href={`/en/poc-v2/sector/${sec.code}`}
-                          className="text-[9px] font-bold text-blue-500 hover:underline uppercase block pt-1.5 border-t border-gray-50 dark:border-gray-800"
-                        >
-                          Explore Sector →
-                        </Link>
-                      </div>
-                    ))}
-                  </div>
-                </div>
 
               </div>
 
@@ -1029,57 +996,7 @@ export default function NewsPOCHeadlinesAIEditorAllSectors({ onBack }: Props) {
                   </div>
                 </div>
 
-                {/* ── Expert Perspectives ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block border-b border-gray-100 dark:border-gray-800 pb-2">
-                    Expert Perspectives
-                  </span>
-                  
-                  <div className="space-y-3 text-xs">
-                    {MOCK_EXPERTS.map((exp, idx) => (
-                      <div key={idx} className="space-y-1">
-                        <span className="font-bold text-gray-900 dark:text-white block">{exp.name} ({exp.org})</span>
-                        <p className="text-[10px] text-gray-555 italic leading-snug font-normal">"{exp.opinion}"</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
 
-
-
-                {/* ── Global Industry Reaction Sentiment breakdown ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-205 dark:border-gray-800 p-5 rounded-2xl shadow-3xs space-y-3">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block border-b border-gray-100 dark:border-gray-800 pb-2">
-                    Global Discussion Sentiment
-                  </span>
-                  
-                  <div className="space-y-2.5 text-xs font-semibold">
-                    <div className="flex justify-between text-[10px]">
-                      <span>Positive Sentiment</span>
-                      <span className="text-emerald-500">42%</span>
-                    </div>
-                    <div className="h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-                      <div className="h-full bg-emerald-500 w-[42%]" />
-                    </div>
-                    
-                    <div className="flex justify-between text-[10px]">
-                      <span>Neutral Sentiment</span>
-                      <span className="text-blue-500">31%</span>
-                    </div>
-                    <div className="h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-                      <div className="h-full bg-blue-500 w-[31%]" />
-                    </div>
-
-                    <div className="flex justify-between text-[10px]">
-                      <span>Negative Sentiment</span>
-                      <span className="text-red-500">27%</span>
-                    </div>
-                    <div className="h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-                      <div className="h-full bg-red-500 w-[27%]" />
-                    </div>
-                    <span className="text-[9px] text-gray-450 block font-normal pt-1">"AI-estimated sentiment" analytics from global discussions.</span>
-                  </div>
-                </div>
 
                 {/* ── Global News Alerts Configurator ── */}
                 <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">

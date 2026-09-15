@@ -664,81 +664,7 @@ export default function NewsPOCHeadlinesIntelligenceEditorAllSectors({ onBack }:
                   </div>
                 )}
 
-                {/* ── Global Intelligence Snapshot ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 p-5 rounded-2xl shadow-3xs space-y-3">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block border-b border-gray-100 dark:border-gray-800 pb-2">
-                    Global Intelligence Snapshot
-                  </span>
-                  
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-xs font-semibold">
-                    <div className="p-3 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
-                      <span className="font-extrabold text-blue-500 text-base block">342</span>
-                      <span className="text-[8px] text-gray-450 block uppercase tracking-wider mt-1">updates</span>
-                    </div>
-                    <div className="p-3 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
-                      <span className="font-extrabold text-amber-500 text-base block">47</span>
-                      <span className="text-[8px] text-gray-450 block uppercase tracking-wider mt-1">developments</span>
-                    </div>
-                    <div className="p-3 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
-                      <span className="font-extrabold text-purple-500 text-base block">19</span>
-                      <span className="text-[8px] text-gray-450 block uppercase tracking-wider mt-1">trends</span>
-                    </div>
-                    <div className="p-3 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
-                      <span className="font-extrabold text-red-505 text-base block">12</span>
-                      <span className="text-[8px] text-gray-450 block uppercase tracking-wider mt-1">high impact</span>
-                    </div>
-                  </div>
-                </div>
 
-                {/* ── Global Market Snapshot ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 p-5 rounded-2xl shadow-3xs space-y-4">
-                  <div className="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-2">
-                    <h3 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
-                      <BarChart2 className="h-4 w-4 text-blue-500" /> Global Market Snapshot
-                    </h3>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-4 text-center">
-                    {[
-                      { title: "Equipment Export volumes", metric: "-8.4% Sourcing index", desc: "Consortium export restrictions", up: false },
-                      { title: "Bilateral grid allocations", metric: "+11.2% CapEx", desc: "German-Norway pipeline grants", up: true },
-                      { title: "GPU hosting real estate", metric: "+14% Relocation cost", desc: "Sovereign AI datacenters mandates", up: true }
-                    ].map((row, idx) => (
-                      <div key={idx} className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-xl border border-gray-150 dark:border-gray-850">
-                        <span className="text-[8px] font-bold text-gray-400 block uppercase tracking-wider">{row.title}</span>
-                        <span className="text-xs font-extrabold text-gray-905 dark:text-white block mt-1.5">{row.metric}</span>
-                        <p className="text-[8px] text-gray-400 mt-1 font-normal leading-tight">{row.desc}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* ── What's Changing Globally ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block border-b border-gray-100 dark:border-gray-800 pb-2">
-                    What's Changing Globally
-                  </span>
-                  
-                  <div className="space-y-3.5 text-xs font-semibold">
-                    {[
-                      { sector: "Technology & AI", state: "Rising", signal: "Sovereign AI GPU localization mandates forcing migrations", up: true },
-                      { sector: "Semiconductors & OSAT", state: "Rising", signal: "Bilateral equipment export controls redistributing wafer fabs", up: true },
-                      { sector: "Energy Transition", state: "Emerging", signal: "Bilateral pipeline grants lower development risk by 11%", up: true }
-                    ].map((row, idx) => (
-                      <div key={idx} className="flex justify-between items-center text-xs">
-                        <div className="space-y-0.5">
-                          <span className="font-bold text-gray-900 dark:text-white block">{row.sector}</span>
-                          <span className="text-[10px] text-gray-400 block font-normal">{row.signal}</span>
-                        </div>
-                        <span className={`text-[9px] font-extrabold font-mono uppercase px-2 py-0.5 rounded ${
-                          row.up ? "bg-emerald-500/10 text-emerald-500" : "bg-blue-500/10 text-blue-500"
-                        }`}>
-                          {row.state}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
 
                 {/* ── Emerging Global Opportunities ── */}
                 <div className="space-y-4 pt-4">
@@ -1057,49 +983,7 @@ export default function NewsPOCHeadlinesIntelligenceEditorAllSectors({ onBack }:
                   )}
                 </div>
 
-                {/* ── Ask Intelligence AI chat Widget ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block border-b border-gray-100 dark:border-gray-800 pb-2">
-                    Ask Intelligence AI
-                  </span>
-                  
-                  <div className="space-y-3 text-xs font-semibold">
-                    <div className="flex gap-1.5 flex-wrap">
-                      {["What are the biggest business developments today?", "What are the biggest global trade risks?"].map((pq, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => handleAskAi(pq)}
-                          className="text-[9.5px] font-bold border border-gray-205 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900 px-2 py-1 rounded-lg text-left"
-                        >
-                          {pq}
-                        </button>
-                      ))}
-                    </div>
 
-                    <div className="flex gap-1.5 pt-1">
-                      <input 
-                        type="text" 
-                        placeholder="Ask about global opportunities..."
-                        value={aiChatQuery}
-                        onChange={(e) => setAiChatQuery(e.target.value)}
-                        className="flex-1 px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-250 dark:border-gray-800 text-[10px] outline-none"
-                      />
-                      <button 
-                        onClick={() => handleAskAi(aiChatQuery)}
-                        disabled={isAiAnswering}
-                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-[9px] px-3 rounded-lg"
-                      >
-                        Ask
-                      </button>
-                    </div>
-
-                    {aiChatResponse && (
-                      <div className="bg-blue-50/50 dark:bg-blue-955/15 p-3 rounded-lg border border-blue-100 dark:border-blue-900/50 text-[10.5px] leading-relaxed text-gray-655 dark:text-gray-300 font-normal">
-                        <strong>AI Response:</strong> {aiChatResponse}
-                      </div>
-                    )}
-                  </div>
-                </div>
 
                 {/* ── Companies Making Moves ── */}
                 <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
@@ -1152,55 +1036,7 @@ export default function NewsPOCHeadlinesIntelligenceEditorAllSectors({ onBack }:
                   </div>
                 </div>
 
-                {/* ── Expert Perspectives ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block border-b border-gray-100 dark:border-gray-800 pb-2">
-                    Expert Global Perspectives
-                  </span>
-                  
-                  <div className="space-y-3 text-xs">
-                    {MOCK_EXPERTS.map((exp, idx) => (
-                      <div key={idx} className="space-y-1.5 border-b border-gray-50 dark:border-gray-800/40 pb-2 last:border-0 last:pb-0">
-                        <span className="font-bold text-gray-905 dark:text-white block leading-snug">{exp.name} ({exp.org})</span>
-                        <p className="text-[10.5px] text-gray-550 dark:text-gray-400 italic leading-snug font-normal">"{exp.perspective}"</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
 
-                {/* ── Global Discussion Sentiment ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-205 dark:border-gray-800 p-5 rounded-2xl shadow-3xs space-y-3">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block border-b border-gray-100 dark:border-gray-800 pb-2">
-                    Global Intelligence Sentiment
-                  </span>
-                  
-                  <div className="space-y-2.5 text-xs font-semibold">
-                    <div className="flex justify-between text-[10px]">
-                      <span>Positive Sentiment</span>
-                      <span className="text-emerald-500">46%</span>
-                    </div>
-                    <div className="h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-                      <div className="h-full bg-emerald-500 w-[46%]" />
-                    </div>
-                    
-                    <div className="flex justify-between text-[10px]">
-                      <span>Neutral Sentiment</span>
-                      <span className="text-blue-500">32%</span>
-                    </div>
-                    <div className="h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-                      <div className="h-full bg-blue-500 w-[32%]" />
-                    </div>
-
-                    <div className="flex justify-between text-[10px]">
-                      <span>Negative Sentiment</span>
-                      <span className="text-red-500">22%</span>
-                    </div>
-                    <div className="h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-                      <div className="h-full bg-red-500 w-[22%]" />
-                    </div>
-                    <span className="text-[9px] text-gray-450 block font-normal pt-1">"AI-estimated sentiment" analytics from global B2B discussions.</span>
-                  </div>
-                </div>
 
                 {/* ── Premium AI Intelligence Conversion lock ── */}
                 <div className="bg-gradient-to-br from-indigo-950 to-slate-900 text-white border border-indigo-900/60 p-5 rounded-2xl shadow-sm space-y-4">

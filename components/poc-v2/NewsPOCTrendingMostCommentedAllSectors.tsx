@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { 
   Sparkles, Share2, Lock, ChevronRight, Search, AlertTriangle, 
-  CheckCircle, ThumbsUp, Bookmark, MessageCircle, ArrowLeft, X, HelpCircle, 
+  ThumbsUp, Bookmark, MessageCircle, ArrowLeft, X, HelpCircle, 
   TrendingUp, Globe, Filter, Star, Briefcase, Eye, ChevronDown, Check,
   MessageSquare, Flame, ShieldAlert
 } from "lucide-react";
@@ -1214,77 +1214,7 @@ export default function NewsPOCTrendingMostCommentedAllSectors({ onBack }: Props
                   </div>
                 </div>
 
-                {/* ── Community Poll ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block border-b border-gray-100 dark:border-gray-800 pb-2">
-                    What Does the Industry Think?
-                  </span>
-                  
-                  <div className="space-y-4">
-                    <h4 className="text-xs font-bold text-gray-900 dark:text-white leading-snug">
-                      Will sovereign GPU cluster localized mandates slow enterprise cloud adoption?
-                    </h4>
 
-                    {!hasVoted ? (
-                      <div className="space-y-2 text-xs font-bold">
-                        <button 
-                          onClick={() => handleCastVote("acc")}
-                          className="w-full text-left p-2.5 rounded-xl border border-gray-250 dark:border-gray-850 hover:border-blue-500 hover:bg-blue-50/5 dark:hover:bg-blue-950/10 transition-all flex items-center justify-between"
-                        >
-                          <span>Accelerate cloud bypass</span>
-                          <span className="text-blue-500">Vote & Discuss →</span>
-                        </button>
-                        <button 
-                          onClick={() => handleCastVote("slow")}
-                          className="w-full text-left p-2.5 rounded-xl border border-gray-250 dark:border-gray-850 hover:border-blue-500 hover:bg-blue-50/5 dark:hover:bg-blue-950/10 transition-all flex items-center justify-between"
-                        >
-                          <span>Slow cloud integration</span>
-                          <span className="text-blue-500">Vote & Discuss →</span>
-                        </button>
-                        <button 
-                          onClick={() => handleCastVote("no")}
-                          className="w-full text-left p-2.5 rounded-xl border border-gray-250 dark:border-gray-850 hover:border-blue-500 hover:bg-blue-50/5 dark:hover:bg-blue-950/10 transition-all flex items-center justify-between"
-                        >
-                          <span>No major impact</span>
-                          <span className="text-blue-500">Vote & Discuss →</span>
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="space-y-3 text-xs font-bold">
-                        <div className="space-y-1">
-                          <div className="flex justify-between text-[10px]">
-                            <span>Accelerate cloud bypass</span>
-                            <span>{accPct}%</span>
-                          </div>
-                          <div className="h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-                            <div className="h-full bg-blue-600" style={{ width: `${accPct}%` }} />
-                          </div>
-                        </div>
-
-                        <div className="space-y-1">
-                          <div className="flex justify-between text-[10px]">
-                            <span>Slow cloud integration</span>
-                            <span>{slowPct}%</span>
-                          </div>
-                          <div className="h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-                            <div className="h-full bg-orange-500" style={{ width: `${slowPct}%` }} />
-                          </div>
-                        </div>
-
-                        <div className="space-y-1">
-                          <div className="flex justify-between text-[10px]">
-                            <span>No major impact</span>
-                            <span>{noPct}%</span>
-                          </div>
-                          <div className="h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-                            <div className="h-full bg-gray-400" style={{ width: `${noPct}%` }} />
-                          </div>
-                        </div>
-                        <span className="text-[9px] text-gray-400 font-semibold block pt-1">Total: {totalPollVotes} votes</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
 
                 {/* ── Trending Questions ── */}
                 <div className="bg-white dark:bg-[#0f172a] border border-gray-250 dark:border-gray-800 p-5 rounded-2xl shadow-3xs space-y-3">
@@ -1481,73 +1411,6 @@ export default function NewsPOCTrendingMostCommentedAllSectors({ onBack }: Props
                   </div>
                 </div>
 
-                {/* ── Discussion Alerts Configurator ── */}
-                <div className="bg-white dark:bg-[#0f172a] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm space-y-3">
-                  <h4 className="font-display text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider font-semibold">
-                    Never Miss a Major Discussion
-                  </h4>
-                  
-                  {!alertConfigured ? (
-                    <div className="space-y-3 text-[10px] font-semibold">
-                      <p className="text-gray-500 leading-relaxed font-normal">
-                        Configure threshold alerts to receive instant notifications when global stories exceed a specified comment count.
-                      </p>
-                      
-                      <div className="space-y-1.5">
-                        <span className="text-[8px] text-gray-400 uppercase font-bold">Comment Threshold</span>
-                        <select 
-                          value={alertThreshold}
-                          onChange={(e) => setAlertThreshold(e.target.value)}
-                          className="w-full p-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-lg text-xs outline-none"
-                        >
-                          <option value="5,000">Exceeds 5,000 comments</option>
-                          <option value="10,000">Exceeds 10,000 comments</option>
-                          <option value="20,000">Exceeds 20,000 comments</option>
-                        </select>
-                      </div>
-
-                      <button 
-                        onClick={() => { setAlertConfigured(true); showToast(`Discussion alert threshold established at ${alertThreshold} comments ✓`); }}
-                        className="w-full bg-[#1D1D46] hover:bg-[#152e4f] text-white font-bold py-2 rounded-lg transition-colors uppercase text-xs"
-                      >
-                        Create Alert
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-300 dark:border-emerald-900 text-emerald-800 dark:text-emerald-300 p-3 rounded-lg text-[10px] font-bold text-center">
-                      ✓ Discussion Alert Activated Successfully!
-                    </div>
-                  )}
-                </div>
-
-                {/* ── Premium Discussion Intelligence conversion CTA ── */}
-                <div className="bg-gradient-to-br from-blue-900 to-indigo-950 text-white border border-blue-955 p-5 rounded-2xl shadow-sm space-y-4">
-                  <h4 className="font-display text-sm font-bold flex items-center gap-1.5">
-                    <Sparkles className="h-4 w-4 text-amber-400 animate-pulse" /> Go Beyond Comments
-                  </h4>
-                  <p className="text-[10px] text-slate-350 leading-relaxed font-normal">
-                    Turn thousands of comments into structured global business intelligence.
-                  </p>
-                  
-                  <ul className="space-y-2 text-[10px] text-slate-405 font-semibold">
-                    <li className="flex items-center gap-1.5">
-                      <CheckCircle className="h-3.5 w-3.5 text-emerald-400 shrink-0" /> AI Discussion Summaries & Opinion Clusters
-                    </li>
-                    <li className="flex items-center gap-1.5">
-                      <CheckCircle className="h-3.5 w-3.5 text-emerald-400 shrink-0" /> Expert vs Community Sentiment comparison
-                    </li>
-                    <li className="flex items-center gap-1.5">
-                      <CheckCircle className="h-3.5 w-3.5 text-emerald-400 shrink-0" /> Custom Global Discussion Alerts
-                    </li>
-                  </ul>
-
-                  <button 
-                    onClick={() => showToast("Opening premium checkout flow...")}
-                    className="w-full text-center bg-amber-500 hover:bg-amber-600 text-gray-955 font-bold text-xs py-2 rounded-xl transition-all uppercase tracking-wider"
-                  >
-                    Unlock Discussion Intelligence
-                  </button>
-                </div>
 
                 {/* ── Sponsored industry discussion ── */}
                 <div className="border border-blue-200/50 dark:border-blue-900/40 bg-blue-50/10 dark:bg-blue-900/5 p-4 rounded-xl shadow-sm space-y-3">
